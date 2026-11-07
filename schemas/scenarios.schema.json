@@ -1,0 +1,185 @@
+{
+  "$defs": {
+    "ScenarioDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title_de": {
+          "title": "Title De",
+          "type": "string"
+        },
+        "validation": {
+          "default": "SYNTHETIC_TECHNICAL",
+          "enum": [
+            "SYNTHETIC_TECHNICAL",
+            "LEGALLY_VALIDATED"
+          ],
+          "title": "Validation",
+          "type": "string"
+        },
+        "has_user_input": {
+          "default": true,
+          "title": "Has User Input",
+          "type": "boolean"
+        },
+        "issues": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "unsupported_issues": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unsupported Issues",
+          "type": "array"
+        },
+        "facts": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Facts",
+          "type": "object"
+        },
+        "unknown_facts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unknown Facts",
+          "type": "array"
+        },
+        "today": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Today"
+        },
+        "expected_urgency": {
+          "anyOf": [
+            {
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Urgency"
+        },
+        "expected_not_rule_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Not Rule Ids",
+          "type": "array"
+        },
+        "expected_route_issue_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Route Issue Ids",
+          "type": "array"
+        },
+        "expected_action": {
+          "enum": [
+            "ASK",
+            "PROCEED",
+            "ESCALATE"
+          ],
+          "title": "Expected Action",
+          "type": "string"
+        },
+        "expected_rule_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Rule Ids",
+          "type": "array"
+        },
+        "expected_reason_codes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Reason Codes",
+          "type": "array"
+        },
+        "expected_missing_facts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Missing Facts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title_de",
+        "expected_action"
+      ],
+      "title": "ScenarioDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "scenarios": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ScenarioDef"
+      },
+      "title": "Scenarios",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "ScenariosFile",
+  "type": "object"
+}

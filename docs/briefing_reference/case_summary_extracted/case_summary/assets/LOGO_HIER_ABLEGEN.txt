@@ -1,0 +1,3 @@
+Hier das LexTec-Logo als lextec_logo.svg (bevorzugt) oder lextec_logo.png ablegen.
+Der Renderer setzt es automatisch oben rechts auf jeder Seite ein (Hoehe 7 mm).
+Ohne Datei erscheint ein schlichter Schriftzug "LexTec".

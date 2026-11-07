@@ -1,0 +1,96 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# DEMO / SYNTHETIC / NOT LEGALLY VALIDATED
+schema_version: 1
+id: tenancy_defects
+version: "0.1-demo"
+content_status: DEMO_SYNTHETIC
+jurisdiction: CH
+legal_area: tenancy
+issue: defects
+title_de: Wohnungsmängel
+description: "Mängel an der Mietwohnung (Demo-Definition)."
+
+classification:
+  description: "Passt, wenn Mängel an der Wohnung geschildert werden (Schimmel, Heizung, Lärm ...)."
+  typical_situations:
+    - "Schimmel in der Wohnung."
+    - "Heizung funktioniert nicht."
+  related_issues: [CH_TENANCY_TERMINATION]
+
+facts:
+  - id: defect_description
+    label_de: Beschreibung des Mangels
+    data_type: string
+    required: true
+    priority: high
+    question_de: "Welcher Mangel besteht genau, und wo in der Wohnung?"
+    why_needed_de: "Art und Ort des Mangels sind Grundlage jeder Beurteilung."
+
+  - id: defect_since
+    label_de: Mangel besteht seit
+    data_type: date
+    required: true
+    priority: medium
+    question_de: "Seit wann besteht der Mangel (ungefähres Datum)?"
+    why_needed_de: "Die Dauer ist für die Fachperson relevant."
+
+  - id: landlord_informed
+    label_de: Vermieterseite informiert
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Wurde die Vermieterseite über den Mangel informiert?"
+    why_needed_de: "Ob und wie informiert wurde, ist für das weitere Vorgehen relevant."
+
+  - id: landlord_informed_date
+    label_de: Datum der Information
+    data_type: date
+    required_if: { ref: fact.landlord_informed, op: equals, value: true }
+    priority: medium
+    question_de: "Wann wurde die Vermieterseite informiert?"
+    why_needed_de: "Das Datum der Meldung muss dokumentiert sein."
+
+  - id: rent_withheld
+    label_de: Mietzins zurückbehalten
+    data_type: boolean
+    required: false
+    priority: low
+    question_de: "Wird oder wurde der Mietzins ganz oder teilweise zurückbehalten?"
+    why_needed_de: "Ein Zurückbehalten sollte von einer Fachperson beurteilt werden."
+
+  - id: deadline_pending
+    label_de: Laufende Frist bekannt
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Ist eine Frist bekannt, die in nächster Zeit abläuft (z. B. auf einem Schreiben vermerkt)?"
+    why_needed_de: "Laufende Fristen müssen von einer Fachperson beurteilt werden."
+
+legal_rules:
+  - id: DEF_DEMO_NOT_INFORMED
+    description: "Demo: Vermieterseite nicht informiert -> Hinweis."
+    when: { ref: fact.landlord_informed, op: equals, value: false }
+    result_code: LANDLORD_NOT_YET_INFORMED
+    result_de: "Die Vermieterseite wurde laut Angabe noch nicht informiert. Vorgehen mit Fachperson klären."
+    legal_source_ids: [CH_OR_259A]
+
+escalation_rules:
+  - id: DEF_DEMO_DEADLINE_PENDING
+    description: "Demo: Laufende Frist -> Fachperson."
+    when: { ref: fact.deadline_pending, op: equals, value: true }
+    urgency: HIGH
+    reason_code: DEADLINE_PENDING_EXPERT_REVIEW
+    reason_de: "Es läuft eine Frist. Die Beurteilung muss durch eine Fachperson erfolgen."
+    professionals: [tenancy_law_counsel]
+
+  - id: DEF_DEMO_RENT_WITHHELD
+    description: "Demo: Mietzins zurückbehalten -> Fachperson."
+    when: { ref: fact.rent_withheld, op: equals, value: true }
+    urgency: MEDIUM
+    reason_code: RENT_WITHHOLDING_EXPERT_REVIEW
+    reason_de: "Der Mietzins wird zurückbehalten. Das sollte eine Fachperson beurteilen."
+    professionals: [tenancy_law_counsel]
+
+legal_source_ids: [CH_OR_259A]
+default_professionals: [tenancy_law_counsel]
+briefing_template: expert_briefing_v1

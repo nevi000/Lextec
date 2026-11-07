@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=../../schemas/authorities.schema.json
+# Zuständige Stellen im Kanton Zürich (Law-Dossier Issue 1, Abschnitt 5, 7.11.2026).
+# WICHTIG: Telefonnummern, Öffnungszeiten und Kosten wurden NICHT auf den offiziellen Seiten geprüft
+# (das verlangt das Dossier vor der Demo). Deshalb contact_verified: false. Keine Nummern erfunden;
+# die Software zeigt diese Angaben als «nicht verifiziert» an. Erst mit verified_at auf true setzen.
+schema_version: 1
+version: "1.0-dossier-2026-11-07"
+content_status: DRAFT
+
+authorities:
+  - id: SCHLICHTUNGSBEHOERDE_MIETE_ZH
+    name_de: "Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)"
+    purpose_de: "Anfechtung und Erstreckung (Begehren einreichen)."
+    cost_de: "Keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)."
+    scope_de: "Paritätische Schlichtungsbehörde des Bezirks, in dem die Wohnung liegt; jedes der zwölf Bezirksgerichte hat eine eigene. Der Bezirk wird anhand der Gemeinde bestimmt; das System ordnet keinen Bezirk selbständig zu."
+    source_note_de: "gerichte-zh.ch; Bezirk per Gemeindesuche. Formular «Kündigungsschutz» beim Obergericht (Inhalt vor Verwendung prüfen)."
+    url_hint: "gerichte-zh.ch"
+
+  - id: RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+    name_de: "Rechtsauskunft der Schlichtungsbehörde"
+    purpose_de: "Neutrale Information zu Rechtslage und Verfahren («nicht um eine Rechtsberatung»)."
+    cost_de: "Auf der Seite nicht angegeben."
+    source_note_de: "gerichte-zh.ch/rechtsauskunft"
+    url_hint: "gerichte-zh.ch/rechtsauskunft"
+
+  - id: RECHTSAUSKUNFT_BEZIRKSGERICHT_ZUERICH
+    name_de: "Rechtsauskunft in Mietsachen, Bezirksgericht Zürich"
+    purpose_de: "Auskunft für die Stadt Zürich; nicht mehr, sobald ein Verfahren läuft."
+    cost_de: "Gratis (laut Heilsarmee-Übersicht)."
+    scope_de: "Stadt Zürich"
+    source_note_de: "Heilsarmee-Übersicht, Stand 07/2026 (Drittquelle)."
+
+  - id: MIETERVERBAND_ZH
+    name_de: "Mieterinnen- und Mieterverband Zürich"
+    purpose_de: "Beratung, Vertretung, Begleitung."
+    cost_de: "Mitglieder gratis (Beitrag ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung (Angaben aus einer Drittquelle)."
+    source_note_de: "mieterverband.ch/mv-zh; Angaben laut Heilsarmee-Übersicht."
+    url_hint: "mieterverband.ch/mv-zh"
+
+  - id: RECHTSAUSKUNFT_BEZIRKSGERICHTE_ZH
+    name_de: "Unentgeltliche Rechtsauskünfte der Bezirksgerichte"
+    purpose_de: "Allgemeine Orientierung."
+    cost_de: "Gratis."
+    source_note_de: "Zum Beispiel Bezirksgericht Dietikon."
+
+  - id: ZAV_RECHTSAUSKUNFT
+    name_de: "Zürcher Anwaltsverband, unentgeltliche Rechtsauskunft"
+    purpose_de: "Kurze Orientierung (ca. 15 Minuten), ohne Termin."
+    cost_de: "Gratis."
+    url_hint: "zav.ch"
+
+  - id: SOZIALDIENST_WOHNGEMEINDE
+    name_de: "Sozialdienst der Wohngemeinde"
+    purpose_de: "Wohnungssuche, Notunterkunft, Finanzierung."
+    cost_de: "–"
+    source_note_de: "Gemeinde der Klientin."

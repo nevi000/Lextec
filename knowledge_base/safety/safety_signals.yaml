@@ -1,0 +1,202 @@
+# LexTec Bridge - Sicherheitssignale (deterministische Erkennung, vor jeder juristischen Triage)
+# ENTWURF: technisch geprueft, NICHT fachlich/klinisch freigegeben. Vor Einsatz mit echten Klientendaten durch Fachpersonen
+# (Krisenintervention, Opferhilfe, Law-Team) pruefen und erweitern.
+#
+# Konsequenzen je Kategorie (action) stammen aus knowledge_base/referrals/referral_network.yaml (safety_routing)
+# und werden dort geladen; diese Datei legt NUR fest, woran ein Signal erkannt wird.
+# Texte werden vor dem Abgleich normalisiert: Kleinbuchstaben, ae/oe/ue/ss statt Umlaute/ß, Akzente entfernt.
+#
+# Gewissheit (certainty):
+#   ACUTE   - konkrete Absicht, Drohung oder andauernde Gefahr (Muster in "acute")
+#   UNCLEAR - nur ein Hinweis/Stichwort, Verneinung unklar, Bedingung, zurueckliegend (Muster in "mention" bzw. abgestuft)
+# Kontext-Modifikatoren (gelten pro Satz/Teilsatz):
+#   negation      -> kein Signal  ("ich habe keine Suizidgedanken")
+#   historical    -> acute wird UNCLEAR, mention wird verworfen ("vor Jahren ...")
+#   hypothetical  -> acute wird UNCLEAR ("angenommen ...", "wuerde"), nie verworfen. Bedingte Drohungen ("wenn ..., bringe ich mich um") bleiben ACUTE.
+#   professional/quote -> mention wird verworfen ("ich arbeite in der Suizidpraevention"); acute NIE verworfen
+schema_version: 1
+version: "0.1-draft"
+content_status: DRAFT_NOT_CLINICALLY_REVIEWED
+
+modifiers:
+  negation:
+    - 'kein\w*'
+    - 'nicht'
+    - 'nie'
+    - 'niemals'
+    - 'ohne'
+    - 'ausgeschlossen'
+    - 'nix'
+    - 'pas de'
+    - 'jamais'
+    - '\bno\b'
+    - '\bnever\b'
+    - 'verneint\w*'
+    - 'bestreitet'
+  historical:
+    - 'vor \d+ (tag|woche|monat|jahr)\w*'
+    - 'vor (mehreren|einigen|vielen|zwei|drei|vier|fuenf|zehn) (jahr|monat|woche)\w*'
+    - 'vor (langer|langem) zeit'
+    - 'damals'
+    - 'frueher'
+    - 'in der vergangenheit'
+    - 'letztes jahr'
+    - 'vergangenes jahr'
+    - 'ehemals'
+    - 'il y a \w+ (ans|mois)'
+    - 'years? ago'
+    - 'in the past'
+  hypothetical:
+    - '\bangenommen\b'
+    - '\bhypothetisch\b'
+    - '\bwuerde\b'
+    - '\bwuerden\b'
+    - '\bkoennte\b'
+    - '\bwaere\b'
+    - '\bwould\b'
+  professional:
+    - 'ich arbeite in'
+    - 'ich arbeite bei'
+    - 'meine arbeit'
+    - 'weiterbildung'
+    - 'schulung'
+    - 'studium'
+    - 'praevention'
+    - 'beratungsstelle'
+    - 'fachstelle'
+    - 'zeitungsartikel'
+    - 'artikel ueber'
+    - 'statistik'
+    - 'thema suizid'
+  quote_markers: ['"', '«', '»', '„', '“']
+
+categories:
+  - id: ACUTE_SELF_HARM
+    label_de: Akute Selbstgefährdung
+    acute:
+      - '\b(werde|will|wollte|woelle|moechte|muss|wird|gleich|jetzt|droht\w*|kuendigt\w* an)\b[^.!?;]{0,45}\b(fenster|balkon|bruecke|dach|zug|bahn)\b[^.!?;]{0,25}\b(spring\w*|stuerz\w*|runter\w*|huepf\w*|werf\w*|gump\w*)'
+      - '\b(spring\w*|stuerz\w*|huepf\w*)\b[^.!?;]{0,25}\b(fenster|balkon|bruecke|dach|zug)\b'
+      - '\b(werde|will|wollte|moechte|muss|wird|droht\w*|drohte|kuendigt\w* an)\b[^.!?;]{0,35}\b(mich|sich|mir|mi)\b[^.!?;]{0,25}\b(umbring\w*|umbringe\w*|umzubring\w*|toeten|das leben nehmen|suizid\w*|selbstmord\w*|etwas antun|was antun|aufhaeng\w*|erhaeng\w*|erschiess\w*|vergift\w*|die pulsadern)'
+      - '\b(bringe?|bring|nehme?|nimm|toete)\b[^.!?;]{0,12}\b(mich|mir|mi|sich)\b[^.!?;]{0,12}\b(um|das leben|ume)\b'
+      - '\b(will|moechte|wollte|mag|woelle)\b[^.!?;]{0,14}\b(nicht mehr leben|nicht mehr da sein|sterben|tot sein|nuemme lebe)\b'
+      - '\bnicht mehr leben\b[^.!?;]{0,12}\b(will|moechte|mag|wollen|koennen|kann)\b'
+      - '\b(suizidgedanken|suizidabsicht\w*|selbstmordgedanken|todeswunsch|todeswuensche|suizidplan\w*|suizidversuch)\b'
+      - '\b(abschiedsbrief\w*|abschiedsnachricht\w*)\b'
+      - '\b(tabletten|pillen|medikamente|schlaftabletten)\b[^.!?;]{0,25}\b(geschluckt|genommen|eingenommen)\b'
+      - '\bi (will|goh|gang|mues)\b[^.!?;]{0,30}\b(umbringe|umbringae|ume bringe|usem fenschter|vom balkon|ab dr bruegg)'
+      - '\bkill (myself|himself|herself)\b|\bend my life\b|\bwant to die\b|\bsuicid\w*'
+      - '\bje vais (me suicider|me tuer|mettre fin)|\bje veux mourir\b'
+    mention:
+      - '\b(suizid\w*|selbstmord\w*|selbsttoetung|selbstverletz\w*|ritzen|lebensmuede\w*|hoffnungslos|keinen sinn mehr|kann nicht mehr)\b'
+      - '\bsich das leben nehmen\b'
+
+  - id: ACUTE_DANGER_VIOLENCE
+    label_de: Akute Gefahr / Gewaltandrohung
+    acute:
+      - '\b(droht\w*|drohte|bedroht\w*|bedrohte|angedroht\w*|gedroht|will|werde|wird|wollte|woelle|kommt)\b[^.!?;]{0,45}\b(schlag\w*|verpruegel\w*|zusammenschlag\w*|erschiess\w*|erstech\w*|erwuerg\w*|abstech\w*|zusammenschiess\w*|krankenhaus)'
+      - '\b(er|sie|vermieter\w*|nachbar\w*|mann|partner|ex|freund\w*|jemand|leute|hausverwalter\w*)\b[^.!?;]{0,30}\b(droht\w*|gedroht|bedroht\w*|will|wird|werde|wollte)\b[^.!?;]{0,25}\b(mich|uns|ihn|mir|die klientin|den klienten)\b[^.!?;]{0,20}\b(umbring\w*|umzubring\w*|toeten|zu toeten)'
+      - '\b(schlaegt|schlug|prügelt|pruegelt|wuergt|tritt|bedroht|verpruegelt)\b[^.!?;]{0,14}\b(mich|sie|ihn|uns|mir|die klientin|den klienten|das kind)\b'
+      - '\b(messer|waffe|pistole|gewehr|axt|hammer)\b[^.!?;]{0,30}\b(droh\w*|bedroh\w*|gezueckt|gezogen|dabei|vor der tuer)\b'
+      - '\b(droh\w*|bedroh\w*)\b[^.!?;]{0,30}\b(messer|waffe|pistole|gewehr)\b'
+      - '\bangst um (mein|ihr|sein|unser)\w* leben\b|\bum (mein|ihr|sein|unser)\w* leben\b[^.!?;]{0,15}\bangst\b'
+      - '\b(lebensgefahr|lebensbedrohlich\w*)\b'
+      - '\bthreaten\w*[^.!?;]{0,30}\b(hit|beat|kill|hurt|stab|shoot)\b|\bhe will (hit|beat|kill) (me|her)\b'
+      - '\b(va|veut) (me|la|le) (frapper|tuer)\b|\bmenace\w*[^.!?;]{0,30}\b(frapper|tuer)\b'
+      - '\b(wott|will|wird)\b[^.!?;]{0,20}\b(schla(g|ge|h)e|abstieche|umbringe)\b'
+    mention:
+      - '\b(gewalt\w*|handgreiflich\w*|geschlagen|schlaege|misshandel\w*|gewalttaetig\w*)\b'
+
+  - id: DOMESTIC_VIOLENCE
+    label_de: Häusliche Gewalt
+    acute:
+      - '\bhaeusliche[nrs]? gewalt\b'
+      - '\b(mein|ihr|sein)\w* (mann|ehemann|partner|freund|expartner|ex|lebenspartner|vater|bruder)\b[^.!?;]{0,30}\b(schlaegt|schlug|bedroht|verpruegelt|wuergt|misshandelt|vergewaltigt)\b'
+      - '\bgewalt in der (beziehung|ehe|familie|partnerschaft)\b'
+      - '\bfrauenhaus\b'
+    mention: []
+
+  - id: SEXUAL_VIOLENCE_HARASSMENT
+    label_de: Sexuelle Gewalt / Belästigung
+    acute:
+      - '\b(vergewaltig\w*|sexuelle[nrs]? (gewalt|uebergriff\w*|belaestig\w*|noetigung)|sexuell belaestigt|missbraucht)\b'
+    mention:
+      - '\b(missbrauch\w*|belaestigt\w*)\b'
+
+  - id: CHILD_ENDANGERMENT
+    label_de: Mögliche Kindesgefährdung
+    acute:
+      - '\b(kindesmisshandlung|kindesgefaehrdung|kindeswohlgefaehrdung|kindsmisshandlung)\b'
+      - '\b(kind\w*|chind\w*|tochter|sohn|baby)\b[^.!?;]{0,35}\b(misshandelt|geschlagen|missbraucht|vernachlaessigt|allein gelassen|eingesperrt)\b'
+    mention:
+      - '\b(kindeswohl)\b'
+
+  - id: EXPLOITATION_TRAFFICKING
+    label_de: Ausbeutung / Menschenhandel
+    acute:
+      - '\b(menschenhandel\w*|zwangsarbeit|zwangsprostitution|ausgebeutet\w*|ausbeutung)\b'
+      - '\b(pass|ausweis|papiere)\b[^.!?;]{0,20}\b(abgenommen|weggenommen|einbehalten|abgeben)\b'
+    mention: []
+
+  - id: MENTAL_HEALTH_CRISIS
+    label_de: Psychische Krise
+    acute:
+      - '\bpsychische[nrs]? krise\b'
+      - '\b(nervenzusammenbruch|panikattacke\w*|psychotisch\w*|psychose)\b'
+      - '\bpsychiatri\w*[^.!?;]{0,20}\b(eingewiesen|notfall|notaufnahme|klinik)\b'
+      - '\bam ende (meiner|ihrer|seiner) kraefte\b'
+    mention: []
+
+  - id: MENTAL_HEALTH_VULNERABILITY
+    label_de: Vulnerabilität (psychische Gesundheit)
+    acute: []
+    mention:
+      - '\b(depressi\w*|angststoerung\w*|psychisch (krank|belastet)|psychische erkrankung\w*|burnout|trauma\w*|ptbs|posttraumatisch\w*)\b'
+
+  - id: EXISTENTIAL_EMERGENCY
+    label_de: Existenzielle Notlage
+    acute:
+      - '\b(obdachlos\w*|obdachlosigkeit)\b'
+      - '\bauf der strasse (stehen|landen|sitzen|schlafen|leben)\b'
+      - '\bkein (essen|strom|heizung|dach ueber dem kopf)\b'
+      - '\bweiss (nicht|nöd|noed) wohin\b'
+      - '\bkein geld (fuer|mehr fuer) (essen|lebensmittel|miete)\b'
+    mention: []
+
+# Texte fuer die Sicherheitsreaktion (kurz, ohne Diagnose, ohne Garantie). Fachlich zu pruefen (siehe Kopf).
+responses:
+  ACUTE_SELF_HARM:
+    headline_de: "Akute Selbstgefährdung möglich – jetzt handeln"
+    explanation_de: "Die Schilderung enthält Hinweise auf eine mögliche unmittelbare Selbstgefährdung. Bitte organisieren Sie jetzt geeignete Hilfe. Die juristische Fallbearbeitung hat zunächst keine Priorität."
+    steps_de:
+      - "Unverzüglich den Rettungsdienst (144) kontaktieren."
+      - "Die betroffene Person nach Möglichkeit nicht allein lassen, sofern dies sicher ist."
+      - "Eigene Sicherheit beachten und sich nicht selbst gefährden."
+      - "Den Anweisungen der Notrufstelle folgen."
+      - "Die normale Fallaufnahme erst fortsetzen, wenn die unmittelbare Gefahr bearbeitet wurde."
+  ACUTE_DANGER_VIOLENCE:
+    headline_de: "Akute Gefahr durch Gewalt möglich – jetzt handeln"
+    explanation_de: "Die Schilderung enthält Hinweise auf eine unmittelbare Bedrohung oder Gewalt. Bitte sorgen Sie jetzt für Sicherheit und holen Sie Hilfe. Die juristische Fallbearbeitung hat zunächst keine Priorität."
+    steps_de:
+      - "Bei unmittelbarer Gefahr sofort die Polizei (117) rufen; bei Verletzungen zusätzlich den Rettungsdienst (144)."
+      - "Eigene Sicherheit beachten und sich nicht selbst gefährden."
+      - "Die betroffene Person nach Möglichkeit an einen sicheren Ort begleiten."
+      - "Den Anweisungen der Notrufstelle folgen."
+      - "Die normale Fallaufnahme erst fortsetzen, wenn die unmittelbare Gefahr bearbeitet wurde."
+  DOMESTIC_VIOLENCE:
+    headline_de: "Hinweis auf häusliche Gewalt"
+    explanation_de: "Bitte klären Sie die Sicherheit der Person, bevor Sie die Mietsache weiterbearbeiten. Beratung und Schutz bietet die Opferhilfe."
+  SEXUAL_VIOLENCE_HARASSMENT:
+    headline_de: "Hinweis auf sexuelle Gewalt oder Belästigung"
+    explanation_de: "Bitte beziehen Sie eine Opferberatungsstelle ein. Die juristische Bearbeitung ist nachrangig."
+  CHILD_ENDANGERMENT:
+    headline_de: "Hinweis auf mögliche Kindesgefährdung"
+    explanation_de: "Eine Fachperson soll prüfen, ob eine Gefährdungsmeldung nötig ist. Bei akuter Gefahr 117."
+  EXPLOITATION_TRAFFICKING:
+    headline_de: "Hinweis auf Ausbeutung oder Menschenhandel"
+    explanation_de: "Bitte beziehen Sie eine spezialisierte Beratungsstelle ein."
+  MENTAL_HEALTH_CRISIS:
+    headline_de: "Hinweis auf eine psychische Krise"
+    explanation_de: "Bitte führen Sie ein Gespräch zur aktuellen Situation, bevor Fristen entschieden werden."
+  EXISTENTIAL_EMERGENCY:
+    headline_de: "Hinweis auf eine existenzielle Notlage"
+    explanation_de: "Bitte klären Sie, ob Wohnen, Nahrung oder Energie gesichert sind, und beziehen Sie den Sozialdienst ein."

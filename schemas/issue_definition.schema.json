@@ -1,0 +1,641 @@
+{
+  "$defs": {
+    "BriefingGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title_de": {
+          "title": "Title De",
+          "type": "string"
+        },
+        "fact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fact Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title_de",
+        "fact_ids"
+      ],
+      "title": "BriefingGroup",
+      "type": "object"
+    },
+    "BriefingProfile": {
+      "additionalProperties": false,
+      "description": "Issue-specific layout of the briefing (the generic 11 sections stay as they are).",
+      "properties": {
+        "intro_de": {
+          "default": "",
+          "title": "Intro De",
+          "type": "string"
+        },
+        "groups": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BriefingGroup"
+          },
+          "title": "Groups",
+          "type": "array"
+        },
+        "review_points": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "title": "Review Points",
+          "type": "array"
+        },
+        "documents_to_request": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Documents To Request",
+          "type": "array"
+        },
+        "authority_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Authority Ids",
+          "type": "array"
+        }
+      },
+      "title": "BriefingProfile",
+      "type": "object"
+    },
+    "Classification": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "typical_situations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Typical Situations",
+          "type": "array"
+        },
+        "related_issues": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Issues",
+          "type": "array"
+        }
+      },
+      "title": "Classification",
+      "type": "object"
+    },
+    "Condition": {
+      "additionalProperties": false,
+      "description": "One node of a condition tree: either a composite (all/any/not) or a leaf (ref/op).",
+      "properties": {
+        "all": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Condition"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All"
+        },
+        "any": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Condition"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any"
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "op": {
+          "anyOf": [
+            {
+              "enum": [
+                "equals",
+                "not_equals",
+                "in",
+                "exists",
+                "is_missing",
+                "is_known",
+                "greater_than",
+                "less_than",
+                "is_unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "Condition",
+      "type": "object"
+    },
+    "DerivedDef": {
+      "additionalProperties": false,
+      "description": "A value computed by the engine from KNOWN date facts. Used for INTERNAL urgency assessment\nonly - never to state a deadline end date.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "days_since_earliest",
+            "days_until"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "facts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Facts",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "facts"
+      ],
+      "title": "DerivedDef",
+      "type": "object"
+    },
+    "EscalationRule": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "when": {
+          "$ref": "#/$defs/Condition"
+        },
+        "action": {
+          "const": "ESCALATE",
+          "default": "ESCALATE",
+          "title": "Action",
+          "type": "string"
+        },
+        "urgency": {
+          "default": "MEDIUM",
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
+          "title": "Urgency",
+          "type": "string"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "reason_de": {
+          "title": "Reason De",
+          "type": "string"
+        },
+        "professionals": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Professionals",
+          "type": "array"
+        },
+        "routes_to_issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Routes To Issue"
+        },
+        "suppress_standard_statements": {
+          "default": false,
+          "title": "Suppress Standard Statements",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "when",
+        "reason_code",
+        "reason_de"
+      ],
+      "title": "EscalationRule",
+      "type": "object"
+    },
+    "FactDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label_de": {
+          "title": "Label De",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "data_type": {
+          "default": "string",
+          "enum": [
+            "string",
+            "boolean",
+            "date",
+            "integer",
+            "enum"
+          ],
+          "title": "Data Type",
+          "type": "string"
+        },
+        "enum_values": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Enum Values",
+          "type": "array"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "required_if": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "priority": {
+          "default": "medium",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Priority",
+          "type": "string"
+        },
+        "question_de": {
+          "title": "Question De",
+          "type": "string"
+        },
+        "why_needed_de": {
+          "default": "",
+          "title": "Why Needed De",
+          "type": "string"
+        },
+        "group": {
+          "default": "",
+          "title": "Group",
+          "type": "string"
+        },
+        "enum_labels_de": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Enum Labels De",
+          "type": "object"
+        },
+        "extraction_hint_de": {
+          "default": "",
+          "title": "Extraction Hint De",
+          "type": "string"
+        },
+        "source_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "depends_on": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "escalation_relevant": {
+          "default": false,
+          "title": "Escalation Relevant",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "label_de",
+        "question_de"
+      ],
+      "title": "FactDef",
+      "type": "object"
+    },
+    "LegalRule": {
+      "additionalProperties": false,
+      "description": "A controlled, source-bound statement (HINT) or a review pointer for the expert (REVIEW_POINT).\n\nEvery rule must cite at least one source: no statement without a source.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "when": {
+          "$ref": "#/$defs/Condition"
+        },
+        "kind": {
+          "default": "REVIEW_POINT",
+          "enum": [
+            "HINT",
+            "REVIEW_POINT"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "result_code": {
+          "title": "Result Code",
+          "type": "string"
+        },
+        "result_de": {
+          "title": "Result De",
+          "type": "string"
+        },
+        "legal_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Legal Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "when",
+        "result_code",
+        "result_de",
+        "legal_source_ids"
+      ],
+      "title": "LegalRule",
+      "type": "object"
+    },
+    "ReviewPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "text_de": {
+          "title": "Text De",
+          "type": "string"
+        },
+        "source_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text_de"
+      ],
+      "title": "ReviewPoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "jurisdiction": {
+      "default": "CH",
+      "title": "Jurisdiction",
+      "type": "string"
+    },
+    "legal_area": {
+      "title": "Legal Area",
+      "type": "string"
+    },
+    "issue": {
+      "title": "Issue",
+      "type": "string"
+    },
+    "title_de": {
+      "title": "Title De",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "classification": {
+      "$ref": "#/$defs/Classification",
+      "default": {
+        "description": "",
+        "typical_situations": [],
+        "related_issues": []
+      }
+    },
+    "facts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FactDef"
+      },
+      "title": "Facts",
+      "type": "array"
+    },
+    "legal_rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/LegalRule"
+      },
+      "title": "Legal Rules",
+      "type": "array"
+    },
+    "escalation_rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/EscalationRule"
+      },
+      "title": "Escalation Rules",
+      "type": "array"
+    },
+    "legal_source_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Legal Source Ids",
+      "type": "array"
+    },
+    "default_professionals": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Default Professionals",
+      "type": "array"
+    },
+    "briefing_template": {
+      "default": "expert_briefing_v1",
+      "title": "Briefing Template",
+      "type": "string"
+    },
+    "canton": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Canton"
+    },
+    "derived": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DerivedDef"
+      },
+      "title": "Derived",
+      "type": "array"
+    },
+    "briefing_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BriefingProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provenance_de": {
+      "default": "",
+      "title": "Provenance De",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "legal_area",
+    "issue",
+    "title_de"
+  ],
+  "title": "IssueDefinition",
+  "type": "object"
+}

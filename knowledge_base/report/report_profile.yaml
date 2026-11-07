@@ -1,0 +1,37 @@
+# LexTec Bridge - Berichtsprofil: welche Eckdaten stehen auf Seite 1 des Fallberichts (Expert Briefing).
+# Datengetrieben: neue Issues ergaenzen einen Abschnitt unter issue_sections; ohne Profil zeigt der Bericht die
+# Schluesselangaben aus der Issue-Definition (generisch). Felder ohne fact_id gibt es in LexTec Bridge (noch) nicht:
+# sie erscheinen als "nicht erfasst", nie als erfundener Wert. Die Aufnahme eines Feldes aendert KEINE Fragelogik.
+# Grundlage: case_summary_v1.yaml (Law-Team, page_1.person / page_1.tenancy). ENTWURF, vom Law-Team zu pruefen.
+schema_version: 1
+version: "0.1-draft"
+content_status: DRAFT
+
+person_fields:
+  - {id: last_name, label: "Name"}
+  - {id: first_name, label: "Vorname"}
+  - {id: birth_date, label: "Geburtsdatum"}
+  - {id: address, label: "Adresse"}
+  - {id: phone, label: "Telefon"}
+  - {id: email, label: "E-Mail"}
+  - {id: preferred_contact, label: "Bevorzugter Kontakt"}
+  - {id: language, label: "Sprache"}
+  - {id: interpreter_needed, label: "Dolmetschbedarf"}
+  - {id: household, label: "Haushalt"}
+  - {id: consent_data_sharing, label: "Einwilligung zur Datenweitergabe"}
+
+issue_sections:
+  CH_TENANCY_TERMINATION:
+    - title: "Angaben zum Mietverhältnis"
+      rows:
+        - {label: "Vermieter / Verwaltung"}
+        - {label: "Mietobjekt (Gemeinde)", fact_id: property_municipality}
+        - {label: "Objektart", fact_id: object_type}
+        - {label: "Familienwohnung", fact_id: family_home_with_spouse}
+        - {label: "Mietbeginn"}
+        - {label: "Vertragsart / Befristung", fact_id: contract_term_type}
+        - {label: "Kündigungsfristen und -termine"}
+        - {label: "Mietzins / Mt. (CHF)", fact_id: rent_amount_chf}
+        - {label: "Nebenkosten / Mt."}
+        - {label: "Kaution"}
+        - {label: "Referenzzinssatz bei Vertragsabschluss"}

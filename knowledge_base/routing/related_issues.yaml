@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=../../schemas/related_issues.schema.json
+# Issues, auf die Issue 1 verweist. Sie sind NOCH NICHT implementiert. Solange kein geladenes Issue mit
+# content_status LEGALLY_REVIEWED unter dieser ID existiert, gilt die Weiterleitung als
+# «nicht verfügbar»: das System empfiehlt menschliche Prüfung und wendet keine Spezialregeln an.
+schema_version: 1
+version: "1.0"
+
+related_issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    title_de: "Kündigung wegen Zahlungsverzug (Issue 3)"
+    issue_number: 3
+  - id: CH_TENANCY_EXTENSION
+    title_de: "Erstreckung des Mietverhältnisses (Issue 4)"
+    issue_number: 4
+  - id: CH_TENANCY_EVICTION
+    title_de: "Ausweisung / laufendes Verfahren (Issue 6)"
+    issue_number: 6

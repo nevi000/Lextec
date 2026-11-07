@@ -1,0 +1,391 @@
+{
+  "is_sample": true,
+  "case_id": "SG-2026-0142",
+  "created_at": "07.11.2026, 10:42",
+  "as_of": "07.11.2026",
+  "kb_version": "kb-1.0",
+  "canton": "SG",
+  "issue_labels": [
+    "Kündigung durch den Vermieter",
+    "Erstreckung"
+  ],
+  "tags": [
+    "Familienwohnung",
+    "2 Kinder im Haushalt",
+    "Dolmetsch nicht nötig"
+  ],
+  "action": "ESCALATE",
+  "urgency": "HIGH",
+  "person": {
+    "last_name": {
+      "v": "Meier",
+      "src": "confirmed"
+    },
+    "first_name": {
+      "v": "Lara",
+      "src": "confirmed"
+    },
+    "birth_date": null,
+    "address": {
+      "v": "Musterstrasse 12, 9000 St. Gallen",
+      "src": "doc",
+      "ref": "MV S.1",
+      "confirmed": true
+    },
+    "phone": {
+      "v": "+41 79 000 00 00",
+      "src": "user"
+    },
+    "email": {
+      "v": "lara.meier@example.ch",
+      "src": "user"
+    },
+    "preferred_contact": {
+      "v": "Telefon, nachmittags",
+      "src": "user"
+    },
+    "language": {
+      "v": "Deutsch",
+      "src": "user"
+    },
+    "interpreter_needed": {
+      "v": "nein",
+      "src": "user"
+    },
+    "household": {
+      "v": "verheiratet, 2 Kinder (4 und 9 J.)",
+      "src": "user"
+    },
+    "consent_data_sharing": {
+      "v": "ja, am 07.11.2026",
+      "src": "confirmed"
+    }
+  },
+  "tenancy": {
+    "landlord": {
+      "v": "Immobilien Beispiel AG",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "object_address": {
+      "v": "Musterstrasse 12, 2. OG links",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "object_type": {
+      "v": "4½-Zimmer-Wohnung",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "family_dwelling": {
+      "v": "ja (Ehepaar mit Kindern)",
+      "src": "user"
+    },
+    "contract_start": {
+      "v": "01.04.2019",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "fixed_term": {
+      "v": "unbefristet",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "notice_period": {
+      "v": "3 Mt., ortsübliche Termine",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "rent_net": {
+      "v": "CHF 1'640.–",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "ancillary_costs": {
+      "v": "CHF 210.–",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "deposit": {
+      "v": "CHF 4'920.– (Kautionskonto)",
+      "src": "doc",
+      "ref": "MV S.1"
+    },
+    "reference_rate": {
+      "v": "1.50 %",
+      "src": "doc",
+      "ref": "MV S.1"
+    }
+  },
+  "short_summary": "Die Vermieterin hat die Familienwohnung per 31.01.2027 gekündigt (Formular vom 09.10.2026, Begründung «Eigenbedarf (Sanierung geplant)»). Das Formular ist nur an den Ehemann adressiert; er hat es am 13.10.2026 entgegengenommen. Frau Meier möchte in der Wohnung bleiben oder zumindest Zeit für eine Wohnungssuche mit zwei Schulkindern gewinnen.",
+  "deadline": {
+    "label": "Anfechtung / Erstreckungsbegehren",
+    "start_date": "13.10.2026",
+    "start_source": "Empfang durch Ehemann, Angabe",
+    "days": 30,
+    "authority": "Schlichtungsbehörde Mietsachen St. Gallen",
+    "legal_basis": "Art. 273 Abs. 1 und 2 lit. a OR",
+    "caveat": "Rechnerisch, nicht verbindlich. Fristbeginn bei Zustellung nur an einen Ehegatten durch Fachperson prüfen."
+  },
+  "safety_flags": [
+    {
+      "flag": "Achtung: Mentale Gesundheit könnte gefährdet sein",
+      "level": "FLAG",
+      "detail": "Frau Meier schreibt: «ich schlafe kaum noch, weil ich nicht weiss, wohin mit den Kindern» (Chat, 07.11.2026, 10:31). Kein Hinweis auf akute Gefährdung. Im Erstgespräch ansprechen.",
+      "show_to_user": []
+    }
+  ],
+  "liability_flag": null,
+  "missing_critical": [
+    "Couvert / Zustellnachweis der Kündigung"
+  ],
+  "recommendation": {
+    "decision": "ESCALATE · an Fachperson Mietrecht",
+    "proposed_steps": [
+      {
+        "title": "Frist sichern",
+        "detail": "Anfechtung und eventualiter Erstreckungsbegehren bis spätestens Do 12.11.2026 bei der Schlichtungsbehörde einreichen. Gerechnet ab Empfang am 13.10.2026."
+      },
+      {
+        "title": "Nichtigkeit prüfen lassen",
+        "detail": "Die Kündigung der Familienwohnung ging nur an den Ehemann (Art. 266n, 266o OR). Trotzdem fristgerecht anfechten."
+      },
+      {
+        "title": "Begründung verlangen",
+        "detail": "«Eigenbedarf» und «Sanierung» widersprechen sich. Schriftliche Begründung bei der Vermieterin anfordern (Art. 271 Abs. 2 OR)."
+      },
+      {
+        "title": "Sozialdienst einbeziehen",
+        "detail": "Wohnungssuche und Absicherung der Familie vorbereiten, falls die Kündigung gültig ist."
+      }
+    ],
+    "responsible_bodies": [
+      {
+        "label": "Schlichtungsbehörde in Mietsachen (Kreis St. Gallen)",
+        "contact": "über kantonales Verzeichnis sg.ch",
+        "reason": "Anfechtung und Erstreckung, ohne Gerichtskosten",
+        "rule_id": "CH_TENANCY_TERMINATION.primary",
+        "verified": false,
+        "short_reason": "Zuständig für Anfechtung und Erstreckung; Verfahren ohne Gerichtskosten"
+      },
+      {
+        "label": "Anwältin/Anwalt Mietrecht (via Mieterverband)",
+        "contact": "über Mieterverband St. Gallen",
+        "reason": "Frist unter 10 Tagen, möglicher Formfehler",
+        "rule_id": "legal_deadline_risk",
+        "verified": false,
+        "short_reason": "Frist ≤ 10 Tage, Formfehler Familienwohnung"
+      },
+      {
+        "label": "Mieterinnen- und Mieterverband, Sektion St. Gallen",
+        "contact": "Mitgliedschaft prüfen",
+        "reason": "Mietrechtsberatung",
+        "rule_id": "CH_TENANCY_TERMINATION.primary",
+        "verified": false,
+        "short_reason": "Mietrechtsberatung"
+      },
+      {
+        "label": "Sozialdienst der Stadt St. Gallen",
+        "contact": "Wohnsitzgemeinde",
+        "reason": "Wohnungsverlust droht, zwei Kinder",
+        "rule_id": "children_in_household",
+        "verified": false,
+        "short_reason": "Wohnungsverlust droht, 2 Kinder im Haushalt"
+      }
+    ],
+    "decision_detail": "Frist läuft, Formfehler möglich"
+  },
+  "chronology": [
+    {
+      "date": "12.02.2019",
+      "event": "Mietvertrag unterzeichnet (beide Ehegatten als Mieter)",
+      "source": "A1 Mietvertrag S.1"
+    },
+    {
+      "date": "01.04.2019",
+      "event": "Mietbeginn",
+      "source": "A1 Mietvertrag S.1"
+    },
+    {
+      "date": "2024",
+      "event": "Mietzinserhöhung auf CHF 1'720.– netto (laut Person)",
+      "source": "Angabe, kein Beleg"
+    },
+    {
+      "date": "09.10.2026",
+      "event": "Kündigungsformular ausgestellt, nur an Herrn Marco Meier adressiert",
+      "source": "A2 Kündigung"
+    },
+    {
+      "date": "13.10.2026",
+      "event": "Einschreiben vom Ehemann entgegengenommen",
+      "source": "Angabe, Couvert fehlt"
+    },
+    {
+      "date": "31.01.2027",
+      "event": "Kündigungstermin",
+      "source": "A2 Kündigung"
+    }
+  ],
+  "legal_check": [
+    {
+      "point": "Amtliches kantonales Formular verwendet",
+      "status": "erfuellt",
+      "basis": "Art. 266l Abs. 2 OR · A2"
+    },
+    {
+      "point": "Separate Zustellung an beide Ehegatten (Familienwohnung)",
+      "status": "unklar",
+      "basis": "Art. 266n, 266o OR · nur an Ehemann adressiert"
+    },
+    {
+      "point": "Kündigungsfrist und -termin eingehalten",
+      "status": "offen",
+      "basis": "Art. 266c OR · Vertrag S. 2–4 fehlen"
+    },
+    {
+      "point": "Anfechtbarkeit (Treu und Glauben, Begründung)",
+      "status": "offen",
+      "basis": "Art. 271, 271a OR"
+    },
+    {
+      "point": "Erstreckung: Härte für Familie",
+      "status": "offen",
+      "basis": "Art. 272, 272b OR (max. 4 Jahre)"
+    },
+    {
+      "point": "Frist Anfechtung/Erstreckung gewahrt",
+      "status": "unklar",
+      "basis": "Art. 273 OR · rechnerisch 12.11.2026"
+    }
+  ],
+  "missing_and_contradictions": [
+    "Widerspruch Nettomiete: Mietvertrag CHF 1'640.–, Person nennt CHF 1'720.– seit 2024. Erhöhungsformular fehlt.",
+    "Begründung der Kündigung uneinheitlich: «Eigenbedarf» und «Sanierung geplant».",
+    "Couvert / Zustellnachweis fehlt: Empfangsdatum 13.10.2026 nur aus Angabe.",
+    "Mietvertrag Seiten 2–4 (Kündigungsbestimmungen, Allgemeine Bedingungen) fehlen.",
+    "Geburtsdatum nicht angegeben (nur für Identifikation nötig)."
+  ],
+  "legal_sources": [
+    {
+      "cite": "Art. 266l Abs. 2 OR",
+      "used_for": "Formularpflicht Kündigung Wohnraum",
+      "verified": true
+    },
+    {
+      "cite": "Art. 266n, 266o OR",
+      "used_for": "Separate Zustellung Familienwohnung, Nichtigkeit",
+      "verified": true
+    },
+    {
+      "cite": "Art. 271, 271a OR",
+      "used_for": "Anfechtbarkeit der Kündigung",
+      "verified": true
+    },
+    {
+      "cite": "Art. 272, 272b OR",
+      "used_for": "Erstreckung, Höchstdauer",
+      "verified": true
+    },
+    {
+      "cite": "Art. 273 Abs. 1, 2 lit. a OR",
+      "used_for": "30-Tage-Frist Anfechtung und Erstreckung",
+      "verified": true
+    },
+    {
+      "cite": "Art. 113 Abs. 2 lit. c ZPO",
+      "used_for": "Keine Gerichtskosten im Schlichtungsverfahren Miete",
+      "verified": false
+    }
+  ],
+  "audit": {
+    "rules_fired": [
+      "CH_TENANCY_TERMINATION",
+      "CH_TENANCY_EXTENSION",
+      "legal_deadline_risk",
+      "imminent_housing_loss",
+      "children_in_household",
+      "MENTAL_HEALTH_VULNERABILITY"
+    ],
+    "model": "LLM-Extraktion, Regeln deterministisch",
+    "processed_at": "07.11.2026, 10:42"
+  },
+  "documents": [
+    {
+      "label": "Mietvertrag",
+      "filename": "mietvertrag_s1.png",
+      "received": "07.11.2026",
+      "pages": "1 von 4",
+      "extracted": [
+        "Parteien",
+        "Objekt",
+        "Mietbeginn",
+        "Befristung",
+        "Kündigungsfrist",
+        "Mietzins",
+        "Kaution",
+        "Referenzzins"
+      ],
+      "ocr_quality": "gut",
+      "files": [
+        "scans/mietvertrag_s1.png"
+      ]
+    },
+    {
+      "label": "Kündigungsformular",
+      "filename": "kuendigung_s1.png",
+      "received": "07.11.2026",
+      "pages": "1",
+      "extracted": [
+        "Adressat",
+        "Kündigungstermin",
+        "Begründung",
+        "Datum",
+        "Formular"
+      ],
+      "ocr_quality": "gut",
+      "files": [
+        "scans/kuendigung_s1.png"
+      ]
+    }
+  ],
+  "missing_documents": [
+    "Couvert / Zustellnachweis",
+    "Mietvertrag S. 2–4",
+    "Formular Mietzinserhöhung 2024"
+  ],
+  "dialog": [
+    {
+      "q": "Wann ist die Kündigung bei Ihnen angekommen?",
+      "a": "Mein Mann hat den eingeschriebenen Brief am 13. Oktober auf der Post abgeholt.",
+      "when": "Chat 10:24"
+    },
+    {
+      "q": "Ist die Wohnung im Mietvertrag auf Sie beide ausgestellt?",
+      "a": "Ja, auf meinen Mann und mich.",
+      "when": "Chat 10:26"
+    },
+    {
+      "q": "Leben Kinder im gleichen Haushalt?",
+      "a": "Ja, zwei Kinder, 4 und 9 Jahre alt.",
+      "when": "Chat 10:27"
+    },
+    {
+      "q": "Zahlen Sie heute den Mietzins aus dem Vertrag?",
+      "a": "Nein, seit 2024 CHF 1'720.– netto. Das Formular dazu finde ich nicht.",
+      "when": "Chat 10:29"
+    },
+    {
+      "q": "Haben Sie selbst eine separate Kündigung erhalten?",
+      "a": null
+    },
+    {
+      "q": "Liegt das Couvert mit Poststempel noch vor?",
+      "a": null
+    },
+    {
+      "q": "Wurde schon etwas bei der Schlichtungsbehörde eingereicht?",
+      "a": null
+    }
+  ]
+}

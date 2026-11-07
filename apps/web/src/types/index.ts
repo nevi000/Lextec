@@ -1,0 +1,46 @@
+import type { components } from "./api";
+
+type S = components["schemas"];
+
+export type CaseDetail = S["CaseDetail"];
+export type CaseListItem = S["CaseListItem"];
+export type DashboardData = S["DashboardData"];
+export type MessageView = S["MessageView"];
+export type MessageResult = S["MessageResult"];
+export type FactView = S["FactView"];
+export type DecisionResult = S["DecisionResult"];
+export type DecisionView = S["DecisionView"];
+export type MissingFact = S["MissingFact"];
+export type TriggeredRule = S["TriggeredRule"];
+export type EvaluatedRule = S["EvaluatedRule"];
+export type NextQuestion = S["NextQuestion"];
+export type BriefingView = S["BriefingView"];
+export type CaseBriefing = S["CaseBriefing"];
+export type BriefingListItem = S["BriefingListItem"];
+export type BriefingOverviewItem = S["BriefingOverviewItem"];
+export type SystemStatus = S["SystemStatus"];
+export type KbStatus = S["KbStatus"];
+export type KbIssue = S["KbIssueOut"];
+export type EvaluationSummary = S["EvaluationSummary"];
+export type ScenarioResult = S["ScenarioResult"];
+export type SourceRef = S["SourceRef"];
+export type IssueView = S["IssueView"];
+export type AnalysisState = S["AnalysisState"];
+
+export type Action = DecisionResult["action"];
+export type SafetyAssessment = S["SafetyAssessment"];
+export type ReferralCard = S["ReferralCard"];
+export type ReferralPlan = S["ReferralPlan"];
+export type SafetyState = SafetyAssessment["state"];
+export type FactStatus = FactView["status"];
+export type FactOrigin = NonNullable<FactView["origin"]>;
+export type HandoverStatus = NonNullable<CaseDetail["handover"]>["status"];
+export type Professional = S["ProfessionalOut"];
+export type IssueBriefing = S["IssueBriefing"];
+export type ApprovedStatement = S["ApprovedStatement"];
+export type RelatedRoute = S["RelatedRoute"];
+export type AIUsageReport = S["AIUsageReport"];
+export type AIUsageSummary = S["AIUsageSummary"];
+export type Urgency = "HIGH" | "MEDIUM" | "LOW";
+export type EvidenceLevel = S["IssueRow"]["evidence_level"];
+export type ScenarioListItem = S["ScenarioListItem"];

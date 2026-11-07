@@ -1,0 +1,1341 @@
+# knowledge_base/referrals/referral_rules.yaml
+# Verweisungsregeln: welcher Falltyp / welches Warnsignal fuehrt zu welcher Anlaufstelle.
+# Wird von der Regel-Engine gelesen; der Abschnitt "briefing" fliesst in die Zusammenfassung
+# fuer die Sachbearbeiterin / den Sachbearbeiter.
+#
+# Version 1.1 (07.11.2026): Kontaktangaben fuer den Kanton Zuerich ergaenzt
+#   (Adresse, Telefon, E-Mail, Web, Oeffnungszeiten, Kosten, Zugang, wo oeffentlich: zustaendige Person).
+#   Stellen ausserhalb ZH sind unveraendert und ohne Kontaktrecherche.
+#
+# Konventionen (wie in der Arbeitsvorlage):
+#   Aktionen:   ASK | PROCEED | ESCALATE | IMMEDIATE_SAFETY_RESPONSE   (strengste gewinnt)
+#   Prioritaet: CRITICAL | HIGH | NORMAL | LOW
+#   Unbekannt bleibt null und wird nicht geraten.
+#   Alle signal-IDs muessen in signals.yaml, alle org-IDs in diesem File existieren.
+#
+# Kontakt-Qualitaet (Feld contact_source):
+#   primary    = auf der offiziellen Website der Stelle geprueft (Datum in last_checked)
+#   secondary  = aus einem Fachverzeichnis (z.B. Heilsarmee Sozialberatung Zuerich, Stand 2026);
+#                vor produktivem Einsatz auf der Website der Stelle bestaetigen
+#   none       = noch nicht recherchiert
+# verified: true  = Angebot und Zustaendigkeit belegt; false = vom Law-Team zu pruefen.
+# Personen werden nur genannt, wenn sie eine oeffentliche Funktion haben und auf der
+# offiziellen Website stehen. Fuer die Kontaktaufnahme gilt immer die Stelle, nicht die Person.
+
+version: "1.1"
+last_reviewed: "2026-11-07"
+reviewed_by: null
+
+# ---------------------------------------------------------------------------
+# 1. AUFLOESUNG VON ROLLEN
+#    Regeln verweisen auf ROLLEN. Die Engine sucht in dieser Reihenfolge:
+#      "KANTON:Gemeinde"  ->  "KANTON"  ->  default
+#    Ist der Rollenname zugleich die ID einer Stelle (z.B. schlichtungsbehoerde_miete),
+#    ist diese generische Stelle der Default. Kein Kanton bekannt -> ASK canton.
+# ---------------------------------------------------------------------------
+role_resolution:
+  schlichtungsbehoerde_miete:
+    "ZH:Zürich": schlichtungsbehoerde_miete_bezirk_zuerich
+    ZH: schlichtungsbehoerde_miete_zh_verzeichnis      # je Bezirk am Ort der Mietsache
+    default: schlichtungsbehoerde_miete
+  mieterverband:
+    "ZH:Winterthur": mieterverband_zh_winterthur
+    ZH: mieterverband_zh
+    default: mieterverband
+  unentgeltliche_rechtsauskunft:
+    "ZH:Zürich": rechtsauskunft_miete_bezirksgericht_zuerich
+    ZH: unentgeltliche_rechtsauskunft_zav
+    default: unentgeltliche_rechtsauskunft
+  sozialdienst_gemeinde:
+    "ZH:Zürich": sozialzentren_stadt_zuerich
+    default: sozialdienst_gemeinde
+  notunterkunft:
+    "ZH:Zürich": wohnen_obdach_stadt_zuerich
+    "ZH:Winterthur": durchgangsheim_anker_winterthur
+    default: sozialdienst_gemeinde
+  kesb:
+    "ZH:Zürich": kesb_stadt_zuerich
+    "ZH:Winterthur": kesb_winterthur_andelfingen
+    default: kesb
+  frauenzentrale_kantonal:
+    AG: frauenzentrale_aargau
+    BL: frauenplus_baselland
+    BE: frauenzentrale_bern
+    GL: frauenzentrale_glarus
+    SG: frauenzentrale_st_gallen
+    GR: frauenzentrale_graubuenden
+    LU: frauenzentrale_luzern
+    "ZH:Winterthur": frauenzentrale_winterthur
+    ZH: frauenzentrale_zuerich
+    ZG: eff_zett
+    default: null                       # kein Partner im Kanton -> Sozialdienst Gemeinde
+  opferhilfe_kantonal:                  # Beratung zuerst; Entschaedigung ist eine eigene Stelle
+    "ZH:Winterthur": frauen_nottelefon_winterthur
+    ZH: opferberatung_zuerich
+    ZG: eff_zett
+    default: opferhilfe_142             # nationale Nummer leitet an kantonale Stelle weiter
+  frauenhaus:
+    "ZH:Winterthur": frauenhaus_winterthur
+    ZH: frauenhaus_violetta
+    default: opferhilfe_142
+  schuldenberatung:
+    ZH: schuldenberatung_kanton_zuerich
+    BE: berner_schuldenberatung
+    ZG: eff_zett
+    default: caritas
+  selbsthilfe:
+    BE: selbsthilfe_be
+    SO: selbsthilfe_solothurn
+    ZG: eff_zett
+    default: null
+  migrationsberatung:
+    ZH: zba_heks_caritas_zuerich
+    SG: solidaritaetshaus_st_gallen
+    default: heks
+  asyl_rechtsvertretung:
+    ZH: freiplatzaktion_zuerich
+    default: asylex
+  ombudsstelle:                         # nur Konflikte mit Behoerden, nicht mit Privaten
+    "ZH:Zürich": ombudsstelle_stadt_zuerich     # bei Stadtverwaltung; bei Kanton -> ombudsstelle_kanton_zuerich
+    ZH: ombudsstelle_kanton_zuerich
+    SH: ombudsstelle_schaffhausen
+    default: null
+  sozialhilferecht:
+    ZH: ufs_sozialhilferecht
+    default: unentgeltliche_rechtsauskunft
+  behinderung:
+    ZH: pro_infirmis_zuerich
+    default: pro_infirmis
+
+# ---------------------------------------------------------------------------
+# 2. ANLAUFSTELLEN
+# ---------------------------------------------------------------------------
+professionals:
+
+  # ===================== Notfall / Hotlines (schweizweit, 24/7) =====================
+  - id: police_117
+    label: "Polizei"
+    type: emergency
+    contact: {phone: "117", hours: "24/7"}
+    verified: true
+  - id: ambulance_144
+    label: "Sanitaet / Rettungsdienst"
+    type: emergency
+    contact: {phone: "144", hours: "24/7"}
+    verified: true
+  - id: dargebotene_hand_143
+    label: "Die Dargebotene Hand"
+    type: hotline
+    specializations: [mental_health, crisis]
+    contact: {phone: "143", hours: "24/7"}
+    verified: true
+  - id: pro_juventute_147
+    label: "Pro Juventute, Beratung fuer Kinder und Jugendliche"
+    type: hotline
+    specializations: [children, youth]
+    contact: {phone: "147", hours: "24/7"}
+    verified: true
+  - id: opferhilfe_142
+    label: "Nationale Opferhilfe-Nummer"
+    type: hotline
+    specializations: [violence, victim_support]
+    contact: {phone: "142", hours: "24/7, kostenlos, vertraulich"}
+    note: "Seit 1. Mai 2026. Keine Notrufnummer: bei akuter Gefahr 117 / 144."
+    source_url: "https://www.gr.ch/DE/Medien/Mitteilungen/MMStaka/2026/Seiten/2026043002.aspx"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Mietrecht =====================
+  - id: schlichtungsbehoerde_miete_bezirk_zuerich
+    label: "Paritaetische Schlichtungsbehoerde in Miet- und Pachtsachen des Bezirks Zuerich"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Bezirksgericht Zuerich, Wengistrasse 30, 8004 Zuerich"
+      phone: "058 111 70 30"
+      email: null                       # im Verzeichnis genannte Adresse betrifft die GlG-Schlichtung; nicht uebernommen
+      web: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
+      hours: "Mo-Fr 08.00-11.45 und 13.30-16.45"
+      costs: "Schlichtungsverfahren in Mietsachen ohne Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)"
+      access: "Schriftliches Schlichtungsgesuch; zustaendig ist der Ort der Mietsache"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/01/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_zh_verzeichnis
+    label: "Schlichtungsbehoerde in Miet- und Pachtsachen am Bezirksgericht des Bezirks der Mietsache (Kanton Zuerich)"
+    type: authority
+    region: [ZH]
+    specializations: [tenancy_disputes]
+    contact:
+      web: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
+      access: "Jedes Bezirksgericht hat eine eigene paritaetische Schlichtungsbehoerde. Bezirk ueber 'Gemeinden und Bezirke A-Z' auf gerichte-zh.ch bestimmen."
+    note: "Keine Friedensrichteraemter fuer Mietsachen. Vorsitz: Gerichtsschreiber/in, je eine Vertretung Mieter- und Vermieterseite."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
+    verified: true
+
+  - id: rechtsauskunft_miete_bezirksgericht_zuerich
+    label: "Unentgeltliche Rechtsauskunft in Miet- und Pachtsachen, Bezirksgericht Zuerich"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [tenancy_law_information]
+    contact:
+      address: "Wengistrasse 30, 8004 Zuerich (Anmeldung an der Loge)"
+      phone: "058 111 74 74 (Mo 09.00-11.30 und 13.30-16.00, Mi 13.30-16.00)"
+      hours: "Vor Ort Mi 09.00-11.30, ohne Voranmeldung, lange Wartezeiten moeglich"
+      costs: "kostenlos"
+      languages: "nur Deutsch (Dolmetscher selbst mitbringen)"
+      access: "Nur Mietobjekt in der Stadt Zuerich; nicht bei anwaltlicher Vertretung oder haengigem Verfahren. Max. ca. 15 Min., muendlich, neutral. Mietvertrag und Kuendigung mitbringen."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/fileadmin/user_upload/Dokumente/BG_Zuerich/Merkblaetter/Miete/Merkblatt_Rechtsauskunft_Miet-_und_Pachtsachen_ab_1._M%C3%A4rz_2026.pdf"
+    verified: true
+
+  - id: mieterverband_zh
+    label: "Mieterinnen- und Mieterverband Zuerich"
+    type: ngo
+    region: [ZH]
+    specializations: [tenancy_law_counselling, defects, legal_representation]
+    contact:
+      address: "Tellstrasse 31, 8004 Zuerich"
+      phone: "044 296 90 20"
+      email: "info@mvzh.ch"
+      web: "https://www.mieterverband.ch/mv-zh/"
+      hours: "Mo-Fr 09.00-12.00 und 13.30-17.00"
+      costs: "Mitgliederbeitrag CHF 100/Jahr; Beratung fuer Mitglieder kostenlos, Nichtmitglieder CHF 70 pro Beratung"
+      access: "Terminpflicht; persoenlich, telefonisch oder schriftlich; auch Anwaltsvertretung und Maengelberatung"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/01/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: mieterverband_zh_winterthur
+    label: "Mieterinnen- und Mieterverband Zuerich, Geschaeftsstelle Winterthur"
+    type: ngo
+    region: ["ZH:Winterthur"]
+    specializations: [tenancy_law_counselling]
+    contact:
+      address: "Merkurstrasse 25, 8400 Winterthur"
+      postal_address: "Postfach 2080, 8401 Winterthur"
+      phone: "052 212 50 35"
+      email: "info@mvzh.ch"
+      web: "https://www.mieterverband.ch/zuerich"
+      hours: null
+      costs: "wie Mieterverband Zuerich"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
+    verified: true
+
+  - id: unentgeltliche_rechtsauskunft_zav
+    label: "Unentgeltliche Rechtsauskunft des Zuercher Anwaltsverbands (ZAV)"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling]
+    contact:
+      address: "Strassburgstrasse 9, 8004 Zuerich"
+      phone: null                        # keine telefonische Beratung
+      web: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
+      hours: "Walk-in Mo-Mi ab 16.30, Do ab 17.00; Beratung Mo-Mi 17.30-19.30, Do 18.00-20.00"
+      costs: "kostenlos"
+      access: "Kurze Orientierungshilfe (ca. 15 Min.) durch Anwaeltinnen/Anwaelte; Termin am selben Tag an der Loge"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: rechtsauskunft_anwaltskollektiv
+    label: "Rechtsauskunft Anwaltskollektiv Zuerich"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling, migration_law]
+    contact:
+      address: "Kernstrasse 8, 8004 Zuerich"
+      phone: "044 241 24 33 (Mo-Fr 13.00-15.00 und 15.30-18.00)"
+      email: "auskunft@anwaltskollektiv.ch (keine Rechtsauskunft per E-Mail)"
+      web: "https://www.anwaltskollektiv.ch/"
+      hours: "Beratung Mo-Fr 12.30-18.30, Terminpflicht"
+      costs: "CHF 70 pro 30 Min."
+      languages: "12 Sprachen; Mi Asyl- und Auslaenderrecht"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Frauen- und Rechtsberatung =====================
+  - id: frauenzentrale_zuerich
+    label: "Zuercher Frauenzentrale, Beratung"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling, budget_counselling, family_law, employment_law]
+    contact:
+      address: "Am Schanzengraben 29, 8002 Zuerich"
+      phone: "044 206 30 20"
+      email: "beratungen@frauenzentrale-zh.ch"
+      web: "https://frauenzentrale-zh.ch/beratungen-rechtsberatung-budgetberatung/"
+      hours: "Mo-Do 08.30-11.30"
+      costs: "Rechtsberatung ab CHF 60, Budgetberatung ab CHF 50"
+      access: "Termin online buchbar"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/6.3.-Frauen-Schwangerschaft.pdf"
+    verified: true
+
+  - id: frauenzentrale_winterthur
+    label: "Frauenzentrale Winterthur, Beratungspunkt Budget und Recht"
+    type: ngo
+    region: ["ZH:Winterthur"]
+    specializations: [legal_counselling, budget_counselling]
+    contact:
+      address: "Metzggasse 2, 8400 Winterthur"
+      phone: "052 212 15 20"
+      email: "beratungspunkt@frauenzentrale-fzw.ch"
+      web: "https://www.beratungspunkt-winterthur.ch"
+      hours: null
+      costs: null
+      access: "Nach Terminabsprache vor Ort oder telefonisch; Budgetberatung auch online"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
+    verified: true
+
+  - id: evangelischer_frauenbund_zuerich
+    label: "Evangelischer Frauenbund Zuerich, Rechts- und Sozialberatung"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling, social_counselling, tenancy_law, family_law]
+    contact:
+      address: "Brahmsstrasse 32, 8003 Zuerich"
+      phone: "044 405 73 35 (Mo, Mi, Fr 08.30-12.00)"
+      email: "sozialberatung@vefz.ch"
+      web: "https://www.vefz.ch/rechtsberatung"
+      costs: "Sozialberatung kostenlos; Rechtsberatung CHF 70/Std."
+      access: "Frauen bis 60 Jahre mit Wohnsitz im Kanton Zuerich; Terminpflicht; einmalige Beratung, keine Mandate"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Opferhilfe und Gewaltschutz =====================
+  - id: opferberatung_zuerich
+    label: "Opferberatung Zuerich (OBZ)"
+    type: ngo_cantonal_mandate
+    region: [ZH]
+    specializations: [victim_support, domestic_violence, sexual_violence, legal_aid_victims]
+    referral_conditions: [domestic_violence, sexual_violence, acute_violence]
+    contact:
+      address: "Gartenhofstrasse 17, 8004 Zuerich"
+      phone: "044 299 40 50"
+      phone_24h: "044 455 21 42 (oder national 142)"
+      email: "opferberatung@obzh.ch"
+      web: "https://www.obzh.ch/"
+      hours: "Telefon Mo-Fr 09.00-12.00 und 13.30-17.00; Chat Mo-Fr 08.00-18.00"
+      costs: "kostenlos; anonyme Beratung moeglich; unentgeltliche Rechtsberatung bei erfuellten Voraussetzungen"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: opferhilfe_zuerich
+    label: "Kantonale Opferhilfestelle Zuerich (Entschaedigung, Genugtuung, Aufsicht Beratungsstellen)"
+    type: authority
+    region: [ZH]
+    specializations: [financial_aid_victims, compensation, supervision_victim_counselling]
+    referral_conditions: [victim_compensation]
+    contact:
+      address: "Neumuehlequai 10, Postfach, 8090 Zuerich"
+      phone: "043 259 25 41"
+      email: "kantonale.opferhilfestelle@ji.zh.ch"
+      web: "https://www.zh.ch/de/direktion-der-justiz-und-des-innern/kantonale-opferhilfestelle.html"
+      hours: "Mo-Do 08.30-11.30 und 14.00-16.30; Fr 08.30-11.30 und 14.00-16.00"
+      person: "Leitung: Sandra Mueller Gmuender"
+      access: "Schriftliches Gesuchsverfahren fuer finanzielle Leistungen; Erstberatung laeuft ueber die Opferberatungsstellen"
+    note: "Nicht die erste Anlaufstelle fuer Beratung -> opferberatung_zuerich."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.zh.ch/de/direktion-der-justiz-und-des-innern/kantonale-opferhilfestelle.html"
+    verified: true
+
+  - id: bif_frauenberatung
+    label: "BIF Beratungsstelle fuer Frauen gegen Gewalt in Ehe und Partnerschaft"
+    type: ngo_cantonal_mandate
+    region: [ZH]
+    specializations: [domestic_violence]
+    contact:
+      address: "Quellenstrasse 31, 8005 Zuerich"
+      phone: "044 278 99 99"
+      email: "info@bif.ch"
+      web: "https://www.bif-frauenberatung.ch/"
+      hours: "Mo-Fr 09.00-11.00 und 14.00-16.00; Di 08.30-11.00 und 16.00-18.00"
+      costs: "kostenlos"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: frauenberatung_sexuelle_gewalt
+    label: "Frauenberatung sexuelle Gewalt Zuerich"
+    type: ngo_cantonal_mandate
+    region: [ZH]
+    specializations: [sexual_violence, domestic_violence]
+    contact:
+      address: "Letzigraben 89, 8003 Zuerich"
+      phone: "044 291 46 46"
+      email: "info@frauenberatung.ch"
+      web: "https://www.frauenberatung.ch/"
+      hours: "Telefon Mo-Fr 09.00-12.00 und 13.00-16.00, Mi 13.00-16.00"
+      costs: "kostenlos"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: frauen_nottelefon_winterthur
+    label: "Frauen-Nottelefon Winterthur"
+    type: ngo_cantonal_mandate
+    region: ["ZH:Winterthur"]
+    specializations: [domestic_violence, sexual_violence, victim_support]
+    contact:
+      address: "Technikumstrasse 38, 8401 Winterthur"
+      phone: "052 213 61 61"
+      email: "info@frauennottelefon.ch"
+      web: "https://www.frauennottelefon.ch/"
+      hours: "Mo, Di, Do, Fr 10.00-17.00; Mi 13.00-17.00"
+      costs: "kostenlos"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: frauenhaus_violetta
+    label: "Frauenhaus Violetta Zuerich"
+    type: shelter
+    region: [ZH]
+    specializations: [domestic_violence, shelter]
+    contact:
+      address: null                     # Schutzadresse, wird nicht publiziert
+      phone_24h: "044 350 04 04"
+      email: "kontakt@frauenhaus-zhv.ch"
+      web: "https://www.frauenhaus-zhv.ch/"
+      costs: "Kostengutsprache der kantonalen Opferhilfe"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: frauenhaus_winterthur
+    label: "Frauenhaus Winterthur"
+    type: shelter
+    region: ["ZH:Winterthur"]
+    specializations: [domestic_violence, shelter]
+    contact:
+      address: null                     # Schutzadresse
+      phone_24h: "052 213 08 78"
+      email: "info@frauenhaus-winterthur.ch"
+      web: "https://www.frauenhaus-winterthur.ch/"
+      costs: "einkommensabhaengig oder Kostengutsprache Opferhilfe/Gemeinde"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: forensic_nurses_zh
+    label: "Forensic Nurses Kanton Zuerich (Spurensicherung nach haeuslicher/sexueller Gewalt)"
+    type: authority
+    region: [ZH]
+    specializations: [evidence_collection, medical_care]
+    contact:
+      phone_24h: "0800 09 09 09"
+      web: "https://www.zh.ch/de/gesundheit/strategien-programme/forensic-nurses.html"
+      access: "Betreuung in der naechsten Spital-Notfallstation; keine Anzeige noetig, Polizei wird nicht beigezogen"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: kokon_zuerich
+    label: "Kokon, Beratung fuer Kinder, Jugendliche und junge Erwachsene"
+    type: ngo_cantonal_mandate
+    region: [ZH]
+    specializations: [children, youth, violence]
+    contact:
+      address: "Aemtlerstrasse 17, 8003 Zuerich"
+      phone_24h: "044 545 45 40"
+      email: "beratung@kokon-zh.ch"
+      web: "https://kokon-zh.ch/"
+      costs: "kostenlos, vertraulich, auch anonym"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  - id: fiz_zuerich
+    label: "FIZ Fachstelle Frauenhandel und Frauenmigration"
+    type: ngo
+    region: [ZH, CH]
+    specializations: [human_trafficking, migrant_women, exploitation]
+    referral_conditions: [exploitation]
+    contact:
+      address: "Hohlstrasse 511, 8048 Zuerich"
+      phone: "044 436 90 00"
+      email: "contact@fiz-info.ch"
+      web: "https://www.fiz-info.ch/"
+      hours: "Telefon Mo-Fr 09.00-12.00 und 13.30-17.00"
+      access: "Opferschutzprogramm Menschenhandel: Zuweisung durch Fachstelle, Kostengutsprache"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Sozialhilfe, Wohnen, Schulden =====================
+  - id: sozialzentren_stadt_zuerich
+    label: "Soziale Dienste Stadt Zuerich, Sozialzentren (Intake)"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [social_assistance, rent_arrears, crisis_counselling, family_counselling]
+    contact:
+      locations:
+        - {name: "Sozialzentrum Albisriederhaus", address: "Albisriederstrasse 330, 8047 Zuerich", phone: "044 412 77 77"}
+        - {name: "Sozialzentrum Dorflinde", address: "Schwamendingerstrasse 41, 8050 Zuerich", phone: "044 412 82 50"}
+        - {name: "Sozialzentrum Helvetiaplatz", address: "Molkenstrasse 5, 8004 Zuerich", phone: "044 412 85 00"}
+        - {name: "Sozialzentrum Selnau", address: "Selnaustrasse 17, 8001 Zuerich", phone: "044 412 66 77"}
+        - {name: "Sozialzentrum Wipkingerplatz", address: "Roeschibachstrasse 26, 8037 Zuerich", phone: "044 412 73 00"}
+      hours: "Mo-Fr 09.00-12.00 und 13.30-16.30"
+      costs: "kostenlos"
+      access: "Ohne Termin; Zuteilung nach Wohnadresse"
+    note: "Engine waehlt den Standort nach Postleitzahl/Quartier; Zuteilungstabelle beim Sozialdepartement einholen."
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.7.-Sozialhilfe-1.pdf"
+    verified: true
+
+  - id: ufs_sozialhilferecht
+    label: "Unabhaengige Fachstelle fuer Sozialhilferecht (UFS)"
+    type: ngo
+    region: [ZH]
+    specializations: [social_assistance_law, legal_representation]
+    referral_conditions: [conflict_with_public_body]
+    contact:
+      address: "Sihlquai 67, 8005 Zuerich"
+      phone: "043 540 50 41 (Mo 11.00-14.00, Mi 09.00-12.00)"
+      email: "info@sozialhilfeberatung.ch"
+      web: "https://www.sozialhilfeberatung.ch/"
+      costs: "kostenlos"
+      access: "Fuer Sozialhilfebeziehende im Kanton Zuerich; Erstkontakt telefonisch"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.7.-Sozialhilfe-1.pdf"
+    verified: true
+
+  - id: wohnen_obdach_stadt_zuerich
+    label: "Stadt Zuerich, Sekretariat Wohnen & Obdach (Notunterkuenfte)"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [emergency_housing, homelessness]
+    contact:
+      address: "Strassburgstrasse 5, 8004 Zuerich"
+      phone: "044 412 65 54"
+      hours: "Mo-Fr 09.00-11.30 und 13.30-16.30; Do 09.00-17.00"
+      costs: "kostenlos"
+      access: "Persoenlich mit Unterlagen; Zuweisung ca. 3 Wochen. Familien ohne Obdach: Notunterkunft fuer Familien ueber dieselbe Nummer (bis 6 Monate, Kostengutsprache)."
+    related:
+      - {name: "Notschlafstelle Rosengartenstrasse", address: "Rosengartenstrasse 30, 8037 Zuerich", phone: "044 415 77 14", hours: "365 Tage; Okt-Mrz 20.30-10.00, Apr-Sep 21.00-10.00, letzter Einlass 00.30", access: "ab 18 J., Wohnsitz Zuerich, Ausweis"}
+      - {name: "Pfuusbus (Sozialwerk Pfarrer Sieber)", address: "Uetlibergerstrasse 311a, 8045 Zuerich", phone: "044 537 58 90", hours: "15.11.-15.4., 19.00-09.00"}
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/2.1.-Wohnen-bei-drohender-Obdachlosigkeit-Notunterkuenfte.pdf"
+    verified: true
+
+  - id: durchgangsheim_anker_winterthur
+    label: "Durchgangsheim Anker, Heilsarmee Winterthur"
+    type: shelter
+    region: ["ZH:Winterthur"]
+    specializations: [emergency_housing]
+    contact:
+      address: "Habsburgstrasse 29, 8400 Winterthur"
+      phone: "052 226 01 61"
+      email: "dhw@heilsarmee.ch"
+      hours: "taeglich 19.00-09.00, Einlass bis 23.00"
+      costs: "Kostengutsprache noetig"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/2.1.-Wohnen-bei-drohender-Obdachlosigkeit-Notunterkuenfte.pdf"
+    verified: true
+
+  - id: schuldenberatung_kanton_zuerich
+    label: "Schuldenberatung Kanton Zuerich (Fachstelle fuer Schuldenfragen)"
+    type: ngo_cantonal_mandate
+    region: [ZH]
+    specializations: [debt_counselling, rent_arrears]
+    referral_conditions: [debt, rent_arrears]
+    contact:
+      address: "Schaffhauserstrasse 550, 8052 Zuerich"
+      phone: "043 333 36 86 (Mo-Do 10.00-13.00)"
+      hotline: "0800 708 708"
+      email: "info@schulden-zh.ch"
+      web: "https://www.schulden-zh.ch"
+      costs: "kostenlos"
+      access: "Ueberschuldete oder unmittelbar gefaehrdete Haushalte"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://www.spielsucht-radix.ch/media/q4rftiat/organisation-der-schuldenberatung-im-kanton-zuerich.pdf"
+    verified: true
+
+  - id: caritas_zuerich
+    label: "Caritas Zuerich, Sozial- und Schuldenberatung"
+    type: ngo
+    region: [ZH]
+    specializations: [social_counselling, debt_counselling]
+    referral_conditions: [rent_arrears, debt, existential_emergency]
+    contact:
+      address: "Beckenhofstrasse 16, 8006 Zuerich"
+      phone: "044 366 68 28"
+      email: "sozialberatung@caritas-zuerich.ch"
+      hours: "Mo, Di, Do 13.30-17.00; Fr 08.30-12.00"
+      access: "Wohnsitz Kanton Zuerich; vertraulich; keine Schuldenuebernahme, keine Darlehen"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://www.spielsucht-radix.ch/media/q4rftiat/organisation-der-schuldenberatung-im-kanton-zuerich.pdf"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Migration und Asyl =====================
+  - id: zba_heks_caritas_zuerich
+    label: "Zuercher Beratungsstelle fuer Asylsuchende (ZBA), HEKS und Caritas Zuerich"
+    type: ngo
+    region: [ZH]
+    specializations: [asylum_law, migration_law, legal_representation]
+    referral_conditions: [migration_status]
+    contact:
+      address: "Flurstrasse 50, 8048 Zuerich"
+      phone: "044 454 60 30 (Mo-Fr 09.30-11.30)"
+      email: "zba@heks.ch"
+      web: "https://www.heks.ch/was-wir-tun/heks-rechtsberatungsstelle-fuer-asylsuchende-zuerich"
+      hours: "Offene Beratung ohne Anmeldung Mi 13.30-17.00"
+      costs: "grundsaetzlich kostenlos; einzelne Verfahren kostenpflichtig, fuer Sozialhilfebeziehende alles kostenlos"
+      languages: "Deutsch, Englisch, Franzoesisch"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: freiplatzaktion_zuerich
+    label: "Freiplatzaktion Zuerich"
+    type: ngo
+    region: [ZH]
+    specializations: [asylum_law, migration_law, legal_representation]
+    referral_conditions: [migration_status]
+    contact:
+      address: "Dienerstrasse 59, 8004 Zuerich"
+      phone: "044 241 54 11"
+      email: "info@freiplatzaktion.ch"
+      web: "https://freiplatzaktion.ch/"
+      hours: "Mo-Fr 09.00-12.00 und 14.00-17.00; 1. Montag im Monat keine Beratung; Anmeldung vor Ort nur Mo 08.30"
+      costs: "kostenlos"
+      access: "Gefluechtete und Migrantinnen/Migranten mit Wohnsitz im Kanton Zuerich; Unterlagen mitbringen"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: rechtsschutz_baz_zuerich
+    label: "Rechtsschutz im beschleunigten Asylverfahren, Asylregion Zuerich (Berner Rechtsberatungsstelle, im BAZ)"
+    type: ngo_federal_mandate
+    region: [ZH]
+    specializations: [asylum_procedure]
+    contact:
+      address: "Foerrlibuckstrasse 110, 8005 Zuerich (Bundesasylzentrum)"
+      phone: "031 370 35 40"
+      email: "info.zh@rbsbern.ch"
+      web: "https://rechtsberatungsstelle.ch/"
+      costs: "kostenlos"
+      access: "Nur fuer Asylsuchende in einem BAZ der Asylregion Zuerich"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: pikett_administrativhaft
+    label: "Pikett Administrativhaft Zuerich"
+    type: ngo
+    region: [ZH]
+    specializations: [detention_pending_deportation]
+    contact:
+      address: "Kernstrasse 8, 8004 Zuerich"
+      phone: "044 521 47 48"
+      phone_24h: "Pikett 044 521 47 47"
+      email: "info@pa-z.ch"
+      web: "https://www.pikett-administrativhaft.ch/"
+      hours: "Mo-Fr 08.00-17.30"
+      costs: "oft Anspruch auf unentgeltliche Vertretung"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: asylex
+    label: "AsyLex"
+    type: ngo
+    region: [CH]
+    specializations: [asylum_law, family_reunification, dublin, detention_pending_deportation, trafficking, un_complaints]
+    referral_conditions: [migration_status, exploitation]
+    contact:
+      address: "Gotthardstrasse 52, 8002 Zuerich"
+      email: "operations@asylex.ch"
+      web: "https://www.asylex.ch"
+      access: "Vorwiegend digitale Beratung; Anfrage ueber die Website"
+      costs: "kostenlos"
+    note: "Kostenlose, vorwiegend digitale Rechtsberatung fuer Gefluechtete; auch Verfahren vor UN-Gremien."
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://cms.kantonsrat.zh.ch/uploads/documents/Projektplakat-AsyLex.pdf"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Behinderung, Kindes- und Erwachsenenschutz =====================
+  - id: pro_infirmis_zuerich
+    label: "Pro Infirmis Zuerich, Beratungsstelle"
+    type: ngo
+    region: [ZH]
+    specializations: [disability, social_counselling, financial_aid]
+    referral_conditions: [disability]
+    contact:
+      address: "Hohlstrasse 560, 8048 Zuerich"
+      phone: "058 775 25 25"
+      email: "zuerich@proinfirmis.ch"
+      web: "https://www.proinfirmis.ch/angebot/zuerich.html"
+      hours: "Mo-Do 08.30-11.30 und 13.30-16.30; Fr 08.30-11.30"
+      costs: "kostenlos, vertraulich"
+      access: "Termin fuer persoenliches Gespraech; auch Chat; Aussenstelle Winterthur vorhanden"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.proinfirmis.ch/angebot/zuerich.html"
+    verified: true
+
+  - id: kesb_stadt_zuerich
+    label: "KESB Stadt Zuerich"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [child_protection, adult_protection]
+    contact:
+      address: "Stauffacherstrasse 45, 8004 Zuerich"
+      phone: "044 412 11 11"
+      phone_legal_info: "044 412 20 70 (Do 16.00-18.00)"
+      web: "https://kesb-zh.ch/organisation/"
+    note: "Behoerde, keine Beratungsstelle. Neutrale Beratung zu KES-Massnahmen: KESCHA 044 273 96 96."
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  - id: kesb_winterthur_andelfingen
+    label: "KESB Winterthur-Andelfingen"
+    type: authority
+    region: ["ZH:Winterthur"]
+    specializations: [child_protection, adult_protection]
+    contact:
+      address: "Bahnhofplatz 17, 8403 Winterthur"
+      phone: "052 267 56 42"
+      email: "kesb@win.ch"
+      web: "https://www.kesb-wa.ch"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
+    verified: true
+
+  # ===================== KANTON ZUERICH: Ombudsstellen =====================
+  - id: ombudsstelle_kanton_zuerich
+    label: "Ombudsstelle des Kantons Zuerich"
+    type: authority
+    region: [ZH]
+    specializations: [conflict_with_authorities]
+    referral_conditions: [conflict_with_public_body]
+    contact:
+      address: "Forchstrasse 59, 8032 Zuerich"
+      phone: "044 269 40 70"
+      web: "https://ombudsstelle.zh.ch/"
+      hours: "Mo, Di, Do, Fr 08.00-11.30 und 13.30-16.00; Gespraeche nach Vereinbarung"
+      person: "Ombudsmann Juerg Trachsel"
+      costs: "kostenlos"
+      access: "Konflikte mit kantonalen und Bezirksbehoerden; Gemeinden nur, wenn die Gemeindeordnung es vorsieht"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://ombudsstelle.zh.ch/"
+    verified: true
+
+  - id: ombudsstelle_stadt_zuerich
+    label: "Ombudsstelle der Stadt Zuerich"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [conflict_with_authorities]
+    referral_conditions: [conflict_with_public_body]
+    contact:
+      address: "Oberdorfstrasse 8, 8001 Zuerich"
+      phone: "044 412 00 30"
+      web: "https://www.stadt-zuerich.ch/ombudsstelle"
+      hours: "Mo, Di, Mi, Fr 09.00-12.00 und 13.30-16.30; Do 13.30-16.30"
+      person: null                       # aktuelle Ombudsperson auf der Website pruefen
+      costs: "kostenlos"
+      access: "Probleme mit der Stadtverwaltung Zuerich (z.B. Sozialzentren, staedtische Wohnungen, Notunterkuenfte)"
+    contact_source: secondary
+    last_checked: "2026-11-07"
+    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    verified: true
+
+  # ===================== Menschenrechte (national, fuer liability_flags.yaml) =====================
+  - id: amnesty_lawyers_group
+    label: "Amnesty International Schweiz (Anfragen zur Lawyers' Group ueber die Sektion)"
+    type: ngo
+    region: [CH]
+    specializations: [human_rights, strategic_cases]
+    referral_conditions: [systemic_human_rights_issue]
+    contact:
+      address: "Speichergasse 33, 3001 Bern"
+      phone: "031 307 22 22"
+      web: "https://www.amnesty.ch"
+    note: "Eine Lawyers' Group ist auf amnesty.ch nicht ausgewiesen. Nur ueber die Sachbearbeitung, nicht direkt an Rechtsuchende. Ansprechperson mit LexTec klaeren."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://amnesty.ch/en"
+    verified: false
+
+  - id: brava
+    label: "Brava (ehemals TERRE DES FEMMES Schweiz)"
+    type: ngo
+    region: [CH]
+    specializations: [gender_based_violence, refugee_women]
+    referral_conditions: [domestic_violence, sexual_violence, migration_status]
+    contact:
+      email: "beratung@brava-ngo.ch"
+      web: "https://brava-ngo.ch/en/what-we-do/counselling"
+    availability: "Nimmt derzeit KEINE neuen Beratungsanfragen an (Stand 07.11.2026)"
+    note: "Bis zur Wiederaufnahme nicht automatisch zuweisen; stattdessen opferhilfe_kantonal und fiz_zuerich."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://brava-ngo.ch/en/what-we-do/counselling"
+    verified: true
+    active: false
+
+  - id: nkvf
+    label: "Nationale Kommission zur Verhuetung von Folter (NKVF)"
+    type: authority
+    region: [CH]
+    specializations: [detention_monitoring, asylum_centre_monitoring]
+    contact:
+      web: "https://www.nkvf.admin.ch"
+    note: "Besucht Orte des Freiheitsentzugs und Bundesasylzentren; keine Einzelfallvertretung. Nur fuer systemische Muster (HR_SYSTEMIC)."
+    contact_source: none
+    verified: false
+
+  # ===================== Weitere Kantone (Kontakte nicht recherchiert) =====================
+
+  - id: eff_zett
+    label: "eff-zett das fachzentrum (Frauenzentrale Zug)"
+    type: ngo_cantonal_mandate
+    region: [ZG]
+    specializations: [victim_support, budget_counselling, debt_counselling, couple_family, self_help]
+    referral_conditions: [domestic_violence, sexual_violence, debt, family_conflict]
+    contact: {phone: "041 725 26 50 (Opferberatung)", email: "opfer@eff-zett.ch"}
+    note: "Vom Kanton Zug beauftragte Opferberatungsstelle."
+    source_url: "https://zg.ch/de/sicherheit/opferhilfe-und-opferberatung"
+    verified: true
+    contact_source: none
+
+  - id: frauenzentrale_bern
+    label: "Frauenzentrale Bern"
+    type: ngo
+    region: [BE]
+    specializations: [legal_counselling, budget_counselling]
+    source_url: "https://www.plattformj.ch/artikel/179696/"
+    verified: true
+    contact_source: none
+
+  - id: frauenplus_baselland
+    label: "frauenplus Baselland"
+    type: ngo
+    region: [BL]
+    specializations: [legal_counselling, budget_counselling, family_support, migrant_contact_point]
+    contact: {phone: "061 921 60 20", email: "baselland@frauenplus.ch"}
+    source_url: "https://www.baselland.ch/politik-und-behorden/direktionen/finanz-und-kirchendirektion/gleichstellung-bl/fachstelle-gleichstellung-fuer-frauen-und-maenner/beratung"
+    verified: true
+    contact_source: none
+
+  - id: frauenzentrale_graubuenden
+    label: "Frauenzentrale Graubuenden"
+    type: ngo
+    region: [GR]
+    specializations: [legal_counselling, employment_law, budget_counselling]
+    source_url: "https://www.srf.ch/news/unbeliebtes-urteil-frauenzentralen-verlieren-vor-gericht"
+    verified: true
+    contact_source: none
+
+  - id: frauenzentrale_aargau
+    label: "Frauenzentrale Aargau"
+    type: ngo
+    region: [AG]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+    contact_source: none
+
+  - id: frauenzentrale_glarus
+    label: "Frauenzentrale Glarus"
+    type: ngo
+    region: [GL]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+    contact_source: none
+
+  - id: frauenzentrale_st_gallen
+    label: "Frauenzentrale St. Gallen"
+    type: ngo
+    region: [SG]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+    contact_source: none
+
+  - id: frauenzentrale_luzern
+    label: "Frauenzentrale Luzern"
+    type: ngo
+    region: [LU]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+    contact_source: none
+
+  - id: berner_schuldenberatung
+    label: "Berner Schuldenberatung"
+    type: ngo
+    region: [BE]
+    specializations: [debt_counselling, rent_arrears]
+    referral_conditions: [rent_arrears, debt]
+    verified: false
+    contact_source: none
+
+  - id: solidaritaetshaus_st_gallen
+    label: "Solidaritaetshaus St. Gallen (Solidaritaetsnetz Ostschweiz)"
+    type: ngo
+    region: [SG]
+    specializations: [everyday_counselling, refugees, multilingual]
+    note: "Alltagsberatung, offene Kurzberatung u.a. auf Englisch, Farsi, Somali, Arabisch, Tigrinya."
+    source_url: "https://www.hallo.sg.ch/de/beratung-kontakte/offene-fragen-/_jcr_content/pdfonthefly.ocFile/offene-fragen--de.pdf"
+    verified: true
+    contact_source: none
+
+  - id: selbsthilfe_be
+    label: "Selbsthilfe BE"
+    type: ngo_cantonal_mandate
+    region: [BE]
+    specializations: [self_help_groups, mental_health_follow_up]
+    contact: {phone: "0848 33 99 00", email: "info@selbsthilfe-be.ch"}
+    note: "Vermittlung von Selbsthilfegruppen; keine Krisenintervention."
+    source_url: "https://www.herzogenbuchsee.ch/leben/soziales/selbsthilfe-be.html/407/print/pdf"
+    verified: true
+    contact_source: none
+
+  - id: selbsthilfe_solothurn
+    label: "Selbsthilfe Solothurn"
+    type: ngo
+    region: [SO]
+    specializations: [self_help_groups, mental_health_follow_up]
+    verified: false
+    contact_source: none
+
+  - id: ombudsstelle_schaffhausen
+    label: "Ombudsstelle Kanton Schaffhausen"
+    type: authority
+    region: [SH]
+    specializations: [conflict_with_authorities]
+    referral_conditions: [conflict_with_public_body]
+    note: "Seit 1.1.2026 besetzt. Nur Konflikte mit Kanton/Gemeinden (z.B. Sozialamt, gemeindeeigene Wohnung), nicht mit privaten Vermietern."
+    source_url: "https://www.jobup.ch/en/jobs/detail/6fbdc7c5-6659-446c-8d29-2bde5e968220"
+    verified: true
+    contact_source: none
+
+  # ===================== Generische Stellen (Fallback ausserhalb der aufgeloesten Kantone) =====================
+
+  - id: schlichtungsbehoerde_miete
+    label: "Paritaetische Schlichtungsbehoerde in Mietsachen (Wohnort/Ort der Mietsache)"
+    type: authority
+    region: [CH]
+    specializations: [tenancy_disputes]
+    note: "Zustaendig fuer Anfechtung, Erstreckung, Maengel, Mietzins, Kaution. Schlichtungsverfahren im Mietrecht ohne Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO). Kontakt ueber kantonales Verzeichnis."
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: mieterverband
+    label: "Mieterinnen- und Mieterverband (kantonale Sektion)"
+    type: ngo
+    region: [CH]
+    specializations: [tenancy_law_counselling]
+    note: "Rechtsberatung meist fuer Mitglieder."
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: sozialdienst_gemeinde
+    label: "Sozialdienst der Wohngemeinde"
+    type: authority
+    region: [CH]
+    specializations: [social_assistance, rent_arrears, emergency_housing]
+    note: "Kann je nach Gemeinde Mietzinsausstaende uebernehmen und Notunterkunft vermitteln."
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: kesb
+    label: "KESB (Kindes- und Erwachsenenschutzbehoerde)"
+    type: authority
+    region: [CH]
+    specializations: [child_protection, adult_protection]
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: unentgeltliche_rechtsauskunft
+    label: "Kantonale unentgeltliche Rechtsauskunft / Anwaltsverband"
+    type: authority
+    region: [CH]
+    specializations: [legal_counselling]
+    note: "Z.B. Kanton St. Gallen: kostenlose Rechtsauskunft an mehreren Standorten."
+    source_url: "https://hallo.sg.ch/el/beratung-kontakte/rechtsauskuenfte/_jcr_content/pdfonthefly.ocFile/rechtsauskuenfte-el.pdf"
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: tenancy_lawyer
+    label: "Anwaeltin/Anwalt Mietrecht (via Mieterverband oder Anwaltsverband)"
+    type: lawyer
+    region: [CH]
+    specializations: [tenancy_litigation]
+    note: "ZH: Anwaltsvertretung ueber mieterverband_zh oder Anwaltssuche des ZAV (https://www.zav.ch)."
+    verified: false
+    contact_source: none
+
+  - id: caritas
+    label: "Caritas (regionale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [social_counselling, debt_counselling, financial_emergency_aid]
+    referral_conditions: [rent_arrears, debt, existential_emergency]
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: heks
+    label: "HEKS (regionale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [migration, asylum_legal_counselling, integration, social_counselling]
+    referral_conditions: [migration_status, existential_emergency]
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+  - id: pro_infirmis
+    label: "Pro Infirmis (kantonale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [disability, social_counselling, social_insurance]
+    referral_conditions: [disability]
+    verified: false
+    contact_source: none
+    note_zh: "Im Kanton Zuerich ueber role_resolution aufgeloest (siehe Abschnitt 1)."
+
+# ---------------------------------------------------------------------------
+# 3. REGELN PRO FALLTYP (Mietrecht)
+#    documents:     welche Unterlagen das Tool anfordert / scannt
+#    extract:       welche Felder aus den Unterlagen gelesen werden
+#    deadline:      gemeldet, nie verbindlich berechnet; Fristbeginn = Zustellung
+#    referrals:     primary = immer; conditional = wenn Signal gesetzt
+# ---------------------------------------------------------------------------
+issue_rules:
+
+  - issue_id: CH_TENANCY_TERMINATION
+    label: "Kuendigung durch den Vermieter"
+    legal_basis: ["Art. 266a ff. OR", "Art. 266l-266o OR (Form, Familienwohnung, Nichtigkeit)", "Art. 271, 271a OR (Anfechtbarkeit)", "Art. 273 Abs. 1 OR"]
+    documents_required: [kuendigungsformular, mietvertrag]
+    documents_optional: [zustellnachweis, begruendung_kuendigung]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: termination_date, from: kuendigungsformular, priority: HIGH}
+      - {id: official_form_used, from: kuendigungsformular, priority: CRITICAL, why: "Ohne amtliches Formular nichtig (Art. 266l Abs. 2, 266o OR)"}
+      - {id: family_dwelling_separate_notice, from: kuendigungsformular, priority: HIGH, why: "Familienwohnung: separate Zustellung an Ehegatten (Art. 266n OR)"}
+      - {id: notice_period_months, from: mietvertrag, priority: NORMAL}
+      - {id: landlord_name, from: mietvertrag, priority: NORMAL}
+    deadline: {signal: deadline_contest_termination_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [schlichtungsbehoerde_miete, mieterverband]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [tenancy_lawyer], urgency: CRITICAL}
+        - {when: {signal: imminent_housing_loss}, add: [sozialdienst_gemeinde]}
+        - {when: {signal: low_income}, add: [frauenzentrale_kantonal, unentgeltliche_rechtsauskunft]}
+        - {when: {signal: landlord_is_public_body}, add: [ombudsstelle]}
+    reason_for_referral: "Anfechtung und Erstreckung nur innert 30 Tagen bei der Schlichtungsbehoerde moeglich; Formfehler pruefen lassen."
+
+  - issue_id: CH_TENANCY_PAYMENT_WARNING
+    label: "Zahlungsaufforderung mit Kuendigungsandrohung"
+    legal_basis: ["Art. 257d Abs. 1 OR (Wohnraum: Zahlungsfrist mind. 30 Tage)", "Art. 266n OR"]
+    documents_required: [zahlungsaufforderung, mietvertrag]
+    documents_optional: [kontoauszug, betreibungsauszug]
+    extract:
+      - {id: date_received, from: zahlungsaufforderung, priority: CRITICAL}
+      - {id: payment_deadline_date, from: zahlungsaufforderung, priority: CRITICAL}
+      - {id: amount_owed, from: zahlungsaufforderung, priority: HIGH}
+      - {id: termination_threat_explicit, from: zahlungsaufforderung, priority: HIGH}
+      - {id: family_dwelling_separate_notice, from: zahlungsaufforderung, priority: NORMAL}
+      - {id: monthly_rent, from: mietvertrag, priority: NORMAL}
+    deadline: {signal: deadline_payment_257d, days: null, from: payment_deadline_date, note: "Frist laut Schreiben; Zahlung innert Frist verhindert die Kuendigung nach Art. 257d."}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [sozialdienst_gemeinde, schuldenberatung]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [mieterverband], urgency: CRITICAL}
+        - {when: {signal: amount_disputed}, add: [mieterverband, schlichtungsbehoerde_miete]}
+        - {when: {signal: low_income}, add: [caritas, frauenzentrale_kantonal]}
+    reason_for_referral: "Noch keine Kuendigung: Wohnung kann durch fristgerechte Zahlung gesichert werden. Finanzierung (Sozialdienst, Caritas) hat Vorrang."
+
+  - issue_id: CH_TENANCY_TERMINATION_ARREARS
+    label: "Kuendigung wegen Zahlungsverzug"
+    legal_basis: ["Art. 257d Abs. 2 OR", "Art. 272a Abs. 1 lit. a OR (keine Erstreckung)", "Art. 273 OR"]
+    documents_required: [kuendigungsformular, zahlungsaufforderung, mietvertrag]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: termination_date, from: kuendigungsformular, priority: CRITICAL}
+      - {id: official_form_used, from: kuendigungsformular, priority: CRITICAL}
+      - {id: payment_deadline_date, from: zahlungsaufforderung, priority: HIGH, why: "War die Zahlungsfrist korrekt angesetzt und abgelaufen?"}
+      - {id: amount_owed, from: zahlungsaufforderung, priority: HIGH}
+      - {id: paid_within_deadline, from: user, priority: HIGH}
+    deadline: {signal: deadline_contest_termination_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: CRITICAL
+    referrals:
+      primary: [schlichtungsbehoerde_miete, sozialdienst_gemeinde]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [tenancy_lawyer]}
+        - {when: {signal: children_in_household}, add: [sozialdienst_gemeinde], note: "Wohnungssuche/Notunterkunft fuer Familie"}
+        - {when: {signal: debt}, add: [schuldenberatung]}
+    reason_for_referral: "Erstreckung ausgeschlossen, Ausweisung droht rasch. Formelle Voraussetzungen von Art. 257d OR durch Fachperson pruefen lassen."
+
+  - issue_id: CH_TENANCY_EXTENSION
+    label: "Erstreckung des Mietverhaeltnisses"
+    legal_basis: ["Art. 272 OR", "Art. 272a OR (Ausschluss)", "Art. 272b OR (max. 4 Jahre Wohnraum)", "Art. 273 Abs. 2 OR"]
+    documents_required: [kuendigungsformular, mietvertrag]
+    documents_optional: [nachweis_wohnungssuche, haushaltsnachweis]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: lease_type, from: mietvertrag, priority: HIGH, why: "Unbefristet: 30 Tage ab Empfang; befristet: spaetestens 60 Tage vor Ablauf (Art. 273 Abs. 2 OR)"}
+      - {id: lease_end_date, from: mietvertrag, priority: HIGH}
+      - {id: household_size, from: user, priority: HIGH}
+      - {id: children_in_household, from: user, priority: HIGH}
+      - {id: housing_search_efforts, from: user, priority: NORMAL}
+      - {id: termination_reason_arrears, from: kuendigungsformular, priority: HIGH, why: "Bei Zahlungsverzug keine Erstreckung (Art. 272a OR)"}
+    deadline: {signal: deadline_extension_request, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [schlichtungsbehoerde_miete, mieterverband]
+      conditional:
+        - {when: {signal: children_in_household}, add: [sozialdienst_gemeinde]}
+        - {when: {signal: disability}, add: [behinderung]}
+        - {when: {signal: low_income}, add: [frauenzentrale_kantonal]}
+    reason_for_referral: "Haerteabwaegung (Familie, Kinder, Wohnungsmarkt) ist eine Einzelfallwertung und gehoert zu einer Fachperson."
+
+  - issue_id: CH_TENANCY_DEFECTS
+    label: "Maengel an der Wohnung"
+    legal_basis: ["Art. 259a ff. OR", "Art. 259g-259i OR (Hinterlegung)"]
+    documents_required: [mietvertrag]
+    documents_optional: [fotos_mangel, maengelruege, korrespondenz_vermieter, arztzeugnis]
+    extract:
+      - {id: defect_type, from: user, priority: HIGH}
+      - {id: defect_since, from: user, priority: HIGH}
+      - {id: landlord_notified_in_writing, from: korrespondenz_vermieter, priority: CRITICAL}
+      - {id: rent_deposited, from: user, priority: HIGH, why: "Hinterlegung: innert 30 Tagen nach Faelligkeit Schlichtungsbehoerde anrufen (Art. 259h OR)"}
+      - {id: health_impact, from: user, priority: HIGH}
+    deadline: {signal: deadline_deposit_259h, days: 30, from: first_deposited_rent_due, applies_if: {fact: rent_deposited, operator: eq, value: true}}
+    default_action: PROCEED          # Erstinformation moeglich; Eskalation bei Gesundheit/Hinterlegung
+    urgency: NORMAL
+    referrals:
+      primary: [mieterverband]
+      conditional:
+        - {when: {signal: health_risk}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: HIGH, note: "z.B. Schimmel mit Kindern, keine Heizung im Winter"}
+        - {when: {signal: rent_deposit_started}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: HIGH}
+        - {when: {signal: children_in_household}, add: [], urgency: HIGH}
+    reason_for_referral: "Rechte haengen von schriftlicher Maengelruege ab; Mietzinshinterlegung ist fristgebunden und riskant ohne Begleitung."
+
+  - issue_id: CH_TENANCY_EVICTION
+    label: "Ausweisung / Raeumung"
+    legal_basis: ["Art. 257 ZPO (Rechtsschutz in klaren Faellen)", "kantonales Vollstreckungsrecht"]
+    documents_required: [gerichtsurkunde]
+    documents_optional: [raeumungsbefehl, kuendigungsformular]
+    extract:
+      - {id: date_received, from: gerichtsurkunde, priority: CRITICAL}
+      - {id: eviction_date, from: raeumungsbefehl, priority: CRITICAL}
+      - {id: court_name, from: gerichtsurkunde, priority: HIGH}
+      - {id: decision_or_summons, from: gerichtsurkunde, priority: CRITICAL, why: "Vorladung oder Entscheid? Rechtsmittelfristen im summarischen Verfahren kurz, keine Gerichtsferien (Art. 145 Abs. 2 ZPO)"}
+    deadline: {signal: deadline_summary_procedure, days: 10, from: date_received, note: "Nur Warnsignal; Frist laut Rechtsmittelbelehrung pruefen."}
+    default_action: ESCALATE
+    urgency: CRITICAL
+    referrals:
+      primary: [tenancy_lawyer, sozialdienst_gemeinde]
+      conditional:
+        - {when: {signal: imminent_housing_loss}, add: [sozialdienst_gemeinde], note: "Notunterkunft organisieren"}
+        - {when: {signal: children_in_household}, add: [kesb], note: "Nur Information/Unterstuetzung, keine Gefaehrdungsmeldung ohne Anlass"}
+        - {when: {signal: low_income}, add: [unentgeltliche_rechtsauskunft]}
+    reason_for_referral: "Gerichtsverfahren laeuft oder ist abgeschlossen; Obdachlosigkeit droht. Immer menschliche Bearbeitung."
+
+  - issue_id: CH_TENANCY_RENT_INCREASE
+    label: "Mietzinserhoehung"
+    legal_basis: ["Art. 269d OR (amtliches Formular, Begruendung, Mitteilung mind. 10 Tage vor Kuendigungsfrist)", "Art. 270b OR"]
+    documents_required: [formular_mietzinserhoehung, mietvertrag]
+    extract:
+      - {id: date_received, from: formular_mietzinserhoehung, priority: CRITICAL}
+      - {id: effective_date, from: formular_mietzinserhoehung, priority: HIGH}
+      - {id: old_rent, from: mietvertrag, priority: HIGH}
+      - {id: new_rent, from: formular_mietzinserhoehung, priority: HIGH}
+      - {id: official_form_used, from: formular_mietzinserhoehung, priority: CRITICAL}
+      - {id: reason_stated, from: formular_mietzinserhoehung, priority: HIGH}
+    deadline: {signal: deadline_contest_rent_increase_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [mieterverband, schlichtungsbehoerde_miete]
+      conditional:
+        - {when: {signal: rent_unaffordable}, add: [sozialdienst_gemeinde, frauenzentrale_kantonal]}
+    reason_for_referral: "Anfechtung nur innert 30 Tagen; Missbraeuchlichkeit (Referenzzins, Kosten) braucht Berechnung durch Fachperson."
+
+  - issue_id: CH_TENANCY_DEPOSIT
+    label: "Mietkaution wird nicht zurueckbezahlt"
+    legal_basis: ["Art. 257e OR"]
+    documents_required: [mietvertrag, kautionsnachweis]
+    documents_optional: [abnahmeprotokoll, korrespondenz_vermieter]
+    extract:
+      - {id: deposit_amount, from: kautionsnachweis, priority: HIGH}
+      - {id: deposit_bank_account_in_tenant_name, from: kautionsnachweis, priority: HIGH}
+      - {id: lease_end_date, from: mietvertrag, priority: CRITICAL, why: "Ohne Rechtsverfahren/Betreibung des Vermieters innert 1 Jahr kann Rueckzahlung direkt bei der Bank verlangt werden (Art. 257e Abs. 3 OR)"}
+      - {id: landlord_claims_damage, from: korrespondenz_vermieter, priority: HIGH}
+      - {id: handover_protocol_signed, from: abnahmeprotokoll, priority: NORMAL}
+    deadline: null
+    default_action: PROCEED
+    urgency: LOW
+    referrals:
+      primary: [mieterverband]
+      conditional:
+        - {when: {signal: landlord_claims_damage}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: NORMAL}
+        - {when: {signal: debt}, add: [schuldenberatung]}
+    reason_for_referral: "Meist Information ausreichend; bei Streit ueber Schaeden Schlichtungsbehoerde."
+
+# ---------------------------------------------------------------------------
+# 4. SICHERHEITS-ROUTING (Kategorien aus safety_keywords.yaml)
+#    Gilt fuer JEDEN Falltyp und ueberschreibt default_action, wenn strenger.
+# ---------------------------------------------------------------------------
+safety_routing:
+  - category: ACUTE_SELF_HARM
+    action: IMMEDIATE_SAFETY_RESPONSE
+    notify_caseworker: immediate
+    show_to_user: [ambulance_144, dargebotene_hand_143, pro_juventute_147]
+    referrals: []
+    follow_up_referrals: [selbsthilfe]          # erst nach Stabilisierung, durch Sachbearbeitung
+    briefing_flag: "AKUTE SELBSTGEFAEHRDUNG GEMELDET - Kontaktaufnahme vor jeder Rechtsfrage"
+  - category: ACUTE_DANGER_VIOLENCE
+    action: IMMEDIATE_SAFETY_RESPONSE
+    notify_caseworker: immediate
+    show_to_user: [police_117, opferhilfe_142]
+    referrals: [opferhilfe_kantonal]
+    briefing_flag: "AKUTE GEFAHR / GEWALT GEMELDET"
+  - category: DOMESTIC_VIOLENCE
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142, police_117]
+    referrals: [opferhilfe_kantonal, frauenzentrale_kantonal]
+    conditional:
+      - {when: {signal: needs_shelter}, add: [frauenhaus]}
+      - {when: {signal: migration_status}, add: [fiz_zuerich, asylex]}    # Brava nimmt derzeit keine neuen Anfragen an
+      - {when: {signal: injuries_recent}, add: [forensic_nurses_zh], note: "nur ZH; Spurensicherung ohne Anzeige"}
+    briefing_flag: "Haeusliche Gewalt - Mietsache ggf. zweitrangig; Schutzmassnahmen (Art. 28b ZGB) pruefen"
+  - category: SEXUAL_VIOLENCE_HARASSMENT
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142]
+    referrals: [opferhilfe_kantonal, frauenzentrale_kantonal]
+    conditional:
+      - {when: {signal: migration_status}, add: [fiz_zuerich]}
+      - {when: {signal: injuries_recent}, add: [forensic_nurses_zh]}
+    briefing_flag: "Sexuelle Gewalt / Belaestigung gemeldet"
+  - category: CHILD_ENDANGERMENT
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [pro_juventute_147, police_117]
+    referrals: [kesb, opferhilfe_kantonal]
+    conditional:
+      - {when: {signal: minor_is_user}, add: [kokon_zuerich], note: "nur ZH; 24h, auch anonym"}
+    briefing_flag: "Moegliche Kindesgefaehrdung - Abklaerung Gefaehrdungsmeldung durch Fachperson"
+  - category: EXPLOITATION_TRAFFICKING
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142, police_117]
+    referrals: [opferhilfe_kantonal, fiz_zuerich, asylex]
+    briefing_flag: "Hinweise auf Ausbeutung / Menschenhandel"
+  - category: MENTAL_HEALTH_CRISIS
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [dargebotene_hand_143]
+    referrals: []
+    follow_up_referrals: [selbsthilfe]
+    briefing_flag: "Psychische Krise - Gespraech vor Fristentscheid; Fristen ggf. stellvertretend wahren"
+  - category: MENTAL_HEALTH_VULNERABILITY
+    action: FLAG
+    notify_caseworker: with_briefing
+    referrals: []
+    follow_up_referrals: [selbsthilfe, pro_infirmis]
+    briefing_flag: "Vulnerabilitaet (psychische Gesundheit) - einfache Sprache, mehr Begleitung"
+  - category: EXISTENTIAL_EMERGENCY
+    action: ESCALATE
+    notify_caseworker: immediate
+    referrals: [sozialdienst_gemeinde, notunterkunft, caritas]
+    conditional:
+      - {when: {signal: migration_status}, add: [migrationsberatung]}
+      - {when: {signal: receives_social_assistance}, add: [sozialhilferecht]}
+      - {when: {signal: debt}, add: [schuldenberatung]}
+    briefing_flag: "Existenzielle Notlage (Wohnung/Nahrung/Energie)"
+
+# ---------------------------------------------------------------------------
+# 5. QUERSCHNITTS-SIGNALE (unabhaengig vom Falltyp, ergaenzen die Verweisung)
+# ---------------------------------------------------------------------------
+cross_cutting:
+  - {signal: migration_status, description: "Aufenthaltsstatus betroffen (N, F, B abhaengig von Sozialhilfe)", add: [migrationsberatung, asyl_rechtsvertretung], urgency: HIGH,
+     note: "Sozialhilfebezug kann aufenthaltsrechtliche Folgen haben - nie ohne Fachperson zu Sozialhilfe raten."}
+  - {signal: disability, add: [behinderung], urgency: NORMAL}
+  - {signal: debt, add: [schuldenberatung], urgency: NORMAL}
+  - {signal: low_income, add: [frauenzentrale_kantonal, unentgeltliche_rechtsauskunft], urgency: NORMAL}
+  - {signal: conflict_with_public_body, add: [ombudsstelle], urgency: NORMAL}
+  - {signal: language_barrier, add: [migrationsberatung], urgency: NORMAL, note: "Mehrsprachige Beratung, z.B. Solidaritaetshaus SG"}
+  - {signal: systemic_human_rights_issue, add: [amnesty_lawyers_group], urgency: LOW, note: "Nur Sachbearbeitung entscheidet."}
+
+# ---------------------------------------------------------------------------
+# 6. BAUSTEIN FUER DIE ZUSAMMENFASSUNG (expert_briefing_v1, Abschnitt
+#    recommended_professionals + decision_and_reasons)
+# ---------------------------------------------------------------------------
+briefing:
+  section_id: recommended_professionals
+  render: |
+    VERWEISUNG
+    Entscheid: {action} | Dringlichkeit: {urgency}
+    Sicherheitshinweise: {safety_flags | "keine"}
+    Frist (nicht verbindlich berechnet): {deadline_signal} - Beginn {deadline_from_value} - zustaendig {deadline_authority}
+    Primaere Stelle(n): {primary_referrals}
+    Zusaetzlich wegen: {conditional_reasons}   # z.B. "Kinder im Haushalt -> Sozialdienst"
+    Begruendung: {reason_for_referral}
+    Fehlende Unterlagen: {missing_documents}
+    Ungeprueft (verified: false): {unverified_referrals}
+  rules:
+    - "Jede Verweisung nennt die ausloesende Regel (rule_id) und das Signal - fuer das Audit-Log."
+    - "Stellen mit verified: false werden im Briefing markiert und nicht direkt an die rechtsuchende Person ausgegeben."
+    - "Stellen mit active: false (z.B. Aufnahmestopp) werden nicht zugewiesen; die Engine nimmt die naechste passende Stelle."
+    - "Kontaktangaben mit contact_source: secondary vor produktivem Einsatz auf der Website der Stelle bestaetigen (last_checked)."
+    - "Schutzadressen (Frauenhaeuser) werden nie ausgegeben, nur Telefonnummern."
+    - "Sicherheitskategorien stehen im Briefing immer zuoberst, vor der Rechtsfrage."
+    - "Weitergabe von Daten an eine Stelle nur mit Einwilligung der Person (besonders schuetzenswerte Daten, Art. 5 lit. c und Art. 6 Abs. 7 nDSG)."

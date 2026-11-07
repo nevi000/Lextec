@@ -1,0 +1,98 @@
+# knowledge_base/briefings/case_summary_v1.yaml
+# Fallzusammenfassung fuer die Sachbearbeitung (ersetzt/erweitert expert_briefing_v1).
+# Seite 1 = alles, was fuer den Erstentscheid noetig ist. Danach Details, dann Anhang mit Scans.
+#
+# Grundsaetze
+#   - Jeder Wert traegt seine Herkunft: doc (aus Unterlage, mit Fundstelle), user (Angabe der Person),
+#     confirmed (von der Person bestaetigt), missing (null). Fehlendes wird angezeigt, nie geraten.
+#   - Die Ampel wird deterministisch aus Regel-Ergebnissen berechnet, nicht vom LLM gewaehlt.
+#   - Fristen sind Warnsignale ("rechnerisch"), keine verbindliche Berechnung.
+version: "1.0"
+id: case_summary_v1
+language: de
+page_format: A4
+
+# ---------------------------------------------------------------------------
+# AMPEL (oben rechts). Erste zutreffende Regel gewinnt.
+# ---------------------------------------------------------------------------
+traffic_light:
+  - level: ROT
+    label: "Sofort bearbeiten"
+    when_any:
+      - {field: action, operator: eq, value: IMMEDIATE_SAFETY_RESPONSE}
+      - {field: urgency, operator: eq, value: CRITICAL}
+      - {field: deadline.days_left, operator: lte, value: 10}
+      - {field: deadline.date_unknown_but_likely, operator: eq, value: true}
+      - {field: liability_flag.severity, operator: in, value: [CRITICAL, HIGH]}
+  - level: AMBER
+    label: "Bearbeiten innert 3 Arbeitstagen / Angaben fehlen"
+    when_any:
+      - {field: action, operator: eq, value: ESCALATE}
+      - {field: action, operator: eq, value: ASK}
+      - {field: missing_critical_count, operator: gte, value: 1}
+      - {field: deadline.days_left, operator: lte, value: 20}
+      - {field: liability_flag.severity, operator: eq, value: WATCH}
+  - level: GRUEN
+    label: "Ordentlich bearbeiten"
+    when_any:
+      - {field: action, operator: eq, value: PROCEED}
+
+# ---------------------------------------------------------------------------
+# SEITE 1
+# ---------------------------------------------------------------------------
+page_1:
+  header: [case_id, created_at, kb_version, issue_labels, traffic_light]
+  banners:                     # nur wenn vorhanden, immer ueber den Stammdaten
+    - safety_flags             # aus safety_keywords.yaml / referral_rules.yaml safety_routing
+    - liability_flag           # aus liability_flags.yaml
+  person:
+    - {id: last_name, label: "Name", required: true}
+    - {id: first_name, label: "Vorname", required: true}
+    - {id: birth_date, label: "Geburtsdatum", required: false}
+    - {id: address, label: "Adresse", required: true}
+    - {id: phone, label: "Telefon", required: true}
+    - {id: email, label: "E-Mail", required: false}
+    - {id: preferred_contact, label: "Bevorzugter Kontakt", required: false}
+    - {id: language, label: "Sprache", required: true}
+    - {id: interpreter_needed, label: "Dolmetscher noetig", required: true}
+    - {id: household, label: "Haushalt", required: false}
+    - {id: consent_data_sharing, label: "Einwilligung Weitergabe", required: true}
+  tenancy:
+    - {id: landlord, label: "Vermieter / Verwaltung", source_doc: mietvertrag}
+    - {id: object_address, label: "Mietobjekt", source_doc: mietvertrag}
+    - {id: object_type, label: "Art", source_doc: mietvertrag}          # Wohnung, Geschaeftsraum, Zimmer
+    - {id: family_dwelling, label: "Familienwohnung", source_doc: user}  # Art. 266m/n OR
+    - {id: contract_start, label: "Mietbeginn", source_doc: mietvertrag}
+    - {id: duration, label: "Dauer bisher", derived: true}
+    - {id: fixed_term, label: "Befristung", source_doc: mietvertrag}     # unbefristet | befristet bis ...
+    - {id: notice_period, label: "Kuendigungsfrist / -termine", source_doc: mietvertrag}
+    - {id: rent_net, label: "Nettomietzins / Mt.", source_doc: mietvertrag}
+    - {id: ancillary_costs, label: "Nebenkosten / Mt.", source_doc: mietvertrag}
+    - {id: rent_gross, label: "Bruttomietzins / Mt.", derived: true}
+    - {id: deposit, label: "Kaution", source_doc: mietvertrag}
+    - {id: reference_rate, label: "Referenzzinssatz bei Vertrag", source_doc: mietvertrag}
+  matter: [issue_labels, short_summary]            # max. 3 Saetze
+  deadline: [label, start_date, start_source, computed_end, days_left, authority, legal_basis, caveat]
+  recommendation:
+    - decision                                      # PROCEED | ASK | ESCALATE | IMMEDIATE_SAFETY_RESPONSE
+    - proposed_steps                                # Loesungsvorschlag, max. 4 Schritte
+    - responsible_bodies                            # aus referral_rules.yaml, nach Kanton aufgeloest
+    - reasons                                       # mit rule_id
+  documents_status: [received_count, missing_required]
+
+# ---------------------------------------------------------------------------
+# SEITE 2 ff.
+# ---------------------------------------------------------------------------
+details:
+  - chronology                  # Ereignisse mit Datum und Quelle
+  - legal_check                 # Pruefpunkte, je mit Status offen/erfuellt/unklar und Fundstelle
+  - missing_and_contradictions  # fehlende Angaben, Widersprueche (Dokument vs. Angabe)
+  - open_questions_for_call     # Fragen fuer das Erstgespraech
+  - legal_sources               # mit verified-Status (Zitatpruefung)
+  - audit                       # rule_ids, kb_version, Modell, Verarbeitungszeit
+
+annex:
+  - document_index              # Liste aller Unterlagen: Typ, Eingang, Seiten, extrahierte Felder, OCR-Qualitaet
+  - scans                       # jede Seite vollformatig; PDFs werden angehaengt
+
+footer: "KI-gestuetzte Vorbereitung, keine Rechtsberatung. Angaben vor Verwendung pruefen. Besonders schuetzenswerte Daten (Art. 5 lit. c nDSG)."

@@ -1,0 +1,947 @@
+# yaml-language-server: $schema=../../schemas/scenarios.schema.json
+# SYNTHETISCH-TECHNISCHE Szenarien (validation: SYNTHETIC_TECHNICAL). Sie prüfen, dass die ENGINE die
+# Regeln aus dem Law-Dossier wie spezifiziert ausführt - NICHT, dass die Regeln juristisch richtig sind.
+# Stichtag der Szenarien: 2026-11-07 (Feld today). Juristisch validierte Szenarien liefert das Law-Team
+# (validation: LEGALLY_VALIDATED).
+schema_version: 1
+version: 0.2-issue01
+scenarios:
+- id: SC_EMPTY
+  title_de: Noch keine Schilderung
+  has_user_input: false
+  expected_action: ASK
+  expected_reason_codes:
+  - NO_INPUT
+- id: SC_EMP_NO_FACTS
+  title_de: Arbeitskündigung erkannt, noch keine Fakten (Demo-Issue)
+  issues:
+  - id: employment_termination
+    confidence: 0.9
+  expected_action: ASK
+  expected_missing_facts:
+  - employer_termination_received
+  - deadline_pending
+  - employment_start_date
+  - incapacity_for_work
+- id: SC_EMP_COMPLETE_NO_DEADLINE
+  title_de: Arbeitskündigung vollständig, keine Frist (Demo-Issue)
+  issues:
+  - id: employment_termination
+    confidence: 0.9
+  facts:
+    employer_termination_received: true
+    employer_termination_received_date: '2026-01-15'
+    employer_termination_in_writing: true
+    employment_start_date: '2020-03-01'
+    incapacity_for_work: false
+    deadline_pending: false
+  expected_action: PROCEED
+  expected_reason_codes:
+  - ALL_REQUIRED_FACTS_PRESENT
+- id: SC_EMP_DEADLINE
+  title_de: Arbeitskündigung mit laufender Frist (Demo-Issue)
+  issues:
+  - id: employment_termination
+    confidence: 0.9
+  facts:
+    employer_termination_received: true
+    employer_termination_received_date: '2026-01-15'
+    employer_termination_in_writing: true
+    employment_start_date: '2020-03-01'
+    incapacity_for_work: false
+    deadline_pending: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - EMP_DEMO_DEADLINE_PENDING
+  expected_reason_codes:
+  - DEADLINE_PENDING_EXPERT_REVIEW
+- id: SC_ESCALATE_WITH_MISSING
+  title_de: Eskalation bei gleichzeitig fehlenden Fakten (Demo-Issue)
+  issues:
+  - id: employment_termination
+    confidence: 0.9
+  facts:
+    deadline_pending: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - EMP_DEMO_DEADLINE_PENDING
+  expected_reason_codes:
+  - DEADLINE_PENDING_EXPERT_REVIEW
+  - MISSING_REQUIRED_FACTS
+- id: SC_UNSUPPORTED_AREA
+  title_de: Nicht unterstütztes Rechtsgebiet
+  unsupported_issues:
+  - 'Familienrecht: Scheidung'
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - GLOBAL_UNSUPPORTED_ISSUE
+  expected_reason_codes:
+  - UNSUPPORTED_LEGAL_AREA
+- id: SC_NO_ISSUE_RECOGNISED
+  title_de: Eingabe ohne erkennbares Rechtsproblem
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - GLOBAL_NO_SUPPORTED_ISSUE
+- id: SC_LOW_CONFIDENCE
+  title_de: Unsichere Klassifikation
+  issues:
+  - id: tenancy_defects
+    confidence: 0.3
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - GLOBAL_LOW_CLASSIFICATION_CONFIDENCE
+- id: SC_MULTI_ISSUE_ASK
+  title_de: Zwei Rechtsgebiete, Angaben fehlen
+  issues:
+  - id: employment_termination
+    confidence: 0.9
+  - id: CH_TENANCY_TERMINATION
+    confidence: 0.6
+  facts:
+    employer_termination_received: true
+  expected_action: ASK
+- id: SC_CONDITIONAL_FACT_REQUIRED
+  title_de: Bedingter Fakt wird erforderlich (Demo-Issue)
+  issues:
+  - id: tenancy_defects
+    confidence: 0.9
+  facts:
+    defect_description: Schimmel im Schlafzimmer
+    defect_since: '2025-11-01'
+    landlord_informed: true
+    deadline_pending: false
+  expected_action: ASK
+  expected_missing_facts:
+  - landlord_informed_date
+- id: SC_UNPAID_SALARY_COMPLETE
+  title_de: Nicht bezahlter Lohn, vollständig (Demo-Issue)
+  issues:
+  - id: unpaid_salary
+    confidence: 0.9
+  facts:
+    salary_period_open: Oktober und November 2025
+    salary_amount_outstanding_chf: 8400
+    employment_ongoing: true
+    employer_reminded: true
+    deadline_pending: false
+  expected_action: PROCEED
+- id: SC_TT_ISSUE_ONLY
+  title_de: Issue 1 erkannt, noch keine Fakten gefragt -> Rückfrage
+  validation: SYNTHETIC_TECHNICAL
+  issues: &id001
+  - id: CH_TENANCY_TERMINATION
+    confidence: 0.9
+  facts: {}
+  expected_action: ASK
+  expected_missing_facts:
+  - tenant_role
+  - co_tenants_exist
+  - object_type
+  - property_municipality
+  - property_in_canton_zh
+  - contract_term_type
+  - delivery_method
+  - receipt_date
+  - official_form_used
+  - family_home_with_spouse
+  - termination_kind
+  - already_reacted
+- id: SC_TT_BASE_LT20
+  title_de: Alles bekannt, 3 Tage seit Empfang, keine Auffälligkeit -> Rechtsperson (bald)
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_LT_20_ALL_KNOWN
+  expected_reason_codes:
+  - LEGAL_REVIEW_STANDARD
+  expected_not_rule_ids:
+  - TT_FORM_MISSING
+  - TT_DAYS_GE_20
+  - TT_DAYS_GT_30
+  expected_urgency: MEDIUM
+  expected_missing_facts: []
+- id: SC_TT_FORM_MISSING
+  title_de: Kein amtliches Formular -> mögliche Nichtigkeit, Rechtsperson
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: false
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_FORM_MISSING
+  expected_reason_codes:
+  - POSSIBLE_FORM_DEFECT
+  expected_urgency: MEDIUM
+- id: SC_TT_FAMILY_HOME_NO_SEPARATE
+  title_de: Familienwohnung, Partner wohnt dort, keine separate Zustellung
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: true
+    termination_kind: ordentlich
+    already_reacted: false
+    spouse_still_lives_there: true
+    separate_delivery_to_spouse: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_FAMILY_HOME_NOT_SEPARATE
+  expected_reason_codes:
+  - POSSIBLE_FORM_DEFECT_FAMILY_HOME
+- id: SC_TT_FAMILY_HOME_SPOUSE_MOVED_OUT
+  title_de: Partner ausgezogen -> keine separate Zustellung nötig
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: true
+    termination_kind: ordentlich
+    already_reacted: false
+    spouse_still_lives_there: false
+  expected_action: ESCALATE
+  expected_not_rule_ids:
+  - TT_FAMILY_HOME_NOT_SEPARATE
+  expected_missing_facts: []
+- id: SC_TT_FAMILY_HOME_ASK_SEPARATE
+  title_de: Familienwohnung, Partner wohnt dort, separate Zustellung noch nicht gefragt
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: true
+    termination_kind: ordentlich
+    already_reacted: false
+    spouse_still_lives_there: true
+  expected_action: ASK
+  expected_missing_facts:
+  - separate_delivery_to_spouse
+- id: SC_TT_REGISTERED_MAIL_ASK_PICKUP
+  title_de: 'Einschreiben: Abholungseinladung wird bedingt erforderlich'
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: eingeschrieben
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ASK
+  expected_missing_facts:
+  - pickup_notice_date
+- id: SC_TT_RECEIPT_NOT_ASKED
+  title_de: Empfangsdatum noch nicht gefragt -> Rückfrage, keine Eskalation
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ASK
+  expected_missing_facts:
+  - receipt_date
+  expected_not_rule_ids:
+  - TT_UNKNOWN_DELIVERY_OR_RECEIPT
+- id: SC_TT_RECEIPT_UNKNOWN
+  title_de: Empfangsdatum gefragt, aber unbekannt -> sofortige Prüfung, nicht erneut fragen
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  unknown_facts:
+  - receipt_date
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_UNKNOWN_DELIVERY_OR_RECEIPT
+  - SYSTEM_REQUIRED_FACT_UNKNOWN
+  expected_reason_codes:
+  - DELIVERY_OR_RECEIPT_UNKNOWN
+  - REQUIRED_FACT_UNKNOWN
+  expected_urgency: HIGH
+  expected_missing_facts: []
+- id: SC_TT_DELIVERY_UNKNOWN
+  title_de: Zustellart gefragt, aber unbekannt -> sofortige Prüfung
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  unknown_facts:
+  - delivery_method
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_UNKNOWN_DELIVERY_OR_RECEIPT
+  expected_urgency: HIGH
+- id: SC_TT_PICKUP_UNKNOWN
+  title_de: Einschreiben, Abholungseinladung unbekannt -> sofortige Prüfung
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: eingeschrieben
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  unknown_facts:
+  - pickup_notice_date
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_UNKNOWN_DELIVERY_OR_RECEIPT
+  expected_urgency: HIGH
+- id: SC_TT_DAYS_19
+  title_de: 19 Tage seit Empfang -> noch nicht zeitkritisch
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-10-19'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_LT_20_ALL_KNOWN
+  expected_not_rule_ids:
+  - TT_DAYS_GE_20
+  expected_urgency: MEDIUM
+- id: SC_TT_DAYS_20
+  title_de: 20 Tage seit Empfang -> sofortige Prüfung (Produktschwelle)
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-10-18'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_GE_20
+  expected_reason_codes:
+  - TIME_CRITICAL_20_DAYS
+  expected_not_rule_ids:
+  - TT_DAYS_LT_20_ALL_KNOWN
+  expected_urgency: HIGH
+- id: SC_TT_DAYS_30
+  title_de: 30 Tage seit Empfang -> sofortige Prüfung
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-10-08'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_GE_20
+  expected_not_rule_ids:
+  - TT_DAYS_GT_30
+  expected_urgency: HIGH
+- id: SC_TT_DAYS_31
+  title_de: 31 Tage seit Empfang -> Frist evtl. abgelaufen, sofortige Prüfung
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-10-07'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_GT_30
+  expected_reason_codes:
+  - POSSIBLY_AFTER_30_DAYS
+  expected_not_rule_ids:
+  - TT_DAYS_GE_20
+  expected_urgency: HIGH
+- id: SC_TT_EARLIEST_DATE_WINS
+  title_de: 'Einschreiben: früheste Datum (Abholungseinladung) zählt'
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: eingeschrieben
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    pickup_notice_date: '2026-10-10'
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_DAYS_GE_20
+  expected_urgency: HIGH
+- id: SC_TT_PAYMENT_DEFAULT
+  title_de: Kündigung wegen Zahlungsverzug -> Issue 3 nicht verfügbar, Rechtsperson sofort
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: zahlungsverzug
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_PAYMENT_DEFAULT
+  expected_route_issue_ids:
+  - CH_TENANCY_PAYMENT_DEFAULT
+  expected_urgency: HIGH
+- id: SC_TT_AGREEMENT
+  title_de: Aufhebungsvereinbarung unterschrieben -> sofort
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: true
+    termination_agreement_signed_or_offered: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_AGREEMENT
+  expected_urgency: HIGH
+- id: SC_TT_REACTED_ASK_AGREEMENT
+  title_de: Bereits reagiert -> Aufhebungsvereinbarung wird bedingt erfragt
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: true
+  expected_action: ASK
+  expected_missing_facts:
+  - termination_agreement_signed_or_offered
+- id: SC_TT_SUBTENANT
+  title_de: Untermieterin -> ausserhalb des Moduls
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: untermieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_OUT_OF_SCOPE_ROLE
+  expected_reason_codes:
+  - OUT_OF_SCOPE_NOT_MAIN_TENANT
+- id: SC_TT_HOLIDAY_FLAT
+  title_de: Ferienwohnung -> ausserhalb des Moduls
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: ferienwohnung_bis_3_monate
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_OUT_OF_SCOPE_OBJECT
+- id: SC_TT_EMERGENCY_HOUSING
+  title_de: Notwohnung/Gemeindeunterkunft -> ausserhalb des Moduls
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: notwohnung_heim
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_OUT_OF_SCOPE_OBJECT
+- id: SC_TT_FURNISHED_ROOM
+  title_de: Möbliertes Zimmer -> eigener Fristhinweis, Rechtsperson
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: moebliertes_zimmer
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_FURNISHED_ROOM
+- id: SC_TT_OTHER_CANTON
+  title_de: Wohnung ausserhalb des Kantons Zürich -> Behörde nicht bestimmbar
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: false
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_CANTON_NOT_ZH
+- id: SC_TT_PRIOR_DISPUTE
+  title_de: Frühere Streitigkeit -> Rechtsperson bald
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    prior_dispute_3y: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_PRIOR_DISPUTE
+- id: SC_TT_REASON_RENOVATION
+  title_de: Grund Sanierung -> Rechtsperson, keine Erfolgsprognose
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    stated_reason: sanierung
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_REASON_SPECIAL
+- id: SC_TT_REASON_OWN_USE
+  title_de: Grund Eigenbedarf -> Rechtsperson
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    stated_reason: eigenbedarf
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_REASON_SPECIAL
+- id: SC_TT_HARDSHIP
+  title_de: Härtegründe -> zusätzlich Sozialberatung, Issue 4
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    hardship_present: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_HARDSHIP
+  expected_route_issue_ids:
+  - CH_TENANCY_EXTENSION
+- id: SC_TT_MOVE_OUT_59
+  title_de: Auszug in 59 Tagen -> zusätzlich Sozialarbeit (Produktschwelle 60)
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    termination_date: '2027-01-05'
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_MOVE_OUT_LT_60
+- id: SC_TT_MOVE_OUT_85
+  title_de: Auszug in 85 Tagen -> keine zusätzliche Sozialarbeitsregel
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    termination_date: '2027-01-31'
+  expected_action: ESCALATE
+  expected_not_rule_ids:
+  - TT_MOVE_OUT_LT_60
+- id: SC_TT_COURT_PROCEEDING
+  title_de: Laufendes Verfahren/Ausweisung -> Issue 6, sofort
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    eviction_or_court_proceeding: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_COURT_PROCEEDING
+  expected_route_issue_ids:
+  - CH_TENANCY_EVICTION
+  expected_urgency: HIGH
+- id: SC_TT_ILLNESS
+  title_de: Krankheit beim Empfang -> sofort (Bundesgericht offen)
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    illness_at_receipt: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_ILLNESS_AT_RECEIPT
+  expected_urgency: HIGH
+- id: SC_TT_VULNERABILITY
+  title_de: Besondere Verletzlichkeit -> ausserhalb des Moduls, Mensch
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    vulnerability_present: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_VULNERABILITY
+- id: SC_TT_EXPERT_REQUESTED
+  title_de: Wunsch nach Fachperson wird respektiert
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: false
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    client_requests_expert: true
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_EXPERT_REQUESTED
+- id: SC_TT_CO_TENANT_NOT_NOTIFIED
+  title_de: Mitmieter nicht benachrichtigt -> möglicher Formmangel
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: true
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+    co_tenants_all_notified: false
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_CO_TENANT_NOT_NOTIFIED
+- id: SC_TT_CO_TENANT_ASK
+  title_de: Mitmieter vorhanden -> Zustellung an alle wird erfragt
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    co_tenants_exist: true
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: true
+    family_home_with_spouse: false
+    termination_kind: ordentlich
+    already_reacted: false
+  expected_action: ASK
+  expected_missing_facts:
+  - co_tenants_all_notified
+- id: SC_TT_DEMO_STEP3
+  title_de: 'Demofall nach Schritt 3: Brief ohne Formular, 3 Tage, Termin 31.1.2027'
+  validation: SYNTHETIC_TECHNICAL
+  issues: *id001
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    contract_term_type: unbefristet
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    delivery_method: normale_post
+    receipt_date: '2026-11-04'
+    official_form_used: false
+    termination_date: '2027-01-31'
+  expected_action: ESCALATE
+  expected_rule_ids:
+  - TT_FORM_MISSING
+  expected_urgency: MEDIUM
+  expected_not_rule_ids:
+  - TT_DAYS_GE_20
+  - TT_MOVE_OUT_LT_60
+  expected_missing_facts:
+  - co_tenants_exist
+  - family_home_with_spouse
+  - termination_kind
+  - already_reacted

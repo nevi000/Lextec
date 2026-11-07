@@ -1,0 +1,56 @@
+{
+  "$defs": {
+    "BriefingTemplateDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title_de": {
+          "title": "Title De",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sections",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title_de",
+        "sections"
+      ],
+      "title": "BriefingTemplateDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "templates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/BriefingTemplateDef"
+      },
+      "title": "Templates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "BriefingTemplatesFile",
+  "type": "object"
+}

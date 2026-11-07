@@ -1,0 +1,172 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/manrope";
+
+/* ------------------------------------------------------------------------------------
+   LexTec Bridge design tokens
+   Palette: forest green / sage / warm off-white / dark ink. Semantic colours always come
+   with an icon + text label in the UI (never colour alone).
+   ------------------------------------------------------------------------------------ */
+@theme {
+  /* Typography as on lextec-rechtsberatung.ch: Manrope for headings, Inter for text */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Manrope Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* surfaces & text (site: #1A1A1A text, #F9F9F9 / #F1F1F1 neutrals, #6B7280 grey) */
+  --color-canvas: #f9f9f9;
+  --color-surface: #ffffff;
+  --color-sunken: #f1f1f1;
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #4b5563;
+  --color-ink-subtle: #6b7280;
+  --color-line: #e6e6e6;
+  --color-line-strong: #d0d0d0;
+
+  /* brand: LexTec green #4A915C (accent), darker #3A724B (actions, AA with white text), dark #1E1C1C (navigation) */
+  --color-brand-950: #141212;
+  --color-brand-900: #1e1c1c;
+  --color-brand-800: #2d5a3b;
+  --color-brand-700: #2f5f3e;
+  --color-brand-600: #3a724b;
+  --color-brand-500: #4a915c;
+  --color-brand-300: #9cc4a7;
+  --color-brand-200: #d4d8d5;
+  --color-brand-100: #e8f1ea;
+  --color-brand-50: #f3f8f4;
+
+  /* decisions: calm by default. Red is reserved for urgent situations. */
+  --color-ask-bg: #fbf6e8;
+  --color-ask-fg: #6b4a00;
+  --color-ask-line: #ead9a8;
+  --color-ask-solid: #b7791f;
+  --color-proceed-bg: #e8f1ea;
+  --color-proceed-fg: #2f5f3e;
+  --color-proceed-line: #c3d9c9;
+  --color-proceed-solid: #3a724b;
+  --color-escalate-bg: #fbeceb;
+  --color-escalate-fg: #8f2314;
+  --color-escalate-line: #eec3be;
+  --color-escalate-solid: #b42318;
+
+  /* states */
+  --color-warning-bg: #fbf1dc;
+  --color-warning-fg: #6b4a00;
+  --color-error-bg: #fdeceb;
+  --color-error-fg: #9b1c1c;
+  --color-error-line: #f1c5c1;
+  --color-unverified-bg: #f1f1f1;
+  --color-unverified-fg: #4b5563;
+  --color-unverified-line: #dcdcdc;
+  --color-incomplete-bg: #f4efe3;
+  --color-incomplete-fg: #6b5a2c;
+  --color-incomplete-line: #e3d9bd;
+
+  /* radii: one calm scale (cards 10, controls 8, chips 6) */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+
+  /* shadows: hairlines instead of glows */
+  --shadow-xs: none;
+  --shadow-card: 0 1px 2px rgb(26 26 26 / 0.04);
+  --shadow-pop: 0 12px 32px -12px rgb(26 26 26 / 0.3);
+
+  /* motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss03";
+    -webkit-font-smoothing: antialiased;
+    color: var(--color-ink);
+    background: var(--color-canvas);
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.55;
+    background: var(--color-canvas);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  ::selection {
+    background: var(--color-brand-200);
+  }
+  button,
+  [role="button"],
+  a {
+    transition-duration: var(--duration-fast);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------- print ---------------------------------------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    font-size: 11pt;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-break-avoid {
+    break-inside: avoid;
+  }
+  .print-shell {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

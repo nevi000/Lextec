@@ -1,0 +1,84 @@
+{
+  "$defs": {
+    "ForbiddenStatementDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description_de": {
+          "title": "Description De",
+          "type": "string"
+        },
+        "patterns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Patterns",
+          "type": "array"
+        },
+        "reason_de": {
+          "default": "",
+          "title": "Reason De",
+          "type": "string"
+        },
+        "source_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "description_de",
+        "patterns"
+      ],
+      "title": "ForbiddenStatementDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "safe_fallback_de": {
+      "default": "Dazu kann das System keine quellengestützte Aussage machen. Bitte eine Fachperson beiziehen.",
+      "title": "Safe Fallback De",
+      "type": "string"
+    },
+    "forbidden": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ForbiddenStatementDef"
+      },
+      "title": "Forbidden",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "StatementPolicyFile",
+  "type": "object"
+}

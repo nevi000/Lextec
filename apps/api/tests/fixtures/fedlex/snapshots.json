@@ -1,0 +1,251 @@
+[
+ {
+  "source_id": "CH_OR_266L",
+  "sr_number": "220",
+  "language": "de",
+  "law_abbreviation": "OR",
+  "law_title": "Bundesgesetz vom 30. März 1911 betreffend die Ergänzung des Schweizerischen Zivilgesetzbuches (Fünfter Teil: Obligationenrecht)",
+  "article": "266l",
+  "paragraph": "Abs. 1–2",
+  "letter": null,
+  "article_label": "Art. 266l Abs. 1–2 OR",
+  "requested_reference_date": "2026-11-07",
+  "version_identifier": "20261001",
+  "valid_from": "2026-10-01",
+  "valid_to": "2027-06-30",
+  "abstract_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377",
+  "eli_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001",
+  "document_url": "https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001/de/xml/fedlex-data-admin-ch-eli-cc-27-317_321_377-20261001-de-xml-4.xml",
+  "article_url": "https://www.fedlex.admin.ch/eli/cc/27/317_321_377/de#art_266_l",
+  "article_eid": "art_266_l",
+  "heading": null,
+  "text": "1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.",
+  "structure": [
+   {
+    "num": "1",
+    "eid": "art_266_l/para_1",
+    "text": "Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen.",
+    "items": []
+   },
+   {
+    "num": "2",
+    "eid": "art_266_l/para_2",
+    "text": "Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.",
+    "items": []
+   }
+  ],
+  "content_hash": "8e4ae0d6e2cc15d9e828e13f6040b2b923a8e406cb781f657b120bb0ff567261",
+  "document_hash": "b5aab27bc6d2e5a569e84b23b5396d3507ce6dc665270f1c48ffb86d1ec12d94"
+ },
+ {
+  "source_id": "CH_OR_266O",
+  "sr_number": "220",
+  "language": "de",
+  "law_abbreviation": "OR",
+  "law_title": "Bundesgesetz vom 30. März 1911 betreffend die Ergänzung des Schweizerischen Zivilgesetzbuches (Fünfter Teil: Obligationenrecht)",
+  "article": "266o",
+  "paragraph": null,
+  "letter": null,
+  "article_label": "Art. 266o OR",
+  "requested_reference_date": "2026-11-07",
+  "version_identifier": "20261001",
+  "valid_from": "2026-10-01",
+  "valid_to": "2027-06-30",
+  "abstract_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377",
+  "eli_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001",
+  "document_url": "https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001/de/xml/fedlex-data-admin-ch-eli-cc-27-317_321_377-20261001-de-xml-4.xml",
+  "article_url": "https://www.fedlex.admin.ch/eli/cc/27/317_321_377/de#art_266_o",
+  "article_eid": "art_266_o",
+  "heading": null,
+  "text": "Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.",
+  "structure": [
+   {
+    "num": "",
+    "eid": "art_266_o/para",
+    "text": "Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.",
+    "items": []
+   }
+  ],
+  "content_hash": "34c5dcd9a14d4f4995fb00a2f3852cc61b8c86d2f17cada06bd38d017275d5de",
+  "document_hash": "b5aab27bc6d2e5a569e84b23b5396d3507ce6dc665270f1c48ffb86d1ec12d94"
+ },
+ {
+  "source_id": "CH_OR_271",
+  "sr_number": "220",
+  "language": "de",
+  "law_abbreviation": "OR",
+  "law_title": "Bundesgesetz vom 30. März 1911 betreffend die Ergänzung des Schweizerischen Zivilgesetzbuches (Fünfter Teil: Obligationenrecht)",
+  "article": "271",
+  "paragraph": "Abs. 1–2",
+  "letter": null,
+  "article_label": "Art. 271 Abs. 1–2 OR",
+  "requested_reference_date": "2026-11-07",
+  "version_identifier": "20261001",
+  "valid_from": "2026-10-01",
+  "valid_to": "2027-06-30",
+  "abstract_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377",
+  "eli_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001",
+  "document_url": "https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001/de/xml/fedlex-data-admin-ch-eli-cc-27-317_321_377-20261001-de-xml-4.xml",
+  "article_url": "https://www.fedlex.admin.ch/eli/cc/27/317_321_377/de#art_271",
+  "article_eid": "art_271",
+  "heading": null,
+  "text": "1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst. 2 Die Kündigung muss auf Verlangen begründet werden.",
+  "structure": [
+   {
+    "num": "1",
+    "eid": "art_271/para_1",
+    "text": "Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst.",
+    "items": []
+   },
+   {
+    "num": "2",
+    "eid": "art_271/para_2",
+    "text": "Die Kündigung muss auf Verlangen begründet werden.",
+    "items": []
+   }
+  ],
+  "content_hash": "04e71cc1960592031643046170f486ebfcad694ed781f1d4ff787a388d98799d",
+  "document_hash": "b5aab27bc6d2e5a569e84b23b5396d3507ce6dc665270f1c48ffb86d1ec12d94"
+ },
+ {
+  "source_id": "CH_OR_273_1",
+  "sr_number": "220",
+  "language": "de",
+  "law_abbreviation": "OR",
+  "law_title": "Bundesgesetz vom 30. März 1911 betreffend die Ergänzung des Schweizerischen Zivilgesetzbuches (Fünfter Teil: Obligationenrecht)",
+  "article": "273",
+  "paragraph": "Abs. 1",
+  "letter": null,
+  "article_label": "Art. 273 Abs. 1 OR",
+  "requested_reference_date": "2026-11-07",
+  "version_identifier": "20261001",
+  "valid_from": "2026-10-01",
+  "valid_to": "2027-06-30",
+  "abstract_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377",
+  "eli_uri": "https://fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001",
+  "document_url": "https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/27/317_321_377/20261001/de/xml/fedlex-data-admin-ch-eli-cc-27-317_321_377-20261001-de-xml-4.xml",
+  "article_url": "https://www.fedlex.admin.ch/eli/cc/27/317_321_377/de#art_273",
+  "article_eid": "art_273",
+  "heading": null,
+  "text": "1 Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.",
+  "structure": [
+   {
+    "num": "1",
+    "eid": "art_273/para_1",
+    "text": "Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.",
+    "items": []
+   },
+   {
+    "num": "2",
+    "eid": "art_273/para_2",
+    "text": "Will der Mieter eine Erstreckung des Mietverhältnisses verlangen, so muss er das Begehren der Schlichtungsbehörde einreichen:a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung;b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.",
+    "items": [
+     {
+      "label": "a.",
+      "eid": "art_273/para_2/lbl_a",
+      "text": "a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung;"
+     },
+     {
+      "label": "b.",
+      "eid": "art_273/para_2/lbl_b",
+      "text": "b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer."
+     }
+    ]
+   },
+   {
+    "num": "3",
+    "eid": "art_273/para_3",
+    "text": "Das Begehren um eine zweite Erstreckung muss der Mieter der Schlichtungsbehörde spätestens 60 Tage vor Ablauf der ersten einreichen.",
+    "items": []
+   },
+   {
+    "num": "4",
+    "eid": "art_273/para_4",
+    "text": "Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO.",
+    "items": []
+   },
+   {
+    "num": "5",
+    "eid": "art_273/para_5",
+    "text": "Weist die zuständige Behörde ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen, ob das Mietverhältnis erstreckt werden kann.",
+    "items": []
+   }
+  ],
+  "content_hash": "24d77712cec8c17a30ab204681fc12c39da4d7467200651a9213966b1df3d084",
+  "document_hash": "b5aab27bc6d2e5a569e84b23b5396d3507ce6dc665270f1c48ffb86d1ec12d94"
+ },
+ {
+  "source_id": "CH_ZPO_113",
+  "sr_number": "272",
+  "language": "de",
+  "law_abbreviation": "ZPO",
+  "law_title": "Schweizerische Zivilprozessordnung vom 19. Dezember 2008 (Zivilprozessordnung, ZPO)",
+  "article": "113",
+  "paragraph": "Abs. 1–2 lit. c",
+  "letter": null,
+  "article_label": "Art. 113 Abs. 1–2 lit. c ZPO",
+  "requested_reference_date": "2026-11-07",
+  "version_identifier": "20260701",
+  "valid_from": "2026-07-01",
+  "valid_to": null,
+  "abstract_uri": "https://fedlex.data.admin.ch/eli/cc/2010/262",
+  "eli_uri": "https://fedlex.data.admin.ch/eli/cc/2010/262/20260701",
+  "document_url": "https://fedlex.data.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/2010/262/20260701/de/xml/fedlex-data-admin-ch-eli-cc-2010-262-20260701-de-xml-3.xml",
+  "article_url": "https://www.fedlex.admin.ch/eli/cc/2010/262/de#art_113",
+  "article_eid": "art_113",
+  "heading": "Schlichtungsverfahren",
+  "text": "1 Im Schlichtungsverfahren werden keine Parteientschädigungen gesprochen. Vorbehalten bleibt die Entschädigung einer unentgeltlichen Rechtsbeiständin oder eines unentgeltlichen Rechtsbeistandes durch den Kanton. 2 Keine Gerichtskosten werden gesprochen in Streitigkeiten: c. c. aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht;",
+  "structure": [
+   {
+    "num": "1",
+    "eid": "art_113/para_1",
+    "text": "Im Schlichtungsverfahren werden keine Parteientschädigungen gesprochen. Vorbehalten bleibt die Entschädigung einer unentgeltlichen Rechtsbeiständin oder eines unentgeltlichen Rechtsbeistandes durch den Kanton.",
+    "items": []
+   },
+   {
+    "num": "2",
+    "eid": "art_113/para_2",
+    "text": "Keine Gerichtskosten werden gesprochen in Streitigkeiten:a. nach dem Gleichstellungsgesetz vom 24. März 1995;b. nach dem Behindertengleichstellungsgesetz vom 13. Dezember 2002;c. aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht;d. aus dem Arbeitsverhältnis sowie nach dem Arbeitsvermittlungsgesetz vom 6. Oktober 1989 bis zu einem Streitwert von 30 000 Franken;e. nach dem Mitwirkungsgesetz vom 17. Dezember 1993;f. aus Zusatzversicherungen zur sozialen Krankenversicherung nach dem Bundesgesetz vom 18. März 1994 über die Krankenversicherung;g. nach dem DSG.",
+    "items": [
+     {
+      "label": "a.",
+      "eid": "art_113/para_2/lbl_a",
+      "text": "a. nach dem Gleichstellungsgesetz vom 24. März 1995;"
+     },
+     {
+      "label": "b.",
+      "eid": "art_113/para_2/lbl_b",
+      "text": "b. nach dem Behindertengleichstellungsgesetz vom 13. Dezember 2002;"
+     },
+     {
+      "label": "c.",
+      "eid": "art_113/para_2/lbl_c",
+      "text": "c. aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht;"
+     },
+     {
+      "label": "d.",
+      "eid": "art_113/para_2/lbl_d",
+      "text": "d. aus dem Arbeitsverhältnis sowie nach dem Arbeitsvermittlungsgesetz vom 6. Oktober 1989 bis zu einem Streitwert von 30 000 Franken;"
+     },
+     {
+      "label": "e.",
+      "eid": "art_113/para_2/lbl_e",
+      "text": "e. nach dem Mitwirkungsgesetz vom 17. Dezember 1993;"
+     },
+     {
+      "label": "f.",
+      "eid": "art_113/para_2/lbl_f",
+      "text": "f. aus Zusatzversicherungen zur sozialen Krankenversicherung nach dem Bundesgesetz vom 18. März 1994 über die Krankenversicherung;"
+     },
+     {
+      "label": "g.",
+      "eid": "art_113/para_2/lbl_g",
+      "text": "g. nach dem DSG."
+     }
+    ]
+   }
+  ],
+  "content_hash": "8d033b97fc4ea065199b39fedb54bd2b612de23a0e910b02697cb8f1a59325b0",
+  "document_hash": "fe97ce8d73996ddeb6ee52bf5e4306797bfcddb24c265409b915f768b52b01f5"
+ }
+]

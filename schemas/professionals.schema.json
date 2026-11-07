@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "ProfessionalDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label_de": {
+          "title": "Label De",
+          "type": "string"
+        },
+        "description_de": {
+          "default": "",
+          "title": "Description De",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label_de"
+      ],
+      "title": "ProfessionalDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "professionals": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ProfessionalDef"
+      },
+      "title": "Professionals",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "ProfessionalsFile",
+  "type": "object"
+}

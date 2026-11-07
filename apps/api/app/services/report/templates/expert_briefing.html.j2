@@ -1,0 +1,427 @@
+{#- templates/expert_briefing.html.j2 - LexTec Bridge Fallbericht (Expert Briefing) im Layout der Law-Team-Vorlage.
+    Basis: case_summary_template.zip / expert_briefing.html.j2. Daten: View-Model aus app/services/report/view.py
+    (Struktur kompatibel mit sample/bridge_fall_0011.json). Aenderungen gegenueber der Vorlage sind in
+    docs/NEW_BRIEFING_INTEGRATION.md aufgelistet (datengetrieben statt fest auf Mietrecht/Zuerich, kein Fristende,
+    Sicherheitsbanner, Chronologie, Gespraech, Unterlagen). Alle Werte werden per Jinja-Autoescape ausgegeben. -#}
+{%- set SRC = {"user": "Angabe", "ai": "KI", "confirmed": "bestätigt", "doc": "Unterlage", "derived": "abgeleitet"} -%}
+{%- macro fact(f, quote=false) -%}
+  <div class="kv{% if quote %} withq{% endif %}">
+    <div class="k">{{ f.label }}</div>
+    {%- if f.value is none %}
+    <div class="v missing">Fehlt</div><div class="s">{{ f.note or "ungeklärt" }}</div>
+    {%- else %}
+    <div class="v">{{ f.value }}{% if quote and f.evidence and f.evidence != f.value %}<span class="ev">«{{ f.evidence }}»</span>{% endif %}</div>
+    <div class="s{% if f.src == 'ai' %} open{% endif %}">{{ SRC.get(f.src, f.src) }}</div>
+    {%- endif %}
+  </div>
+{%- endmacro -%}
+{%- macro contact_cell(s) -%}
+  {%- if s.contact -%}
+    {%- if s.contact.address %}{{ s.contact.address }}{% endif -%}
+    {%- if s.contact.phone %}<br><b class="tel">{{ s.contact.phone }}</b>{% endif -%}
+    {%- if s.contact.email %}<small>{{ s.contact.email }}</small>{% endif -%}
+    {%- if s.contact.web %}<small><a href="{{ s.contact.web }}" target="_blank" rel="noopener noreferrer">{{ s.contact.web }}</a></small>{% endif -%}
+    {%- if s.contact.hours %}<small>{{ s.contact.hours }}</small>{% endif -%}
+  {%- else -%}{{ s.web or "Kontakt fehlt" }}{%- endif -%}
+{%- endmacro -%}
+{%- macro bodies_table(items) -%}
+    <table class="bodies">
+      {% for s in items %}
+      <tr><td class="name">{{ s.label }}{% if s.unverified or not s.contact_primary %}<span class="dot"></span>{% endif %}<small>{{ s.purpose }}</small>{% if s.not_emergency_number %}<small><b>Beratung, keine Notrufnummer</b></small>{% endif %}</td>
+          <td class="contact">{{ contact_cell(s) }}<small class="q">{{ s.quality }}</small></td>
+          <td class="why">{{ s.costs or "Kosten nicht angegeben" }}</td></tr>
+      {% endfor %}
+    </table>
+{%- endmacro -%}
+{%- macro masthead(extra="") -%}
+  <div class="masthead">
+    <span>{{ b.doc_type }}&emsp;{{ b.case_id }}{% if extra %}&emsp;{{ extra }}{% endif %}{% if b.kb_status != "LEGALLY_REVIEWED" %}&emsp;<span class="sample">Wissensbasis: Entwurf</span>{% endif %}</span>
+    {% if logo %}<img class="logo" src="{{ logo }}" alt="LexTec">{% else %}<span class="wordmark">LexTec</span>{% endif %}
+  </div>
+{%- endmacro -%}
+{%- macro safety_banner(sf) -%}
+  <div class="safety {{ sf.state }}" role="alert">
+    <div class="safety-head"><b>{{ sf.headline }}</b></div>
+    {% if sf.explanation %}<p>{{ sf.explanation }}</p>{% endif %}
+    {% if sf.state == "IMMEDIATE" %}<p class="safety-note">Dieser Bericht ersetzt die Kontaktaufnahme mit der Notrufstelle nicht. Die juristische Einschätzung ist nachrangig.</p>{% endif %}
+    {% if sf.contacts %}
+    <ul class="safety-contacts">
+      {% for c in sf.contacts %}<li><b>{{ c.label }}</b> <span class="tel">{{ c.contact.phone or "" }}</span>{% if c.not_emergency_number %} <i>Beratung, keine Notrufnummer</i>{% endif %}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if sf.steps %}<ol class="safety-steps">{% for st in sf.steps %}<li>{{ st }}</li>{% endfor %}</ol>{% endif %}
+    {% if sf.signals %}<p class="refs">Erkannt: {% for s in sf.signals %}{{ s.label }}{% if s.certainty != "ACUTE" %} (unklar){% endif %}{% if s.acknowledged %} (bearbeitet: «{{ s.note }}»){% endif %}{% if not loop.last %}; {% endif %}{% endfor %}. Dokumentation ist keine Entwarnung.</p>{% endif %}
+  </div>
+{%- endmacro -%}
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'">
+<title>Fallbericht {{ b.case_id }}</title>
+<style>
+{{ fonts_css | safe }}
+{% include "design.css" %}
+  .wordmark { font-family: sans-serif; font-weight: 800; font-size: 13pt; letter-spacing: -0.03em; color: var(--ink); }
+  .logo { height: 6.2mm; width: auto; }
+  .masthead { align-items: center; }
+  a { color: inherit; text-decoration: underline; text-decoration-color: var(--hair); }
+  .client { font-family: sans-serif; font-weight: 650; font-size: 12pt; letter-spacing: -0.01em; margin-top: .4mm; }
+  .contact-line { color: var(--ink-2); font-size: 8.2pt; margin-top: .6mm; }
+  .g-list { list-style: none; margin: .6mm 0 0; padding: 0; }
+  .g-list li { font-weight: 600; font-size: 8pt; line-height: 1.28; padding: .45mm 0 .45mm 3mm; position: relative; }
+  .g-list li::before { content: ""; position: absolute; left: 0; top: 1.75mm; width: 1.5mm; height: 1.5mm; border-radius: 50%; background: var(--red); }
+  .g-list.ok li::before { background: var(--brand-light); }
+  .notices { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 4mm; }
+  .notices .notice { margin-bottom: 0; }
+  .notice.info { background: var(--surface); } .notice.info::before { background: var(--faint); }
+  .sample { color: var(--brand); font-weight: 600; }
+  .signal.ROT .signal-level { color: var(--red); } .signal.AMBER .signal-level, .signal.GRUEN .signal-level { color: var(--brand); }
+  .signal { background: var(--surface) !important; }
+  .signal.ROT { border-left: 1.4mm solid var(--red); }
+  .decision-box { background: var(--surface); }
+  h1, h2, .client { color: var(--ink); }
+  .dot, .unconf, .s.open::before { background: transparent !important; border: 1.1px solid var(--muted); box-sizing: border-box; }
+  .groups { column-count: 2; column-gap: 9mm; }
+  .kv .k { hyphens: auto; overflow-wrap: anywhere; }
+  .kv.withq { grid-template-columns: 31mm 1fr auto; }
+  .ev { display: block; color: var(--faint); font-weight: 400; font-size: 7pt; margin-top: .3mm; }
+  .group { margin-bottom: 3.6mm; break-inside: avoid; }
+  .group h3 { font-weight: 600; font-size: 8.6pt; margin: 0 0 .8mm; color: var(--ink); }
+  .refs { color: var(--faint); font-size: 6.9pt; margin-top: .4mm; }
+  .refs span + span::before { content: ", "; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { display: grid; grid-template-columns: 30mm 1fr; gap: 3mm; padding: 1.3mm 0; border-top: 1px solid var(--hair-2); break-inside: avoid; }
+  .checklist li:first-child { border-top: none; padding-top: 0; }
+  .checklist b { font-weight: 600; }
+  .decision-box { display: grid; grid-template-columns: 1fr auto; gap: 4mm; border-radius: 12px; padding: 3.4mm 4mm; margin-bottom: 5mm; }
+  .decision-box .big { font-family: sans-serif; font-weight: 700; font-size: 14pt; letter-spacing: -0.015em; }
+  .decision-box .meta { color: var(--muted); font-size: 7.2pt; text-align: right; }
+  .decision-box p { color: var(--ink-2); margin-top: 1mm; }
+  .empty { color: var(--muted); }
+  .src-card { padding: 2.6mm 0; border-top: 1px solid var(--hair-2); break-inside: avoid; }
+  .src-card:first-of-type { border-top: none; }
+  .src-head { display: flex; justify-content: space-between; gap: 4mm; align-items: baseline; }
+  .src-head b { font-family: sans-serif; font-weight: 650; font-size: 9.4pt; }
+  .src-head .id { color: var(--faint); font-size: 6.8pt; }
+  .src-law { color: var(--muted); font-size: 7.2pt; }
+  .badges { margin: 1mm 0 1.2mm; font-size: 6.9pt; }
+  .badges span { margin-right: 3mm; white-space: nowrap; }
+  .badges .y { color: var(--green); } .badges .n { color: var(--orange); }
+  .badges .y::before { content: "✓ "; } .badges .n::before { content: "○ "; }
+  .src-text { color: var(--ink-2); font-size: 7.8pt; line-height: 1.42; }
+  .src-text .lab { display: block; color: var(--faint); font-size: 6.6pt; margin-bottom: .3mm; }
+  .src-meta { color: var(--faint); font-size: 6.8pt; margin-top: 1mm; }
+  .bodies .name { width: 40%; } .bodies .contact { width: 36%; }
+  .bodies .name small { display: block; font-weight: 400; color: var(--muted); }
+  .bodies .contact small { display: block; color: var(--faint); font-size: 6.8pt; }
+  .bodies .contact small.q { color: var(--faint); font-size: 6.4pt; }
+  .bodies tr { break-inside: avoid; }
+  .tel { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .p1 { display: flex; flex-direction: column; min-height: 268mm; }
+  .p1 .section { margin-bottom: 2.6mm; }
+  .p1 .hero { margin-bottom: 3.4mm; }
+  .p1 .notices { margin-bottom: 3.4mm; }
+  .signal .signal-level { font-size: 13pt; }
+  .g-rows { list-style: none; margin: .4mm 0 0; padding: 0; }
+  .g-rows li { display: flex; justify-content: space-between; gap: 2mm; padding: .5mm 0; border-top: 1px solid var(--hair-2); font-size: 7.8pt; }
+  .g-rows li:first-child { border-top: none; }
+  .g-rows span { color: var(--muted); }
+  .key { list-style: none; margin: 0; padding: 0; }
+  .key li { display: grid; grid-template-columns: 27mm 1fr; gap: 3mm; padding: 1mm 0; border-top: 1px solid var(--hair-2); }
+  .key li:first-child { border-top: none; padding-top: 0; }
+  .key span { color: var(--muted); }
+  .missing-soft { color: var(--red); }
+  .notes { margin-top: auto; padding-top: 2mm; break-inside: avoid; }
+  .notes h2 { margin-bottom: 2mm; }
+  .note-meta { display: grid; grid-template-columns: 1fr 0.6fr 1fr; gap: 6mm; margin-bottom: 1mm; }
+  .note-meta span { color: var(--faint); font-size: 7pt; border-bottom: 1px solid var(--hair); padding-bottom: 3mm; }
+  .note-line { height: 6mm; border-bottom: 1px solid var(--hair); }
+  /* sicherheit */
+  .safety { border: 1.2px solid var(--red); border-left-width: 2mm; border-radius: 10px; padding: 3mm 3.6mm; margin-bottom: 4mm; background: #fff; break-inside: avoid; }
+  .safety.HUMAN_CHECK, .safety.UNCLEAR { border-color: var(--muted); }
+  .safety-head b { font-family: sans-serif; font-size: 12pt; color: var(--red); }
+  .safety.HUMAN_CHECK .safety-head b, .safety.UNCLEAR .safety-head b { color: var(--ink); }
+  .safety p { color: var(--ink-2); margin-top: 1mm; }
+  .safety-note { font-weight: 600; }
+  .safety-contacts { list-style: none; margin: 1.6mm 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .6mm 6mm; }
+  .safety-contacts li { font-size: 8pt; } .safety-contacts i { color: var(--muted); font-style: normal; font-size: 6.8pt; }
+  .safety-steps { margin: 1.6mm 0 0; padding-left: 4mm; color: var(--ink-2); }
+  .person-line { color: var(--ink-2); font-size: 7.8pt; }
+  .persons { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 7mm; }
+  .persons .kv { grid-template-columns: 24mm 1fr; }
+  .persons .kv .s { display: none; }
+  .persons .kv .v.missing { font-weight: 500; }
+  .eckdaten { column-count: 2; column-gap: 9mm; }
+  .eckdaten .kv { grid-template-columns: 33mm 1fr auto; }
+  .eckdaten .kv .v { font-size: 7.8pt; }
+  .eckdaten .kv { break-inside: avoid; }
+  .chron .future .d { color: var(--red); }
+  .qa li { break-inside: avoid; }
+  .docs-note { color: var(--ink-2); }
+  .state.unklar { color: var(--ink); } .state.unklar::before { background: var(--ink); }
+  /* bildschirmvorschau: A4-Blaetter auf grauem Grund; beim Drucken/PDF unveraendert */
+  @media screen {
+    body { background: #e4e6e4; padding: 8mm 0; }
+    .page, .annex { background: #fff; width: 210mm; max-width: 100%; margin: 0 auto 8mm; padding: 13mm 15mm 14mm; box-shadow: 0 .4mm 3mm rgba(0,0,0,.18); }
+    .p1 { min-height: 297mm; }
+  }
+  @media print { .page, .annex { box-shadow: none; } }
+</style>
+</head>
+<body>
+
+<!-- ===================== SEITE 1: UEBERBLICK ===================== -->
+<section class="page p1">
+  {{ masthead() }}
+
+  {% if b.safety and b.safety.state == "IMMEDIATE" %}{{ safety_banner(b.safety) }}{% endif %}
+
+  <div class="hero">
+    <div>
+      <h1>{{ b.issue_label }}</h1>
+      <p class="client">{{ b.client.label }} <span class="missing" style="font-size:8pt">Name nicht erfasst</span></p>
+      <p class="contact-line"><span class="missing">Kontaktangaben fehlen.</span>&ensp;Erfasst durch {{ b.client.submitted_by }}.</p>
+      <p class="stand">{% if b.municipality %}Gemeinde {{ b.municipality }}{% if b.canton %}, Kanton {{ b.canton }}{% endif %}{% elif b.canton %}Kanton {{ b.canton }}{% else %}Wohnort nicht erfasst{% endif %}. Version {{ b.version }}, Fallstand {{ b.case_state }}, erstellt {{ b.created_at }}. Wissensbasis {{ b.kb_version }}.</p>
+    </div>
+    <div class="signal {{ b.tl.level }}">
+      <div class="g-k" style="margin-bottom:.8mm">Dringlichkeit</div>
+      <div class="signal-level">{{ b.tl.label }}</div>
+      <div class="signal-why">{{ b.tl.reasons | join(". ") }}.</div>
+    </div>
+  </div>
+
+  {% if b.safety and b.safety.state != "IMMEDIATE" %}{{ safety_banner(b.safety) }}{% endif %}
+
+  <div class="notices">
+    {% if b.kb_status != "LEGALLY_REVIEWED" %}<div class="notice"><p><b>Achtung: Rechtliche Hinweise sind ein Entwurf.</b> Die Wissensbasis ist nicht juristisch freigegeben.</p></div>{% endif %}
+    <div class="notice info"><p><b>Datenschutz.</b> {{ b.disclaimers.external_ai }}</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Kurzsachverhalt</h2>
+    <p class="lead" style="margin:0 0 .6mm">{{ b.summary }}</p>
+    <p class="refs">{{ b.summary_source }}.</p>
+  </div>
+
+  <div class="section">
+    <h2>Personendaten <small class="legend">LexTec Bridge speichert (noch) keine Personalien</small></h2>
+    <p class="person-line"><span class="missing">Nicht erfasst:</span> {% for p in b.person %}{{ p.label }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>
+  </div>
+
+  {% for sec in b.sections %}
+  <div class="section">
+    <h2>{{ sec.title }}</h2>
+    <div class="eckdaten">{% for r in sec.rows %}{{ fact(r) }}{% endfor %}</div>
+  </div>
+  {% endfor %}
+
+  <div class="section">
+    <h2>Fristen und Unterlagen</h2>
+    <div class="glance" style="margin-bottom:0">
+      <div>
+        <div class="g-k">Fristhinweise</div>
+        <ul class="g-rows">
+          <li><span>Dringlichkeit (intern)</span><b>{{ b.urgency.level }}</b></li>
+          {% for r in b.urgency.rows %}<li><span>{{ r.label }}</span><b>{{ r.value if r.value is not none else "unbekannt" }}</b></li>{% endfor %}
+        </ul>
+        {% for h in b.urgency.hints[:1] %}<div class="g-d">{{ h.text[:150] }}{% if h.text | length > 150 %} …{% endif %}</div>{% endfor %}
+        <div class="g-d note">Hinweis, kein Fristende. Das Fristende prüft und berechnet die Fachperson.</div>
+      </div>
+      <div>
+        <div class="g-k">Unterlagen vorliegend</div>
+        {% if b.documents_received %}<ul class="g-list ok">{% for d in b.documents_received %}<li>{{ d }}</li>{% endfor %}</ul>
+        {% else %}<p class="g-d" style="margin-top:.6mm">Keine Unterlagen im System. Alle Angaben stammen aus dem Gespräch.</p>{% endif %}
+      </div>
+      <div>
+        <div class="g-k">Unterlagen anzufordern</div>
+        {% if b.documents_requested %}<ul class="g-list">{% for m in b.documents_requested %}<li>{{ m }}</li>{% endfor %}</ul>
+        {% else %}<p class="g-d">Keine.</p>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Das Wichtigste</h2>
+    {% set known = [] %}{% set open = [] %}
+    {% for g in b.fact_groups %}{% for f in g.facts if f.key %}{% if f.value %}{% set _ = known.append(f.label ~ ": " ~ f.value) %}{% else %}{% set _ = open.append(f.label) %}{% endif %}{% endfor %}{% endfor %}
+    <ul class="key">
+      <li><span>Entscheid</span><div><b>{{ b.decision.label }}.</b> Empfohlene Stelle: {{ b.handover.to }} ({{ b.handover.status | replace(".", "") }}).</div></li>
+      {% if b.next_steps %}<li><span>Nächster Schritt</span><div>{{ b.next_steps[0].title.rstrip('.') }}.{% if b.next_steps[0].detail %} {{ b.next_steps[0].detail }}{% endif %}</div></li>{% endif %}
+      {% if b.missing_all %}<li><span>Noch offen</span><div class="missing-soft">{{ b.missing_all[:6] | join(", ") }}{% if b.missing_all | length > 6 %} und {{ b.missing_all | length - 6 }} weitere{% endif %}</div></li>{% endif %}
+      {% if known %}<li><span>Bekannt</span><div>{{ known[:8] | join("; ") }}{% if known | length > 8 %}; weitere auf Seite 4{% endif %}</div></li>{% endif %}
+    </ul>
+  </div>
+
+</section>
+
+<!-- ===================== EINSCHAETZUNG UND WEITERLEITUNG ===================== -->
+<section class="page">
+  {{ masthead() }}
+  <div class="page-head"><h1 class="display">Einschätzung und Weiterleitung</h1><span>{{ b.decision.rules_checked }} Regeln geprüft, {{ b.decision.rules_fired | length }} ausgelöst</span></div>
+
+  <h2>Entscheid</h2>
+  <div class="decision-box">
+    <div><div class="big">{{ b.decision.label }}</div>
+      {% if b.decision.effective_action == "IMMEDIATE_SAFETY_RESPONSE" %}<p><b>Die Sicherheitsreaktion hat Vorrang.</b> Juristische Einschätzung (nachrangig): {{ b.decision.action }}.</p>{% endif %}
+      <p>{{ b.decision.reason }}</p>
+      <p class="refs" style="margin-top:1.4mm">Dringlichkeit «{{ b.urgency.level }}». {{ b.urgency.note }}</p></div>
+    <div class="meta">{{ b.decision.effective_action }}<br>{{ b.decision.code }}<br>{{ b.decision.rules_fired | join(", ") }}<br>Dringlichkeit: {{ b.urgency.level }}</div>
+  </div>
+
+  <div class="section">
+    <h2>Prozess</h2>
+    <ol class="steps">
+    {% for st in b.next_steps %}<li><div><b>{{ st.title.rstrip('.') }}.</b>{% if st.detail %}<span>{{ st.detail }}</span>{% endif %}</div></li>{% endfor %}
+    </ol>
+    <p class="refs">Ein Fallbericht ist keine Kontaktaufnahme. Übergabestatus: {{ b.handover.status }}</p>
+  </div>
+
+  <div class="section">
+    <h2>{% if b.canton %}Zuständige Stellen (Kanton {{ b.canton }}){% else %}Empfohlene Stellen{% endif %} <small class="legend"><span class="unconf"></span>Kontakt vor Weitergabe bestätigen</small></h2>
+    {% if b.bodies %}{{ bodies_table(b.bodies) }}{% else %}<p class="empty">Keine konkrete Stelle aus der Wissensbasis ermittelt. Empfohlen: {{ b.handover.to }}.</p>{% endif %}
+    <p class="refs">{{ b.bodies_note }}</p>
+  </div>
+  <div class="notes" style="margin-top:6mm">
+    <h2>Notizen</h2>
+    <div class="note-meta"><span>Bearbeitet von</span><span>Datum</span><span>Weitergeleitet an</span></div>
+    {% for i in range(5) %}<div class="note-line"></div>{% endfor %}
+  </div>
+</section>
+
+<!-- ===================== RECHTLICHE PRUEFUNG ===================== -->
+<section class="page">
+  {{ masthead() }}
+  <div class="page-head"><h1 class="display">Rechtliche Prüfung</h1><span>Quellen im Volltext im Anhang</span></div>
+  <div class="section">
+    <h2>Juristische Prüfpunkte</h2>
+    <p class="refs" style="margin:-1mm 0 2mm">Eine Rechtsquelle belegt nicht, dass ein Prüfpunkt erfüllt ist. «Regel ausgelöst» heisst: das System hat einen Anlass für die Prüfung festgestellt, die Beurteilung macht die Fachperson.</p>
+    {% if b.legal_checks %}
+    <ul class="checklist">
+      {% for c in b.legal_checks %}
+      <li><span class="state {{ c.state }}">{{ c.point }}</span><div>{{ c.text }}{% if c.issue %} <span class="refs">({{ c.issue }})</span>{% endif %}<div class="refs">{% for sid in c.sources %}<span>{{ b.src_title[sid] or sid }}</span>{% endfor %}</div></div></li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">Für dieses Rechtsgebiet liegen keine Prüfpunkte aus der Wissensbasis vor.</p>{% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Freigegebene allgemeine Hinweise</h2>
+    {% if b.general_hints %}<ul class="plain">
+      {% for h in b.general_hints %}<li>{{ h.text }}<div class="refs">{% for sid in h.sources %}<span>{{ b.src_title[sid] or sid }}</span>{% endfor %}</div></li>{% endfor %}
+    </ul>{% else %}<p class="empty">Keine allgemeinen Hinweise (zum Beispiel bei einem Fall ausserhalb des Moduls).</p>{% endif %}
+  </div>
+
+  <div class="split">
+    <div class="section">
+      <h2>Erkannte rechtliche Risiken</h2>
+      {% if b.risks %}<ul class="plain">{% for r in b.risks %}<li>{{ r }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine Hinweise aus den Prüfregeln.</p>{% endif %}
+    </div>
+    <div class="section">
+      <h2>Erkannte Rechtsgebiete</h2>
+      {% for a in b.legal_areas %}<p><b>{{ a.label }}</b>{% if a.confidence is not none %}&ensp;<span class="empty">Sicherheit der KI-Zuordnung {{ (a.confidence * 100) | round | int }} %</span>{% endif %}</p>
+      {% if a.evidence %}<p class="refs" style="font-size:7.2pt">«{{ a.evidence }}»</p>{% endif %}{% endfor %}
+      {% for u in b.unsupported %}<p><b>{{ u }}</b>&ensp;<span class="missing-soft">nicht abgedeckt: eine Fachperson muss beurteilen</span></p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ERFASSTE ANGABEN ===================== -->
+<section class="page">
+  {{ masthead() }}
+  <div class="page-head"><h1 class="display">Erfasste Angaben</h1><span>{{ b.inputs_count }} Eingaben, Fallstand {{ b.case_state }}</span></div>
+
+  <div class="split">
+    <div class="section">
+      <h2>Offene Fragen</h2>
+      {% if b.open_mandatory_questions %}<ul class="plain q">{% for q in b.open_mandatory_questions %}<li>{{ q }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine offenen Pflichtfragen.</p>{% endif %}
+    </div>
+    <div class="section">
+      <h2>Widersprüche und Unklarheiten</h2>
+      {% if b.contradictions %}<ul class="plain">{% for c in b.contradictions %}<li>{{ c }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine Widersprüche erkannt.</p>{% endif %}
+      {% if b.unconfirmed_ai %}<h2 style="margin-top:3mm">Unbestätigte KI-Angaben</h2><p class="refs" style="margin:0">{{ b.unconfirmed_ai | join(", ") }}</p>{% endif %}
+    </div>
+  </div>
+
+  <p class="refs" style="margin:-1mm 0 3mm">Antworten aus dem Gespräch stehen im Wortlaut unter dem Wert. «KI» heisst: aus dem Gesprächstext abgeleitet und noch nicht von der Fachperson bestätigt. «Fehlt» heisst: nicht erfasst, nie geschätzt.</p>
+  <div class="groups">
+  {% for g in b.fact_groups %}
+  <div class="group">
+    <h3>{{ g.title }}</h3>
+    {% for f in g.facts %}{{ fact(f, quote=true) }}{% endfor %}
+  </div>
+  {% endfor %}
+  </div>
+</section>
+
+<!-- ===================== CHRONOLOGIE, GESPRAECH, UNTERLAGEN ===================== -->
+<section class="page">
+  {{ masthead() }}
+  <div class="page-head"><h1 class="display">Chronologie, Gespräch und Unterlagen</h1><span>aus dem gespeicherten Fall</span></div>
+
+  <div class="section">
+    <h2>Chronologie</h2>
+    {% if b.chronology %}
+    <ul class="timeline chron">
+      {% for e in b.chronology %}<li class="{{ 'future' if e.future else '' }}"><span class="d">{{ e.date[8:10] }}.{{ e.date[5:7] }}.{{ e.date[:4] }}</span><span class="m"></span><span>{{ e.label_de }}{% if e.future %} (angegebener Termin){% endif %}</span><span class="q">{{ e.source_de }}</span></li>{% endfor %}
+    </ul>
+    {% else %}<p class="empty">{% if b.has_extras %}Noch keine Ereignisse erfasst.{% else %}Diese Berichtsversion enthält keine Chronologie (vor der neuen Vorlage erstellt).{% endif %}</p>{% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Gesprächsinformationen</h2>
+    {% if b.conversation %}
+    <ul class="qa">
+      {% for c in b.conversation %}<li>
+        {% if c.kind == "ANSWER" %}<b>{{ c.question_de }}</b><span>{{ c.text }}</span>{% if c.status_de %}<i>{{ c.status_de }}</i>{% endif %}<i>{{ c.at }}</i>
+        {% else %}<b>{{ "Schilderung" if c.kind == "DESCRIPTION" else "Ergänzung" }}</b><span>{{ c.text }}</span><i>{{ c.at }}</i>{% endif %}
+      </li>{% endfor %}
+    </ul>
+    {% else %}<p class="empty">Keine gespeicherten Gesprächsangaben in dieser Berichtsversion.</p>{% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Unterlagenübersicht</h2>
+    <p class="docs-note">In LexTec Bridge können derzeit keine Dokumente hochgeladen werden. Deshalb sind keine Originaldokumente oder Scans angehängt und keine Angaben aus Dokumenten extrahiert.
+    {% if b.documents_received %}Als durch Unterlagen belegt markiert: {{ b.documents_received | join("; ") }}.{% endif %}</p>
+    {% if b.documents_requested %}
+    <ul class="docs compact" style="margin-top:2mm">
+      {% for d in b.documents_requested %}<li class="absent"><span class="n">✗</span><div><div class="t">{{ d }}</div><div class="x">Dokumenttyp laut Wissensbasis, noch nicht vorliegend</div></div><div class="r">fehlt</div></li>{% endfor %}
+    </ul>{% endif %}
+  </div>
+</section>
+
+<!-- ===================== ANHANG: RECHTSQUELLEN ===================== -->
+<section class="annex">
+  {{ masthead("Anhang") }}
+  <div class="page-head"><h1 class="display">Rechtsquellen</h1><span>{{ b.sources | length }} Quellen</span></div>
+  <p class="refs" style="margin-bottom:3mm">{{ b.sources_note }}</p>
+  {% for s in b.sources %}
+  <div class="src-card">
+    <div class="src-head"><b>{{ s.title }}</b><span class="id">{{ s.id }}</span></div>
+    <div class="src-law">{{ s.law }}</div>
+    <div class="badges">
+      <span class="{{ 'y' if s.status.dossier else 'n' }}">Im Law-Dossier geprüft</span>
+      {% if s.kind == 'statute' %}<span class="{{ 'y' if s.status.official_text else 'n' }}">Amtlicher Wortlaut abgerufen</span>
+      <span class="{{ 'y' if s.status.wording_matched else 'n' }}">Wortlaut abgeglichen</span>{% else %}<span class="n">Vom System nicht live verifiziert</span>{% endif %}
+      <span class="{{ 'y' if s.status.interpretation_reviewed else 'n' }}">Interpretation {{ 'fachlich freigegeben' if s.status.interpretation_reviewed else 'noch nicht freigegeben' }}</span>
+    </div>
+    {% if s.wording_note %}<div class="src-meta"><b>{{ s.wording_note }}</b></div>{% endif %}
+    {% if s.text %}<div class="src-text"><span class="lab">{{ s.text_label }}</span>{{ s.text }}</div>{% endif %}
+    <div class="src-meta">{{ s.meta }}{% if s.meta %}. {% endif %}Referenziert von {{ s.referenced_by | join(", ") }}.{% for l in s.links %} <a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.label }}</a>{% endfor %}</div>
+  </div>
+  {% endfor %}
+
+  <h2 style="margin-top:5mm">Dokumentenverzeichnis</h2>
+  <p class="docs-note">Keine hochgeladenen Originaldokumente (Funktion noch nicht vorhanden). Muster-Scans aus der Vorlage werden nie in echten Berichten verwendet.</p>
+
+  <div class="audit" style="margin-top:5mm">
+    <b>Nachvollziehbarkeit.</b> {{ b.case_id }}, Version {{ b.version }}, Fallstand {{ b.case_state }}, {{ b.inputs_count }} Eingaben, erstellt {{ b.created_at }}.
+    Wissensbasis {{ b.kb_version }} ({{ b.kb_status }}). Extraktion: {{ b.extraction_model }}. {{ b.decision.rules_checked }} Regeln geprüft, ausgelöst: {{ b.decision.rules_fired | join(", ") or "keine" }} ({{ b.decision.code }}).
+    Die Ampel bildet das Ergebnis der Entscheidungs-Engine ab (nicht das Sprachmodell, keine eigene Regelberechnung); ein Fristende wird nicht berechnet. {{ b.disclaimers.responsibility }}
+    Kontaktangaben der Stellen aus dem Fachstellen-Netzwerk der Wissensbasis (Prüfstand je Stelle angegeben).
+  </div>
+</section>
+</body>
+</html>

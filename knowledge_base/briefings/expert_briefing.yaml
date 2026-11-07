@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=../../schemas/briefing_templates.schema.json
+schema_version: 1
+version: "1.0"
+
+templates:
+  - id: expert_briefing_v1
+    title_de: Expert Briefing
+    sections:
+      - overview
+      - legal_areas
+      - known_facts
+      - missing_information
+      - uncertainties
+      - legal_sources
+      - legal_risks
+      - decision_rationale
+      - escalation_reasons
+      - recommended_professionals
+      - next_steps

@@ -1,0 +1,87 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# DEMO / SYNTHETIC / NOT LEGALLY VALIDATED
+schema_version: 1
+id: unpaid_salary
+version: "0.1-demo"
+content_status: DEMO_SYNTHETIC
+jurisdiction: CH
+legal_area: employment
+issue: unpaid_salary
+title_de: Nicht bezahlter Lohn
+description: "Ausstehende Lohnzahlungen (Demo-Definition)."
+
+classification:
+  description: "Passt, wenn Lohn nicht oder nur teilweise bezahlt wurde."
+  typical_situations:
+    - "Der Lohn wurde nicht überwiesen."
+  related_issues: [employment_termination]
+
+facts:
+  - id: salary_period_open
+    label_de: Zeitraum des offenen Lohns
+    data_type: string
+    required: true
+    priority: high
+    question_de: "Für welchen Zeitraum (z. B. Monate) wurde der Lohn nicht bezahlt?"
+    why_needed_de: "Der betroffene Zeitraum bestimmt den Umfang der Forderung."
+
+  - id: salary_amount_outstanding_chf
+    label_de: Offener Betrag (CHF)
+    data_type: integer
+    required: true
+    priority: medium
+    question_de: "Wie hoch ist der offene Betrag ungefähr (in CHF)?"
+    why_needed_de: "Der Betrag ist für die Einschätzung des Vorgehens relevant."
+
+  - id: employment_ongoing
+    label_de: Arbeitsverhältnis besteht noch
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Besteht das Arbeitsverhältnis noch?"
+    why_needed_de: "Ob das Arbeitsverhältnis läuft, beeinflusst das weitere Vorgehen."
+
+  - id: employer_reminded
+    label_de: Arbeitgeber gemahnt
+    data_type: boolean
+    required_if: { ref: fact.salary_period_open, op: exists }
+    priority: medium
+    question_de: "Wurde der Arbeitgeber bereits zur Zahlung aufgefordert (mündlich oder schriftlich)?"
+    why_needed_de: "Bisherige Schritte sind für die Fachperson relevant."
+
+  - id: employment_start_date
+    label_de: Beginn des Arbeitsverhältnisses
+    data_type: date
+    required: false
+    priority: low
+    question_de: "Seit wann besteht das Arbeitsverhältnis (Eintrittsdatum)?"
+    why_needed_de: "Hintergrundinformation für die Fachperson."
+
+  - id: deadline_pending
+    label_de: Laufende Frist bekannt
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Ist eine Frist bekannt, die in nächster Zeit abläuft (z. B. auf einem Schreiben vermerkt)?"
+    why_needed_de: "Laufende Fristen müssen von einer Fachperson beurteilt werden."
+
+legal_rules:
+  - id: SAL_DEMO_ONGOING_EMPLOYMENT
+    description: "Demo: Arbeitsverhältnis besteht noch -> Hinweis."
+    when: { ref: fact.employment_ongoing, op: equals, value: true }
+    result_code: SALARY_UNPAID_ONGOING_EMPLOYMENT
+    result_de: "Der Lohn ist offen, das Arbeitsverhältnis besteht noch. Weiteres Vorgehen durch Fachperson klären."
+    legal_source_ids: [CH_OR_322]
+
+escalation_rules:
+  - id: SAL_DEMO_DEADLINE_PENDING
+    description: "Demo: Laufende Frist -> Fachperson."
+    when: { ref: fact.deadline_pending, op: equals, value: true }
+    urgency: HIGH
+    reason_code: DEADLINE_PENDING_EXPERT_REVIEW
+    reason_de: "Es läuft eine Frist. Die Beurteilung muss durch eine Fachperson erfolgen."
+    professionals: [employment_law_counsel]
+
+legal_source_ids: [CH_OR_322]
+default_professionals: [employment_law_counsel]
+briefing_template: expert_briefing_v1

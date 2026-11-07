@@ -1,0 +1,666 @@
+{
+  "_comment": "Daten von FALL-0011 aus dem LexTec-Bridge-Briefing (07.11.2026, 16:23), unveraendert uebernommen und fuer das neue Layout strukturiert. Feldnamen sind ein Vorschlag fuer die Schnittstelle zum Bridge-Backend.",
+  "doc_type": "Expert Briefing",
+  "case_id": "FALL-0011",
+  "version": 1,
+  "created_at": "07.11.2026, 16:23",
+  "case_state": "v23",
+  "kb_version": "kb-8ece9320cb",
+  "kb_status": "DRAFT",
+  "inputs_count": 11,
+  "issue_label": "Kündigung durch die Vermieterschaft",
+  "issue_id": "CH_TENANCY_TERMINATION",
+  "canton": "ZH",
+  "municipality": "Zürich",
+  "client": {
+    "label": "Klientin",
+    "name": null,
+    "phone": null,
+    "email": null,
+    "address": null,
+    "submitted_by": "eine Sozialarbeiterin"
+  },
+  "disclaimers": {
+    "kb_draft": "Die verwendeten Wissensbasis-Inhalte sind nicht juristisch freigegeben (DRAFT). Das Law-Dossier ist keine endgültige Freigabe für den Einsatz mit echten Klienten; rechtliche Hinweise sind als Entwurf zu verstehen.",
+    "external_ai": "Extraktion mit externer KI (Gemini); Angaben wurden an einen externen Dienst übermittelt.",
+    "responsibility": "Dieses Briefing ist eine strukturierte Fallübersicht und keine Rechtsauskunft. Die Verantwortung liegt bei der zuständigen Fachperson."
+  },
+  "summary": "Eine Klientin in Zürich hat von ihrem Vermieter die Kündigung für ihre Wohnung erhalten. Sie ist unsicher, ob sie tatsächlich ausziehen muss.",
+  "summary_source": "KI-erstellt, aus den Eingaben",
+  "legal_areas": [
+    {
+      "label": "Kündigung durch die Vermieterschaft",
+      "confidence": 0.99,
+      "evidence": "Sie hat von ihrem Vermieter die Kündigung für ihre Wohnung erhalten und weiss nicht, ob sie ausziehen muss."
+    }
+  ],
+  "urgency": {
+    "level": "bald",
+    "days_since_receipt": 1,
+    "days_to_termination_date": null,
+    "derived": "Systemseitig abgeleitet",
+    "note": "Interne Dringlichkeitsbewertung nach Produktschwellen (z. B. 20 Tage, 60 Tage). Das sind Produktentscheide und keine gesetzlichen Fristen. Das System nennt kein Fristende; Berechnung und Beurteilung der Frist erfolgen durch die Fachperson.",
+    "legal_deadline_hint": "Anfechtung und Erstreckung innert 30 Tagen nach Empfang bei der Schlichtungsbehörde (Art. 273 Abs. 1 und 2 lit. a OR)"
+  },
+  "decision": {
+    "action": "ESCALATE",
+    "label": "Fachperson nötig",
+    "code": "LEGAL_REVIEW_STANDARD",
+    "reason": "Alle zwingenden Angaben liegen vor und die Zeit ist noch nicht knapp. Der Entscheid über eine Anfechtung ist ein Einzelfall und gehört zu einer Rechtsperson, bald.",
+    "rules_checked": 42,
+    "rules_fired": [
+      "TT_DAYS_LT_20_ALL_KNOWN"
+    ]
+  },
+  "handover": {
+    "to": "Mietrechtsberatung",
+    "description": "Juristische Fachperson mit Schwerpunkt Mietrecht.",
+    "status": "Übergabe empfohlen, noch nicht angefragt."
+  },
+  "next_steps": [
+    {
+      "title": "Fall an Mietrechtsberatung übergeben",
+      "detail": "Dringlichkeit: bald. Die Übergabe ist nur empfohlen, nicht erfolgt."
+    },
+    {
+      "title": "Briefing bereitstellen",
+      "detail": "Dieses Briefing und die zugrunde liegenden Angaben der Fachperson zur Verfügung stellen."
+    }
+  ],
+  "documents_received": [],
+  "documents_requested": [
+    "Kündigungsformular (beide Seiten)",
+    "Briefumschlag bzw. Abholungseinladung",
+    "Mietvertrag",
+    "Korrespondenz mit der Vermieterschaft der letzten drei Jahre"
+  ],
+  "fact_groups": [
+    {
+      "title": "Vorprüfung des Mietverhältnisses",
+      "facts": [
+        {
+          "label": "Vertragspartei",
+          "value": "Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)",
+          "src": "user",
+          "evidence": "Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)",
+          "key": true
+        },
+        {
+          "label": "Mitmieter",
+          "value": "Nein",
+          "src": "user",
+          "evidence": "Nein",
+          "key": true
+        },
+        {
+          "label": "Kündigung an alle Mitmieter zugestellt",
+          "value": null
+        },
+        {
+          "label": "Objektart",
+          "value": "Gewöhnliche Wohnung",
+          "src": "ai",
+          "evidence": "Kündigung für ihre Wohnung erhalten",
+          "key": true
+        },
+        {
+          "label": "Gemeinde",
+          "value": "Zürich",
+          "src": "ai",
+          "evidence": "Ich betreue eine Klientin in Zürich.",
+          "key": true
+        },
+        {
+          "label": "Wohnung im Kanton Zürich",
+          "value": "Ja",
+          "src": "ai",
+          "evidence": "Ich betreue eine Klientin in Zürich."
+        },
+        {
+          "label": "Vertragsart",
+          "value": "Unbefristet",
+          "src": "user",
+          "evidence": "Unbefristet",
+          "key": true
+        }
+      ]
+    },
+    {
+      "title": "Zustellung und Empfang",
+      "facts": [
+        {
+          "label": "Art der Zustellung",
+          "value": "Eingeschrieben",
+          "src": "user",
+          "evidence": "Eingeschrieben (Einschreiben)",
+          "key": true
+        },
+        {
+          "label": "Abholungseinladung",
+          "value": "06.11.2026",
+          "src": "user",
+          "evidence": "2026-11-06",
+          "key": true
+        },
+        {
+          "label": "Empfangsdatum",
+          "value": "06.11.2026",
+          "src": "user",
+          "evidence": "2026-11-06",
+          "key": true
+        },
+        {
+          "label": "Ferien oder Abwesenheit beim Empfang",
+          "value": null
+        },
+        {
+          "label": "Krankheit beim Empfang",
+          "value": null
+        }
+      ]
+    },
+    {
+      "title": "Form der Kündigung",
+      "facts": [
+        {
+          "label": "Amtliches Formular",
+          "value": "Ja",
+          "src": "user",
+          "evidence": "Ja",
+          "key": true
+        },
+        {
+          "label": "Foto des Formulars vorhanden",
+          "value": null
+        },
+        {
+          "label": "Kündigung unterschrieben",
+          "value": null
+        },
+        {
+          "label": "Familienwohnung",
+          "value": "Nein",
+          "src": "user",
+          "evidence": "Nein",
+          "key": true
+        },
+        {
+          "label": "Partnerperson wohnt noch dort",
+          "value": null
+        },
+        {
+          "label": "Separate Zustellung an Partnerperson",
+          "value": null
+        }
+      ]
+    },
+    {
+      "title": "Inhalt und Kündigungsgrund",
+      "facts": [
+        {
+          "label": "Art der Kündigung",
+          "value": "Ordentliche Kündigung",
+          "src": "user",
+          "evidence": "Ordentliche Kündigung",
+          "key": true
+        },
+        {
+          "label": "Kündigungstermin",
+          "value": null,
+          "key": true
+        },
+        {
+          "label": "Kündigungsgrund",
+          "value": null,
+          "key": true
+        }
+      ]
+    },
+    {
+      "title": "Vorgeschichte",
+      "facts": [
+        {
+          "label": "Streit oder Verfahren mit der Vermieterschaft (3 Jahre)",
+          "value": null
+        },
+        {
+          "label": "Änderung der familiären Situation",
+          "value": null
+        },
+        {
+          "label": "Bereits reagiert (angefochten, unterschrieben, verhandelt)",
+          "value": "Nein",
+          "src": "user",
+          "evidence": "Nein"
+        },
+        {
+          "label": "Aufhebungsvereinbarung unterschrieben oder vorgelegt",
+          "value": null
+        },
+        {
+          "label": "Laufendes Gerichtsverfahren oder Ausweisung",
+          "value": null
+        }
+      ]
+    },
+    {
+      "title": "Härtegründe und soziale Umstände",
+      "facts": [
+        {
+          "label": "Härtegründe",
+          "value": null
+        },
+        {
+          "label": "Beschreibung der Härtegründe",
+          "value": null
+        },
+        {
+          "label": "Mietzins (CHF)",
+          "value": null,
+          "key": true
+        },
+        {
+          "label": "Zahlende Stelle",
+          "value": null
+        },
+        {
+          "label": "Besondere Verletzlichkeit",
+          "value": null
+        },
+        {
+          "label": "Wunsch nach einer Fachperson",
+          "value": null
+        }
+      ]
+    }
+  ],
+  "open_mandatory_questions": [],
+  "missing_mandatory": [],
+  "contradictions": [],
+  "legal_checks": [
+    {
+      "point": "Fristbeginn",
+      "text": "Absolute Empfangstheorie; bei Einschreiben in der Regel der Tag nach Einwurf der Abholungseinladung.",
+      "sources": [
+        "BGE_140_III_244",
+        "BGE_143_III_15",
+        "CH_OR_273_1"
+      ]
+    },
+    {
+      "point": "Form",
+      "text": "Amtliches Formular, Schriftlichkeit, separate Zustellung bei Familienwohnung (Art. 266l–266o OR).",
+      "sources": [
+        "CH_OR_266L",
+        "CH_OR_266N",
+        "CH_OR_266O"
+      ]
+    },
+    {
+      "point": "Anfechtbarkeit",
+      "text": "Treu und Glauben, Sperrfristen (Art. 271 und 271a OR).",
+      "sources": [
+        "CH_OR_271",
+        "CH_OR_271A_1"
+      ]
+    },
+    {
+      "point": "Erstreckung",
+      "text": "Eventualiter im Anfechtungsbegehren verlangen (Art. 273 Abs. 2 und 5 OR).",
+      "sources": [
+        "CH_OR_273_2",
+        "CH_OR_273_4_5"
+      ]
+    }
+  ],
+  "risks": [],
+  "general_hints": [
+    {
+      "text": "Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten werden.",
+      "sources": [
+        "CH_OR_273_1"
+      ]
+    },
+    {
+      "text": "Beim Einschreiben gilt die Kündigung in der Regel am Tag nach dem Einwurf der Abholungseinladung als empfangen, nicht erst bei der Abholung. Auch Ferien ändern daran nichts.",
+      "sources": [
+        "BGE_143_III_15",
+        "BGE_140_III_244"
+      ]
+    },
+    {
+      "text": "Die Klientin kann verlangen, dass die Kündigung begründet wird. Die Begründung ist aber keine Gültigkeitsvoraussetzung.",
+      "sources": [
+        "CH_OR_271",
+        "BGE_143_III_344"
+      ]
+    },
+    {
+      "text": "Zuständig ist die Schlichtungsbehörde im Bezirk, in dem die Wohnung liegt. Das Schlichtungsverfahren kostet keine Gerichtskosten.",
+      "sources": [
+        "CH_ZPO_33",
+        "CH_ZPO_113"
+      ]
+    },
+    {
+      "text": "Lehnt eine Partei einen Entscheidvorschlag der Schlichtungsbehörde ab, muss sie selbst innert 30 Tagen klagen.",
+      "sources": [
+        "CH_ZPO_211",
+        "CH_ZPO_209_4"
+      ]
+    }
+  ],
+  "bodies": [
+    {
+      "label": "Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)",
+      "purpose": "Anfechtung und Erstreckung (Begehren einreichen)",
+      "costs": "Keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)",
+      "web": "gerichte-zh.ch",
+      "note": "Jedes der zwölf Bezirksgerichte hat eine eigene paritätische Schlichtungsbehörde.",
+      "ref_id": "schlichtungsbehoerde_miete_bezirk_zuerich",
+      "ref_scope": "Gemeinde Zürich = Bezirk Zürich"
+    },
+    {
+      "label": "Rechtsauskunft in Mietsachen, Bezirksgericht Zürich",
+      "purpose": "Auskunft für die Stadt Zürich; nicht mehr, sobald ein Verfahren läuft",
+      "costs": "Gratis",
+      "ref_id": "rechtsauskunft_miete_bezirksgericht_zuerich"
+    },
+    {
+      "label": "Mieterinnen- und Mieterverband Zürich",
+      "purpose": "Beratung, Vertretung, Begleitung",
+      "costs": "Mitglieder gratis (ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung",
+      "web": "mieterverband.ch/mv-zh",
+      "ref_id": "mieterverband_zh"
+    },
+    {
+      "label": "Zürcher Anwaltsverband, unentgeltliche Rechtsauskunft",
+      "purpose": "Kurze Orientierung (ca. 15 Minuten), ohne Termin",
+      "costs": "Gratis",
+      "web": "zav.ch",
+      "ref_id": "unentgeltliche_rechtsauskunft_zav"
+    },
+    {
+      "label": "Sozialdienst der Wohngemeinde",
+      "purpose": "Wohnungssuche, Notunterkunft, Finanzierung",
+      "costs": null,
+      "ref_id": "sozialzentren_stadt_zuerich"
+    },
+    {
+      "label": "Rechtsauskunft der Schlichtungsbehörde",
+      "purpose": "Neutrale Information zu Rechtslage und Verfahren, keine Rechtsberatung",
+      "costs": "nicht angegeben",
+      "web": "gerichte-zh.ch/rechtsauskunft"
+    },
+    {
+      "label": "Unentgeltliche Rechtsauskünfte der Bezirksgerichte",
+      "purpose": "Allgemeine Orientierung",
+      "costs": "Gratis"
+    }
+  ],
+  "bodies_note": "Telefonnummern, Öffnungszeiten und Kosten wurden nicht durchgehend auf den offiziellen Seiten geprüft; vor der Weitergabe bestätigen.",
+  "sources": [
+    {
+      "id": "CH_OR_266L",
+      "title": "Art. 266l Abs. 1–2 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_OR_266N",
+      "title": "Art. 266n OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung (Art. 257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen Partner separat zuzustellen.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_OR_266O",
+      "title": "Art. 266o OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_OR_271",
+      "title": "Art. 271 Abs. 1–2 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 81. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst. 2 Die Kündigung muss auf Verlangen begründet werden.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION",
+        "TT_HINT_REASON_ON_REQUEST"
+      ]
+    },
+    {
+      "id": "CH_OR_271A_1",
+      "title": "Art. 271a Abs. 1 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 81. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "1 Die Kündigung durch den Vermieter ist insbesondere anfechtbar, wenn sie ausgesprochen wird: a. weil der Mieter nach Treu und Glauben Ansprüche aus dem Mietverhältnis geltend macht; b. weil der Vermieter eine einseitige Vertragsänderung zu Lasten des Mieters oder eine Mietzinsanpassung durchsetzen will; c. allein um den Mieter zum Erwerb der gemieteten Wohnung zu veranlassen; d. während eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens, ausser wenn der Mieter das Verfahren missbräuchlich eingeleitet hat; e. vor Ablauf von drei Jahren nach Abschluss eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens, in dem der Vermieter: 1. zu einem erheblichen Teil unterlegen ist; 2. seine Forderung oder Klage zurückgezogen oder erheblich eingeschränkt hat; 3. auf die Anrufung des Richters verzichtet hat; 4. mit dem Mieter einen Vergleich geschlossen oder sich sonstwie geeinigt hat; f. wegen Änderungen in der familiären Situation des Mieters, aus denen dem Vermieter keine wesentlichen Nachteile entstehen.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_OR_273_1",
+      "title": "Art. 273 Abs. 1 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 83. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "1 Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION",
+        "TT_HINT_30_DAYS"
+      ]
+    },
+    {
+      "id": "CH_OR_273_2",
+      "title": "Art. 273 Abs. 2 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 83. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "2 Will der Mieter eine Erstreckung des Mietverhältnisses verlangen, so muss er das Begehren der Schlichtungsbehörde einreichen: a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung; b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_OR_273_4_5",
+      "title": "Art. 273 Abs. 4–5 OR",
+      "law": "Obligationenrecht (OR), SR 220",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.10.2026, OR_admin.pdf S. 84. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52",
+      "text": "4 Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO. 5 Weist die zuständige Behörde ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen, ob das Mietverhältnis erstreckt werden kann.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION"
+      ]
+    },
+    {
+      "id": "CH_ZPO_33",
+      "title": "Art. 33 ZPO – Miete und Pacht unbeweglicher Sachen",
+      "law": "Zivilprozessordnung (ZPO), SR 272",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.07.2026, ZPO.pdf S. 9. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52",
+      "text": "Für Klagen aus Miete und Pacht unbeweglicher Sachen ist das Gericht am Ort der gelegenen Sache zuständig.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION",
+        "TT_HINT_VENUE_COSTS"
+      ]
+    },
+    {
+      "id": "CH_ZPO_113",
+      "title": "Art. 113 Abs. 1–2 lit. c ZPO – Schlichtungsverfahren",
+      "law": "Zivilprozessordnung (ZPO), SR 272",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.07.2026, ZPO.pdf S. 28–29. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52",
+      "text": "1 Im Schlichtungsverfahren werden keine Parteientschädigungen gesprochen. Vorbehalten bleibt die Entschädigung einer unentgeltlichen Rechtsbeiständin oder eines unentgeltlichen Rechtsbeistandes durch den Kanton. 2 Keine Gerichtskosten werden gesprochen in Streitigkeiten: c. aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht;",
+      "referenced_by": [
+        "TT_HINT_VENUE_COSTS"
+      ]
+    },
+    {
+      "id": "CH_ZPO_209_4",
+      "title": "Art. 209 Abs. 4 ZPO – Klagebewilligung",
+      "law": "Zivilprozessordnung (ZPO), SR 272",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.07.2026, ZPO.pdf S. 57. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52",
+      "text": "4 In Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht beträgt die Klagefrist 30 Tage.",
+      "referenced_by": [
+        "TT_HINT_PROPOSAL"
+      ]
+    },
+    {
+      "id": "CH_ZPO_211",
+      "title": "Art. 211 Abs. 1–3 ZPO – Wirkungen",
+      "law": "Zivilprozessordnung (ZPO), SR 272",
+      "kind": "statute",
+      "status": {
+        "dossier": true,
+        "official_text": true,
+        "wording_matched": true,
+        "interpretation_reviewed": false
+      },
+      "meta": "Stand 01.07.2026, ZPO.pdf S. 57. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52",
+      "text": "1 Der Entscheidvorschlag gilt als angenommen und hat die Wirkungen eines rechtskräftigen Entscheids, wenn ihn keine Partei innert 20 Tagen seit der schriftlichen Eröffnung ablehnt. Die Ablehnung bedarf keiner Begründung. 2 Nach Eingang der Ablehnung stellt die Schlichtungsbehörde die Klagebewilligung zu: a. in den Angelegenheiten nach Artikel 210 Absatz 1 Buchstabe b: der ablehnenden Partei; b. in den übrigen Fällen: der klagenden Partei. 3 Wird die Klage in den Angelegenheiten nach Artikel 210 Absatz 1 Buchstabe b nicht rechtzeitig eingereicht, so gilt der Entscheidvorschlag als anerkannt und er hat die Wirkungen eines rechtskräftigen Entscheides.",
+      "referenced_by": [
+        "TT_HINT_PROPOSAL"
+      ]
+    },
+    {
+      "id": "BGE_140_III_244",
+      "title": "BGE 140 III 244",
+      "law": "Urteil 4A_120/2014 vom 19.05.2014",
+      "kind": "decision",
+      "status": {
+        "dossier": true,
+        "official_text": false,
+        "wording_matched": false,
+        "interpretation_reviewed": false
+      },
+      "meta": "Fundstellen: E. 4.1, S. 4; E. 4.2 ff.; E. 5.1–5.2, S. 5–6. Vom System nicht live verifiziert",
+      "text": "Fehlt das genehmigte Formular, ist die Kündigung nichtig; die Nichtigkeit kann jederzeit geltend gemacht werden und ist von Amtes wegen zu beachten. Ein veraltetes Formular führt nicht zur Nichtigkeit, wenn es dieselben Informationen enthält. Die 30-Tage-Frist von Art. 273 Abs. 1 OR ist materiellrechtlich; es gilt die absolute Empfangstheorie. Die relative Theorie gilt im Mietrecht nur für Mietzinserhöhungen (Art. 269d OR) und Zahlungsaufforderungen (Art. 257d Abs. 1 OR).",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION",
+        "TT_HINT_REGISTERED_MAIL"
+      ]
+    },
+    {
+      "id": "BGE_143_III_15",
+      "title": "BGE 143 III 15",
+      "law": "Urteil 4A_293/2016 vom 13.12.2016",
+      "kind": "decision",
+      "status": {
+        "dossier": true,
+        "official_text": false,
+        "wording_matched": false,
+        "interpretation_reviewed": false
+      },
+      "meta": "Fundstellen: E. 4.1, S. 17–19; E. 4.2, S. 19; E. 4.3, S. 19. Vom System nicht live verifiziert",
+      "text": "Bei Abholungseinladung gilt die Kündigung am Tag des Einwurfs als empfangen, wenn sofortiges Abholen zumutbar ist, sonst in der Regel am Folgetag; die 7-Tage-Abholfiktion der ZPO gilt nicht. Ferien oder Abwesenheit trägt die Empfängerin; sie muss sich auch nach Ablauf der Abholfrist bei der Post nach dem Absender erkundigen; späte Kenntnis verkürzt die verbleibende Frist. Im Fall: Einwurf 2.12., Empfang 3.12.2013, Klage vom 7.2.2014 verspätet. Ob Krankheit anders zu behandeln wäre, blieb offen.",
+      "referenced_by": [
+        "CH_TENANCY_TERMINATION",
+        "TT_HINT_REGISTERED_MAIL"
+      ]
+    },
+    {
+      "id": "BGE_143_III_344",
+      "title": "BGE 143 III 344",
+      "law": "Urteil 4A_703/2016 vom 24.05.2017",
+      "kind": "decision",
+      "status": {
+        "dossier": true,
+        "official_text": false,
+        "wording_matched": false,
+        "interpretation_reviewed": false
+      },
+      "meta": "Fundstellen: E. 5.3.1, S. 345; E. 5.3.3, S. 346–347; E. 5.3.4, S. 347–348. Vom System nicht live verifiziert",
+      "text": "Die Begründung ist keine Gültigkeitsvoraussetzung, auch nicht bei Sanierung; BGE 142 III 91 und 140 III 496 waren insoweit missverständlich. Fehlende, fehlerhafte, pauschale oder später ausgewechselte Gründe können aber ein Indiz gegen ein schützenswertes Interesse sein.",
+      "referenced_by": [
+        "TT_HINT_REASON_ON_REQUEST"
+      ]
+    }
+  ],
+  "sources_note": "«Im Law-Dossier geprüft» ist der Prüfstand laut Law-Team. «Amtlicher Text abgerufen» bedeutet nur, dass der Gesetzestext bei Fedlex gefunden und gespeichert wurde. Ob eine Rechtsfolge im konkreten Fall eintritt, prüft die Fachperson. Bundesgerichtsentscheide sind nicht an Fedlex angebunden und stammen aus dem Dossier.",
+  "extraction_model": "Gemini"
+}

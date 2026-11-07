@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Expert Briefing FALL-0011</title>
+<style>
+@page { size: A4; margin: 13mm 15mm 14mm 15mm; }
+  :root {
+    /* LexTec-Palette: Grau/Weiss als Basis, Gruen als einziger Akzent, Rot nur fuer Fehlendes */
+    --brand: #1c5d45; --brand-light: #6ab472; --brand-tint: #eef4f0;
+    --ink: #1e1e1e; --ink-2: #3d3d3d; --muted: #6b6b6b; --faint: #8e8e8e;
+    --hair: #d6d6d6; --hair-2: #e9e9e9; --surface: #f4f4f4;
+    --red: #b42318; --red-tint: #f4f4f4;
+    --orange: #1c5d45; --orange-lamp: #6ab472; --orange-tint: #f4f4f4;
+    --green: #1c5d45; --green-tint: #f4f4f4; --blue: #1c5d45; --off: #e3e3e3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { font-family: "Inter", sans-serif; color: var(--ink); font-size: 8pt; line-height: 1.38;
+         font-feature-settings: "cv11", "ss01", "tnum"; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .display { font-family: "Inter Display", "Inter", sans-serif; }
+  p { margin: 0; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+
+  /* ---------- Kopf ---------- */
+  .masthead { display: flex; justify-content: space-between; align-items: baseline; color: var(--faint); font-size: 7.2pt; margin-bottom: 4.6mm; }
+  .masthead b { color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+  .sample { color: var(--red); font-weight: 600; }
+  .hero { display: grid; grid-template-columns: 1fr 50mm; gap: 8mm; align-items: start; margin-bottom: 4.4mm; }
+  .eyebrow-free { color: var(--muted); font-size: 8.4pt; margin-bottom: 1.2mm; }
+  h1 { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 19pt; line-height: 1.07; letter-spacing: -0.024em; margin: 0 0 1.6mm; }
+  .who { font-size: 10pt; color: var(--ink-2); }
+  .who span { color: var(--faint); }
+  .stand { color: var(--faint); font-size: 7.2pt; margin-top: 1.2mm; }
+
+  /* Ampel: die eine laute Stelle */
+  .signal { border-radius: 14px; padding: 3.2mm 3.8mm 3mm; }
+  .signal.ROT { background: var(--red-tint); }
+  .signal.AMBER { background: var(--orange-tint); }
+  .signal.GRUEN { background: var(--green-tint); }
+  .lights { display: inline-flex; gap: 1.6mm; background: #1d1d1f; border-radius: 99px; padding: 1.4mm 2mm; margin-bottom: 2.6mm; }
+  .light { width: 4.2mm; height: 4.2mm; border-radius: 50%; background: #3a3a3c; }
+  .light.on.ROT { background: #ff453a; box-shadow: 0 0 0 0.6mm rgba(255,69,58,.28); }
+  .light.on.AMBER { background: var(--orange-lamp); box-shadow: 0 0 0 0.6mm rgba(255,159,10,.28); }
+  .light.on.GRUEN { background: #30d158; box-shadow: 0 0 0 0.6mm rgba(48,209,88,.28); }
+  .signal-level { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 15pt; line-height: 1; letter-spacing: -0.02em; }
+  .signal.ROT .signal-level { color: var(--red); } .signal.AMBER .signal-level { color: var(--orange); } .signal.GRUEN .signal-level { color: var(--green); }
+  .signal-label { font-weight: 600; font-size: 8.6pt; margin-top: 1mm; }
+  .signal-why { color: var(--ink-2); font-size: 7.4pt; margin-top: 1.6mm; line-height: 1.38; }
+  .signal-why .more { color: var(--muted); }
+
+  .lead { font-size: 8.5pt; line-height: 1.42; color: var(--ink-2); margin: 0 0 4mm; }
+  /* ---------- Kennzahlen-Band ---------- */
+  .glance { display: grid; grid-template-columns: 1fr .9fr 1.3fr; background: var(--surface); border-radius: 12px; margin-bottom: 4.8mm; }
+  .glance > div { padding: 2.6mm 3.8mm; }
+  .glance > div + div { border-left: 1px solid var(--hair-2); }
+  .g-k { color: var(--muted); font-size: 7.4pt; margin-bottom: 1mm; }
+  .g-v { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 16pt; line-height: 1.05; letter-spacing: -0.02em; }
+  .g-v small { font-size: 9pt; font-weight: 600; letter-spacing: 0; color: var(--ink-2); }
+  .g-v.hot { color: var(--red); }
+  .g-d { color: var(--ink-2); font-size: 7.3pt; margin-top: 1mm; line-height: 1.33; }
+  .g-d.note { color: var(--faint); font-size: 6.9pt; margin-top: 1mm; }
+
+  /* ---------- Abschnitte ---------- */
+  h2 { font-family: "Inter Display", sans-serif; font-weight: 650; font-size: 11pt; letter-spacing: -0.012em; margin: 0 0 2mm; }
+  .section { margin-bottom: 4.2mm; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 9mm; }
+
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .steps li { display: grid; grid-template-columns: 6.2mm 1fr; gap: 2.2mm; padding: 1.1mm 0; border-top: 1px solid var(--hair-2); counter-increment: s; }
+  .steps li:first-child { border-top: none; padding-top: 0; }
+  .steps li::before { content: counter(s); font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 9pt; color: #fff; background: var(--brand);
+                      width: 5.2mm; height: 5.2mm; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: .2mm; }
+  .steps b { font-weight: 600; font-size: 8.2pt; margin-right: 1.4mm; }
+  .steps span { color: var(--ink-2); }
+
+  .orgs { list-style: none; margin: 0; padding: 0; }
+  .orgs li { padding: 1.3mm 0; border-top: 1px solid var(--hair-2); }
+  .orgs li:first-child { border-top: none; padding-top: 0; }
+  .orgs b { font-weight: 600; display: block; }
+  .orgs .c { color: var(--ink-2); }
+  .orgs .w { color: var(--muted); }
+  .bodies { width: 100%; border-collapse: collapse; }
+  .bodies td { padding: .9mm 3mm .9mm 0; border-top: 1px solid var(--hair-2); vertical-align: top; }
+  .bodies tr:first-child td { border-top: none; padding-top: 0; }
+  .bodies .name { font-weight: 600; width: 44%; }
+  .bodies .contact { color: var(--ink-2); width: 21%; }
+  .bodies .why { color: var(--muted); }
+  .dot { display: inline-block; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--orange-lamp); margin-left: 1.2mm; vertical-align: 0.3mm; }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr; column-gap: 9mm; }
+  .kv { display: grid; grid-template-columns: 24mm 1fr auto; gap: 2mm; padding: .62mm 0; border-top: 1px solid var(--hair-2); align-items: baseline; }
+  .kv:first-of-type { border-top: none; }
+  .k { color: var(--muted); }
+  .v { font-weight: 500; }
+  .s { color: var(--faint); font-size: 6.6pt; white-space: nowrap; text-align: right; }
+  .s.open::before { content: ""; display: inline-block; width: 1.4mm; height: 1.4mm; border-radius: 50%; background: var(--orange-lamp); margin-right: 1.1mm; vertical-align: .2mm; }
+  .missing { color: var(--red); font-weight: 600; }
+  .unconf { display: inline-block; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--orange-lamp); margin-right: 1.4mm; vertical-align: 0.3mm; }
+
+  .notice { display: grid; grid-template-columns: 2.4mm 1fr; gap: 2.6mm; padding: 1.8mm 3.2mm; border-radius: 10px; background: var(--orange-tint); margin-bottom: 4mm; font-size: 7.6pt; }
+  .notice::before { content: ""; width: 2.2mm; height: 2.2mm; border-radius: 50%; background: var(--orange-lamp); margin-top: .7mm; }
+  .notice.critical { background: var(--red-tint); }
+  .notice.critical::before { background: var(--red); }
+  .notice.hr { background: #f4f1fb; }
+  .notice.hr::before { background: #8944ab; }
+  .notice b { font-weight: 600; }
+  .notice p { color: var(--ink-2); }
+
+  h2 small.legend { font-family: "Inter", sans-serif; font-weight: 400; font-size: 6.8pt; color: var(--faint); letter-spacing: 0; margin-left: 2mm; }
+  .footnote { color: var(--faint); font-size: 6.4pt; line-height: 1.4; margin-top: 2mm; border-top: 1px solid var(--hair-2); padding-top: 2.2mm; }
+
+  /* ---------- Seite 2 ---------- */
+  .page-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5mm; }
+  .page-head h1 { font-size: 15pt; margin: 0; }
+  .page-head span { color: var(--faint); font-size: 7.4pt; }
+
+  .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+  .timeline li { display: grid; grid-template-columns: 22mm 3.4mm 1fr auto; gap: 2.4mm; padding: 1.15mm 0; align-items: baseline; }
+  .timeline .d { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .timeline .m { width: 2mm; height: 2mm; border-radius: 50%; border: 1.4px solid var(--ink); background: #fff; justify-self: center; align-self: center; }
+  .timeline li.future .m { border-color: var(--red); background: var(--red); }
+  .timeline li.weak .m { border-style: dashed; border-color: var(--faint); }
+  .timeline .q { color: var(--faint); font-size: 6.8pt; text-align: right; }
+
+  .checks { list-style: none; margin: 0; padding: 0; }
+  .checks li { display: grid; grid-template-columns: 17mm 1fr 52mm; gap: 3mm; padding: 1.5mm 0; border-top: 1px solid var(--hair-2); align-items: baseline; }
+  .checks li:first-child { border-top: none; padding-top: 0; }
+  .state { font-weight: 600; font-size: 7.4pt; }
+  .state::before { content: ""; display: inline-block; width: 1.8mm; height: 1.8mm; border-radius: 50%; margin-right: 1.4mm; vertical-align: 0.2mm; }
+  .state.erfuellt { color: var(--green); } .state.erfuellt::before { background: var(--green); }
+  .state.offen { color: var(--orange); } .state.offen::before { background: var(--orange-lamp); }
+  .state.unklar { color: var(--red); } .state.unklar::before { background: var(--red); }
+  .checks .b { color: var(--muted); font-size: 7.4pt; }
+
+  .plain { margin: 0; padding: 0; list-style: none; }
+  .plain li { padding: .9mm 0 .9mm 4mm; border-top: 1px solid var(--hair-2); position: relative; }
+  .plain li:first-child { border-top: none; padding-top: 0; }
+  .plain li::before { content: ""; position: absolute; left: 0; top: 2.85mm; width: 1.5mm; height: 1.5mm; border-radius: 50%; background: var(--hair); }
+  .plain li:first-child::before { top: 1.65mm; }
+  .plain.q li::before { border-radius: 1px; background: none; border: 1px solid var(--muted); width: 1.9mm; height: 1.9mm; top: 2.6mm; }
+  .plain.q li:first-child::before { top: 1.4mm; }
+
+  .sources { width: 100%; border-collapse: collapse; }
+  .sources td { padding: 1.3mm 3mm 1.3mm 0; border-top: 1px solid var(--hair-2); }
+  .sources tr:first-child td { border-top: none; }
+  .sources .c { font-weight: 600; width: 38mm; }
+  .sources .u { color: var(--muted); }
+  .sources .ok { color: var(--green); font-weight: 600; font-size: 7.4pt; width: 22mm; text-align: right; }
+  .sources .no { color: var(--orange); font-weight: 600; font-size: 7.4pt; width: 22mm; text-align: right; }
+
+  .audit { background: var(--surface); border-radius: 10px; padding: 3mm 3.6mm; color: var(--muted); font-size: 7.2pt; }
+  .audit b { color: var(--ink-2); font-weight: 600; }
+
+  /* ---------- Anhang ---------- */
+  .annex { break-before: page; }
+  .docs { list-style: none; margin: 0; padding: 0; }
+  .docs li { display: grid; grid-template-columns: 9mm 1fr 44mm; gap: 3mm; padding: 1.6mm 0; border-top: 1px solid var(--hair-2); }
+  .docs li:first-child { border-top: none; }
+  .docs .n { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 10pt; }
+  .docs .t { font-weight: 600; font-size: 9pt; }
+  .docs .x { color: var(--muted); font-size: 7.4pt; margin-top: .6mm; }
+  .docs .r { color: var(--muted); font-size: 7.4pt; text-align: right; }
+  .docs li.absent .n, .docs li.absent .t { color: var(--red); }
+  .scan-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3mm; }
+  .scan-head b { font-family: "Inter Display", sans-serif; font-size: 11pt; font-weight: 650; }
+  .scan-head span { color: var(--faint); font-size: 7.4pt; }
+  .scan { text-align: center; background: var(--surface); border-radius: 12px; padding: 5mm; }
+  .scan img { max-width: 100%; max-height: 228mm; box-shadow: 0 0.4mm 2mm rgba(0,0,0,.12); }
+  .wordmark { font-family: "Inter Display", sans-serif; font-weight: 800; font-size: 13pt; letter-spacing: -0.03em; color: var(--ink); }
+  .logo { height: 7mm; width: auto; }
+  .masthead { align-items: center; }
+  .client { font-family: "Inter Display", sans-serif; font-weight: 650; font-size: 12pt; letter-spacing: -0.01em; margin-top: .4mm; }
+  .contact-line { color: var(--ink-2); font-size: 8.4pt; margin-top: .8mm; }
+  .contact-line span + span { margin-left: 4mm; }
+  .g-name { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 11.5pt; line-height: 1.15; letter-spacing: -0.012em; }
+  .g-list { list-style: none; margin: .6mm 0 0; padding: 0; }
+  .g-list li { font-weight: 600; font-size: 8.4pt; line-height: 1.3; padding: .5mm 0 .5mm 3mm; position: relative; }
+  .g-list li::before { content: ""; position: absolute; left: 0; top: 1.9mm; width: 1.5mm; height: 1.5mm; border-radius: 50%; background: var(--red); }
+  .qa { list-style: none; margin: 0; padding: 0; }
+  .qa li { padding: .9mm 0; border-top: 1px solid var(--hair-2); }
+  .qa li:first-child { border-top: none; padding-top: 0; }
+  .qa b { display: block; font-weight: 600; }
+  .qa span { color: var(--ink-2); }
+  .qa i { font-style: normal; color: var(--faint); font-size: 6.8pt; margin-left: 1.6mm; }
+  .qa .pending { color: var(--orange); font-weight: 500; }
+  .docs.compact li { padding: 1.6mm 0; }
+  .wordmark { font-family: "Inter Display", sans-serif; font-weight: 800; font-size: 13pt; letter-spacing: -0.03em; color: var(--ink); }
+  .logo { height: 7mm; width: auto; }
+  .masthead { align-items: center; }
+  .client { font-family: "Inter Display", sans-serif; font-weight: 650; font-size: 12pt; letter-spacing: -0.01em; margin-top: .4mm; }
+  .contact-line { color: var(--ink-2); font-size: 8.2pt; margin-top: .6mm; }
+  .contact-line .missing { font-weight: 500; }
+  .g-name { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 12pt; line-height: 1.15; letter-spacing: -0.012em; }
+  .g-list { list-style: none; margin: .6mm 0 0; padding: 0; }
+  .g-list li { font-weight: 600; font-size: 8pt; line-height: 1.28; padding: .45mm 0 .45mm 3mm; position: relative; }
+  .g-list li::before { content: ""; position: absolute; left: 0; top: 1.75mm; width: 1.5mm; height: 1.5mm; border-radius: 50%; background: var(--red); }
+  .notices { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 4mm; }
+  .notices .notice { margin-bottom: 0; }
+  .notice.info { background: var(--surface); }
+  .notice.info::before { background: var(--faint); }
+  .sample { color: var(--brand); font-weight: 600; }
+  .signal.ROT .signal-level { color: var(--red); } .signal.AMBER .signal-level, .signal.GRUEN .signal-level { color: var(--brand); }
+  .signal { background: var(--surface) !important; }
+  .decision-box { background: var(--surface); }
+  h1, h2, .g-name, .client { color: var(--ink); }
+  .badges .n { color: var(--faint); }
+  .logo { height: 6.2mm; }
+  .dot, .unconf, .s.open::before { background: transparent !important; border: 1.1px solid var(--muted); box-sizing: border-box; }
+  .groups { column-count: 2; column-gap: 9mm; }
+  .kv .k { hyphens: auto; overflow-wrap: anywhere; }
+  .kv.withq { grid-template-columns: 31mm 1fr auto; }
+  .ev { display: block; color: var(--faint); font-weight: 400; font-size: 7pt; margin-top: .3mm; }
+  .group { margin-bottom: 3.6mm; break-inside: avoid; }
+  .group h3 { font-weight: 600; font-size: 8.6pt; margin: 0 0 .8mm; color: var(--ink); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; column-gap: 9mm; }
+  .refs { color: var(--faint); font-size: 6.9pt; margin-top: .4mm; }
+  .refs span + span::before { content: ", "; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { display: grid; grid-template-columns: 26mm 1fr; gap: 3mm; padding: 1.3mm 0; border-top: 1px solid var(--hair-2); }
+  .checklist li:first-child { border-top: none; padding-top: 0; }
+  .checklist b { font-weight: 600; }
+  .decision-box { display: grid; grid-template-columns: 1fr auto; gap: 4mm; background: var(--surface); border-radius: 12px; padding: 3.4mm 4mm; margin-bottom: 5mm; }
+  .decision-box .big { font-family: "Inter Display", sans-serif; font-weight: 700; font-size: 14pt; letter-spacing: -0.015em; }
+  .decision-box .meta { color: var(--muted); font-size: 7.2pt; text-align: right; }
+  .decision-box p { color: var(--ink-2); margin-top: 1mm; }
+  .empty { color: var(--muted); }
+  .src-card { padding: 2.6mm 0; border-top: 1px solid var(--hair-2); break-inside: avoid; }
+  .src-card:first-of-type { border-top: none; }
+  .src-head { display: flex; justify-content: space-between; gap: 4mm; align-items: baseline; }
+  .src-head b { font-family: "Inter Display", sans-serif; font-weight: 650; font-size: 9.4pt; }
+  .src-head .id { color: var(--faint); font-size: 6.8pt; }
+  .src-law { color: var(--muted); font-size: 7.2pt; }
+  .badges { margin: 1mm 0 1.2mm; font-size: 6.9pt; }
+  .badges span { margin-right: 3mm; white-space: nowrap; }
+  .badges .y { color: var(--green); } .badges .n { color: var(--orange); }
+  .badges .y::before { content: "✓ "; } .badges .n::before { content: "○ "; }
+  .src-text { color: var(--ink-2); font-size: 7.8pt; line-height: 1.42; }
+  .src-meta { color: var(--faint); font-size: 6.8pt; margin-top: 1mm; }
+  .bodies .name { width: 40%; } .bodies .contact { width: 36%; }
+  .facts .kv { grid-template-columns: 30mm 1fr auto; }
+  .bodies .name small { display: block; font-weight: 400; color: var(--muted); }
+  .bodies .contact small { display: block; color: var(--faint); font-size: 6.8pt; }
+  .p1 { display: flex; flex-direction: column; height: 268mm; }
+  .p1 .section { margin-bottom: 3.6mm; }
+  .p1 .hero { margin-bottom: 3.4mm; }
+  .p1 .notices { margin-bottom: 3.6mm; }
+  .signal .signal-level { font-size: 13pt; }
+  .g-rows { list-style: none; margin: .4mm 0 0; padding: 0; }
+  .g-rows li { display: flex; justify-content: space-between; gap: 2mm; padding: .5mm 0; border-top: 1px solid var(--hair-2); font-size: 7.8pt; }
+  .g-rows li:first-child { border-top: none; }
+  .g-rows span { color: var(--muted); }
+  .g-list.ok li::before { background: var(--brand-light); }
+  .key { list-style: none; margin: 0; padding: 0; }
+  .key li { display: grid; grid-template-columns: 27mm 1fr; gap: 3mm; padding: 1mm 0; border-top: 1px solid var(--hair-2); }
+  .key li:first-child { border-top: none; padding-top: 0; }
+  .key span { color: var(--muted); }
+  .missing-soft { color: var(--red); }
+  .notes { margin-top: auto; padding-top: 2mm; }
+  .notes h2 { margin-bottom: 2.4mm; }
+  .note-meta { display: grid; grid-template-columns: 1fr 0.6fr 1fr; gap: 6mm; margin-bottom: 1mm; }
+  .note-meta span { color: var(--faint); font-size: 7pt; border-bottom: 1px solid var(--hair); padding-bottom: 5mm; }
+  .note-line { height: 7.6mm; border-bottom: 1px solid var(--hair); }
+</style>
+</head>
+<body>
+
+<!-- ===================== SEITE 1: ÜBERBLICK ===================== -->
+<section class="page p1">
+  <div class="masthead">
+    <span>Expert Briefing&emsp;FALL-0011&emsp;<span class="sample">Wissensbasis: Entwurf</span></span>
+    <img class="logo" src="data:image/png;base64,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" alt="LexTec">
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1>Kündigung durch die Vermieterschaft</h1>
+      <p class="client">Klientin <span class="missing" style="font-size:8pt">Name nicht erfasst</span></p>
+      <p class="contact-line"><span class="missing">Kontaktangaben fehlen.</span>&ensp;Erfasst durch eine Sozialarbeiterin.</p>
+      <p class="stand">Gemeinde Zürich, Kanton ZH. Version 1, Fallstand v23, erstellt 07.11.2026, 16:23.</p>
+    </div>
+    <div class="signal AMBER">
+      <div class="g-k" style="margin-bottom:.8mm">Dringlichkeit</div>
+      <div class="signal-level">Bald bearbeiten</div>
+      <div class="signal-why">Stufe «bald». Fachperson nötig. Pflichtangaben vollständig.</div>
+    </div>
+  </div>
+
+  <div class="notices">
+    <div class="notice"><p><b>Achtung: Rechtliche Hinweise sind ein Entwurf.</b> Die Wissensbasis ist nicht juristisch freigegeben.</p></div>
+    <div class="notice info"><p><b>Datenschutz.</b> Angaben wurden zur Extraktion an eine externe KI übermittelt (Gemini).</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Kurzsachverhalt</h2>
+    <p class="lead" style="margin:0">Eine Klientin in Zürich hat von ihrem Vermieter die Kündigung für ihre Wohnung erhalten. Sie ist unsicher, ob sie tatsächlich ausziehen muss.</p>
+  </div>
+
+  <div class="section">
+    <h2>Fristen und Unterlagen</h2>
+    <div class="glance" style="margin-bottom:0">
+      <div>
+        <div class="g-k">Frist</div>
+        <ul class="g-rows">
+          <li><span>Empfang Kündigung</span><b>06.11.2026</b></li>
+          <li><span>Seit Empfang</span><b>1 Tag</b></li>
+          <li><span>Gesetzliche Frist</span><b>30 Tage</b></li>
+          <li><span>Kündigungstermin</span><b class="missing">fehlt</b></li>
+        </ul>
+        <div class="g-d note">Art. 273 OR. Das Fristende berechnet die Fachperson.</div>
+      </div>
+      <div>
+        <div class="g-k">Unterlagen vorliegend</div>
+        <p class="g-d" style="margin-top:.6mm">Noch keine Unterlagen eingereicht. Alle Angaben stammen aus dem Gespräch.</p>
+      </div>
+      <div>
+        <div class="g-k">Unterlagen fehlend</div>
+        <ul class="g-list"><li>Kündigungsformular (beide Seiten)</li><li>Briefumschlag bzw. Abholungseinladung</li><li>Mietvertrag</li><li>Korrespondenz mit der Vermieterschaft der letzten drei Jahre</li></ul>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Das Wichtigste</h2>
+    
+    
+    <ul class="key">
+      <li><span>Entscheid</span><div><b>Fachperson nötig.</b> Übergabe an Mietrechtsberatung (Übergabe empfohlen, noch nicht angefragt).</div></li>
+      <li><span>Nächster Schritt</span><div>Fall an Mietrechtsberatung übergeben. Dringlichkeit: bald. Die Übergabe ist nur empfohlen, nicht erfolgt.</div></li>
+      <li><span>Noch offen</span><div class="missing-soft">Kündigungstermin, Kündigungsgrund, Mietzins (CHF)</div></li>
+      <li><span>Bekannt</span><div>Vertragspartei: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete); Mitmieter: Nein; Objektart: Gewöhnliche Wohnung; Gemeinde: Zürich; Vertragsart: Unbefristet; Art der Zustellung: Eingeschrieben; Abholungseinladung: 06.11.2026; Empfangsdatum: 06.11.2026; Amtliches Formular: Ja; Familienwohnung: Nein; Art der Kündigung: Ordentliche Kündigung</div></li>
+    </ul>
+  </div>
+
+  <div class="notes">
+    <h2>Notizen</h2>
+    <div class="note-meta"><span>Bearbeitet von</span><span>Datum</span><span>Weitergeleitet an</span></div>
+    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+  </div>
+</section>
+
+<!-- ===================== SEITE 2: RECHTLICHE EINSCHÄTZUNG ===================== -->
+<section class="page">
+  <div class="masthead">
+    <span>Expert Briefing&emsp;FALL-0011&emsp;<span class="sample">Wissensbasis: Entwurf</span></span>
+    <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVgAAABaCAYAAAD9007/AAAimUlEQVR4Xu2dXaxEV1XHN5SWClVAoy/EAyb6gMZgCCAoCC0tCrnwINcnffFBTeaFROQb5FNKiyUkJhfjg0YTY2LGh5oRFES+EYECijHGRE1O+FBBBaG1Bdqa33L9T9bsOTPn3Jkz9869d/2TyXydObPPPnv/99rrszRNc13TNNeWUoqee14/PH7WNN376/3319uPHE3TPCy+1285f/2oj0skEonLAojwQX9swkMg0rZtv+kH3c9z27b3VsQKEd/ftu23hzqobdtvRUJPJBKJy4aHQXR9F6XPnVjvdUn1OsjYyZHX4CFt297nrx8YQ67Cuv9OJBKJy4BuK98nTfpn1/gzki5kKkI2oqUT9Nvq/TW1hJtIJBJXCQ/RxbretHsfpNNv9hAoqgAIVioDk3SDuoHz8ICUl5BSayKRuCqoCfaaNaQIySLtPjQ8ALpYzoHeVdLsd/h7fiPS7ZAEm0gkrgpqa/8DTqCA15EQOfYRpZT7jk6Of7iU8rXFbP4FJ1gkWEms8RydFJvEmkgkrhqWVAIuceozDFay9CPZXn90cnxSSkE98FOlFDwIHlVKefliNv8jf4/a4D5UCsEQZmqCJNhEInHVUBMsfqmoAUSuSK3XHp0cf18p5bdKKU8upaACuKGU8lWXaL9cSvnHUsovLWbzr0htIKJVhybBJhKJqwbI1BC8CKJh6qFHJ8ffU0p5cynl6aWUR7sEy+++2wn2O0spTyil3Hp0cvy9TtDmJ5tIJBJXGR3BrgGqAfStL3QyRXrlIWMXeIyrCp5fSvmhUuw3Om/tlbCEDDRIJBKXGUaEwc/V4PpT1AOQ5Y0YtkopcsmShGtGMDdyoQr4uutmOecSsaZ6IJFIXEX0SbC17+oPllJwt0I9AES0+i3uWXgXPLKU8kT3PtA5umCERCKRuGowklwjYUoShTwxagGI04IMQkchvaJzRRfLd530mpJrIpG4yqj9YJE460QtqAnudhJF3wpQGZBBy8Jn/XuOQ5o1L4Q14bWJRCJxZdCpCDYkaYE4UQuIXCFbJXpRkpfvcsKVlPtQl175bSKRSFxJLEmwFclixJI0i0sWJIs6AF2rIKJFkkVNwPm+SY4CDzYwAg7SrAh9JVHMAUABEYOpFhOJRGIMVhJjbwnImMdKchcQvBI4Jmbk4nWXMOY8EJODnybVYiKRSAxhKoKFWEWwD4Y0hysEGvPMoq/tq35wlkhSTSQS+8JUBBsDD5TgxaTZEEzQl76wz6iWSCQSlwJ9frDbgPNY3gKkUpdS61I0tQphTKmaRCKRuLCYSoIFSrK9YshySZbyNJ0BKWtyJRKJy44pCVYkK9QGr415CQ4Jm3IkZPBEIpEYi6kIVm5aK14E62p9QVTBu0D62TN/rglzE7kmEonEaTCVDvZ/3A8WqKT3t5umIdpLkq2V/vb30QAm1cK5PKuNEKsShaNPduJVuPBO0rdIO1z/0utDQNNYnTVDuG+TIJ4vLmCxPzbBKxp3uYXr9304xbm76/Zr1xjtxoSPje5zP44Q8q2gtp2ijfbfobJz3Y8Pr8eWxvNWDezBNvdtDNTOvvNPIez0naOejxr79X0OxxmPhff0d2/f1vNoLXG4+xTJtv+0lHKTBx1w0vgbDFf3OKny3YcWs/nPesjsknQYyOug0DRWQwzCV6iv+ep6I+O1bpW4hg735OPXeQDG9YdabVdt1WSe2kc5epSMPbcP2N7kQV5SnqAW69Nw7KnuVdMYWWIfUEl6y6nh57Tdlhae8D8Wpdi2LeN/FGLx0KZpyN1x35h+cPJk0V/6Lz8fRmXdM1ss4ngb1bANoG/0v+pvkc1U6rKqAgpzzhL+79p2wftJu2Pm4zfidYUF89u6H9yftm2/HsbWyvVKcKjns9xU4cUpVAREdjE4kVyvOzo5fpzX6rq/mhySYJdIa6pO3AEq3KikNUATjf6x9u5ww5XWUZFiEIFK6hj57tD2nRFWXAZ1R67V4NwFVr69XmDjZN2Evv6JROq/1a6p68u4WIyBog9FUD7ptDgiwfAf5Nh4ZNu2d/cV9FyH2BZXi0GERq7rJKEAW4yapunmil//Egn1XC/XsjPBVqTOHBbRmEAyov1D6BYI3znaIiJiG/rxSNgY9PMqfB9+ktcT90L/a2MfcvVnxq6EI5JecayRfyTWisQ7DplCguUmQkQ8uIh3e16C//WwWnkOyC0rkroKJJ7nM+2kthjt/uxiNr/LB6bVFxt5Azci3CDbAVSTebKVelv44OgWmEC0nfSyLfzcDFByWCxNHJHVpnPHY2ppyhMLMeFtMlTHdn09cP6lnYUTJ+dUe7UYinwhldELY1hM43mY5IpqHDXGolSkMeTXvHSd3n76hvPyn6Ml7D5oIQlSPP/Xu2hug9A/N7hkyWKGtP6Nbc43cK9pu0mw9XG+i6FvqTeIyvO5vhP/gAtZd/m8ZXHk+kXI9e6n26GySExBsLUel8ax7WYAMJAgWElxQCuIor8m0xNtCTqKTvtvT8v454vZ/Jf9XBjiRk2AdXBpg4WHfuDGEL022fZqV8S2+CSmP7hHtlWr7t02YBw8r5TyiSjJnkZC8a2YjReXAG17XUp5ainlw94oSPa2UsrbfCKMUnFU198RZ9M0ry2l8ABv9bJJqjUnUh71H4EIYyQjk5m5Mzb3BYKJstdpTsn/nPd8r2fAmLu1bds3bnPT1pCtJHrGhXKTxLm9DWj310opL2jb1u5lrfrZ5qQRKuYq1Yn3Y7f4NE0DqdJPP+kqT5JXmS3G54HuEWT7wbZtKaFVL/hSHy0teFMZuSK4ABrEuXmNWM2EoNG8RqXAg9c8VIbmvJ6pOcZ/U0+MAfz8o5PjP3RiuWZAST64ODhBQwb0h6Qfe9514EyBsGUFmrAMLghr7QJ8CrDCM1BVp03nJKR6VB9AzN6Pyl9M25CqPuKFOJnkjDEG/pMkdZ3GWIf0q2tycn2Dt5nF5i0+NjgnkhZbdshmcAse9HTmNSMC8f8a/H0AEjV9xwIoouWZsSWS43wcx/xDEtx5fnOdMqAFYUNCydjFYROUsJ+5hnFOBAh2ru0XVFHqI0ng93Cfm6ZhB/uXTq7ca1MDKHGVLySWgrWU8oxSypuapuH+vxgpNowbVA6QLPe5u69T6GB1swVtTyAtQQrm+obH8jO6iPN4pmOtNHkphe3Dk45Ojv9kMZu/qB6k0rUEnctY0AdR38RkHS0B7Rkd6YXJC2Ex8HYFgxWClL5uqSz80MmrPur0kEEPdlfTNO8tpfy0S0K3+mv6erT043pVyARp5tUh5/GrJXn71vxUW9fwWyBdIH3woTB5N4FjaZMW84/5PWKecX0sUvSjvHC0mEFOo69/HaJePqi2Im8g1e0CtduEkKArHa2G2QRvs6m6fM6S7Y+xyJjBeC/1JP3FgvFRVxcy1iBbnp+C4OX9qTnyjqZpHsUOwQ2WjHHpebtFYgqCNV1P2PoDs8hKCvQO6JOGtA0FWmHO+rkPSLWoOqLkJXKNi8YgpIP0ycQEtps9Rvo5C/gWWUYoVmYmK+29u23bW6ZqQ7CgR0PUoKokbveDhbfTh3r7XlBKWbjeDDJ6mbZxQ/DJZuThW8jX+Fjm3r+ylHJHj7VeE3aQBCrPDHke3Nc0zZH0vJvg/4194DlO+qgt0Ad2Bqb6NeebSg0V7ptSkOp/meNsu3caI306XpcC6aPB8TEElyohV0n0T22a5lWllGc753Cf3+O7n0/6griiAvJ2vryU8us+P5DiX9M0DWqrNwfXu6hmuraP9AyndNNieyVJVhOUFSEm3K6DEVR9FtaXZBsLJop86QAmJSu1XKjUbv5L7lWSnOlIrdzywxWBR52i/qsvKTj6WP7jFxezOSudRH5J4sB+P0ZKctIyfXTbtkv+lIcGtj9aWNq2HVSBnDd84jDWnlSKSXeA9ze5CmFJCl7nduRjHnJlAnHdSCRxF3YucIJ7lxMCeFbbth+bgny2RRgjBz+eI7wv2YF04fzsDtq2/XhtcNUOtTZIu1oLon1d0J+jo39Lj7R/3c46Gh+MEKAIVucU8Qm2RQ5bGUFEq226npWhC52SSJDPmDzoTSBLJoIU+5xfhMozj6gj0vnicx+5ftWrN0A0eBTEpDT1VvoQ3MyuNHyBY2v5N+jHXEdpPtmV9IV+zyy+0ivGydM0zct80vBbpBNUDokLjkrP/xLnDO1Mb3ZyZUcirxG5aZku1SVT4y1fnOE6jKmvdy7jXCzMqBEk6XaL+hQEq0KHNQn2gf+LBCqCVonwWqLmeBlJBI6NhRfpkEiUUa9XWzhlxOEc9bXzOyRXquf+F4avxWyOdRNJTkY76YtsZdvVwyAxGczHum1bBv0nfAfDQvzuYGTifnWqGakbgn8zk4ZxgYTz1rZtIeiD3m0khiHPAVcLoJ9HOGOuv97vMVwSBTHjIBZn+VuHeW584u/v8B0TnzHW3u/fSZVl55lCBwuiNVhSpshzV3DxfVtVLqxPAo3Hjpkg6FrxcOB3PJBg2RpiRbbOdXVJR67rKjckzh7SIfukYNfCffugq3XQWyJZdO4/uqdqqUu5SDZyffprCDbJ9XIgeCUwLsR5b27blnusoBHIdGVsBLeubkH2cabfscu503c7SLt4GbCT6gIbppBg+8B5EblZKeI2Om63x4CVge1a7Q4iy9866Deqhivda1d1IfwQcmWCfsWV17T5zsVs/s5K9wpSJXBgqAw83MdPuf8qCyFE+oGmaZ7pRIzaBz/kKBBgyPoN1ZRr2xYHc5tQh2KITOwE5ixeIUDukrdGctXZ62orGgfsgvwh9YFF8rkki5DKuOI79Ped4Z5xtg+CNeui60j5Y3wWkRLZbvPMex5sxSDC+B2f1ccSZSWjFYSrvAGqdhvVADJGsQ3gWMiS89UP/h/y5f+/4B2E9APJfmwxm//KhsVh0jjpxG5wKz3GBw1+1AD4w37cxwDj8bXy9/VJYWPGfRhlrIB0XxkSf4zy0U0cNpw0CSCQoZyAAki180mvfVedv8yNMkR4GfcEv/iH+ZjT+Tg/O6ZnaWwx1qZQEajhMj7h8sAFiPj0H3ofPQaASFEGsC6xR4gEg0yPQidpu87k4YGelvPQFiYaUgzkqjwDOp5zRiMcoK1fKqX8Uynlrxaz+WecxHuTg++QkyCxB0g/Fly4FEKL0YrtPvf8lqZpXtq27dtcKonWYBlL8Xe9PTaxTgiSuHhwgsQlSzxEpB9uicovYaiiBaMKScZ7RYLxO0gZ1y8WYRZyFulnOufgfWIBChDwFASrcFgkwk8jji9m88/7KqBwQCDirA1ZIrKaeG0lOTo5xuj0Y+6mguMv4L9k/GJCydGa118upfx2KeVvF7M5r/Xf9f9ybpzpy2I2R+8KmGxm0Ooh0lQPHCDqvABhW4/rDVtDeRbc3jTN+9u2/ZRLIb/mW0fb6bRtS7RW1NnViU4SFxO/GvKkEOba7YalXvK5zs5U+R2WsrOFz9kBdclfglsWRlHGmXZFsg1M4kUAKcH4ENi9i9n8iy45wuRswfmODDQ4rkOMXKA+QyXAhdqxfry+t1VgMZv/p59PW36FAUJ4crcQeXKMJZ1ZzOZs9zkH51PIm6Rc+3/O7cfZiuTt6FKWVTApuC909iLDXZZQ8ttiE+KvR4dxVjkwp8zENYhNnhxOmkQayVKMvyLA8IXUIV9tXhuid8HYUN7E9ojzKahnTC864VyTFPqR6v+6QIaobxcJM7aqz02yrXXzURiTu5c+m0KCjb6tit7qXKXin9eJRRQhE9OvqW4Xlnte+3fSvQKILiaMiVZ9/a+CGliVTEKuyoN3iuhYJ6zvhtaSbP3+oiMQlPoO/TX9+4gx2a4cppuSLkvhrQfSV0R5aWG/0aVa9GSmh3N/xnfoQjQWfSLtlOgnMQqdv7xb7ZVQZqogl58I+aoJRJE/605ZxsZiCoLVOSxbVAgkYNIpG40RUzXhYg6Dle13JD4/pwIEomuWJFc9K/CgM97FNjh6o9cqchVpr8S+h4k4Kh3eRYCcqX3l1sBGksdaOjjQK/0nfcbieaqk1/uC68qe5royiBNplTZaHH/Y2in81kI0fVEeDIW96hgzPjYhxO9bguugU58i1yxQXgDuvflBK7fuWUTDTeVFoGisSEyRyIyo4s0IBGquUyOkHRmqNiG2Y93xva5iPeS/Fgqjmyjb1LnDXZK6XKjBigoJDT4IBW4aS7+HtwaqBVQ/X22a5s/O++J8EuGbiAsNUgvXx6Tj/j1b2ZAkAASvhCTXcRgcH5vGUNM073JjouX0DQIM/T+YDGgEsOzDMQh7n669TvaNqQhWpCWylOFKhLuiuwxkO4ZchV7pMyC6bNXSp7UxSNKn9ck1xHbv++acBYLeC6Mh16R7p90IxLnpEXOTcn/kg8z5Yi6Ic0FI5oIRAiMp7WUB+DCRPC6lm/7ZLckaQ5fi/p4BhsbH0PfadUYDkXxMpwAEb2qIkNBHqSan4r+1mEJFAKLkGr0FhgZpV7dLOtJKNQBEhEPkCpYCCnxy4a/GTVxqi+t36+uXG5fIeEV/Gx3bJ0hGfQiwfgnp3BSMQd+Qb3XoHtK3EJakQh2P9IELy7nDt4WE0SqxEET7jKax5C5vx+DpY6TzcfbfHGz9tAMCaRd3AVF3ZJkzA1GsrzZRKLq5VSHBussWr+uMfXvDVAS7CawSnbFpHWpiDaFreBL889HJsSSlqINVHLDIl87jOPOBrUJcRdYRfaTdLRA9+iV9JyIeQ/oHjZDQQn5+Wozow+eNiWaqjJdy+Lek1Od98S6VvsJdshScAhiXOImziJC/wMaS/CN9p7NzPtXLjrZtb57yGoMblSVkn4Bk/8IDACzjWsiwNsW5BzGViFwnVRFEQNHo1MX9VpERHXp0nEsqCD9Q/2nF6JxUowQLop50FzLs++2l0cGG3L1AWzriqQddtUSuSo6hENOQeei8gRWZ9HJSfxAWSzCMKm8QgGAueiGG3Bbx01RESGwHj5bqyna7lGmYgFyBBDL562vMnomHiLbPmmRyuZLLBBJu1FVqkEIuykilzOl8h/5NorgkTpMWQihjN2ldwtR3nXQYYoI51w1HJ8eP947CiMLEQGcm0pbfpSaMFNrmitWnKA8uRUtK9B71RC/8uCnKZRwEegx8S4nGN0G/7XFnOxM3GEGLcvRo8NeQq1JXvg7fWB+Lkk5/pmmal7dte1uoGabv1gkOiYnQ41Nq42bM4j4S8j6yPBR+7q50z2n/p6+Md6ghFpNtm/dCLcH2Kfg70g0SYZToIFhOxiC+5ujkmNpWSksoEpa0Zz6voc4Px0UdK8cZ4fr2Ui4WbDX5H9X3SiQMLjkzUbpaSKqX5TleLTbcdzlvdyJGDULlA41PMtKTCQlIel3R2ycuJKheAOAS6mlZ7TUnylE7ND/eapOFIISl+moutHVSse/kvtXpYIPRJxo1ZLyKwQRGgqGro+RIWOuzjk6OldQFqHCZfidyrq349edaech29aMhIctQJq3EFUIVyGKGNndYp7SKKqoy8J/rEireDYB8FfjEYuhiHpDO7jmKU1dI5BXqyssKuW7aDjuU6elLddqHyEsdQjpLzmvBDE3T4DtOiLZyZD+4ZORyku1zLJdRB0SJVtB5kAKe6HkCYHi2Wmpg3wXF8wLeS4+q/+E90rGqfsrKrbDYxBWGXKt8qxcNdeQhYKwwBtn+k0CbLZzVZ3JJBImGRCA/TrIOeRUokcdEOsDEOcLL6yCpotI7ahoLOvnMmHpoDnnZRNVmp1pwou2Kg5IaE5LVj5XUZMUVx/WjfcalWvIEUUpF4pThCWJUeW4IEt1pfHAsDz5TSW+e+QxJg9+Q/BpJgmoDOCNHN6LEFYfnj5DHgtLJkeCDBZ2xQiE7Kn8Syit3LI1XgPsW4wzBAlJ++hXv0ksFVwnhCqaMe28M42AQ0S1TZcWryEV2QKp4wvEduZLfQ0pfYv4xKEWJVnrTKFUusXpAtNTJAMaghSxVKYDnuu6WnNklrUp3y+cqI0PH8NvHOBHL8HZpjEyJ7SEdrAeRIGW8mIoEoa49qQpjUg8L2Q6ThWoHGMKUNJkCg2DsFjJx2ICPCDKRBEr0HruWUehx1bQdOeTpRKtEV+C1MZ8wob+dLnWDBV0SI5D0GiVepfjD2VzZqnSs0hWOdQeL0rEIVuJ9RKoHEgbXwcZxgxsWlmjGzR0hBBbDqeosAXZvJvl6Hlj8Ya2AJuGbIfAicbGBVxKLKAERCoahrPvobGnBU4YxJe4jzJfFHB9rZWv7KLumsFvaWNEg+ptCotHvMxKmyA51QCxAOEYCqFUTK6oKP2cdEJHGh0SH4NaHYYvdDrseqhqgY5X1V9m9NAGYIMrcxNhFPaBxdbMXyUtccGi34gZPpE24hKxqbxijY5eKoCdoBlsTWdgYa/AjCdsJv7bc1PIDxyWKH69EdAWJVtEvDNyoaxUgW/mTKqOWtv41yUZ1g6KwJO1GSbmGzl/X+Iq6tINELPsbtilbObGH7Qc1ggazXI2BrKHBqV7uSXtRwfh4k+vL6IWyzjlbvUeCIJkLW336mbbf7tJrndOzy+oWJhiRW+jOqM/FGKN96GafEosfKnfumH6dEPK+YZ5xXVy7uaWdZWHGeN8ck869vpzCU12fu0whxUZXvFd56kqDAhxicInmWPRU8V0PhrJP+lgx/mvb9jcrX3/UrtcueQSIVMMJublsnZgIsL90qNEBm3NoOx91rH2oXbzkYSC9bdTTRmhQ6xmijjliDx20lcnxSN3IymVoLeLAduV8Fx8fo162RYy59wFCO8kJa4Xetj1vRPA9ZBz1JjleB008v3Z5klgQSfgNhinIle/xGkCSNUn1lO0nLwFEK33dm4JBw4xkQVpWdY29wv9fAT5AgTRTOuOPgfyDZRORvWQnaNEK1QF4LdXNoJ/qEHz+2L2imoVv6cU3r2uahvwHSLMKcGAemMTqi5jNgdA+Ft7Oa8BzDd/ix9BuG6MaN5Jcu8CBnsgnysBwHBdL4UIs/FIRSCIFfXpW+ayqNladZIHf1/ldY+CBBhTnpgPUMZxHce4HHW3jg4XroA9ZpJCK0FdTzBHfuaH2my8yPnYeyklWdpHsFOncDK43YoDwVpm1ntw0zS4hxoB7f1cYdCrLMcoNKpRORpfW5af1wc9g5nw4k9NO+vdWSjL7NXEdG/sohPqqTzGCyHAh1y1qedl9CsnEuYd7hy9yCohggcIlzchAbdl3I6KDvRcLVJ+yFaYW1S6Q0EX1XyuH7Sfj3KeOtKrhfIa0z1jAT/U2X3hRCUGeLMIUu0S6JYT6BONUOM/TfDyQ9pBjMJBp4WZsv5BS3SF3iirOmkpqRTWgzFMuzUJ2f08xwFLKj5RSHusDlsGFVR9s0rWKdHVMJOZ1qCe0foO7VvxOobhnkbBmV9CPDEomyHvDQsHkGCIwfsvvzMrdNM0rfJBIGtSA3AVxuweRIMFCXhgGdlUVMBhv9PLZjxA5jEUg/i5xjNxsnHBxk6FqqO2kcMkSuY75L0kpCpP1dlG6+/3+mmAEdnFkw1+SGsNCtzd4u5hvkmIxwik59VmQK31iqsRgGIo70fftePFWtgfLPj6rp7l3YxDC4s3/2d8Tucd8pA6bxjeRfTcRcBLUFeyGxC/MC1vgfKwtXAf7CReilnZmWhwUqroCJ9oHvG7VMc657ov6b06q1MoaIoeI6IEggxnPSi6iLFiqo6VEvSJSJn204nHho3V4BwAGKtcgNQjXJ6Ngn/uaPuM6o+Rvfe56pZ3J1ZXxcl1SBAp+yfS7dhib2jf0nRJw0+ZO8hqRBnEJQT3SSaRuiIIAkU4YR0icVmo5VP3cCJ9wlnvApR0mCn6TnJf20gdYnW3S6GS+hTyrbFvy06WvaZPUOXtHyCpmQpJvlWWM5l4M3f+h7xnf0b7TYaJsbLIz2RjxRYLxcZv72ON1IjDmmQPs1OlnqchM9+1pOVEPEH79orZtWVzQtbJAx3EpNcfaqrJGgD6ozWF7MZv//NHJ8S846ytCi2qsaoQ6XaQbjVY1EfNeUi3bMX5rW+EquQwLABOUm6Bt60UEN1H9I9c1IO+MTaCf6CMkePqCIn6GKdK5BdKTIz7Wd/5H2Yem2CF8rkqSITXBYL7VoPOkfUZooeQyk0E+jlSMta1akFz7vFJq4lZMubanTBgmIB4ITHwmGn0PFMgQDWRnAXxzIX2u/++i8/u+EXTgndeFW+RrPfi2YI5TEJV7h64UPbcSBZ1GgFsHJXzSfb6hbTv1DufHGEogCoYr1ABIsbQJEmWcIlUzZyFWglbeRztlu/Bdk6mLapUGx1jO05p9g2TKAFVOABGDXfTRyTF5IO9ZzOb/Gq/s6OT4+xezeVtd7VJHHZ0c/4B0tovZ/F9EPkcnx4+rfsfkZvV+AlKED/SYY7SLoPDz8R6p7ucWsznbW1aslS1ufc37RHAFMn2gJkd8Hvr/SKRT6KUiQvskWZu0fNosQ5ugLa0PQunCRm1vQ6aiepyu1eFGCXaMK44TNmoxIr061YLa7URL+sYliTUeu2+ELbpt2aWbnvI+rYOTbOdrfJqxOxb7VLe44WltEc7Qt9af8X77a8vSFnMF+1hemse+w0FNhTrCFuwhgpVUKWONdFQyNvHHS9vUKgnCitEsWHYlwUb9n3Q7InbeX3t0cox+5A9cTJceRM+C3FgOimD7EG/aaQag3OSkCxtDHmPQRxRTkce6xcEnbW86yRqBMFcIpSKePiPtIML5pVpYInMhLm5T7B7GYMMC09vGqRH+f0mnPSUhxkU+7FimHN9LOvYeQ/7SOOrZ7q+kNwxjxjgxuM3ZblwL3xQi+E7okaCRWpdKyRydHCOu3+nSrAhZBI2EKpXDwUmwiUTi6mJsCGsikUgkTokk2EQikdgTkmATiURiT0iCTSQSiT0hCTaRSCT2hCTYRCKR2BOSYBOJRGJPuCgEq9BNgNNvbDeRRzEairBG+dLumqgkkUgktsbBE6yHusZ2xlRhwLJKhYQoJKMh6qmLG08kEonzwMETrIN2KsG22hzzqJKAQom/kWDPKstRIpFIrMXBE2wouSIpVRmo1HZyD8QEMEAJSwYTqSQSicS+cPAEGyRYZXXvy0VAXgLIVOVOyNiUSCQS54qDJ1jPSqMyzEpOozyfPFvplVDGgZonXz7XXk0kEok1dbQOERAmxitgCcD9tQhXNXRYMKi08MVDvIhEInG1cPASLOkMF7P5F0op/+63RgYvgfIOj3bSRUXwe6G8eCKRSJwbpigHshNiSZAolYY8sUr6/dJSyh/LBcvrW6Ee4PEVf/7SYjYnbywSr6kRmub/88uqJI3XGCL7+FLe2UQikZgaByPB9mUZd6AOoCbYZ0spv+OFxyjKB7GiNvgPr9f1+VLK75ZSPufS7AOxSF0k70QikTgLHAzB9kDlbFRV9sHFbH57KeWdpRQK81ELjNLh1OyihO5LSim/70XT7g1lx3urNoTvE4lEYi8495IxNVSvyj9nm4/qQKGyKgH84NHJ8WNLKY8vpfzDYjanuq1Jul5YkMqgXUGyIL1SA6oLn0VN0FcUMZFIJKbAoRJsh1BMDECgkKzajQSuwAOL9Kp0uuhZFQFmOtkk1EQicVY4OIIFofIskJELMoUkqSz6jdpIFSRWSNVKj3v5XHIVWMnhJNdEInGWOEiCraESwZTK9Wgtk1QDEctLQD6yqAKoYy5y3aqccyKRSOyCi0KwSK3oYSXhKoMW4bFIpybdBlKFaPn8/g3eCSslwxOJRGJKXAiCDcQqgxWow2aXsI5Yg1+snSMSdyKRSEyJcw800DZ/k6QpVAYsGa1OmzFLxHyhFpdEInHx8H+ete4hbywD/AAAAABJRU5ErkJggg==" alt="LexTec">
+  </div>
+  <div class="page-head"><h1 class="display">Einschätzung und Weiterleitung</h1><span>42 Regeln geprüft, 1 ausgelöst</span></div>
+
+  <h2>Entscheid</h2>
+  <div class="decision-box">
+    <div><div class="big">Fachperson nötig</div><p>Alle zwingenden Angaben liegen vor und die Zeit ist noch nicht knapp. Der Entscheid über eine Anfechtung ist ein Einzelfall und gehört zu einer Rechtsperson, bald.</p><p class="refs" style="margin-top:1.4mm">Dringlichkeit «bald»: 1 Tag(e) seit Empfang, Kündigungstermin unbekannt. Interne Dringlichkeitsbewertung nach Produktschwellen (z. B. 20 Tage, 60 Tage). Das sind Produktentscheide und keine gesetzlichen Fristen. Das System nennt kein Fristende; Berechnung und Beurteilung der Frist erfolgen durch die Fachperson.</p></div>
+    <div class="meta">ESCALATE<br>LEGAL_REVIEW_STANDARD<br>TT_DAYS_LT_20_ALL_KNOWN<br>Dringlichkeit: bald</div>
+  </div>
+
+  <div class="section">
+    <h2>Prozess</h2>
+    <ol class="steps">
+    <li><div><b>Fall an Mietrechtsberatung übergeben.</b><span>Dringlichkeit: bald. Die Übergabe ist nur empfohlen, nicht erfolgt.</span></div></li><li><div><b>Briefing bereitstellen.</b><span>Dieses Briefing und die zugrunde liegenden Angaben der Fachperson zur Verfügung stellen.</span></div></li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>Zuständige Stellen im Kanton Zürich <small class="legend"><span class="unconf"></span>Kontakt vor Weitergabe bestätigen</small></h2>
+    <table class="bodies">
+      
+      <tr><td class="name">Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)<span class="dot"></span><small>Anfechtung und Erstreckung (Begehren einreichen)</small></td>
+          <td class="contact">Bezirksgericht Zürich, Wengistrasse 30, 8004 Zürich<br>058 111 70 30<small>Mo-Fr 08.00-11.45 und 13.30-16.45</small></td>
+          <td class="why">Keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)</td></tr>
+      
+      <tr><td class="name">Rechtsauskunft in Mietsachen, Bezirksgericht Zürich<small>Auskunft für die Stadt Zürich; nicht mehr, sobald ein Verfahren läuft</small></td>
+          <td class="contact">Wengistrasse 30, 8004 Zürich (Anmeldung an der Loge)<br>058 111 74 74 (Mo 09.00-11.30 und 13.30-16.00, Mi 13.30-16.00)<small>Vor Ort Mi 09.00-11.30, ohne Voranmeldung, lange Wartezeiten möglich</small></td>
+          <td class="why">Gratis</td></tr>
+      
+      <tr><td class="name">Mieterinnen- und Mieterverband Zürich<span class="dot"></span><small>Beratung, Vertretung, Begleitung</small></td>
+          <td class="contact">Tellstrasse 31, 8004 Zürich<br>044 296 90 20<small>Mo-Fr 09.00-12.00 und 13.30-17.00</small></td>
+          <td class="why">Mitglieder gratis (ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung</td></tr>
+      
+      <tr><td class="name">Zürcher Anwaltsverband, unentgeltliche Rechtsauskunft<span class="dot"></span><small>Kurze Orientierung (ca. 15 Minuten), ohne Termin</small></td>
+          <td class="contact">Strassburgstrasse 9, 8004 Zürich<small>Walk-in Mo-Mi ab 16.30, Do ab 17.00; Beratung Mo-Mi 17.30-19.30, Do 18.00-20.00</small></td>
+          <td class="why">Gratis</td></tr>
+      
+      <tr><td class="name">Sozialdienst der Wohngemeinde<span class="dot"></span><small>Wohnungssuche, Notunterkunft, Finanzierung</small></td>
+          <td class="contact">5 Sozialzentren, Zuteilung nach Wohnadresse<small>Mo-Fr 09.00-12.00 und 13.30-16.30</small></td>
+          <td class="why">Kosten nicht angegeben</td></tr>
+      
+      <tr><td class="name">Rechtsauskunft der Schlichtungsbehörde<span class="dot"></span><small>Neutrale Information zu Rechtslage und Verfahren, keine Rechtsberatung</small></td>
+          <td class="contact">gerichte-zh.ch/rechtsauskunft</td>
+          <td class="why">nicht angegeben</td></tr>
+      
+      <tr><td class="name">Unentgeltliche Rechtsauskünfte der Bezirksgerichte<span class="dot"></span><small>Allgemeine Orientierung</small></td>
+          <td class="contact">Kontakt fehlt</td>
+          <td class="why">Gratis</td></tr>
+      
+    </table>
+    <p class="refs">Telefonnummern, Öffnungszeiten und Kosten wurden nicht durchgehend auf den offiziellen Seiten geprüft; vor der Weitergabe bestätigen. Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung): Gemeinde Zürich = Bezirk Zürich. </p>
+  </div>
+</section>
+
+<!-- ===================== SEITE 3: RECHTLICHE PRÜFUNG ===================== -->
+<section class="page">
+  <div class="masthead">
+    <span>Expert Briefing&emsp;FALL-0011&emsp;<span class="sample">Wissensbasis: Entwurf</span></span>
+    <img class="logo" src="data:image/png;base64,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" alt="LexTec">
+  </div>
+  <div class="page-head"><h1 class="display">Rechtliche Prüfung</h1><span>Quellen im Volltext im Anhang</span></div>
+  <div class="section">
+    <h2>Juristische Prüfpunkte</h2>
+    <ul class="checklist">
+      
+      <li><b>Fristbeginn</b><div>Absolute Empfangstheorie; bei Einschreiben in der Regel der Tag nach Einwurf der Abholungseinladung.<div class="refs"><span>BGE 140 III 244</span><span>BGE 143 III 15</span><span>Art. 273 Abs. 1 OR</span></div></div></li>
+      
+      <li><b>Form</b><div>Amtliches Formular, Schriftlichkeit, separate Zustellung bei Familienwohnung (Art. 266l–266o OR).<div class="refs"><span>Art. 266l Abs. 1–2 OR</span><span>Art. 266n OR</span><span>Art. 266o OR</span></div></div></li>
+      
+      <li><b>Anfechtbarkeit</b><div>Treu und Glauben, Sperrfristen (Art. 271 und 271a OR).<div class="refs"><span>Art. 271 Abs. 1–2 OR</span><span>Art. 271a Abs. 1 OR</span></div></div></li>
+      
+      <li><b>Erstreckung</b><div>Eventualiter im Anfechtungsbegehren verlangen (Art. 273 Abs. 2 und 5 OR).<div class="refs"><span>Art. 273 Abs. 2 OR</span><span>Art. 273 Abs. 4–5 OR</span></div></div></li>
+      
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Freigegebene allgemeine Hinweise</h2>
+    <ul class="plain">
+      <li>Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten werden.<div class="refs"><span>Art. 273 Abs. 1 OR</span></div></li><li>Beim Einschreiben gilt die Kündigung in der Regel am Tag nach dem Einwurf der Abholungseinladung als empfangen, nicht erst bei der Abholung. Auch Ferien ändern daran nichts.<div class="refs"><span>BGE 143 III 15</span><span>BGE 140 III 244</span></div></li><li>Die Klientin kann verlangen, dass die Kündigung begründet wird. Die Begründung ist aber keine Gültigkeitsvoraussetzung.<div class="refs"><span>Art. 271 Abs. 1–2 OR</span><span>BGE 143 III 344</span></div></li><li>Zuständig ist die Schlichtungsbehörde im Bezirk, in dem die Wohnung liegt. Das Schlichtungsverfahren kostet keine Gerichtskosten.<div class="refs"><span>Art. 33 ZPO – Miete und Pacht unbeweglicher Sachen</span><span>Art. 113 Abs. 1–2 lit. c ZPO – Schlichtungsverfahren</span></div></li><li>Lehnt eine Partei einen Entscheidvorschlag der Schlichtungsbehörde ab, muss sie selbst innert 30 Tagen klagen.<div class="refs"><span>Art. 211 Abs. 1–3 ZPO – Wirkungen</span><span>Art. 209 Abs. 4 ZPO – Klagebewilligung</span></div></li>
+    </ul>
+  </div>
+
+  <div class="split">
+    <div class="section">
+      <h2>Erkannte rechtliche Risiken</h2>
+      <p class="empty">Keine Hinweise aus den Prüfregeln.</p>
+    </div>
+    <div class="section">
+      <h2>Erkannte Rechtsgebiete</h2>
+      <p><b>Kündigung durch die Vermieterschaft</b>&ensp;<span class="empty">Sicherheit 99 %</span></p>
+      <p class="refs" style="font-size:7.2pt">«Sie hat von ihrem Vermieter die Kündigung für ihre Wohnung erhalten und weiss nicht, ob sie ausziehen muss.»</p>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- ===================== SEITE 3: ANGABEN ===================== -->
+<section class="page">
+  <div class="masthead">
+    <span>Expert Briefing&emsp;FALL-0011&emsp;<span class="sample">Wissensbasis: Entwurf</span></span>
+    <img class="logo" src="data:image/png;base64,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" alt="LexTec">
+  </div>
+  <div class="page-head"><h1 class="display">Erfasste Angaben</h1><span>11 Eingaben, Fallstand v23</span></div>
+
+  <div class="split">
+    <div class="section">
+      <h2>Offene Pflichtfragen</h2>
+      <p class="empty">Keine offenen Pflichtfragen.</p>
+    </div>
+    <div class="section">
+      <h2>Widersprüche und Unklarheiten</h2>
+      <p class="empty">Keine Widersprüche erkannt.</p>
+    </div>
+  </div>
+
+  <p class="refs" style="margin:-1mm 0 3mm">Antworten aus dem Gespräch stehen im Wortlaut unter dem Wert. «KI» heisst: aus dem Gesprächstext abgeleitet und noch nicht von der Fachperson bestätigt.</p>
+  <div class="groups">
+  
+  <div class="group">
+    <h3>Vorprüfung des Mietverhältnisses</h3>
+    <div class="kv withq">
+    <div class="k">Vertragspartei</div>
+    <div class="v">Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Mitmieter</div>
+    <div class="v">Nein</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Kündigung an alle Mitmieter zugestellt</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Objektart</div>
+    <div class="v">Gewöhnliche Wohnung<span class="ev">«Kündigung für ihre Wohnung erhalten»</span></div>
+    <div class="s open">KI</div>
+  </div><div class="kv withq">
+    <div class="k">Gemeinde</div>
+    <div class="v">Zürich<span class="ev">«Ich betreue eine Klientin in Zürich.»</span></div>
+    <div class="s open">KI</div>
+  </div><div class="kv withq">
+    <div class="k">Wohnung im Kanton Zürich</div>
+    <div class="v">Ja<span class="ev">«Ich betreue eine Klientin in Zürich.»</span></div>
+    <div class="s open">KI</div>
+  </div><div class="kv withq">
+    <div class="k">Vertragsart</div>
+    <div class="v">Unbefristet</div>
+    <div class="s">Angabe</div>
+  </div>
+  </div>
+  
+  <div class="group">
+    <h3>Zustellung und Empfang</h3>
+    <div class="kv withq">
+    <div class="k">Art der Zustellung</div>
+    <div class="v">Eingeschrieben<span class="ev">«Eingeschrieben (Einschreiben)»</span></div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Abholungseinladung</div>
+    <div class="v">06.11.2026<span class="ev">«2026-11-06»</span></div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Empfangsdatum</div>
+    <div class="v">06.11.2026<span class="ev">«2026-11-06»</span></div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Ferien oder Abwesenheit beim Empfang</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Krankheit beim Empfang</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div>
+  </div>
+  
+  <div class="group">
+    <h3>Form der Kündigung</h3>
+    <div class="kv withq">
+    <div class="k">Amtliches Formular</div>
+    <div class="v">Ja</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Foto des Formulars vorhanden</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Kündigung unterschrieben</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Familienwohnung</div>
+    <div class="v">Nein</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Partnerperson wohnt noch dort</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Separate Zustellung an Partnerperson</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div>
+  </div>
+  
+  <div class="group">
+    <h3>Inhalt und Kündigungsgrund</h3>
+    <div class="kv withq">
+    <div class="k">Art der Kündigung</div>
+    <div class="v">Ordentliche Kündigung</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Kündigungstermin</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Kündigungsgrund</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div>
+  </div>
+  
+  <div class="group">
+    <h3>Vorgeschichte</h3>
+    <div class="kv withq">
+    <div class="k">Streit oder Verfahren mit der Vermieterschaft (3 Jahre)</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Änderung der familiären Situation</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Bereits reagiert (angefochten, unterschrieben, verhandelt)</div>
+    <div class="v">Nein</div>
+    <div class="s">Angabe</div>
+  </div><div class="kv withq">
+    <div class="k">Aufhebungsvereinbarung unterschrieben oder vorgelegt</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Laufendes Gerichtsverfahren oder Ausweisung</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div>
+  </div>
+  
+  <div class="group">
+    <h3>Härtegründe und soziale Umstände</h3>
+    <div class="kv withq">
+    <div class="k">Härtegründe</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Beschreibung der Härtegründe</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Mietzins (CHF)</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Zahlende Stelle</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Besondere Verletzlichkeit</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div><div class="kv withq">
+    <div class="k">Wunsch nach einer Fachperson</div>
+    <div class="v missing">Fehlt</div><div class="s">ungeklärt</div>
+  </div>
+  </div>
+  
+  </div>
+</section>
+
+<!-- ===================== ANHANG: RECHTSQUELLEN ===================== -->
+<section class="annex">
+  <div class="masthead">
+    <span>Expert Briefing&emsp;FALL-0011&emsp;Anhang&emsp;<span class="sample">Wissensbasis: Entwurf</span></span>
+    <img class="logo" src="data:image/png;base64,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" alt="LexTec">
+  </div>
+  <div class="page-head"><h1 class="display">Rechtsquellen</h1><span>15 Quellen aus dem Law-Dossier</span></div>
+  <p class="refs" style="margin-bottom:3mm">«Im Law-Dossier geprüft» ist der Prüfstand laut Law-Team. «Amtlicher Text abgerufen» bedeutet nur, dass der Gesetzestext bei Fedlex gefunden und gespeichert wurde. Ob eine Rechtsfolge im konkreten Fall eintritt, prüft die Fachperson. Bundesgerichtsentscheide sind nicht an Fedlex angebunden und stammen aus dem Dossier.</p>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 266l Abs. 1–2 OR</b><span class="id">CH_OR_266L</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 266n OR</b><span class="id">CH_OR_266N</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung (Art. 257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen Partner separat zuzustellen.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 266o OR</b><span class="id">CH_OR_266O</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 76. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 271 Abs. 1–2 OR</b><span class="id">CH_OR_271</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst. 2 Die Kündigung muss auf Verlangen begründet werden.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 81. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION, TT_HINT_REASON_ON_REQUEST.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 271a Abs. 1 OR</b><span class="id">CH_OR_271A_1</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Die Kündigung durch den Vermieter ist insbesondere anfechtbar, wenn sie ausgesprochen wird: a. weil der Mieter nach Treu und Glauben Ansprüche aus dem Mietverhältnis geltend macht; b. weil der Vermieter eine einseitige Vertragsänderung zu Lasten des Mieters oder eine Mietzinsanpassung durchsetzen will; c. allein um den Mieter zum Erwerb der gemieteten Wohnung zu veranlassen; d. während eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens, ausser wenn der Mieter das Verfahren missbräuchlich eingeleitet hat; e. vor Ablauf von drei Jahren nach Abschluss eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens, in dem der Vermieter: 1. zu einem erheblichen Teil unterlegen ist; 2. seine Forderung oder Klage zurückgezogen oder erheblich eingeschränkt hat; 3. auf die Anrufung des Richters verzichtet hat; 4. mit dem Mieter einen Vergleich geschlossen oder sich sonstwie geeinigt hat; f. wegen Änderungen in der familiären Situation des Mieters, aus denen dem Vermieter keine wesentlichen Nachteile entstehen.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 81. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 273 Abs. 1 OR</b><span class="id">CH_OR_273_1</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 83. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION, TT_HINT_30_DAYS.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 273 Abs. 2 OR</b><span class="id">CH_OR_273_2</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">2 Will der Mieter eine Erstreckung des Mietverhältnisses verlangen, so muss er das Begehren der Schlichtungsbehörde einreichen: a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung; b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 83. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 273 Abs. 4–5 OR</b><span class="id">CH_OR_273_4_5</span></div>
+    <div class="src-law">Obligationenrecht (OR), SR 220</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">4 Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO. 5 Weist die zuständige Behörde ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen, ob das Mietverhältnis erstreckt werden kann.</div>
+    <div class="src-meta">Stand 01.10.2026, OR_admin.pdf S. 84. Fassung gültig 01.10.2026–30.06.2027, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 33 ZPO – Miete und Pacht unbeweglicher Sachen</b><span class="id">CH_ZPO_33</span></div>
+    <div class="src-law">Zivilprozessordnung (ZPO), SR 272</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Für Klagen aus Miete und Pacht unbeweglicher Sachen ist das Gericht am Ort der gelegenen Sache zuständig.</div>
+    <div class="src-meta">Stand 01.07.2026, ZPO.pdf S. 9. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52. Referenziert von CH_TENANCY_TERMINATION, TT_HINT_VENUE_COSTS.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 113 Abs. 1–2 lit. c ZPO – Schlichtungsverfahren</b><span class="id">CH_ZPO_113</span></div>
+    <div class="src-law">Zivilprozessordnung (ZPO), SR 272</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Im Schlichtungsverfahren werden keine Parteientschädigungen gesprochen. Vorbehalten bleibt die Entschädigung einer unentgeltlichen Rechtsbeiständin oder eines unentgeltlichen Rechtsbeistandes durch den Kanton. 2 Keine Gerichtskosten werden gesprochen in Streitigkeiten: c. aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht;</div>
+    <div class="src-meta">Stand 01.07.2026, ZPO.pdf S. 28–29. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52. Referenziert von TT_HINT_VENUE_COSTS.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 209 Abs. 4 ZPO – Klagebewilligung</b><span class="id">CH_ZPO_209_4</span></div>
+    <div class="src-law">Zivilprozessordnung (ZPO), SR 272</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">4 In Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen sowie aus landwirtschaftlicher Pacht beträgt die Klagefrist 30 Tage.</div>
+    <div class="src-meta">Stand 01.07.2026, ZPO.pdf S. 57. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52. Referenziert von TT_HINT_PROPOSAL.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>Art. 211 Abs. 1–3 ZPO – Wirkungen</b><span class="id">CH_ZPO_211</span></div>
+    <div class="src-law">Zivilprozessordnung (ZPO), SR 272</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="y">Amtlicher Text abgerufen</span>
+      <span class="y">Wortlaut abgeglichen</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">1 Der Entscheidvorschlag gilt als angenommen und hat die Wirkungen eines rechtskräftigen Entscheids, wenn ihn keine Partei innert 20 Tagen seit der schriftlichen Eröffnung ablehnt. Die Ablehnung bedarf keiner Begründung. 2 Nach Eingang der Ablehnung stellt die Schlichtungsbehörde die Klagebewilligung zu: a. in den Angelegenheiten nach Artikel 210 Absatz 1 Buchstabe b: der ablehnenden Partei; b. in den übrigen Fällen: der klagenden Partei. 3 Wird die Klage in den Angelegenheiten nach Artikel 210 Absatz 1 Buchstabe b nicht rechtzeitig eingereicht, so gilt der Entscheidvorschlag als anerkannt und er hat die Wirkungen eines rechtskräftigen Entscheides.</div>
+    <div class="src-meta">Stand 01.07.2026, ZPO.pdf S. 57. Fassung gültig ab 01.07.2026, abgerufen 07.11.2026, 14:52. Referenziert von TT_HINT_PROPOSAL.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>BGE 140 III 244</b><span class="id">BGE_140_III_244</span></div>
+    <div class="src-law">Urteil 4A_120/2014 vom 19.05.2014</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="n">Vom System nicht live verifiziert</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Fehlt das genehmigte Formular, ist die Kündigung nichtig; die Nichtigkeit kann jederzeit geltend gemacht werden und ist von Amtes wegen zu beachten. Ein veraltetes Formular führt nicht zur Nichtigkeit, wenn es dieselben Informationen enthält. Die 30-Tage-Frist von Art. 273 Abs. 1 OR ist materiellrechtlich; es gilt die absolute Empfangstheorie. Die relative Theorie gilt im Mietrecht nur für Mietzinserhöhungen (Art. 269d OR) und Zahlungsaufforderungen (Art. 257d Abs. 1 OR).</div>
+    <div class="src-meta">Fundstellen: E. 4.1, S. 4; E. 4.2 ff.; E. 5.1–5.2, S. 5–6. Vom System nicht live verifiziert. Referenziert von CH_TENANCY_TERMINATION, TT_HINT_REGISTERED_MAIL.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>BGE 143 III 15</b><span class="id">BGE_143_III_15</span></div>
+    <div class="src-law">Urteil 4A_293/2016 vom 13.12.2016</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="n">Vom System nicht live verifiziert</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Bei Abholungseinladung gilt die Kündigung am Tag des Einwurfs als empfangen, wenn sofortiges Abholen zumutbar ist, sonst in der Regel am Folgetag; die 7-Tage-Abholfiktion der ZPO gilt nicht. Ferien oder Abwesenheit trägt die Empfängerin; sie muss sich auch nach Ablauf der Abholfrist bei der Post nach dem Absender erkundigen; späte Kenntnis verkürzt die verbleibende Frist. Im Fall: Einwurf 2.12., Empfang 3.12.2013, Klage vom 7.2.2014 verspätet. Ob Krankheit anders zu behandeln wäre, blieb offen.</div>
+    <div class="src-meta">Fundstellen: E. 4.1, S. 17–19; E. 4.2, S. 19; E. 4.3, S. 19. Vom System nicht live verifiziert. Referenziert von CH_TENANCY_TERMINATION, TT_HINT_REGISTERED_MAIL.</div>
+  </div>
+  
+  <div class="src-card">
+    <div class="src-head"><b>BGE 143 III 344</b><span class="id">BGE_143_III_344</span></div>
+    <div class="src-law">Urteil 4A_703/2016 vom 24.05.2017</div>
+    <div class="badges">
+      <span class="y">Im Law-Dossier geprüft</span>
+      <span class="n">Vom System nicht live verifiziert</span>
+      <span class="n">Interpretation noch nicht geprüft</span>
+    </div>
+    <div class="src-text">Die Begründung ist keine Gültigkeitsvoraussetzung, auch nicht bei Sanierung; BGE 142 III 91 und 140 III 496 waren insoweit missverständlich. Fehlende, fehlerhafte, pauschale oder später ausgewechselte Gründe können aber ein Indiz gegen ein schützenswertes Interesse sein.</div>
+    <div class="src-meta">Fundstellen: E. 5.3.1, S. 345; E. 5.3.3, S. 346–347; E. 5.3.4, S. 347–348. Vom System nicht live verifiziert. Referenziert von TT_HINT_REASON_ON_REQUEST.</div>
+  </div>
+  
+
+  <div class="audit" style="margin-top:5mm">
+    <b>Nachvollziehbarkeit.</b> FALL-0011, Version 1, Fallstand v23, 11 Eingaben, erstellt 07.11.2026, 16:23.
+    Wissensbasis kb-8ece9320cb (DRAFT). Extraktion: Gemini. 42 Regeln geprüft, ausgelöst: TT_DAYS_LT_20_ALL_KNOWN (LEGAL_REVIEW_STANDARD).
+    Die Ampel folgt festen Regeln, nicht dem Sprachmodell. Dieses Briefing ist eine strukturierte Fallübersicht und keine Rechtsauskunft. Die Verantwortung liegt bei der zuständigen Fachperson.
+    Kontaktangaben der Stellen ergänzt aus referral_rules.yaml (Stand 2026-11-07).
+  </div>
+</section>
+</body>
+</html>

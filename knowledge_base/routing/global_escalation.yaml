@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=../../schemas/global_escalation.schema.json
+# DEMO / SYNTHETIC / NOT LEGALLY VALIDATED
+# Generic competence-boundary rules. Thresholds below are TECHNICAL placeholders chosen to
+# exercise the engine; the legal team defines the real criteria.
+schema_version: 1
+version: "0.1-demo"
+content_status: DEMO_SYNTHETIC
+
+rules:
+  - id: GLOBAL_UNSUPPORTED_ISSUE
+    description: "Mindestens ein erkanntes Rechtsproblem ist in der Wissensbasis nicht abgedeckt."
+    when: { ref: ctx.unsupported_issue_count, op: greater_than, value: 0 }
+    urgency: MEDIUM
+    reason_code: UNSUPPORTED_LEGAL_AREA
+    reason_de: "Ein erkanntes Rechtsproblem liegt ausserhalb der abgedeckten Rechtsgebiete. Eine Fachperson muss die Situation beurteilen."
+    professionals: [lawyer_general]
+
+  - id: GLOBAL_NO_SUPPORTED_ISSUE
+    description: "Eingaben liegen vor, aber kein unterstütztes Rechtsproblem wurde erkannt."
+    when:
+      all:
+        - { ref: ctx.has_user_input, op: equals, value: true }
+        - { ref: ctx.active_issue_count, op: equals, value: 0 }
+    urgency: MEDIUM
+    reason_code: NO_SUPPORTED_ISSUE_IDENTIFIED
+    reason_de: "Es konnte kein unterstütztes Rechtsproblem eindeutig erkannt werden."
+    professionals: [lawyer_general]
+
+  - id: GLOBAL_LOW_CLASSIFICATION_CONFIDENCE
+    description: "Die Zuordnung zu einem Rechtsgebiet ist zu unsicher (technischer Platzhalter-Schwellenwert)."
+    when: { ref: ctx.min_classification_confidence, op: less_than, value: 0.5 }
+    urgency: MEDIUM
+    reason_code: LOW_CLASSIFICATION_CONFIDENCE
+    reason_de: "Die Zuordnung zum Rechtsgebiet ist zu unsicher für eine verlässliche Weiterbearbeitung."
+    professionals: [lawyer_general]
+
+  - id: GLOBAL_TOO_MANY_ISSUES
+    description: "Viele gleichzeitige Rechtsprobleme (technischer Platzhalter-Schwellenwert)."
+    when: { ref: ctx.active_issue_count, op: greater_than, value: 3 }
+    urgency: MEDIUM
+    reason_code: COMPLEXITY_EXCEEDS_SCOPE
+    reason_de: "Mehrere zusammenwirkende Rechtsprobleme übersteigen die Komplexität, die das System selbst beurteilen soll."
+    professionals: [lawyer_general]

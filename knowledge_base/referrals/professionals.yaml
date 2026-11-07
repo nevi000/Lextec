@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../../schemas/professionals.schema.json
+# DEMO / SYNTHETIC / NOT LEGALLY VALIDATED
+schema_version: 1
+version: "0.1-demo"
+content_status: DEMO_SYNTHETIC
+
+professionals:
+  - id: tenancy_law_counsel
+    label_de: Mietrechtsberatung
+    description_de: Juristische Fachperson mit Schwerpunkt Mietrecht.
+  - id: employment_law_counsel
+    label_de: Arbeitsrechtsberatung
+    description_de: Juristische Fachperson mit Schwerpunkt Arbeitsrecht.
+  - id: social_counselling
+    label_de: Sozialberatung
+    description_de: Beratung zu Existenzsicherung, Wohnsituation und Sozialleistungen.
+  - id: lawyer_general
+    label_de: Juristische Fachperson (allgemein)
+    description_de: Rechtsanwältin oder Rechtsanwalt bzw. Rechtsberatungsstelle für Fälle ausserhalb der abgedeckten Rechtsgebiete.
+  - id: independent_legal_body
+    label_de: Unabhängige Rechtsberatung
+    description_de: Unabhängige Stelle, wenn z. B. die Gemeinde zugleich Gegenpartei sein könnte.

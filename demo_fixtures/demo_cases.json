@@ -1,0 +1,23 @@
+[
+  {
+    "title": "",
+    "messages": [{ "content": "Mein Arbeitgeber hat mir gekündigt." }]
+  },
+  {
+    "title": "",
+    "messages": [
+      {
+        "content": "Mein Arbeitgeber hat mir gekündigt. Jetzt kann ich meine Miete nicht mehr bezahlen und habe Angst, meine Wohnung zu verlieren."
+      }
+    ]
+  },
+  {
+    "title": "",
+    "messages": [
+      { "content": "In meiner Wohnung hat sich Schimmel gebildet. Der Vermieter ist informiert." },
+      { "content": "12.10.2025", "answers_fact_id": "landlord_informed_date" },
+      { "content": "Seit Oktober 2025", "answers_fact_id": "defect_since" },
+      { "content": "Nein", "answers_fact_id": "deadline_pending" }
+    ]
+  }
+]

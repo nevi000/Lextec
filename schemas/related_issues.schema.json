@@ -1,0 +1,67 @@
+{
+  "$defs": {
+    "RelatedIssueDef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title_de": {
+          "title": "Title De",
+          "type": "string"
+        },
+        "issue_number": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Issue Number"
+        },
+        "status": {
+          "const": "PLANNED",
+          "default": "PLANNED",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title_de"
+      ],
+      "title": "RelatedIssueDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Issues that are referred to but may not be implemented yet.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "related_issues": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RelatedIssueDef"
+      },
+      "title": "Related Issues",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "RelatedIssuesFile",
+  "type": "object"
+}

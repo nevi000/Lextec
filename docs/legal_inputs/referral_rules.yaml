@@ -1,0 +1,606 @@
+# knowledge_base/referrals/referral_rules.yaml
+# Verweisungsregeln: welcher Falltyp / welches Warnsignal fuehrt zu welcher Anlaufstelle.
+# Wird von der Regel-Engine gelesen; der Abschnitt "briefing" fliesst in die Zusammenfassung
+# fuer die Sachbearbeiterin / den Sachbearbeiter.
+#
+# Konventionen (wie in der Arbeitsvorlage):
+#   Aktionen:   ASK | PROCEED | ESCALATE | IMMEDIATE_SAFETY_RESPONSE   (strengste gewinnt)
+#   Prioritaet: CRITICAL | HIGH | NORMAL | LOW
+#   Unbekannt bleibt null und wird nicht geraten.
+#   Alle signal-IDs muessen in signals.yaml, alle org-IDs in diesem File existieren.
+#   verified: false  = vom Law-Team vor Einsatz zu pruefen (Angebot, Region, Kontakt).
+
+version: "1.0"
+last_reviewed: null
+reviewed_by: null
+
+# ---------------------------------------------------------------------------
+# 1. AUFLOESUNG NACH KANTON
+#    Regeln verweisen auf ROLLEN (z.B. frauenzentrale_kantonal). Die Engine setzt
+#    anhand des Fakts "canton" die konkrete Stelle ein. Kein Kanton bekannt -> ASK canton.
+# ---------------------------------------------------------------------------
+role_resolution:
+  frauenzentrale_kantonal:
+    AG: frauenzentrale_aargau
+    BL: frauenplus_baselland
+    BE: frauenzentrale_bern
+    GL: frauenzentrale_glarus
+    SG: frauenzentrale_st_gallen
+    GR: frauenzentrale_graubuenden
+    LU: frauenzentrale_luzern
+    ZH: frauenzentrale_zuerich          # Region Winterthur: frauenzentrale_winterthur
+    ZG: eff_zett
+    default: null                       # kein Partner im Kanton -> Sozialdienst Gemeinde
+  opferhilfe_kantonal:
+    ZH: opferhilfe_zuerich
+    ZG: eff_zett
+    default: opferhilfe_142             # nationale Nummer leitet an kantonale Stelle weiter
+  schuldenberatung:
+    BE: berner_schuldenberatung
+    ZG: eff_zett
+    default: caritas
+  selbsthilfe:
+    BE: selbsthilfe_be
+    SO: selbsthilfe_solothurn
+    ZG: eff_zett
+    default: null
+  migrationsberatung:
+    SG: solidaritaetshaus_st_gallen
+    default: heks
+  ombudsstelle:
+    SH: ombudsstelle_schaffhausen
+    default: null                       # nur fuer Konflikte mit Behoerden, nicht mit Privaten
+
+# ---------------------------------------------------------------------------
+# 2. ANLAUFSTELLEN
+# ---------------------------------------------------------------------------
+professionals:
+
+  # --- Notfall / Hotlines (immer verfuegbar, kantonsunabhaengig) ---
+  - id: police_117
+    label: "Polizei"
+    type: emergency
+    contact: {phone: "117"}
+    available: "24/7"
+    verified: true
+  - id: ambulance_144
+    label: "Sanitaet / Rettungsdienst"
+    type: emergency
+    contact: {phone: "144"}
+    available: "24/7"
+    verified: true
+  - id: dargebotene_hand_143
+    label: "Die Dargebotene Hand"
+    type: hotline
+    specializations: [mental_health, crisis]
+    contact: {phone: "143"}
+    available: "24/7"
+    verified: true
+  - id: pro_juventute_147
+    label: "Pro Juventute, Beratung fuer Kinder und Jugendliche"
+    type: hotline
+    specializations: [children, youth]
+    contact: {phone: "147"}
+    available: "24/7"
+    verified: true
+  - id: opferhilfe_142
+    label: "Nationale Opferhilfe-Nummer"
+    type: hotline
+    specializations: [violence, victim_support]
+    contact: {phone: "142"}
+    available: "24/7, kostenlos, vertraulich"
+    note: "Seit 1. Mai 2026. Keine Notrufnummer: bei akuter Gefahr 117 / 144."
+    source_url: "https://www.gr.ch/DE/Medien/Mitteilungen/MMStaka/2026/Seiten/2026043002.aspx"
+    verified: true
+
+  # --- Partnerorganisationen LexTec ---
+  - id: opferhilfe_zuerich
+    label: "Opferhilfe Kanton Zuerich"
+    type: authority
+    region: [ZH]
+    specializations: [violence, victim_support, financial_aid_victims]
+    referral_conditions: [domestic_violence, sexual_violence, acute_violence, exploitation]
+    contact: {phone: "142 (24/7)"}
+    source_url: "https://www.zh.ch/de/sicherheit-justiz/opferhilfe/opferberatung.html"
+    verified: true
+
+  - id: eff_zett
+    label: "eff-zett das fachzentrum (Frauenzentrale Zug)"
+    type: ngo_cantonal_mandate
+    region: [ZG]
+    specializations: [victim_support, budget_counselling, debt_counselling, couple_family, self_help]
+    referral_conditions: [domestic_violence, sexual_violence, debt, family_conflict]
+    contact: {phone: "041 725 26 50 (Opferberatung)", email: "opfer@eff-zett.ch"}
+    note: "Vom Kanton Zug beauftragte Opferberatungsstelle."
+    source_url: "https://zg.ch/de/sicherheit/opferhilfe-und-opferberatung"
+    verified: true
+
+  - id: brava
+    label: "Brava (ehemals TERRE DES FEMMES Schweiz)"
+    type: ngo
+    region: [CH]
+    specializations: [gender_based_violence, refugee_women]
+    referral_conditions: [domestic_violence, sexual_violence, migration_status]
+    note: "Schwerpunkt geschlechtsbezogene Gewalt, besonders bei gefluechteten Frauen (z.B. Gewalt im Ausland/auf der Flucht)."
+    source_url: "https://www.brava-ngo.ch/assets/brava_jb_2025_de_digi.pdf"
+    verified: true
+
+  # Frauenzentralen: Rechts- und Budgetberatung zu tiefen Tarifen (Angebot je Kanton pruefen)
+  - id: frauenzentrale_zuerich
+    label: "Zuercher Frauenzentrale"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling, budget_counselling, family_law, employment_law]
+    source_url: "https://www.zh.ch/de/wirtschaft-arbeit/arbeitsbedingungen/arbeitsssicherheit-gesundheitsschutz/betrieblicher-gesundheitsschutz/anlaufstellen-fuer-arbeitnehmende/angebote/rechtsberatung-zuercher-frauenzentrale.html"
+    verified: true
+  - id: frauenzentrale_winterthur
+    label: "Frauenzentrale Winterthur"
+    type: ngo
+    region: [ZH]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+  - id: frauenzentrale_bern
+    label: "Frauenzentrale Bern"
+    type: ngo
+    region: [BE]
+    specializations: [legal_counselling, budget_counselling]
+    source_url: "https://www.plattformj.ch/artikel/179696/"
+    verified: true
+  - id: frauenplus_baselland
+    label: "frauenplus Baselland"
+    type: ngo
+    region: [BL]
+    specializations: [legal_counselling, budget_counselling, family_support, migrant_contact_point]
+    contact: {phone: "061 921 60 20", email: "baselland@frauenplus.ch"}
+    source_url: "https://www.baselland.ch/politik-und-behorden/direktionen/finanz-und-kirchendirektion/gleichstellung-bl/fachstelle-gleichstellung-fuer-frauen-und-maenner/beratung"
+    verified: true
+  - id: frauenzentrale_graubuenden
+    label: "Frauenzentrale Graubuenden"
+    type: ngo
+    region: [GR]
+    specializations: [legal_counselling, employment_law, budget_counselling]
+    source_url: "https://www.srf.ch/news/unbeliebtes-urteil-frauenzentralen-verlieren-vor-gericht"
+    verified: true
+  - id: frauenzentrale_aargau
+    label: "Frauenzentrale Aargau"
+    type: ngo
+    region: [AG]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+  - id: frauenzentrale_glarus
+    label: "Frauenzentrale Glarus"
+    type: ngo
+    region: [GL]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+  - id: frauenzentrale_st_gallen
+    label: "Frauenzentrale St. Gallen"
+    type: ngo
+    region: [SG]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+  - id: frauenzentrale_luzern
+    label: "Frauenzentrale Luzern"
+    type: ngo
+    region: [LU]
+    specializations: [legal_counselling, budget_counselling]
+    verified: false
+
+  - id: berner_schuldenberatung
+    label: "Berner Schuldenberatung"
+    type: ngo
+    region: [BE]
+    specializations: [debt_counselling, rent_arrears]
+    referral_conditions: [rent_arrears, debt]
+    verified: false
+
+  - id: caritas
+    label: "Caritas (regionale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [social_counselling, debt_counselling, financial_emergency_aid]
+    referral_conditions: [rent_arrears, debt, existential_emergency]
+    verified: false
+
+  - id: heks
+    label: "HEKS (regionale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [migration, asylum_legal_counselling, integration, social_counselling]
+    referral_conditions: [migration_status, existential_emergency]
+    verified: false
+
+  - id: asylex
+    label: "AsyLex"
+    type: ngo
+    region: [CH]
+    specializations: [asylum_law, family_reunification, dublin, detention_pending_deportation, trafficking]
+    referral_conditions: [migration_status, exploitation]
+    contact: {address: "Gotthardstrasse 52, 8002 Zuerich", email: "operations@asylex.ch", web: "www.asylex.ch"}
+    note: "Kostenlose, vorwiegend digitale Rechtsberatung fuer Gefluechtete."
+    source_url: "https://cms.kantonsrat.zh.ch/uploads/documents/Projektplakat-AsyLex.pdf"
+    verified: true
+
+  - id: solidaritaetshaus_st_gallen
+    label: "Solidaritaetshaus St. Gallen (Solidaritaetsnetz Ostschweiz)"
+    type: ngo
+    region: [SG]
+    specializations: [everyday_counselling, refugees, multilingual]
+    note: "Alltagsberatung, offene Kurzberatung u.a. auf Englisch, Farsi, Somali, Arabisch, Tigrinya."
+    source_url: "https://www.hallo.sg.ch/de/beratung-kontakte/offene-fragen-/_jcr_content/pdfonthefly.ocFile/offene-fragen--de.pdf"
+    verified: true
+
+  - id: pro_infirmis
+    label: "Pro Infirmis (kantonale Stellen)"
+    type: ngo
+    region: [CH]
+    specializations: [disability, social_counselling, social_insurance]
+    referral_conditions: [disability]
+    verified: false
+
+  - id: selbsthilfe_be
+    label: "Selbsthilfe BE"
+    type: ngo_cantonal_mandate
+    region: [BE]
+    specializations: [self_help_groups, mental_health_follow_up]
+    contact: {phone: "0848 33 99 00", email: "info@selbsthilfe-be.ch"}
+    note: "Vermittlung von Selbsthilfegruppen; keine Krisenintervention."
+    source_url: "https://www.herzogenbuchsee.ch/leben/soziales/selbsthilfe-be.html/407/print/pdf"
+    verified: true
+  - id: selbsthilfe_solothurn
+    label: "Selbsthilfe Solothurn"
+    type: ngo
+    region: [SO]
+    specializations: [self_help_groups, mental_health_follow_up]
+    verified: false
+
+  - id: ombudsstelle_schaffhausen
+    label: "Ombudsstelle Kanton Schaffhausen"
+    type: authority
+    region: [SH]
+    specializations: [conflict_with_authorities]
+    referral_conditions: [conflict_with_public_body]
+    note: "Seit 1.1.2026 besetzt. Nur Konflikte mit Kanton/Gemeinden (z.B. Sozialamt, gemeindeeigene Wohnung), nicht mit privaten Vermietern."
+    source_url: "https://www.jobup.ch/en/jobs/detail/6fbdc7c5-6659-446c-8d29-2bde5e968220"
+    verified: true
+
+  - id: amnesty_lawyers_group
+    label: "Amnesty International Schweiz - Lawyers' Group"
+    type: ngo
+    region: [CH]
+    specializations: [human_rights, strategic_cases]
+    referral_conditions: [systemic_human_rights_issue]
+    note: "Nur ueber die Sachbearbeitung, nicht direkt an Rechtsuchende. Rolle und Zugang vom Law-Team klaeren."
+    verified: false
+
+  # --- Behoerden / Stellen ausserhalb der Partnerliste (fuer Mietrecht unverzichtbar) ---
+  - id: schlichtungsbehoerde_miete
+    label: "Paritaetische Schlichtungsbehoerde in Mietsachen (Wohnort/Ort der Mietsache)"
+    type: authority
+    region: [CH]
+    specializations: [tenancy_disputes]
+    note: "Zustaendig fuer Anfechtung, Erstreckung, Maengel, Mietzins, Kaution. Schlichtungsverfahren im Mietrecht ohne Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO). Kontakt ueber kantonales Verzeichnis."
+    verified: false
+  - id: mieterverband
+    label: "Mieterinnen- und Mieterverband (kantonale Sektion)"
+    type: ngo
+    region: [CH]
+    specializations: [tenancy_law_counselling]
+    note: "Rechtsberatung meist fuer Mitglieder."
+    verified: false
+  - id: sozialdienst_gemeinde
+    label: "Sozialdienst der Wohngemeinde"
+    type: authority
+    region: [CH]
+    specializations: [social_assistance, rent_arrears, emergency_housing]
+    note: "Kann je nach Gemeinde Mietzinsausstaende uebernehmen und Notunterkunft vermitteln."
+    verified: false
+  - id: kesb
+    label: "KESB (Kindes- und Erwachsenenschutzbehoerde)"
+    type: authority
+    region: [CH]
+    specializations: [child_protection, adult_protection]
+    verified: false
+  - id: unentgeltliche_rechtsauskunft
+    label: "Kantonale unentgeltliche Rechtsauskunft / Anwaltsverband"
+    type: authority
+    region: [CH]
+    specializations: [legal_counselling]
+    note: "Z.B. Kanton St. Gallen: kostenlose Rechtsauskunft an mehreren Standorten."
+    source_url: "https://hallo.sg.ch/el/beratung-kontakte/rechtsauskuenfte/_jcr_content/pdfonthefly.ocFile/rechtsauskuenfte-el.pdf"
+    verified: false
+  - id: tenancy_lawyer
+    label: "Anwaeltin/Anwalt Mietrecht (via Mieterverband oder Anwaltsverband)"
+    type: lawyer
+    region: [CH]
+    specializations: [tenancy_litigation]
+    verified: false
+
+# ---------------------------------------------------------------------------
+# 3. REGELN PRO FALLTYP (Mietrecht)
+#    documents:     welche Unterlagen das Tool anfordert / scannt
+#    extract:       welche Felder aus den Unterlagen gelesen werden
+#    deadline:      gemeldet, nie verbindlich berechnet; Fristbeginn = Zustellung
+#    referrals:     primary = immer; conditional = wenn Signal gesetzt
+# ---------------------------------------------------------------------------
+issue_rules:
+
+  - issue_id: CH_TENANCY_TERMINATION
+    label: "Kuendigung durch den Vermieter"
+    legal_basis: ["Art. 266a ff. OR", "Art. 266l-266o OR (Form, Familienwohnung, Nichtigkeit)", "Art. 271, 271a OR (Anfechtbarkeit)", "Art. 273 Abs. 1 OR"]
+    documents_required: [kuendigungsformular, mietvertrag]
+    documents_optional: [zustellnachweis, begruendung_kuendigung]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: termination_date, from: kuendigungsformular, priority: HIGH}
+      - {id: official_form_used, from: kuendigungsformular, priority: CRITICAL, why: "Ohne amtliches Formular nichtig (Art. 266l Abs. 2, 266o OR)"}
+      - {id: family_dwelling_separate_notice, from: kuendigungsformular, priority: HIGH, why: "Familienwohnung: separate Zustellung an Ehegatten (Art. 266n OR)"}
+      - {id: notice_period_months, from: mietvertrag, priority: NORMAL}
+      - {id: landlord_name, from: mietvertrag, priority: NORMAL}
+    deadline: {signal: deadline_contest_termination_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [schlichtungsbehoerde_miete, mieterverband]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [tenancy_lawyer], urgency: CRITICAL}
+        - {when: {signal: imminent_housing_loss}, add: [sozialdienst_gemeinde]}
+        - {when: {signal: low_income}, add: [frauenzentrale_kantonal, unentgeltliche_rechtsauskunft]}
+        - {when: {signal: landlord_is_public_body}, add: [ombudsstelle]}
+    reason_for_referral: "Anfechtung und Erstreckung nur innert 30 Tagen bei der Schlichtungsbehoerde moeglich; Formfehler pruefen lassen."
+
+  - issue_id: CH_TENANCY_PAYMENT_WARNING
+    label: "Zahlungsaufforderung mit Kuendigungsandrohung"
+    legal_basis: ["Art. 257d Abs. 1 OR (Wohnraum: Zahlungsfrist mind. 30 Tage)", "Art. 266n OR"]
+    documents_required: [zahlungsaufforderung, mietvertrag]
+    documents_optional: [kontoauszug, betreibungsauszug]
+    extract:
+      - {id: date_received, from: zahlungsaufforderung, priority: CRITICAL}
+      - {id: payment_deadline_date, from: zahlungsaufforderung, priority: CRITICAL}
+      - {id: amount_owed, from: zahlungsaufforderung, priority: HIGH}
+      - {id: termination_threat_explicit, from: zahlungsaufforderung, priority: HIGH}
+      - {id: family_dwelling_separate_notice, from: zahlungsaufforderung, priority: NORMAL}
+      - {id: monthly_rent, from: mietvertrag, priority: NORMAL}
+    deadline: {signal: deadline_payment_257d, days: null, from: payment_deadline_date, note: "Frist laut Schreiben; Zahlung innert Frist verhindert die Kuendigung nach Art. 257d."}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [sozialdienst_gemeinde, schuldenberatung]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [mieterverband], urgency: CRITICAL}
+        - {when: {signal: amount_disputed}, add: [mieterverband, schlichtungsbehoerde_miete]}
+        - {when: {signal: low_income}, add: [caritas, frauenzentrale_kantonal]}
+    reason_for_referral: "Noch keine Kuendigung: Wohnung kann durch fristgerechte Zahlung gesichert werden. Finanzierung (Sozialdienst, Caritas) hat Vorrang."
+
+  - issue_id: CH_TENANCY_TERMINATION_ARREARS
+    label: "Kuendigung wegen Zahlungsverzug"
+    legal_basis: ["Art. 257d Abs. 2 OR", "Art. 272a Abs. 1 lit. a OR (keine Erstreckung)", "Art. 273 OR"]
+    documents_required: [kuendigungsformular, zahlungsaufforderung, mietvertrag]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: termination_date, from: kuendigungsformular, priority: CRITICAL}
+      - {id: official_form_used, from: kuendigungsformular, priority: CRITICAL}
+      - {id: payment_deadline_date, from: zahlungsaufforderung, priority: HIGH, why: "War die Zahlungsfrist korrekt angesetzt und abgelaufen?"}
+      - {id: amount_owed, from: zahlungsaufforderung, priority: HIGH}
+      - {id: paid_within_deadline, from: user, priority: HIGH}
+    deadline: {signal: deadline_contest_termination_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: CRITICAL
+    referrals:
+      primary: [schlichtungsbehoerde_miete, sozialdienst_gemeinde]
+      conditional:
+        - {when: {signal: legal_deadline_risk}, add: [tenancy_lawyer]}
+        - {when: {signal: children_in_household}, add: [sozialdienst_gemeinde], note: "Wohnungssuche/Notunterkunft fuer Familie"}
+        - {when: {signal: debt}, add: [schuldenberatung]}
+    reason_for_referral: "Erstreckung ausgeschlossen, Ausweisung droht rasch. Formelle Voraussetzungen von Art. 257d OR durch Fachperson pruefen lassen."
+
+  - issue_id: CH_TENANCY_EXTENSION
+    label: "Erstreckung des Mietverhaeltnisses"
+    legal_basis: ["Art. 272 OR", "Art. 272a OR (Ausschluss)", "Art. 272b OR (max. 4 Jahre Wohnraum)", "Art. 273 Abs. 2 OR"]
+    documents_required: [kuendigungsformular, mietvertrag]
+    documents_optional: [nachweis_wohnungssuche, haushaltsnachweis]
+    extract:
+      - {id: date_received, from: kuendigungsformular, priority: CRITICAL}
+      - {id: lease_type, from: mietvertrag, priority: HIGH, why: "Unbefristet: 30 Tage ab Empfang; befristet: spaetestens 60 Tage vor Ablauf (Art. 273 Abs. 2 OR)"}
+      - {id: lease_end_date, from: mietvertrag, priority: HIGH}
+      - {id: household_size, from: user, priority: HIGH}
+      - {id: children_in_household, from: user, priority: HIGH}
+      - {id: housing_search_efforts, from: user, priority: NORMAL}
+      - {id: termination_reason_arrears, from: kuendigungsformular, priority: HIGH, why: "Bei Zahlungsverzug keine Erstreckung (Art. 272a OR)"}
+    deadline: {signal: deadline_extension_request, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [schlichtungsbehoerde_miete, mieterverband]
+      conditional:
+        - {when: {signal: children_in_household}, add: [sozialdienst_gemeinde]}
+        - {when: {signal: disability}, add: [pro_infirmis]}
+        - {when: {signal: low_income}, add: [frauenzentrale_kantonal]}
+    reason_for_referral: "Haerteabwaegung (Familie, Kinder, Wohnungsmarkt) ist eine Einzelfallwertung und gehoert zu einer Fachperson."
+
+  - issue_id: CH_TENANCY_DEFECTS
+    label: "Maengel an der Wohnung"
+    legal_basis: ["Art. 259a ff. OR", "Art. 259g-259i OR (Hinterlegung)"]
+    documents_required: [mietvertrag]
+    documents_optional: [fotos_mangel, maengelruege, korrespondenz_vermieter, arztzeugnis]
+    extract:
+      - {id: defect_type, from: user, priority: HIGH}
+      - {id: defect_since, from: user, priority: HIGH}
+      - {id: landlord_notified_in_writing, from: korrespondenz_vermieter, priority: CRITICAL}
+      - {id: rent_deposited, from: user, priority: HIGH, why: "Hinterlegung: innert 30 Tagen nach Faelligkeit Schlichtungsbehoerde anrufen (Art. 259h OR)"}
+      - {id: health_impact, from: user, priority: HIGH}
+    deadline: {signal: deadline_deposit_259h, days: 30, from: first_deposited_rent_due, applies_if: {fact: rent_deposited, operator: eq, value: true}}
+    default_action: PROCEED          # Erstinformation moeglich; Eskalation bei Gesundheit/Hinterlegung
+    urgency: NORMAL
+    referrals:
+      primary: [mieterverband]
+      conditional:
+        - {when: {signal: health_risk}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: HIGH, note: "z.B. Schimmel mit Kindern, keine Heizung im Winter"}
+        - {when: {signal: rent_deposit_started}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: HIGH}
+        - {when: {signal: children_in_household}, add: [], urgency: HIGH}
+    reason_for_referral: "Rechte haengen von schriftlicher Maengelruege ab; Mietzinshinterlegung ist fristgebunden und riskant ohne Begleitung."
+
+  - issue_id: CH_TENANCY_EVICTION
+    label: "Ausweisung / Raeumung"
+    legal_basis: ["Art. 257 ZPO (Rechtsschutz in klaren Faellen)", "kantonales Vollstreckungsrecht"]
+    documents_required: [gerichtsurkunde]
+    documents_optional: [raeumungsbefehl, kuendigungsformular]
+    extract:
+      - {id: date_received, from: gerichtsurkunde, priority: CRITICAL}
+      - {id: eviction_date, from: raeumungsbefehl, priority: CRITICAL}
+      - {id: court_name, from: gerichtsurkunde, priority: HIGH}
+      - {id: decision_or_summons, from: gerichtsurkunde, priority: CRITICAL, why: "Vorladung oder Entscheid? Rechtsmittelfristen im summarischen Verfahren kurz, keine Gerichtsferien (Art. 145 Abs. 2 ZPO)"}
+    deadline: {signal: deadline_summary_procedure, days: 10, from: date_received, note: "Nur Warnsignal; Frist laut Rechtsmittelbelehrung pruefen."}
+    default_action: ESCALATE
+    urgency: CRITICAL
+    referrals:
+      primary: [tenancy_lawyer, sozialdienst_gemeinde]
+      conditional:
+        - {when: {signal: imminent_housing_loss}, add: [sozialdienst_gemeinde], note: "Notunterkunft organisieren"}
+        - {when: {signal: children_in_household}, add: [kesb], note: "Nur Information/Unterstuetzung, keine Gefaehrdungsmeldung ohne Anlass"}
+        - {when: {signal: low_income}, add: [unentgeltliche_rechtsauskunft]}
+    reason_for_referral: "Gerichtsverfahren laeuft oder ist abgeschlossen; Obdachlosigkeit droht. Immer menschliche Bearbeitung."
+
+  - issue_id: CH_TENANCY_RENT_INCREASE
+    label: "Mietzinserhoehung"
+    legal_basis: ["Art. 269d OR (amtliches Formular, Begruendung, Mitteilung mind. 10 Tage vor Kuendigungsfrist)", "Art. 270b OR"]
+    documents_required: [formular_mietzinserhoehung, mietvertrag]
+    extract:
+      - {id: date_received, from: formular_mietzinserhoehung, priority: CRITICAL}
+      - {id: effective_date, from: formular_mietzinserhoehung, priority: HIGH}
+      - {id: old_rent, from: mietvertrag, priority: HIGH}
+      - {id: new_rent, from: formular_mietzinserhoehung, priority: HIGH}
+      - {id: official_form_used, from: formular_mietzinserhoehung, priority: CRITICAL}
+      - {id: reason_stated, from: formular_mietzinserhoehung, priority: HIGH}
+    deadline: {signal: deadline_contest_rent_increase_30d, days: 30, from: date_received, authority: schlichtungsbehoerde_miete}
+    default_action: ESCALATE
+    urgency: HIGH
+    referrals:
+      primary: [mieterverband, schlichtungsbehoerde_miete]
+      conditional:
+        - {when: {signal: rent_unaffordable}, add: [sozialdienst_gemeinde, frauenzentrale_kantonal]}
+    reason_for_referral: "Anfechtung nur innert 30 Tagen; Missbraeuchlichkeit (Referenzzins, Kosten) braucht Berechnung durch Fachperson."
+
+  - issue_id: CH_TENANCY_DEPOSIT
+    label: "Mietkaution wird nicht zurueckbezahlt"
+    legal_basis: ["Art. 257e OR"]
+    documents_required: [mietvertrag, kautionsnachweis]
+    documents_optional: [abnahmeprotokoll, korrespondenz_vermieter]
+    extract:
+      - {id: deposit_amount, from: kautionsnachweis, priority: HIGH}
+      - {id: deposit_bank_account_in_tenant_name, from: kautionsnachweis, priority: HIGH}
+      - {id: lease_end_date, from: mietvertrag, priority: CRITICAL, why: "Ohne Rechtsverfahren/Betreibung des Vermieters innert 1 Jahr kann Rueckzahlung direkt bei der Bank verlangt werden (Art. 257e Abs. 3 OR)"}
+      - {id: landlord_claims_damage, from: korrespondenz_vermieter, priority: HIGH}
+      - {id: handover_protocol_signed, from: abnahmeprotokoll, priority: NORMAL}
+    deadline: null
+    default_action: PROCEED
+    urgency: LOW
+    referrals:
+      primary: [mieterverband]
+      conditional:
+        - {when: {signal: landlord_claims_damage}, add: [schlichtungsbehoerde_miete], action: ESCALATE, urgency: NORMAL}
+        - {when: {signal: debt}, add: [schuldenberatung]}
+    reason_for_referral: "Meist Information ausreichend; bei Streit ueber Schaeden Schlichtungsbehoerde."
+
+# ---------------------------------------------------------------------------
+# 4. SICHERHEITS-ROUTING (Kategorien aus safety_keywords.yaml)
+#    Gilt fuer JEDEN Falltyp und ueberschreibt default_action, wenn strenger.
+# ---------------------------------------------------------------------------
+safety_routing:
+  - category: ACUTE_SELF_HARM
+    action: IMMEDIATE_SAFETY_RESPONSE
+    notify_caseworker: immediate
+    show_to_user: [ambulance_144, dargebotene_hand_143, pro_juventute_147]
+    referrals: []
+    follow_up_referrals: [selbsthilfe]          # erst nach Stabilisierung, durch Sachbearbeitung
+    briefing_flag: "AKUTE SELBSTGEFAEHRDUNG GEMELDET - Kontaktaufnahme vor jeder Rechtsfrage"
+  - category: ACUTE_DANGER_VIOLENCE
+    action: IMMEDIATE_SAFETY_RESPONSE
+    notify_caseworker: immediate
+    show_to_user: [police_117, opferhilfe_142]
+    referrals: [opferhilfe_kantonal]
+    briefing_flag: "AKUTE GEFAHR / GEWALT GEMELDET"
+  - category: DOMESTIC_VIOLENCE
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142, police_117]
+    referrals: [opferhilfe_kantonal, frauenzentrale_kantonal]
+    conditional:
+      - {when: {signal: migration_status}, add: [brava, asylex]}
+    briefing_flag: "Haeusliche Gewalt - Mietsache ggf. zweitrangig; Schutzmassnahmen (Art. 28b ZGB) pruefen"
+  - category: SEXUAL_VIOLENCE_HARASSMENT
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142]
+    referrals: [opferhilfe_kantonal, frauenzentrale_kantonal]
+    conditional:
+      - {when: {signal: migration_status}, add: [brava]}
+    briefing_flag: "Sexuelle Gewalt / Belaestigung gemeldet"
+  - category: CHILD_ENDANGERMENT
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [pro_juventute_147, police_117]
+    referrals: [kesb, opferhilfe_kantonal]
+    briefing_flag: "Moegliche Kindesgefaehrdung - Abklaerung Gefaehrdungsmeldung durch Fachperson"
+  - category: EXPLOITATION_TRAFFICKING
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [opferhilfe_142, police_117]
+    referrals: [opferhilfe_kantonal, asylex]
+    briefing_flag: "Hinweise auf Ausbeutung / Menschenhandel"
+  - category: MENTAL_HEALTH_CRISIS
+    action: ESCALATE
+    notify_caseworker: immediate
+    show_to_user: [dargebotene_hand_143]
+    referrals: []
+    follow_up_referrals: [selbsthilfe]
+    briefing_flag: "Psychische Krise - Gespraech vor Fristentscheid; Fristen ggf. stellvertretend wahren"
+  - category: MENTAL_HEALTH_VULNERABILITY
+    action: FLAG
+    notify_caseworker: with_briefing
+    referrals: []
+    follow_up_referrals: [selbsthilfe, pro_infirmis]
+    briefing_flag: "Vulnerabilitaet (psychische Gesundheit) - einfache Sprache, mehr Begleitung"
+  - category: EXISTENTIAL_EMERGENCY
+    action: ESCALATE
+    notify_caseworker: immediate
+    referrals: [sozialdienst_gemeinde, caritas]
+    conditional:
+      - {when: {signal: migration_status}, add: [migrationsberatung]}
+      - {when: {signal: debt}, add: [schuldenberatung]}
+    briefing_flag: "Existenzielle Notlage (Wohnung/Nahrung/Energie)"
+
+# ---------------------------------------------------------------------------
+# 5. QUERSCHNITTS-SIGNALE (unabhaengig vom Falltyp, ergaenzen die Verweisung)
+# ---------------------------------------------------------------------------
+cross_cutting:
+  - {signal: migration_status, description: "Aufenthaltsstatus betroffen (N, F, B abhaengig von Sozialhilfe)", add: [migrationsberatung, asylex], urgency: HIGH,
+     note: "Sozialhilfebezug kann aufenthaltsrechtliche Folgen haben - nie ohne Fachperson zu Sozialhilfe raten."}
+  - {signal: disability, add: [pro_infirmis], urgency: NORMAL}
+  - {signal: debt, add: [schuldenberatung], urgency: NORMAL}
+  - {signal: low_income, add: [frauenzentrale_kantonal, unentgeltliche_rechtsauskunft], urgency: NORMAL}
+  - {signal: conflict_with_public_body, add: [ombudsstelle], urgency: NORMAL}
+  - {signal: language_barrier, add: [migrationsberatung], urgency: NORMAL, note: "Mehrsprachige Beratung, z.B. Solidaritaetshaus SG"}
+  - {signal: systemic_human_rights_issue, add: [amnesty_lawyers_group], urgency: LOW, note: "Nur Sachbearbeitung entscheidet."}
+
+# ---------------------------------------------------------------------------
+# 6. BAUSTEIN FUER DIE ZUSAMMENFASSUNG (expert_briefing_v1, Abschnitt
+#    recommended_professionals + decision_and_reasons)
+# ---------------------------------------------------------------------------
+briefing:
+  section_id: recommended_professionals
+  render: |
+    VERWEISUNG
+    Entscheid: {action} | Dringlichkeit: {urgency}
+    Sicherheitshinweise: {safety_flags | "keine"}
+    Frist (nicht verbindlich berechnet): {deadline_signal} - Beginn {deadline_from_value} - zustaendig {deadline_authority}
+    Primaere Stelle(n): {primary_referrals}
+    Zusaetzlich wegen: {conditional_reasons}   # z.B. "Kinder im Haushalt -> Sozialdienst"
+    Begruendung: {reason_for_referral}
+    Fehlende Unterlagen: {missing_documents}
+    Ungeprueft (verified: false): {unverified_referrals}
+  rules:
+    - "Jede Verweisung nennt die ausloesende Regel (rule_id) und das Signal - fuer das Audit-Log."
+    - "Stellen mit verified: false werden im Briefing markiert und nicht direkt an die rechtsuchende Person ausgegeben."
+    - "Sicherheitskategorien stehen im Briefing immer zuoberst, vor der Rechtsfrage."
+    - "Weitergabe von Daten an eine Stelle nur mit Einwilligung der Person (besonders schuetzenswerte Daten, Art. 5 lit. c und Art. 6 Abs. 7 nDSG)."

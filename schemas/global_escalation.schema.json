@@ -1,0 +1,201 @@
+{
+  "$defs": {
+    "Condition": {
+      "additionalProperties": false,
+      "description": "One node of a condition tree: either a composite (all/any/not) or a leaf (ref/op).",
+      "properties": {
+        "all": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Condition"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All"
+        },
+        "any": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Condition"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any"
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "op": {
+          "anyOf": [
+            {
+              "enum": [
+                "equals",
+                "not_equals",
+                "in",
+                "exists",
+                "is_missing",
+                "is_known",
+                "greater_than",
+                "less_than",
+                "is_unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "Condition",
+      "type": "object"
+    },
+    "EscalationRule": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "when": {
+          "$ref": "#/$defs/Condition"
+        },
+        "action": {
+          "const": "ESCALATE",
+          "default": "ESCALATE",
+          "title": "Action",
+          "type": "string"
+        },
+        "urgency": {
+          "default": "MEDIUM",
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
+          "title": "Urgency",
+          "type": "string"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "reason_de": {
+          "title": "Reason De",
+          "type": "string"
+        },
+        "professionals": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Professionals",
+          "type": "array"
+        },
+        "routes_to_issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Routes To Issue"
+        },
+        "suppress_standard_statements": {
+          "default": false,
+          "title": "Suppress Standard Statements",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "when",
+        "reason_code",
+        "reason_de"
+      ],
+      "title": "EscalationRule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/EscalationRule"
+      },
+      "title": "Rules",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "GlobalEscalationFile",
+  "type": "object"
+}

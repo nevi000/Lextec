@@ -1,0 +1,395 @@
+# =====================================================================
+# Mietrecht-Triage – Keyword-Konfiguration
+# ---------------------------------------------------------------------
+# Stufen (Ampel):  gruen < orange < rot < notfall
+#   - Ampel startet bei gruen und kann nur hochspringen, nie zurück.
+#   - notfall bricht den Durchlauf ab (Notfallnummern anzeigen).
+# Schreibweise der Begriffe:
+#   - "räum*"      -> Wortanfang + beliebige Endung (Räumung, räumen …)
+#   - "keine miete" -> ganze Phrase
+#   - Gross-/Kleinschreibung egal
+# trigger:        Einzel-Keywords, geprüft in jeder neuen Nachricht
+# kombi_trigger:  alle Gruppen in "wenn_alle" müssen irgendwo im
+#                 Gesprächsverlauf vorkommen; "ausser" hebt den Treffer auf
+# issues:         nur zur Zuordnung des Rechtsproblems, keine Eskalation
+# =====================================================================
+
+frist_schwelle_tage: 7
+
+formular_marker:
+  - rechtsbelehrung
+  - auszug aus dem obligationenrecht
+  - bestimmungen des obligationenrechts
+  - wichtige hinweise für den mieter
+
+trigger:
+  - id: P1
+    stufe: notfall
+    beschreibung: Gefahr für Leib und Leben / Gewalt
+    begriffe:
+      - suizid*
+      - umbringen
+      - nicht mehr leben
+      - mir etwas antun
+      - schlägt mich
+      - bedroht mich
+      - angst um mein leben
+      - häusliche gewalt
+
+  - id: V1
+    stufe: rot
+    beschreibung: Gerichtliches/amtliches Schreiben oder Betreibung
+    begriffe:
+      - gerichtsurkunde
+      - vorladung
+      - zitation
+      - urteil
+      - verfügung
+      - bezirksgericht
+      - mietgericht
+      - einzelgericht
+      - klarer fall
+      - klaren fällen
+      - 257 zpo
+      - klagebewilligung
+      - schlichtungsverhandlung
+      - zahlungsbefehl
+      - betreibung*
+      - betrieben
+      - rechtsvorschlag
+      - pfändung*
+
+  - id: V2
+    stufe: rot
+    beschreibung: Verfahren läuft bereits / Anwalt involviert
+    begriffe:
+      - laufendes verfahren
+      - verfahren läuft
+      - mein anwalt
+      - meine anwältin
+      - anwalt des vermieters
+
+  - id: V3
+    stufe: rot
+    beschreibung: Räumung / Ausweisung / Eigenmacht des Vermieters
+    begriffe:
+      - räumung*
+      - ausweisung*
+      - ausgewiesen
+      - exmission
+      - vollstreckung*
+      - stadtammann*
+      - gemeindeammann*
+      - polizei kommt
+      - muss raus bis
+      - muess use
+      - schloss ausgewechselt
+      - strom abgestellt
+      - wasser abgestellt
+      - sachen rausgestellt
+
+  - id: F2
+    stufe: rot
+    beschreibung: Frist (vermutlich) verpasst
+    begriffe:
+      - frist verpasst
+      - frist abgelaufen
+      - frist verstrichen
+      - vergessen zu reagieren
+
+  - id: K1
+    stufe: rot
+    beschreibung: Mischfall Familienrecht (Trennung, Familienwohnung)
+    begriffe:
+      - trennung
+      - getrennt
+      - scheidung
+      - eheschutz*
+      - mein mann ist ausgezogen
+      - meine frau ist ausgezogen
+      - partner ist ausgezogen
+      - familienwohnung
+
+  - id: K2
+    stufe: rot
+    beschreibung: Mischfall Migrationsrecht
+    begriffe:
+      - aufenthaltsbewilligung
+      - ausweis b
+      - ausweis f
+      - ausweis l
+      - ausweis n
+      - familiennachzug
+      - migrationsamt
+      - asyl*
+      - vorläufig aufgenommen
+
+  - id: K4
+    stufe: rot
+    beschreibung: Ausserhalb Scope (kein Wohnraum / Sonderverhältnis)
+    begriffe:
+      - geschäftsräume
+      - geschäftsmiete
+      - geschäftslokal
+      - ladenlokal
+      - büro
+      - restaurant
+      - pacht*
+      - dienstwohnung
+      - hauswartwohnung
+      - ausschluss aus der genossenschaft
+
+  - id: U1
+    stufe: rot
+    beschreibung: Person wünscht einen Menschen
+    begriffe:
+      - anwalt
+      - anwältin
+      - jurist*
+      - mit jemandem sprechen
+      - mit einem menschen
+      - echte person
+
+  - id: U2
+    stufe: rot
+    beschreibung: Person will eine Eingabe einreichen
+    begriffe:
+      - klage einreichen
+      - ans gericht schreiben
+      - an das gericht schreiben
+      - für mich anfechten
+
+  - id: S1
+    stufe: orange
+    beschreibung: Drohender Wohnungsverlust ohne Anschlusslösung
+    begriffe:
+      - obdachlos*
+      - auf der strasse
+      - weiss nicht wohin
+      - weiss nöd wohi
+      - notunterkunft
+      - bei freunden schlafen
+      - keine wohnung
+      - keine neue wohnung
+      - kei wohnig
+
+  - id: S2
+    stufe: orange
+    beschreibung: Zahlungsunfähigkeit
+    begriffe:
+      - kein geld
+      - kann nicht zahlen
+      - können nicht zahlen
+      - kann nicht bezahlen
+      - nöd zahle
+      - schulden
+      - job verloren
+      - stelle verloren
+      - arbeitslos*
+      - rav
+      - lohn nicht erhalten
+
+  - id: K3
+    stufe: orange
+    beschreibung: Sozialhilfe / Sozialversicherung
+    begriffe:
+      - sozialamt
+      - sozialhilfe
+      - sozialdienst*
+      - iv
+      - ergänzungsleistung*
+
+  - id: P2
+    stufe: orange
+    beschreibung: Kinder / Schwangerschaft
+    begriffe:
+      - kind*
+      - chind*
+      - baby
+      - schwanger*
+      - sohn
+      - tochter
+
+  - id: P3
+    stufe: orange
+    beschreibung: Gesundheit / Alter / Behinderung
+    begriffe:
+      - krank*
+      - spital
+      - rollstuhl
+      - behindert*
+      - pflegebedürftig
+      - asthma
+      - rentner*
+      - über 80
+
+kombi_trigger:   # Treffer nur, wenn aus JEDER Gruppe mindestens ein Begriff vorkommt
+  - id: KOMBI_5_ZAHLUNGSSTOPP
+    stufe: rot
+    beschreibung: Mangel + Miete zurückbehalten ohne Hinterlegung (Art. 259g OR) → Zahlungsverzug, Kündigung nach Art. 257d droht
+    wenn_alle:
+      gruppe_1:
+        - schimmel*
+        - mangel
+        - mängel
+        - heizung
+        - wasserschaden
+        - feucht*
+      gruppe_2:
+        - zahle nicht
+        - zahle keine
+        - keine miete
+        - nicht mehr bezahlt
+        - zurückbehalten
+        - zurückbehalte
+        - miete gekürzt
+        - kürze die miete
+    ausser:
+      - hinterlegt
+      - hinterlege*
+      - hinterlegung
+
+  - id: KOMBI_1_RACHE
+    stufe: rot
+    beschreibung: Kündigung nach Geltendmachung von Ansprüchen → Verdacht Rachekündigung (Art. 271a Abs. 1 lit. a OR)
+    wenn_alle:
+      gruppe_1:
+        - kündig*
+        - gekündigt
+      gruppe_2:
+        - mängel gemeldet
+        - mangel gemeldet
+        - beschwert
+        - beschwerde
+        - mieterverband
+        - senkung
+        - herabsetzung
+        - schlichtung*
+    ausser: []   # keine Ausnahme
+
+  - id: KOMBI_3_VERZUG
+    stufe: rot
+    beschreibung: Kündigung + Zahlungsrückstand → Erstreckung ausgeschlossen (Art. 272a OR), Räumung droht
+    wenn_alle:
+      gruppe_1:
+        - kündig*
+        - gekündigt
+      gruppe_2:
+        - zahlungsrückstand*
+        - zahlungsverzug*
+        - mietrückstand*
+        - rückstand*
+        - nicht bezahlt
+    ausser: []   # keine Ausnahme
+
+  - id: KOMBI_HAERTE
+    stufe: rot
+    beschreibung: Kündigung/Erstreckung + besondere Härte → Interessenabwägung (Art. 272 OR) braucht menschliches Urteil
+    wenn_alle:
+      gruppe_1:
+        - kündig*
+        - gekündigt
+        - erstreckung*
+      gruppe_2:
+        - kind*
+        - chind*
+        - krank*
+        - schwanger*
+        - behindert*
+        - rentner*
+    ausser: []   # keine Ausnahme
+
+  - id: KOMBI_DIENSTWOHNUNG
+    stufe: rot
+    beschreibung: Kündigung im Zusammenhang mit Arbeitsverhältnis → Mischfall Arbeitsrecht
+    wenn_alle:
+      gruppe_1:
+        - kündig*
+        - gekündigt
+      gruppe_2:
+        - arbeitgeber*
+        - dienstwohnung
+        - hauswart*
+    ausser: []   # keine Ausnahme
+
+  - id: KOMBI_5_GESUNDHEIT
+    stufe: orange
+    beschreibung: Schimmel + gesundheitlich verletzliche Person
+    wenn_alle:
+      gruppe_1:
+        - schimmel*
+      gruppe_2:
+        - kind*
+        - baby
+        - asthma
+        - schwanger*
+    ausser: []   # keine Ausnahme
+
+issues:
+  1_kuendigung_vermieter:
+    - gekündigt
+    - kündigung
+    - kündigungsformular
+    - kündigungstermin
+    - ausziehen bis
+
+  2_zahlungsaufforderung:
+    - mahnung
+    - zahlungsaufforderung
+    - zahlungsfrist
+    - sonst kündig*
+    - kündigungsandrohung
+    - mietrückstand*
+    - ausstehende miete
+
+  3_kuendigung_zahlungsverzug:
+    - zahlungsrückstand*
+    - zahlungsverzug*
+    - ausserordentliche kündigung
+    - 257d
+
+  4_erstreckung:
+    - erstreckung*
+    - mehr zeit
+    - länger bleiben
+    - keine neue wohnung
+    - keine wohnung
+    - wohnungssuche
+
+  5_maengel:
+    - mangel
+    - mängel
+    - schimmel*
+    - feucht*
+    - heizung
+    - wasserschaden
+    - defekt
+    - lärm
+    - baustelle
+    - mietzinsreduktion
+    - herabsetzung
+    - hinterleg*
+
+  6_ausweisung_raeumung:
+    - räumung*
+    - ausweisung*
+    - gerichtsurkunde
+    - klarer fall
+    - klaren fällen
+
+  7_mietzinserhoehung:
+    - mietzinserhöhung
+    - erhöhung
+    - neuer mietzins
+    - referenzzins*
+    - teuerung
+    - renovation
+    - wertvermehrend*
+
+  8_mietkaution:
+    - kaution*
+    - depot
+    - mietkautionskonto
+    - kautionsversicherung
+    - wohnungsabgabe
+    - abnahmeprotokoll

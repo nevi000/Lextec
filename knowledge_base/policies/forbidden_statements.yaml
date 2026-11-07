@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=../../schemas/statement_policy.schema.json
+# Verbotene Aussagen (Law-Dossier Issue 1, Abschnitt 6, «Verbotene Aussagen»).
+# Diese Muster werden ZWEIFACH durchgesetzt:
+#   1. Beim Laden der Knowledge Base: jeder Text der KB wird geprüft -> Treffer = Validierungsfehler.
+#   2. Zur Laufzeit: jeder von der KI erzeugte Freitext (Zusammenfassung, umformulierte Fragen) wird
+#      geprüft; bei Treffer wird er durch einen sicheren Fallback ersetzt.
+# Reguläre Ausdrücke, ohne Beachtung der Gross-/Kleinschreibung. Neue Muster hier ergänzen.
+# Wörtliche Zitate von Gesetzes- und BGE-Wortlaut (legal_sources) sind ausgenommen: Das Dossier erlaubt
+# ausdrücklich, Gesetzestexte wörtlich zu zitieren. Die Policy gilt für Aussagen des SYSTEMS.
+schema_version: 1
+version: "1.0-dossier-2026-11-07"
+content_status: DRAFT
+safe_fallback_de: "Dazu kann das System keine quellengestützte Aussage machen. Bitte eine Fachperson beiziehen."
+
+forbidden:
+  - id: FB_DEADLINE_END_DATE
+    description_de: "Jedes berechnete Fristende («Sie haben bis am …»)."
+    reason_de: "Das System nennt nie ein Fristende; das Datum bestimmt die Fachperson."
+    patterns:
+      - '\bhaben\s+bis\s+(spätestens\s+)?(am|zum)?\s*\d{1,2}\.'
+      - '\bbis\s+(spätestens\s+)?(am|zum)\s+\d{1,2}\.\s?(\d{1,2}\.|(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember))'
+      - '\bFrist(ende)?\b[^.\n]{0,25}\b(läuft|endet|abläuft|ablaufen)\b[^.\n]{0,25}\b(am|bis|zum)\s+\d{1,2}\.'
+      - '\bFristende\s*[:=]?\s*\d{1,2}\.'
+      - '\bspätestens\s+(am\s+)?\d{1,2}\.\s?(\d{1,2}\.|(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember))\s?\d{0,4}\s+(anfechten|einreichen|Begehren|Schlichtungsbehörde)'
+    source_ids: [CH_OR_273_1]
+
+  - id: FB_VALIDITY_CONCLUSION
+    description_de: "«Die Kündigung ist gültig / ungültig / nichtig.»"
+    reason_de: "Die Gültigkeit beurteilt ausschliesslich eine Fachperson."
+    patterns:
+      - '\bKündigung\b[^.?!\n]{0,40}\bist\s+(\w+\s+){0,2}(gültig|ungültig|nichtig|unwirksam|rechtmässig|rechtswidrig|missbräuchlich)\b'
+      - '\bKündigung\b[^.?!\n]{0,25}\b(gilt\s+als|wird\s+als)\s+(nichtig|ungültig|gültig)\b'
+      - '\b(ist|sind)\s+(daher|somit|deshalb|damit)\s+(nichtig|ungültig)\b'
+    source_ids: [CH_OR_266O]
+
+  - id: FB_NO_REASON_INVALID
+    description_de: "«Ohne Begründung ist die Kündigung ungültig.» (falsch, BGE 143 III 344 E. 5.3.1)"
+    patterns:
+      - '\bohne\s+Begründung\b[^.?!\n]{0,50}\b(ungültig|nichtig|unwirksam)\b'
+      - '\bfehlende\s+Begründung\b[^.?!\n]{0,40}\b(macht|führt)\b[^.?!\n]{0,30}\b(ungültig|nichtig)\b'
+    source_ids: [BGE_143_III_344]
+
+  - id: FB_HARDSHIP_CONTEST
+    description_de: "«Weil der Auszug für Sie hart ist, können Sie die Kündigung anfechten.» (falsch, BGE 142 III 91 E. 3.2.1)"
+    patterns:
+      - '\b(weil|da)\b[^.?!\n]{0,50}\b(Härte|hart|schwer)\b[^.?!\n]{0,70}\b(anfechten|anfechtbar|ungültig)\b'
+    source_ids: [BGE_142_III_91]
+
+  - id: FB_HOLIDAY_DELAYS_DEADLINE
+    description_de: "«Sie waren in den Ferien, deshalb läuft die Frist später.» (falsch, BGE 143 III 15 E. 4.1)"
+    patterns:
+      - '\b(Ferien|Urlaub|Abwesenheit)\b[^.?!\n]{0,70}\bFrist\s+(läuft|beginnt|startet)\s+(erst\s+)?(später|danach|nach)\b'
+      - '\b(Ferien|Urlaub|Abwesenheit)\b[^.?!\n]{0,60}\b(verlängert|verschiebt|hemmt)\b[^.?!\n]{0,30}\bFrist\b'
+      - '\b(Ferien|Urlaub|Abwesenheit)\b[^.?!\n]{0,70}\b(läuft|beginnt|startet)\s+(die\s+)?Frist\s+(erst\s+)?(später|danach|nach)\b'
+      - '\b(Ferien|Urlaub|Abwesenheit)\b[^.?!\n]{0,70}\bFrist\b[^.?!\n]{0,20}\b(später|verlängert|verschoben)\b'
+    source_ids: [BGE_143_III_15]
+
+  - id: FB_SUCCESS_PROMISE
+    description_de: "«Die Anfechtung hat gute Chancen.» / «Sie bekommen sicher eine Erstreckung.»"
+    patterns:
+      - '\bgute[nr]?\s+(Chancen|Erfolgsaussichten|Aussichten)\b'
+      - '\b(sichere?|garantierte?)\s+(Erstreckung|Erfolg)\b'
+      - '\b(bekommen|erhalten|erreichen)\s+(sicher|garantiert|bestimmt)\b'
+      - '\bErfolgsaussichten?\b[^.?!\n]{0,20}\b(sind|liegen|betragen)\b'
+    source_ids: []
+
+  - id: FB_PRETEXT_ASSERTION
+    description_de: "«Der Eigenbedarf ist vorgeschoben.» (unbelegte Behauptung eines vorgeschobenen Grundes)"
+    patterns:
+      - '\b(Eigenbedarf|Kündigungsgrund|Grund|Sanierung|Abbruch)\b[^.?!\n]{0,30}\bist\s+(offensichtlich\s+|klar\s+|wohl\s+)?vorgeschoben\b'
+      - '\bvorgeschobene[rn]?\s+(Eigenbedarf|Grund|Sanierung)\s+liegt\s+vor\b'
+    source_ids: [BGE_145_III_143]
+
+  - id: FB_MOVE_OUT_ADVICE
+    description_de: "Aussage, ob die Klientin ausziehen muss oder nicht (Rechtsberatung im Einzelfall)."
+    patterns:
+      - '\b(Sie|die\s+Klientin|die\s+Mieterin)\s+(muss|müssen|braucht|brauchen)\s+(nicht\s+|nicht\s+zwingend\s+)?(auszuziehen|ausziehen|zu\s+räumen|die\s+Wohnung\s+(zu\s+)?(verlassen|räumen))\b'
+    source_ids: []

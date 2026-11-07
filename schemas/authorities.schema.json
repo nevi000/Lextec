@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "AuthorityDef": {
+      "additionalProperties": false,
+      "description": "A body/office the social worker can refer to. Contact data and costs are NEVER presented\nas current unless ``contact_verified`` is true (with ``verified_at``).",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name_de": {
+          "title": "Name De",
+          "type": "string"
+        },
+        "purpose_de": {
+          "title": "Purpose De",
+          "type": "string"
+        },
+        "cost_de": {
+          "default": "",
+          "title": "Cost De",
+          "type": "string"
+        },
+        "scope_de": {
+          "default": "",
+          "title": "Scope De",
+          "type": "string"
+        },
+        "source_note_de": {
+          "default": "",
+          "title": "Source Note De",
+          "type": "string"
+        },
+        "url_hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url Hint"
+        },
+        "contact_verified": {
+          "default": false,
+          "title": "Contact Verified",
+          "type": "boolean"
+        },
+        "verified_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified At"
+        }
+      },
+      "required": [
+        "id",
+        "name_de",
+        "purpose_de"
+      ],
+      "title": "AuthorityDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "authorities": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AuthorityDef"
+      },
+      "title": "Authorities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "AuthoritiesFile",
+  "type": "object"
+}

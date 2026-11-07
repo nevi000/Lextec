@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# DEMO / SYNTHETIC / NOT LEGALLY VALIDATED
+# Technical example for the rule engine. Not a statement of Swiss law.
+schema_version: 1
+id: employment_termination
+version: "0.1-demo"
+content_status: DEMO_SYNTHETIC
+jurisdiction: CH
+legal_area: employment
+issue: termination
+title_de: Arbeitskündigung
+description: "Kündigung eines Arbeitsverhältnisses (Demo-Definition)."
+
+classification:
+  description: "Passt, wenn eine Arbeitgeberkündigung geschildert wird."
+  typical_situations:
+    - "Der Arbeitgeber hat gekündigt."
+    - "Kündigung während Krankheit oder Probezeit."
+  related_issues: [unpaid_salary, CH_TENANCY_TERMINATION]
+
+facts:
+  - id: employer_termination_received
+    label_de: Kündigung durch Arbeitgeber erhalten
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Hat die Person eine Kündigung des Arbeitsverhältnisses erhalten?"
+    why_needed_de: "Ohne Kündigung liegt kein Kündigungsfall vor."
+
+  - id: employer_termination_received_date
+    label_de: Datum des Kündigungserhalts
+    data_type: date
+    required_if: { ref: fact.employer_termination_received, op: equals, value: true }
+    priority: high
+    question_de: "An welchem Datum wurde die Kündigung zugestellt bzw. übergeben?"
+    why_needed_de: "Das Zustelldatum ist Ausgangspunkt für jede Fristberechnung durch die Fachperson."
+
+  - id: employer_termination_in_writing
+    label_de: Kündigung schriftlich
+    data_type: boolean
+    required_if: { ref: fact.employer_termination_received, op: equals, value: true }
+    priority: medium
+    question_de: "Wurde die Kündigung schriftlich ausgesprochen?"
+    why_needed_de: "Die Form der Kündigung ist für die fachliche Prüfung relevant."
+
+  - id: employment_start_date
+    label_de: Beginn des Arbeitsverhältnisses
+    data_type: date
+    required: true
+    priority: medium
+    question_de: "Seit wann besteht das Arbeitsverhältnis (Eintrittsdatum)?"
+    why_needed_de: "Die Dauer des Arbeitsverhältnisses beeinflusst die fachliche Beurteilung."
+
+  - id: incapacity_for_work
+    label_de: Arbeitsunfähigkeit
+    data_type: boolean
+    required: true
+    priority: medium
+    question_de: "War oder ist die Person zum Zeitpunkt der Kündigung arbeitsunfähig (z. B. krank oder verunfallt)?"
+    why_needed_de: "Eine Arbeitsunfähigkeit kann für die fachliche Prüfung wesentlich sein."
+
+  - id: deadline_pending
+    label_de: Laufende Frist bekannt
+    data_type: boolean
+    required: true
+    priority: high
+    question_de: "Ist eine Frist bekannt, die in nächster Zeit abläuft (z. B. auf einem Schreiben vermerkt)?"
+    why_needed_de: "Laufende Fristen müssen von einer Fachperson beurteilt werden."
+
+legal_rules:
+  - id: EMP_DEMO_TERMINATION_FORM_CHECK
+    description: "Demo: Kündigung nicht schriftlich -> Hinweis für die Fachperson."
+    when: { ref: fact.employer_termination_in_writing, op: equals, value: false }
+    result_code: TERMINATION_NOT_IN_WRITING
+    result_de: "Die Kündigung wurde laut Angabe nicht schriftlich ausgesprochen. Formfrage durch Fachperson prüfen."
+    legal_source_ids: [CH_OR_335]
+
+escalation_rules:
+  - id: EMP_DEMO_DEADLINE_PENDING
+    description: "Demo: Laufende Frist -> Fachperson."
+    when: { ref: fact.deadline_pending, op: equals, value: true }
+    urgency: HIGH
+    reason_code: DEADLINE_PENDING_EXPERT_REVIEW
+    reason_de: "Es läuft eine Frist. Die Beurteilung muss durch eine Fachperson erfolgen."
+    professionals: [employment_law_counsel]
+
+legal_source_ids: [CH_OR_335]
+default_professionals: [employment_law_counsel]
+briefing_template: expert_briefing_v1

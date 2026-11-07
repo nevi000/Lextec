@@ -1,0 +1,359 @@
+# knowledge_base/safety/liability_flags.yaml
+# Kennzeichnung von Faellen mit moeglicher Staatshaftung oder Menschenrechtsverletzung
+# durch eine Behoerde oder eine Stelle, die oeffentliche Aufgaben erfuellt.
+# Folge: Vorgesetzte informieren, Beweise sichern, unabhaengige Stelle einbeziehen.
+#
+# ZWECK (fuer Governance-Notiz): Schutz der betroffenen Person und rechtmaessiges
+# Verwaltungshandeln. Der Flag dient NICHT der Abwehr von Anspruechen gegen die Behoerde.
+#
+# Grundregel: Ein Flag braucht ZWEI Treffer:
+#   (1) einen Kontext "staatlicher Akteur" (state_context) UND
+#   (2) eine Verletzungskategorie (categories).
+#   Schimmel in einer privaten Mietwohnung = Mietrecht (tenancy_defects), kein Flag.
+#   Schimmel in einer Asylunterkunft oder Sozialwohnung der Gemeinde = Flag.
+#
+# Konventionen wie Arbeitsvorlage. Neue Aktion: FLAG_SUPERVISOR (kumulativ zu ASK/PROCEED/ESCALATE).
+version: "1.0"
+last_reviewed: null
+reviewed_by: null
+
+normalization:
+  lowercase: true
+  replace: {"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "é": "e", "è": "e", "à": "a"}
+  wildcard: "*"
+  negation_lowers_severity: false
+
+# ---------------------------------------------------------------------------
+# 1. KONTEXT: STAATLICHER AKTEUR
+#    Auch private Betreiber und Sicherheitsdienste, soweit sie im Auftrag des
+#    Staates handeln (Haftung i.d.R. beim Gemeinwesen, vgl. Art. 19 VG).
+# ---------------------------------------------------------------------------
+state_context:
+  - id: ASYLUM_ACCOMMODATION
+    level: federal_or_cantonal
+    keywords:
+      de: ["bundesasylzentrum", "baz", "asylunterkunft", "asylheim", "kollektivunterkunft",
+           "durchgangszentrum", "rueckkehrzentrum", "nothilfeunterkunft", "nothilfezentrum",
+           "zentrum fuer asylsuchende", "unterkunft fuer gefluechtete", "containerdorf",
+           "zivilschutzanlage", "bunker", "unterirdische unterkunft"]
+      fr: ["centre federal d'asile", "cfa", "foyer pour requerants", "centre d'hebergement collectif",
+           "abri pc", "centre de retour", "aide d'urgence"]
+      it: ["centro federale d'asilo", "cfa", "centro per richiedenti l'asilo", "alloggio collettivo",
+           "rifugio pc", "centro di ritorno"]
+      en: ["federal asylum centre", "asylum centre", "asylum shelter", "refugee accommodation",
+           "collective accommodation", "civil protection bunker", "return centre"]
+  - id: PUBLIC_HOUSING
+    level: municipal
+    keywords:
+      de: ["sozialwohnung", "gemeindewohnung", "wohnung vom sozialamt", "wohnung der gemeinde",
+           "notwohnung", "notunterkunft", "notschlafstelle", "obdachlosenunterkunft",
+           "vom sozialdienst zugewiesen"]
+      fr: ["logement social", "logement communal", "hebergement d'urgence", "sleep-in"]
+      it: ["alloggio sociale", "alloggio comunale", "alloggio d'emergenza", "dormitorio"]
+      en: ["social housing", "council flat", "municipal housing", "emergency shelter", "homeless shelter"]
+  - id: DETENTION_AND_INSTITUTIONS
+    level: cantonal
+    keywords:
+      de: ["ausschaffungshaft", "administrativhaft", "untersuchungshaft", "gefaengnis", "polizeiposten",
+           "polizeizelle", "fuersorgerische unterbringung", "psychiatrie", "geschlossene abteilung",
+           "heim", "kinderheim", "jugendheim", "pflegeheim", "massnahmenzentrum"]
+      fr: ["detention administrative", "prison", "poste de police", "placement a des fins d'assistance",
+           "foyer pour enfants", "ems"]
+      it: ["detenzione amministrativa", "carcere", "posto di polizia", "ricovero a scopo di assistenza",
+           "istituto", "casa per anziani"]
+      en: ["immigration detention", "prison", "police station", "psychiatric ward", "care home", "children's home"]
+  - id: AUTHORITY_ACTION
+    level: any
+    keywords:
+      de: ["sozialamt", "sozialdienst", "migrationsamt", "sem", "staatssekretariat fuer migration",
+           "kesb", "beistand", "beistaendin", "polizei", "behoerde", "gemeinde", "amt",
+           "betreuungspersonal", "sicherheitsdienst", "securitas", "betreiber der unterkunft"]
+      fr: ["service social", "office des migrations", "sem", "apea", "curateur", "police",
+           "autorite", "commune", "agents de securite"]
+      it: ["servizio sociale", "ufficio della migrazione", "sem", "arp", "curatore", "polizia",
+           "autorita", "comune", "agenti di sicurezza"]
+      en: ["social services", "migration office", "sem", "child protection authority", "guardian",
+           "police", "authority", "municipality", "security staff", "guards"]
+
+# ---------------------------------------------------------------------------
+# 2. VERLETZUNGSKATEGORIEN
+#    severity: CRITICAL -> Vorgesetzte sofort (gleicher Tag) + Safety-Routing
+#              HIGH     -> Vorgesetzte innert 2 Arbeitstagen
+#              WATCH    -> im Briefing, Musterauswertung pro Einrichtung
+# ---------------------------------------------------------------------------
+categories:
+
+  - id: INHUMAN_LIVING_CONDITIONS
+    label: "Menschenunwuerdige Unterbringung"
+    severity: HIGH
+    escalate_to_critical_if: [children_affected, health_risk_acute, winter_no_heating]
+    legal_basis: ["Art. 3 EMRK", "Art. 8 EMRK", "Art. 7 BV (Menschenwuerde)", "Art. 10 Abs. 3 BV", "Art. 12 BV (Hilfe in Notlagen)"]
+    keywords:
+      de: ["unmenschlich*", "menschenunwuerdig*", "wie tiere behandelt", "schimmel", "ungeziefer",
+           "bettwanzen", "kakerlaken", "ratten", "kein warmes wasser", "kein wasser", "keine heizung",
+           "kalt in der nacht", "ueberbelegt", "ueberfuellt", "zu viele leute in einem zimmer",
+           "keine privatsphaere", "keine abschliessbare*", "dusche nicht abschliessbar",
+           "kein tageslicht", "kein fenster", "unterirdisch", "dreckig", "verdreckte toiletten",
+           "kaputte toiletten", "zu wenig essen", "verdorbenes essen", "hunger"]
+      fr: ["inhumain*", "indigne", "moisissure", "punaises de lit", "cafards", "rats", "pas d'eau chaude",
+           "pas de chauffage", "surpeuple", "pas d'intimite", "pas de lumiere du jour", "pas assez a manger"]
+      it: ["disumano*", "indegno", "muffa", "cimici", "scarafaggi", "ratti", "niente acqua calda",
+           "niente riscaldamento", "sovraffollato", "nessuna privacy", "senza luce", "non abbastanza cibo"]
+      en: ["inhumane", "degrading", "treated like animals", "mould", "mold", "bed bugs", "cockroaches",
+           "rats", "no hot water", "no heating", "overcrowded", "no privacy", "no daylight", "not enough food"]
+
+  - id: ABUSE_BY_STAFF_OR_OFFICIALS
+    label: "Gewalt oder Misshandlung durch Personal / Amtspersonen"
+    severity: CRITICAL
+    legal_basis: ["Art. 3 EMRK", "Art. 10 Abs. 3 BV", "Art. 312 StGB (Amtsmissbrauch)", "UN-Antifolterkonvention"]
+    also_triggers_safety: [ACUTE_DANGER_VIOLENCE]
+    keywords:
+      de: ["vom sicherheitsdienst geschlagen", "security hat mich geschlagen", "polizei hat mich geschlagen",
+           "betreuer hat mich geschlagen", "gefesselt", "fixiert", "besinnungsraum", "isolationszelle",
+           "eingesperrt im raum", "pfefferspray", "getreten", "bedroht vom personal", "beleidigt vom personal",
+           "rassistisch beschimpft", "sexuell belaestigt vom personal", "nackt ausgezogen", "leibesvisitation"]
+      fr: ["frappe par les agents", "frappe par la police", "attache", "cellule d'isolement",
+           "spray au poivre", "insulte par le personnel", "fouille a nu"]
+      it: ["picchiato dagli agenti", "picchiato dalla polizia", "legato", "cella di isolamento",
+           "spray al peperoncino", "insultato dal personale", "perquisizione corporale"]
+      en: ["beaten by guards", "beaten by security", "beaten by police", "restrained", "tied up",
+           "isolation room", "pepper spray", "insulted by staff", "strip searched"]
+
+  - id: UNLAWFUL_DEPRIVATION_OF_LIBERTY
+    label: "Moeglicherweise unrechtmaessiger Freiheitsentzug"
+    severity: CRITICAL
+    legal_basis: ["Art. 5 EMRK", "Art. 31 BV", "Art. 10 Abs. 2 BV"]
+    keywords:
+      de: ["darf nicht raus", "eingeschlossen", "ausgangssperre", "tage nicht raus", "ohne entscheid festgehalten",
+           "kein haftentscheid", "ohne richter", "kein anwalt in der haft", "festgehalten ohne grund"]
+      fr: ["enferme", "pas le droit de sortir", "detenu sans decision", "pas d'avocat en detention"]
+      it: ["rinchiuso", "non posso uscire", "detenuto senza decisione", "nessun avvocato in detenzione"]
+      en: ["locked in", "not allowed to leave", "held without a decision", "no lawyer in detention"]
+
+  - id: DENIAL_OF_EMERGENCY_AID_OR_CARE
+    label: "Verweigerung von Nothilfe oder medizinischer Versorgung"
+    severity: CRITICAL
+    legal_basis: ["Art. 12 BV", "Art. 3 EMRK", "Art. 2 EMRK (bei Lebensgefahr)"]
+    keywords:
+      de: ["nothilfe verweigert", "nothilfe gestrichen", "keine nothilfe", "kein arzt", "darf nicht zum arzt",
+           "medikamente weggenommen", "keine medikamente", "krank und niemand hilft", "schwanger ohne betreuung",
+           "notfall ignoriert", "ambulanz nicht gerufen", "auf die strasse gestellt", "aus der unterkunft geworfen"]
+      fr: ["aide d'urgence refusee", "pas de medecin", "medicaments retires", "urgence ignoree", "mis a la rue"]
+      it: ["aiuto d'emergenza rifiutato", "nessun medico", "medicine tolte", "emergenza ignorata", "messo in strada"]
+      en: ["emergency aid refused", "no doctor", "medication taken away", "emergency ignored", "put on the street",
+           "thrown out of the shelter"]
+
+  - id: DEATH_OR_SERIOUS_INJURY
+    label: "Todesfall, Suizid(versuch) oder schwere Verletzung in staatlicher Obhut"
+    severity: CRITICAL
+    legal_basis: ["Art. 2 EMRK (inkl. Untersuchungspflicht)", "Art. 10 Abs. 1 BV"]
+    also_triggers_safety: [ACUTE_SELF_HARM]
+    keywords:
+      de: ["ist gestorben", "tot aufgefunden", "hat sich umgebracht", "suizidversuch", "schwer verletzt",
+           "ins spital gebracht", "bewusstlos"]
+      fr: ["est mort", "retrouve mort", "s'est suicide", "tentative de suicide", "gravement blesse"]
+      it: ["e morto", "trovato morto", "si e suicidato", "tentato suicidio", "gravemente ferito"]
+      en: ["died", "found dead", "killed himself", "killed herself", "suicide attempt", "seriously injured"]
+
+  - id: CHILD_RIGHTS_VIOLATION
+    label: "Verletzung von Kinderrechten in staatlicher Obhut"
+    severity: HIGH
+    escalate_to_critical_if: [unaccompanied_minor, abuse_suspected]
+    legal_basis: ["Art. 11 BV", "Art. 19 BV (Grundschulunterricht)", "UN-Kinderrechtskonvention", "Art. 3, 8 EMRK"]
+    keywords:
+      de: ["kinder gehen nicht zur schule", "keine schule", "unbegleitet*", "uma", "minderjaehrig* bei erwachsenen",
+           "kind mit fremden maennern im zimmer", "kinder ohne spielplatz", "kinder haben angst vor dem personal",
+           "kind von eltern getrennt"]
+      fr: ["enfants pas scolarises", "mineur non accompagne", "mna", "enfant separe de ses parents"]
+      it: ["bambini non vanno a scuola", "minore non accompagnato", "mna", "bambino separato dai genitori"]
+      en: ["children not in school", "unaccompanied minor", "child separated from parents",
+           "child in room with adult strangers"]
+
+  - id: DISCRIMINATION_BY_AUTHORITY
+    label: "Diskriminierung durch Behoerde"
+    severity: HIGH
+    legal_basis: ["Art. 8 Abs. 2 BV", "Art. 14 EMRK", "UN-Rassendiskriminierungskonvention", "Behindertengleichstellungsgesetz"]
+    keywords:
+      de: ["wegen meiner herkunft", "wegen meiner hautfarbe", "wegen meiner religion", "wegen meines kopftuchs",
+           "weil ich behindert bin", "rassistisch", "racial profiling", "nur auslaender werden kontrolliert",
+           "anders behandelt als schweizer"]
+      fr: ["a cause de mon origine", "a cause de ma couleur", "a cause de ma religion", "raciste", "profilage racial"]
+      it: ["per la mia origine", "per il colore della pelle", "per la mia religione", "razzista", "profilazione razziale"]
+      en: ["because of my origin", "because of my skin colour", "because of my religion", "racist", "racial profiling",
+           "because I am disabled"]
+
+  - id: FAMILY_AND_PRIVACY_INTERFERENCE
+    label: "Eingriff in Familie, Privatsphaere, Korrespondenz"
+    severity: WATCH
+    escalate_to_critical_if: [data_shared_with_country_of_origin]
+    legal_basis: ["Art. 8 EMRK", "Art. 13 BV", "Art. 14 BV", "nDSG / kantonales Datenschutzrecht"]
+    keywords:
+      de: ["familie getrennt untergebracht", "von meinem mann getrennt", "von meiner frau getrennt",
+           "briefe geoeffnet", "post geoeffnet", "handy abgenommen", "handy durchsucht", "zimmer durchsucht ohne grund",
+           "daten an mein heimatland", "botschaft informiert", "heimatbehoerden kontaktiert"]
+      fr: ["famille separee", "courrier ouvert", "telephone confisque", "donnees transmises au pays d'origine"]
+      it: ["famiglia separata", "posta aperta", "telefono sequestrato", "dati trasmessi al paese d'origine"]
+      en: ["family separated", "mail opened", "phone confiscated", "phone searched", "data sent to my home country",
+           "embassy was informed"]
+
+  - id: PROCEDURAL_DENIAL
+    label: "Verletzung von Verfahrensgarantien"
+    severity: WATCH
+    escalate_to_high_if: [deadline_running, deportation_risk]
+    legal_basis: ["Art. 29 BV (rechtliches Gehoer, Rechtsverzoegerung)", "Art. 29a BV", "Art. 13 EMRK", "Art. 6 EMRK"]
+    keywords:
+      de: ["nie angehoert", "kein rechtliches gehoer", "keine akteneinsicht", "akten verweigert",
+           "keine rechtsmittelbelehrung", "kein dolmetscher", "nichts verstanden beim interview",
+           "entscheid nicht erklaert", "seit monaten keine antwort", "behoerde reagiert nicht",
+           "musste unterschreiben ohne zu verstehen"]
+      fr: ["jamais entendu", "pas d'acces au dossier", "pas d'interprete", "aucune reponse depuis des mois",
+           "signe sans comprendre"]
+      it: ["mai ascoltato", "nessun accesso agli atti", "nessun interprete", "nessuna risposta da mesi",
+           "firmato senza capire"]
+      en: ["never heard", "no access to my file", "no interpreter", "no answer for months", "signed without understanding"]
+
+  - id: AUTHORITY_INACTION
+    label: "Untaetigkeit trotz Meldung (Haftung durch Unterlassen)"
+    severity: HIGH
+    legal_basis: ["Art. 29 Abs. 1 BV", "Schutzpflichten aus Art. 2, 3, 8 EMRK", "Staatshaftung (VG / kantonale Haftungsgesetze)"]
+    keywords:
+      de: ["mehrmals gemeldet", "schon oft gesagt", "niemand reagiert", "meldung ignoriert",
+           "gefaehrdungsmeldung ohne reaktion", "polizei kam nicht", "kesb hat nichts gemacht",
+           "beschwerde ohne antwort"]
+      fr: ["signale plusieurs fois", "personne ne reagit", "plainte sans reponse", "la police n'est pas venue"]
+      it: ["segnalato piu volte", "nessuno reagisce", "reclamo senza risposta", "la polizia non e venuta"]
+      en: ["reported several times", "nobody reacts", "complaint ignored", "police didn't come"]
+
+  - id: FORCED_LABOUR
+    label: "Zwangs- oder unbezahlte Arbeit im staatlichen Rahmen"
+    severity: HIGH
+    legal_basis: ["Art. 4 EMRK"]
+    keywords:
+      de: ["muss gratis arbeiten", "sonst kein geld", "arbeiten fuer die unterkunft ohne lohn", "zwangsarbeit"]
+      fr: ["obliger de travailler gratuitement", "travail force"]
+      it: ["costretto a lavorare gratis", "lavoro forzato"]
+      en: ["forced to work for free", "forced labour"]
+
+exclusions:
+  de: ["pc-spiel", "hoehere gewalt", "bunkerrohr"]   # Fehlalarm-Beispiele, vom Team erweitern
+  fr: ["force majeure"]
+  it: ["forza maggiore"]
+  en: ["force majeure"]
+
+# ---------------------------------------------------------------------------
+# 3. FOLGEN EINES FLAGS (Workflow)
+# ---------------------------------------------------------------------------
+actions:
+  CRITICAL:
+    flag: HR_LIABILITY_CRITICAL
+    notify: [caseworker, supervisor]
+    notify_within: "gleicher Arbeitstag"
+    run_safety_routing: true
+    four_eyes: true                      # Entscheid ueber Weiterleitung durch 2 Personen
+    referrals_independent: [opferhilfe_kantonal, asylex, tenancy_lawyer]
+  HIGH:
+    flag: HR_LIABILITY_HIGH
+    notify: [caseworker, supervisor]
+    notify_within: "2 Arbeitstage"
+    four_eyes: true
+    referrals_independent: [asylex, amnesty_lawyers_group, ombudsstelle]
+  WATCH:
+    flag: HR_LIABILITY_WATCH
+    notify: [caseworker]
+    notify_within: "mit Briefing"
+    four_eyes: false
+
+# Interessenkonflikt: Ist die Behoerde, gegen die sich der Vorwurf richtet, dieselbe
+# Stelle, die das Tool betreibt oder den Fall bearbeitet, darf die Weiterleitung nicht
+# NUR intern erfolgen.
+conflict_of_interest:
+  when: {signal: accused_body_is_case_handler}
+  rules:
+    - "Fall wird zusaetzlich an eine unabhaengige Stelle verwiesen (AsyLex, Anwaeltin, Ombudsstelle)."
+    - "Betroffene Person wird schriftlich ueber unabhaengige Beratung informiert."
+    - "Vorgesetzte duerfen den Flag nicht ohne dokumentierte Begruendung entfernen (Audit-Log)."
+    - "Keine Rueckmeldung an die beschuldigte Einrichtung ohne Einwilligung der Person (Schutz vor Repressalien)."
+
+# Musterauswertung: Mehrere Faelle zur gleichen Einrichtung = systemisches Problem.
+pattern_detection:
+  group_by: facility_id                  # pseudonymisiert; Einrichtung, nicht Person
+  threshold: {cases: 3, within_days: 90}
+  on_threshold:
+    flag: HR_SYSTEMIC
+    notify: [supervisor, management]
+    referrals_independent: [nkvf, amnesty_lawyers_group]
+    note: "NKVF prueft Bundesasylzentren und Orte des Freiheitsentzugs."
+
+# ---------------------------------------------------------------------------
+# 4. BEWEISSICHERUNG (Checkliste im Briefing, nicht automatisch erhoben)
+# ---------------------------------------------------------------------------
+evidence_checklist:
+  - "Datum, Uhrzeit, Ort (Einrichtung, Zimmer) jedes Vorfalls"
+  - "Fotos / Videos der Zustaende mit Datum (nur mit Einwilligung, keine Dritten erkennbar)"
+  - "Namen oder Funktion beteiligter Personen, Zeuginnen und Zeugen"
+  - "Arztberichte, Spitaleintritte, Medikamentenlisten"
+  - "Bisherige Meldungen/Beschwerden und Antworten der Behoerde (Unterlassen belegen)"
+  - "Entscheide mit Zustelldatum (fuer Rechtsmittel- und Verjaehrungsfristen)"
+
+# ---------------------------------------------------------------------------
+# 5. FRISTEN-WARNSIGNALE (nie verbindlich berechnen; Law-Team prueft)
+# ---------------------------------------------------------------------------
+deadline_signals:
+  - id: deadline_criminal_complaint_3m
+    rule: "Antragsdelikte (z.B. einfache Koerperverletzung, Tätlichkeit): Strafantrag innert 3 Monaten ab Kenntnis des Taeters (Art. 31 StGB)"
+  - id: deadline_appeal_decision
+    rule: "Rechtsmittelfrist laut Rechtsmittelbelehrung des Entscheids; im Asylverfahren teils nur 5-7 Arbeitstage (Art. 108 AsylG)"
+  - id: deadline_state_liability
+    rule: "Staatshaftungsbegehren: Bund nach VG, Kantone/Gemeinden nach kantonalem Haftungsgesetz; Verjaehrungs- bzw. Verwirkungsfristen unterschiedlich - Law-Team pruefen"
+  - id: deadline_ecthr_4m
+    rule: "Beschwerde an den EGMR innert 4 Monaten nach dem letzten innerstaatlichen Entscheid (Art. 35 Abs. 1 EMRK); vorher Instanzenzug erschoepfen"
+  - id: interim_measures_rule_39
+    rule: "Drohende Wegweisung bei Gefahr fuer Leib und Leben: vorlaeufige Massnahme beim EGMR (Rule 39) moeglich - sofort an spezialisierte Stelle"
+
+# ---------------------------------------------------------------------------
+# 6. ZUSAETZLICHE STELLEN (in referral_rules.yaml uebernehmen)
+# ---------------------------------------------------------------------------
+additional_professionals:
+  - id: nkvf
+    label: "Nationale Kommission zur Verhuetung von Folter (NKVF)"
+    type: authority
+    region: [CH]
+    specializations: [detention_monitoring, asylum_centre_monitoring]
+    note: "Besucht Orte des Freiheitsentzugs und Bundesasylzentren; keine Einzelfallvertretung."
+    verified: false
+  - id: smri
+    label: "Schweizerische Menschenrechtsinstitution (SMRI)"
+    type: authority
+    region: [CH]
+    specializations: [human_rights_monitoring]
+    note: "Keine individuelle Beschwerdeinstanz; fuer systemische Muster."
+    verified: false
+  - id: aufsichtsbehoerde
+    label: "Aufsichtsbehoerde der betroffenen Einrichtung (Aufsichtsanzeige)"
+    type: authority
+    region: [CH]
+    note: "Aufsichtsanzeige ist kein Rechtsmittel, aber fristlos moeglich (vgl. Art. 71 VwVG)."
+    verified: false
+
+# ---------------------------------------------------------------------------
+# 7. BAUSTEIN FUER DIE ZUSAMMENFASSUNG (oberster Abschnitt, vor der Rechtsfrage)
+# ---------------------------------------------------------------------------
+briefing:
+  section_id: legal_and_safety_risks
+  position: top
+  render: |
+    MENSCHENRECHTS- / HAFTUNGSHINWEIS: {flag}  (Vorgesetzte informiert: {supervisor_notified_at})
+    Staatlicher Kontext: {state_context_ids}  | Einrichtung: {facility_id}
+    Kategorie(n): {category_labels}
+    Moegliche Rechtsgrundlagen: {legal_basis}   # Pruefpunkte, keine rechtliche Wuerdigung
+    Ausloesende Aussagen (woertlich, Fundstelle): {evidence_snippets}
+    Interessenkonflikt: {conflict_of_interest | "nein"}
+    Fristen-Warnsignale: {deadline_signals}
+    Unabhaengige Stellen: {referrals_independent}
+    Beweissicherung offen: {evidence_checklist_open}
+    Muster: {pattern_status}   # z.B. "3. Fall zu dieser Einrichtung in 90 Tagen"
+  rules:
+    - "Die KI stellt keine Menschenrechtsverletzung fest; sie markiert Hinweise zur Pruefung."
+    - "Woertliche Aussagen werden zitiert, nicht umformuliert (Beweiswert)."
+    - "Ein Flag darf nur mit Begruendung durch zwei Personen entfernt werden; Entfernung wird geloggt."
+    - "Daten fuer die Musterauswertung nur pseudonymisiert; besonders schuetzenswerte Daten (Art. 5 lit. c nDSG)."

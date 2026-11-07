@@ -1,0 +1,852 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Issue 1 – Kündigung durch die Vermieterschaft (Kanton Zürich)
+# Quelle: Law-Dossier "14.28 Issue 1 – Kündigung durch die Vermieterschaft" (7.11.2026),
+#         docs/legal_inputs/. Gesetzeswortlaut aus OR_admin.pdf (SR 220, Stand 1.10.2026) und
+#         ZPO.pdf (SR 272, Stand 1.7.2026); 8 Leitentscheide im Volltext geprüft (laut Dossier).
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: siehe docs/ISSUE_01_INTEGRATION.md).
+#
+# PRODUKTENTSCHEIDE (keine gesetzlichen Fristen!): die Schwellen 20 Tage und 60 Tage in den Regeln
+# TT_DAYS_GE_20 / TT_DAYS_LT_20_ALL_KNOWN / TT_MOVE_OUT_LT_60 sind interne Dringlichkeitsschwellen
+# laut Dossier Abschnitt 6. Das System berechnet und nennt NIE ein Fristende.
+# Dringlichkeit: HIGH = "sofort", MEDIUM = "bald", LOW = "normal".
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_TERMINATION
+version: "1.0-dossier-2026-11-07"
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: landlord_termination
+title_de: Kündigung durch die Vermieterschaft
+description: "Ordentliche Kündigung einer Wohnung durch die Vermieterschaft (Schweizer Recht, Fokus Kanton Zürich)."
+provenance_de: "Law-Dossier Issue 1 vom 7.11.2026; Produktschwellen 20/60 Tage = interne Entscheide, keine Gesetzesfristen."
+
+classification:
+  description: >-
+    Passt, wenn die Vermieterschaft (Vermieter, Vermieterin, Liegenschaftsverwaltung) einer
+    Mieterin oder einem Mieter die Wohnung kündigt oder die Wohnung zurückverlangt, auch wenn das
+    Wort «Kündigung» nicht fällt (z. B. Kündigungsformular erhalten, Wohnung verlassen müssen,
+    Eigenbedarf angekündigt). Die Schilderung kann von der Sozialarbeiterin über eine Klientin
+    stammen. NICHT passend: Kündigung durch Arbeitgeber, Mängel an der Wohnung ohne Kündigung.
+  typical_situations:
+    - "Mein Vermieter hat mir gekündigt."
+    - "Meine Klientin muss ihre Wohnung verlassen."
+    - "Wir haben eine Kündigung der Wohnung erhalten."
+    - "Die Vermieterschaft will die Wohnung zurück."
+    - "Die Klientin hat ein Kündigungsformular bekommen."
+    - "Die Vermieterin kündigt wegen Eigenbedarf."
+  related_issues: [tenancy_defects, employment_termination]
+
+derived:
+  # INTERNE Dringlichkeit, kein Fristende. Frühester bekannter Empfangshinweis (Abholungseinladung oder Empfang).
+  - id: days_since_earliest_receipt
+    kind: days_since_earliest
+    facts: [pickup_notice_date, receipt_date]
+    description: "Tage seit dem frühesten bekannten Empfangshinweis (heute minus frühestes Datum)."
+  - id: days_until_termination_date
+    kind: days_until
+    facts: [termination_date]
+    description: "Tage bis zum angegebenen Kündigungstermin (Auszug)."
+
+# --------------------------------------------------------------------------------------------
+# Fakten (Dossier Abschnitt 2). required = «zwingend»; required_if = «ja, bei …».
+# MISSING = noch nicht gefragt -> Rückfrage; UNKNOWN = gefragt, Klientin weiss es nicht -> Eskalation.
+# --------------------------------------------------------------------------------------------
+facts:
+  # ---- A. Vorprüfung --------------------------------------------------------------------
+  - id: tenant_role
+    group: prescreening
+    label_de: Vertragspartei
+    data_type: enum
+    enum_values: [hauptmieterin, untermieterin, andere]
+    enum_labels_de:
+      hauptmieterin: "Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)"
+      untermieterin: "Klientin ist Untermieterin"
+      andere: "Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)"
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_273B_1]
+    extraction_hint_de: "Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht. 'alleinige Mieterin' = hauptmieterin."
+    question_de: "Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?"
+    why_needed_de: "Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange das Hauptmietverhältnis besteht (Art. 273b OR)."
+
+  - id: co_tenants_exist
+    group: prescreening
+    label_de: Mitmieter im Vertrag
+    data_type: boolean
+    required: true
+    priority: high
+    source_ids: [BGE_140_III_491]
+    extraction_hint_de: "true, wenn eine weitere Person im Mietvertrag steht; false bei 'keine weiteren Mitmieter' / 'alleinige Mieterin'."
+    question_de: "Steht noch jemand anderes im Mietvertrag?"
+    why_needed_de: "Die Kündigung muss allen Mitmietern zugehen (BGE 140 III 491)."
+
+  - id: co_tenants_all_notified
+    group: prescreening
+    label_de: Kündigung an alle Mitmieter zugestellt
+    data_type: boolean
+    required_if: { ref: fact.co_tenants_exist, op: equals, value: true }
+    priority: medium
+    escalation_relevant: true
+    depends_on: [co_tenants_exist]
+    source_ids: [BGE_140_III_491]
+    question_de: "Wurde die Kündigung allen Mitmietern zugestellt?"
+    why_needed_de: "Bei Mitmiete muss gegenüber allen Mietern gekündigt werden (BGE 140 III 491)."
+
+  - id: object_type
+    group: prescreening
+    label_de: Objektart
+    data_type: enum
+    enum_values: [wohnung, moebliertes_zimmer, notwohnung_heim, ferienwohnung_bis_3_monate, andere]
+    enum_labels_de:
+      wohnung: "Gewöhnliche Wohnung"
+      moebliertes_zimmer: "Möbliertes Zimmer"
+      notwohnung_heim: "Notwohnung, Heim oder Unterkunft der Gemeinde"
+      ferienwohnung_bis_3_monate: "Ferienwohnung (höchstens drei Monate gemietet)"
+      andere: "Anderes Objekt"
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_253A_2, CH_OR_266C, CH_OR_266E]
+    extraction_hint_de: "'normale Wohnung' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer."
+    question_de: "Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?"
+    why_needed_de: "Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist."
+
+  - id: property_municipality
+    group: prescreening
+    label_de: Gemeinde der Wohnung
+    data_type: string
+    required: true
+    priority: medium
+    source_ids: [CH_ZPO_33]
+    extraction_hint_de: "Name der Gemeinde, z. B. 'Zürich'."
+    question_de: "In welcher Gemeinde liegt die Wohnung?"
+    why_needed_de: "Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO)."
+
+  - id: property_in_canton_zh
+    group: prescreening
+    label_de: Wohnung im Kanton Zürich
+    description: "TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton Zürich ausgerichtet; die Stellenangaben gelten nur dort."
+    data_type: boolean
+    required: true
+    priority: medium
+    escalation_relevant: true
+    depends_on: [property_municipality]
+    extraction_hint_de: "true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich; sonst nur setzen, wenn ausdrücklich gesagt."
+    question_de: "Liegt die Wohnung im Kanton Zürich?"
+    why_needed_de: "Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich."
+
+  - id: contract_term_type
+    group: prescreening
+    label_de: Vertragsart
+    data_type: enum
+    enum_values: [unbefristet, befristet]
+    enum_labels_de: { unbefristet: "Unbefristet", befristet: "Befristet" }
+    required: true
+    priority: medium
+    source_ids: [CH_OR_273_2]
+    question_de: "Ist der Mietvertrag unbefristet oder befristet?"
+    why_needed_de: "Die Frist für ein Erstreckungsbegehren hängt von der Vertragsart ab (Art. 273 Abs. 2 OR)."
+
+  # ---- B. Zustellung und Frist ------------------------------------------------------------
+  - id: delivery_method
+    group: delivery
+    label_de: Art der Zustellung
+    data_type: enum
+    enum_values: [persoenlich, eingeschrieben, normale_post]
+    enum_labels_de:
+      persoenlich: "Persönlich übergeben"
+      eingeschrieben: "Eingeschrieben (Einschreiben)"
+      normale_post: "Normale Post"
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [BGE_140_III_244]
+    extraction_hint_de: "'gewöhnlicher Brief', 'normale Post' = normale_post. Einschreiben nur, wenn ausdrücklich genannt."
+    question_de: "Wie wurde die Kündigung zugestellt: persönlich, eingeschrieben oder mit normaler Post?"
+    why_needed_de: "Die Zustellart bestimmt den Fristbeginn (BGE 140 III 244)."
+
+  - id: pickup_notice_date
+    group: delivery
+    label_de: Datum der Abholungseinladung
+    data_type: date
+    required_if: { ref: fact.delivery_method, op: equals, value: eingeschrieben }
+    priority: high
+    escalation_relevant: true
+    depends_on: [delivery_method]
+    source_ids: [BGE_143_III_15]
+    extraction_hint_de: "Datum, an dem der gelbe Zettel (Abholungseinladung) im Briefkasten lag. NICHT das Briefdatum."
+    question_de: "Wann lag der gelbe Zettel (Abholungseinladung) im Briefkasten?"
+    why_needed_de: "Frühester möglicher Empfang bei eingeschriebener Post (BGE 143 III 15)."
+
+  - id: receipt_date
+    group: delivery
+    label_de: Empfangsdatum
+    data_type: date
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_273_1]
+    extraction_hint_de: "Datum, an dem die Klientin die Kündigung tatsächlich in den Händen hatte. Das Datum auf dem Brief ist NICHT das Empfangsdatum. Nur setzen, wenn ausdrücklich genannt."
+    question_de: "Wann hatte die Klientin die Kündigung tatsächlich in den Händen?"
+    why_needed_de: "Ausgangspunkt der 30-Tage-Frist (Art. 273 Abs. 1 OR). Das Datum auf dem Brief ist nicht der Empfang."
+
+  - id: absence_at_receipt
+    group: delivery
+    label_de: Ferien oder Abwesenheit beim Empfang
+    data_type: boolean
+    priority: low
+    source_ids: [BGE_143_III_15]
+    question_de: "War die Klientin beim Empfang in den Ferien oder abwesend?"
+    why_needed_de: "Abwesenheit ändert den Fristbeginn nicht (BGE 143 III 15); wichtig für die Einschätzung der Fachperson."
+
+  - id: illness_at_receipt
+    group: delivery
+    label_de: Krankheit beim Empfang
+    data_type: boolean
+    priority: medium
+    escalation_relevant: true
+    source_ids: [BGE_143_III_15]
+    question_de: "War die Klientin beim Empfang der Kündigung krank?"
+    why_needed_de: "Ob Krankheit anders zu behandeln ist, hat das Bundesgericht offen gelassen (BGE 143 III 15)."
+
+  # ---- C. Form -----------------------------------------------------------------------------
+  - id: official_form_used
+    group: form
+    label_de: Amtliches Kündigungsformular verwendet
+    data_type: boolean
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_266L, CH_OR_266O]
+    extraction_hint_de: "false bei 'nur ein gewöhnlicher Brief ohne amtliches Formular' / 'kein Formular'; true nur, wenn das kantonale Formular ausdrücklich genannt wird."
+    question_de: "Wurde das amtliche kantonale Kündigungsformular verwendet?"
+    why_needed_de: "Die Vermieterschaft muss mit dem vom Kanton genehmigten Formular kündigen (Art. 266l Abs. 2 OR); ein Mangel kann die Kündigung nichtig machen (Art. 266o OR) – das beurteilt die Fachperson."
+
+  - id: form_photo_available
+    group: form
+    label_de: Foto des Formulars vorhanden
+    data_type: boolean
+    priority: low
+    question_de: "Gibt es ein Foto des Kündigungsformulars (beide Seiten)?"
+    why_needed_de: "Das Foto ermöglicht der Fachperson die Formprüfung."
+
+  - id: termination_signed
+    group: form
+    label_de: Kündigung unterschrieben
+    data_type: boolean
+    priority: medium
+    source_ids: [CH_OR_266L]
+    question_de: "Ist die Kündigung unterschrieben?"
+    why_needed_de: "Die Kündigung muss schriftlich erfolgen (Art. 266l Abs. 1 OR)."
+
+  - id: family_home_with_spouse
+    group: form
+    label_de: Familienwohnung (Ehe-/eingetragene Partnerperson)
+    data_type: boolean
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_266N, CH_OR_273A_1, BGE_139_III_7]
+    extraction_hint_de: "true nur bei Ehe oder eingetragener Partnerschaft; Konkubinat = false. 'keine Ehe- oder eingetragene Partnerperson' = false."
+    question_de: "Wohnt die Klientin dort mit einer Ehe- oder eingetragenen Partnerperson?"
+    why_needed_de: "Bei Familienwohnung ist die Kündigung auch der Partnerperson separat zuzustellen (Art. 266n OR; BGE 139 III 7). Konkubinat zählt nicht."
+
+  - id: spouse_still_lives_there
+    group: form
+    label_de: Partnerperson wohnt noch dort
+    data_type: boolean
+    required_if: { ref: fact.family_home_with_spouse, op: equals, value: true }
+    priority: medium
+    depends_on: [family_home_with_spouse]
+    source_ids: [BGE_139_III_7, BGE_140_III_491]
+    question_de: "Wohnt die Partnerperson noch dort (oder ist sie definitiv ausgezogen)?"
+    why_needed_de: "Bei definitivem Auszug entfällt der Familiencharakter (BGE 139 III 7; BGE 140 III 491)."
+
+  - id: separate_delivery_to_spouse
+    group: form
+    label_de: Separate Zustellung an die Partnerperson
+    data_type: boolean
+    required_if:
+      all:
+        - { ref: fact.family_home_with_spouse, op: equals, value: true }
+        - { ref: fact.spouse_still_lives_there, op: equals, value: true }
+    priority: high
+    escalation_relevant: true
+    depends_on: [family_home_with_spouse, spouse_still_lives_there]
+    source_ids: [CH_OR_266N, CH_OR_266O]
+    question_de: "Hat die Partnerperson eine eigene Kündigung in einem separaten Umschlag erhalten?"
+    why_needed_de: "Fehlt die separate Zustellung, kann ein Formmangel vorliegen (Art. 266n, 266o OR); die Fachperson beurteilt das."
+
+  # ---- D. Inhalt ---------------------------------------------------------------------------
+  - id: termination_kind
+    group: content
+    label_de: Art der Kündigung
+    data_type: enum
+    enum_values: [ordentlich, zahlungsverzug]
+    enum_labels_de:
+      ordentlich: "Ordentliche Kündigung"
+      zahlungsverzug: "Kündigung wegen Zahlungsrückstand"
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_257D]
+    extraction_hint_de: "zahlungsverzug nur, wenn die Kündigung ausdrücklich mit Mietzinsrückstand begründet wird oder eine Zahlungsfrist mit Kündigungsandrohung vorausging. 'keine Mietrückstände' spricht für ordentlich."
+    question_de: "Ist es eine ordentliche Kündigung oder eine Kündigung wegen Zahlungsrückstand?"
+    why_needed_de: "Bei Zahlungsverzug gelten andere Regeln (Art. 257d OR); dafür ist ein eigenes Issue vorgesehen."
+
+  - id: termination_date
+    group: content
+    label_de: Angegebener Kündigungstermin
+    data_type: date
+    priority: medium
+    source_ids: [CH_OR_266A, CH_OR_266C]
+    extraction_hint_de: "Datum, auf das gekündigt wurde ('per 31. Januar 2027')."
+    question_de: "Auf welches Datum wurde gekündigt?"
+    why_needed_de: "Planung des Auszugs; ein falscher Termin macht die Kündigung nicht ungültig, sie gilt dann auf den nächstmöglichen Termin (Art. 266a Abs. 2 OR)."
+
+  - id: stated_reason
+    group: content
+    label_de: Angegebener Kündigungsgrund
+    data_type: enum
+    enum_values: [keine_angabe, eigenbedarf, sanierung, abbruch, anderer_grund]
+    enum_labels_de:
+      keine_angabe: "Kein Grund angegeben"
+      eigenbedarf: "Eigenbedarf"
+      sanierung: "Umbau / Sanierung"
+      abbruch: "Abbruch"
+      anderer_grund: "Anderer Grund"
+    priority: medium
+    escalation_relevant: true
+    source_ids: [BGE_145_III_143, BGE_142_III_91, BGE_151_III_481, BGE_143_III_344]
+    question_de: "Steht im Schreiben ein Kündigungsgrund (Eigenbedarf, Sanierung, Abbruch …)?"
+    why_needed_de: "Der Grund ist für die Prüfung nach Treu und Glauben relevant (BGE 145 III 143, 142 III 91, 151 III 481)."
+
+  # ---- E. Vorgeschichte --------------------------------------------------------------------
+  - id: prior_dispute_3y
+    group: history
+    label_de: Streit oder Verfahren mit der Vermieterschaft (letzte 3 Jahre)
+    data_type: boolean
+    priority: medium
+    escalation_relevant: true
+    source_ids: [CH_OR_271A_1]
+    question_de: "Hat die Klientin in den letzten 3 Jahren etwas gegenüber der Vermieterschaft eingefordert oder ein Verfahren geführt?"
+    why_needed_de: "Kündigungen im Zusammenhang mit Ansprüchen oder Verfahren können anfechtbar sein (Art. 271a Abs. 1 lit. a, d, e OR)."
+
+  - id: family_change_recent
+    group: history
+    label_de: Änderung der familiären Situation
+    data_type: boolean
+    priority: low
+    escalation_relevant: true
+    source_ids: [CH_OR_271A_1]
+    question_de: "Gab es kürzlich eine Heirat, Geburt, Trennung oder einen Todesfall?"
+    why_needed_de: "Art. 271a Abs. 1 lit. f OR (Änderungen in der familiären Situation)."
+
+  - id: already_reacted
+    group: history
+    label_de: Bereits reagiert (angefochten, unterschrieben, verhandelt)
+    data_type: boolean
+    required: true
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_OR_273C]
+    extraction_hint_de: "false bei 'noch nichts unterschrieben und keine Anfechtung eingereicht'."
+    question_de: "Hat die Klientin schon reagiert, also angefochten, etwas unterschrieben oder mit der Vermieterschaft verhandelt?"
+    why_needed_de: "Eine unterschriebene Aufhebungsvereinbarung ist keine Kündigung; der Kündigungsschutz greift dann nicht direkt (Art. 273c OR)."
+
+  - id: termination_agreement_signed_or_offered
+    group: history
+    label_de: Aufhebungsvereinbarung unterschrieben oder vorgelegt
+    data_type: boolean
+    required_if: { ref: fact.already_reacted, op: equals, value: true }
+    priority: high
+    escalation_relevant: true
+    depends_on: [already_reacted]
+    source_ids: [CH_OR_273C]
+    question_de: "Wurde eine Aufhebungsvereinbarung unterschrieben oder vorgelegt?"
+    why_needed_de: "Eine Unterschrift kann nicht rückgängig zu machende Folgen haben; die Prüfung ist dringlich."
+
+  - id: eviction_or_court_proceeding
+    group: history
+    label_de: Laufendes Gerichtsverfahren oder Ausweisung
+    data_type: boolean
+    priority: high
+    escalation_relevant: true
+    source_ids: [CH_ZPO_257_1]
+    question_de: "Läuft bereits ein Gerichtsverfahren oder eine Ausweisung?"
+    why_needed_de: "Ein laufendes Verfahren liegt ausserhalb dieses Issues (Art. 257 ZPO); dafür ist ein eigenes Issue vorgesehen."
+
+  # ---- F. Soziale Umstände -----------------------------------------------------------------
+  - id: hardship_present
+    group: social
+    label_de: Härtegründe
+    data_type: boolean
+    priority: medium
+    escalation_relevant: true
+    source_ids: [BGE_142_III_91, CH_OR_272]
+    extraction_hint_de: "true bei Kindern, Krankheit, Alter, langer Mietdauer, geringem Einkommen, wenn dies als Belastung geschildert wird."
+    question_de: "Gibt es Härtegründe, z. B. Kinder, Krankheit, Alter, lange Mietdauer oder knappes Einkommen?"
+    why_needed_de: "Härte macht die Kündigung nicht anfechtbar, ist aber für eine Erstreckung relevant (BGE 142 III 91)."
+
+  - id: hardship_details
+    group: social
+    label_de: Beschreibung der Härtegründe
+    data_type: string
+    priority: low
+    depends_on: [hardship_present]
+    question_de: "Welche Härtegründe bestehen genau?"
+    why_needed_de: "Details helfen der Fachperson bei der Erstreckung und der Wohnungssuche."
+
+  - id: rent_amount_chf
+    group: social
+    label_de: Mietzins (CHF)
+    data_type: integer
+    priority: low
+    question_de: "Wie hoch ist die Miete (CHF)?"
+    why_needed_de: "Relevant für die Wohnungssuche."
+
+  - id: rent_payer
+    group: social
+    label_de: Zahlende Stelle
+    data_type: enum
+    enum_values: [klientin, sozialdienst, andere]
+    enum_labels_de: { klientin: "Klientin selbst", sozialdienst: "Sozialdienst", andere: "Andere Stelle" }
+    priority: low
+    question_de: "Wer zahlt die Miete: die Klientin selbst oder der Sozialdienst?"
+    why_needed_de: "Mögliche Interessenkonflikte; Wohnungssuche."
+
+  - id: vulnerability_present
+    group: social
+    label_de: Besondere Verletzlichkeit
+    data_type: boolean
+    priority: medium
+    escalation_relevant: true
+    extraction_hint_de: "Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine akute Krise genannt wird. Keine Einschätzung durch die KI."
+    question_de: "Gibt es Gewalt, einen Trennungsstreit, eine Sprachbarriere oder eine akute Krise?"
+    why_needed_de: "Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände."
+
+  - id: client_requests_expert
+    group: social
+    label_de: Wunsch nach einer Fachperson
+    data_type: boolean
+    priority: low
+    escalation_relevant: true
+    extraction_hint_de: "true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson wünscht."
+    question_de: "Wünschen die Klientin oder Sie eine Fachperson?"
+    why_needed_de: "Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert."
+
+# --------------------------------------------------------------------------------------------
+# Eskalationsregeln (Dossier Abschnitt 6). Die Rückfrage-Regel «zwingendes Faktum nicht erhoben»
+# ist kein Eskalationsfall, sondern die Missing-Information-Engine (ASK).
+# «Rechtsperson» = tenancy_law_counsel; «+ Sozialarbeiter:in» = social_counselling.
+# --------------------------------------------------------------------------------------------
+escalation_rules:
+  # ---- Anwendungsbereich (Vorprüfung): Modulaussagen unterdrücken ---------------------------
+  - id: TT_OUT_OF_SCOPE_ROLE
+    description: "Klientin ist nicht Hauptmieterin (Untermiete / nicht Vertragspartei): ausserhalb des Moduls."
+    when: { ref: fact.tenant_role, op: in, value: [untermieterin, andere] }
+    urgency: MEDIUM
+    reason_code: OUT_OF_SCOPE_NOT_MAIN_TENANT
+    reason_de: "Die Klientin ist nicht selbst Hauptmieterin (z. B. Untermiete). Dieses Modul gilt dafür nicht; es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen."
+    professionals: [lawyer_general]
+    suppress_standard_statements: true
+
+  - id: TT_OUT_OF_SCOPE_OBJECT
+    description: "Ferienwohnung bis 3 Monate, Notwohnung/Heim/Gemeindeunterkunft oder anderes Objekt: ausserhalb des Moduls."
+    when: { ref: fact.object_type, op: in, value: [notwohnung_heim, ferienwohnung_bis_3_monate, andere] }
+    urgency: MEDIUM
+    reason_code: OUT_OF_SCOPE_OBJECT
+    reason_de: "Das Wohnobjekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls (z. B. Ferienwohnung, Notunterkunft). Es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen."
+    professionals: [lawyer_general]
+    suppress_standard_statements: true
+
+  - id: TT_FURNISHED_ROOM
+    description: "Möbliertes Zimmer: eigene Kündigungsfrist (Art. 266e OR); Formvorschriften noch zu klären."
+    when: { ref: fact.object_type, op: equals, value: moebliertes_zimmer }
+    urgency: MEDIUM
+    reason_code: FURNISHED_ROOM_SPECIAL_RULES
+    reason_de: "Bei möblierten Zimmern gelten besondere Fristen; ob Formular- und Anfechtungsregeln gelten, ist offen. Eine Rechtsperson muss prüfen."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_CANTON_NOT_ZH
+    description: "TECHNISCHE ANNAHME: Wohnung nicht im Kanton Zürich -> Stellenangaben nicht anwendbar."
+    when: { ref: fact.property_in_canton_zh, op: equals, value: false }
+    urgency: MEDIUM
+    reason_code: AUTHORITY_NOT_DETERMINABLE
+    reason_de: "Die Wohnung liegt nicht im Kanton Zürich. Die Zürcher Stellenangaben gelten nicht; die zuständige Behörde muss separat bestimmt werden."
+    professionals: [tenancy_law_counsel]
+
+  # ---- Zeitkritische Regeln (interne Dringlichkeit, kein Fristende) --------------------------
+  - id: TT_UNKNOWN_DELIVERY_OR_RECEIPT
+    description: "Empfangsdatum, Zustellart oder Abholungseinladung nach Rückfrage unbekannt: Fristbeginn nicht bestimmbar."
+    when:
+      any:
+        - { ref: fact.receipt_date, op: is_unknown }
+        - { ref: fact.delivery_method, op: is_unknown }
+        - { ref: fact.pickup_notice_date, op: is_unknown }
+    urgency: HIGH
+    reason_code: DELIVERY_OR_RECEIPT_UNKNOWN
+    reason_de: "Zustellart oder Empfangsdatum sind der Klientin unbekannt. Der Fristbeginn lässt sich so nicht bestimmen; ein Fristverlust wäre nicht mehr rückgängig zu machen. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_DAYS_GT_30
+    description: "Mehr als 30 Tage seit dem frühesten bekannten Empfangshinweis (Produktregel, kein Fristende)."
+    when: { ref: derived.days_since_earliest_receipt, op: greater_than, value: 30 }
+    urgency: HIGH
+    reason_code: POSSIBLY_AFTER_30_DAYS
+    reason_de: "Seit dem frühesten bekannten Empfangshinweis sind mehr als 30 Tage vergangen. Die Frist könnte abgelaufen sein; ob noch Wege offen sind, klärt die Fachperson sofort."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_DAYS_GE_20
+    description: "PRODUKTENTSCHEID (keine Gesetzesfrist): 20 bis 30 Tage seit dem frühesten bekannten Empfangshinweis."
+    when:
+      all:
+        - { ref: derived.days_since_earliest_receipt, op: greater_than, value: 19 }
+        - { ref: derived.days_since_earliest_receipt, op: less_than, value: 31 }
+    urgency: HIGH
+    reason_code: TIME_CRITICAL_20_DAYS
+    reason_de: "Seit dem frühesten bekannten Empfangshinweis sind 20 oder mehr Tage vergangen; die 30-Tage-Frist ist knapp. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_DAYS_LT_20_ALL_KNOWN
+    description: "PRODUKTENTSCHEID (keine Gesetzesfrist): weniger als 20 Tage, alle zwingenden Angaben bekannt."
+    when:
+      all:
+        - { ref: derived.days_since_earliest_receipt, op: less_than, value: 20 }
+        - { ref: ctx.missing_required_count, op: equals, value: 0 }
+    urgency: MEDIUM
+    reason_code: LEGAL_REVIEW_STANDARD
+    reason_de: "Alle zwingenden Angaben liegen vor und die Zeit ist noch nicht knapp. Der Entscheid über eine Anfechtung ist ein Einzelfall und gehört zu einer Rechtsperson, bald."
+    professionals: [tenancy_law_counsel]
+
+  # ---- Form --------------------------------------------------------------------------------
+  - id: TT_FORM_MISSING
+    description: "Kein amtliches Formular: mögliche Nichtigkeit, keine Entwarnung (Art. 266l, 266o OR)."
+    when: { ref: fact.official_form_used, op: equals, value: false }
+    urgency: MEDIUM
+    reason_code: POSSIBLE_FORM_DEFECT
+    reason_de: "Es wurde laut Angabe kein amtliches Kündigungsformular verwendet. Ob ein Formmangel vorliegt, soll eine Rechtsperson prüfen; es gibt keine Entwarnung, und die Frist ist trotzdem zu wahren."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_FAMILY_HOME_NOT_SEPARATE
+    description: "Familienwohnung, Partnerperson wohnt noch dort, aber keine separate Zustellung (Art. 266n, 266o OR)."
+    when:
+      all:
+        - { ref: fact.family_home_with_spouse, op: equals, value: true }
+        - { ref: fact.spouse_still_lives_there, op: equals, value: true }
+        - { ref: fact.separate_delivery_to_spouse, op: equals, value: false }
+    urgency: MEDIUM
+    reason_code: POSSIBLE_FORM_DEFECT_FAMILY_HOME
+    reason_de: "Bei einer Familienwohnung hat die Partnerperson laut Angabe keine separate Kündigung erhalten. Ein möglicher Formmangel muss eine Rechtsperson prüfen; keine Entwarnung."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_CO_TENANT_NOT_NOTIFIED
+    description: "Mitmieter, Kündigung nicht an alle zugestellt (BGE 140 III 491)."
+    when: { ref: fact.co_tenants_all_notified, op: equals, value: false }
+    urgency: MEDIUM
+    reason_code: POSSIBLE_FORM_DEFECT_CO_TENANT
+    reason_de: "Die Kündigung wurde laut Angabe nicht allen Mitmietern zugestellt. Ein möglicher Formmangel muss eine Rechtsperson prüfen."
+    professionals: [tenancy_law_counsel]
+
+  # ---- Vorgeschichte -----------------------------------------------------------------------
+  - id: TT_PRIOR_DISPUTE
+    description: "Streit oder Verfahren mit der Vermieterschaft in den letzten 3 Jahren (Art. 271a OR)."
+    when: { ref: fact.prior_dispute_3y, op: equals, value: true }
+    urgency: MEDIUM
+    reason_code: PRIOR_DISPUTE_ART_271A
+    reason_de: "Es gab in den letzten drei Jahren einen Streit oder ein Verfahren mit der Vermieterschaft. Das kann für die Anfechtbarkeit relevant sein; eine Rechtsperson prüft, bald."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_FAMILY_CHANGE
+    description: "Kürzliche Änderung der familiären Situation (Art. 271a Abs. 1 lit. f OR)."
+    when: { ref: fact.family_change_recent, op: equals, value: true }
+    urgency: MEDIUM
+    reason_code: FAMILY_CHANGE_ART_271A
+    reason_de: "Die familiäre Situation hat sich kürzlich geändert. Das kann für die Anfechtbarkeit relevant sein; eine Rechtsperson prüft, bald."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_REASON_SPECIAL
+    description: "Angegebener Grund Sanierung, Abbruch oder Eigenbedarf (BGE 142 III 91, 151 III 481, 145 III 143)."
+    when: { ref: fact.stated_reason, op: in, value: [sanierung, abbruch, eigenbedarf] }
+    urgency: MEDIUM
+    reason_code: REASON_NEEDS_LEGAL_REVIEW
+    reason_de: "Als Grund wird Sanierung, Abbruch oder Eigenbedarf genannt. Dafür gelten besondere Anforderungen in der Rechtsprechung; eine Rechtsperson muss prüfen, bald. Das System macht keine Erfolgsprognose."
+    professionals: [tenancy_law_counsel]
+
+  # ---- Soziale Umstände --------------------------------------------------------------------
+  - id: TT_HARDSHIP
+    description: "Härtegründe (Kinder, Krankheit, lange Mietdauer ...): Erstreckung prüfen, Wohnungssuche starten; Issue 4."
+    when: { ref: fact.hardship_present, op: equals, value: true }
+    urgency: MEDIUM
+    reason_code: HARDSHIP_EXTENSION_AND_SOCIAL
+    reason_de: "Es gibt Härtegründe. Sie machen die Kündigung nicht anfechtbar, können aber für eine Erstreckung zählen. Zusätzlich sollte die Wohnungssuche früh beginnen."
+    professionals: [tenancy_law_counsel, social_counselling]
+    routes_to_issue: CH_TENANCY_EXTENSION
+
+  - id: TT_MOVE_OUT_LT_60
+    description: "PRODUKTENTSCHEID (keine Gesetzesfrist): Kündigungstermin in weniger als 60 Tagen."
+    when: { ref: derived.days_until_termination_date, op: less_than, value: 60 }
+    urgency: MEDIUM
+    reason_code: MOVE_OUT_WITHIN_60_DAYS
+    reason_de: "Der angegebene Kündigungstermin liegt in weniger als 60 Tagen. Zusätzlich zur Rechtsperson ist rasche soziale Unterstützung (Notfallplanung Wohnen) sinnvoll."
+    professionals: [tenancy_law_counsel, social_counselling]
+
+  - id: TT_VULNERABILITY
+    description: "Besondere Verletzlichkeit (Gewalt, Trennungsstreit, Sprachbarriere, akute Krise): ausserhalb des Moduls -> Mensch."
+    when: { ref: fact.vulnerability_present, op: equals, value: true }
+    urgency: MEDIUM
+    reason_code: OUTSIDE_MODULE_VULNERABILITY
+    reason_de: "Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört in menschliche Hände; das System nimmt dazu keine Einschätzung vor."
+    professionals: [social_counselling, tenancy_law_counsel]
+
+  # ---- Andere Issues / Sonderfälle ---------------------------------------------------------
+  - id: TT_PAYMENT_DEFAULT
+    description: "Kündigung wegen Zahlungsverzug: Wechsel zu Issue 3 (andere Regeln, Art. 257d OR)."
+    when: { ref: fact.termination_kind, op: equals, value: zahlungsverzug }
+    urgency: HIGH
+    reason_code: PAYMENT_DEFAULT_OTHER_ISSUE
+    reason_de: "Die Kündigung erfolgt wegen Zahlungsrückstand. Dafür gelten andere Regeln als in diesem Modul; Standardaussagen werden unterdrückt. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+    routes_to_issue: CH_TENANCY_PAYMENT_DEFAULT
+    suppress_standard_statements: true
+
+  - id: TT_AGREEMENT
+    description: "Aufhebungsvereinbarung unterschrieben oder vorgelegt: irreversibel (Art. 273c OR)."
+    when: { ref: fact.termination_agreement_signed_or_offered, op: equals, value: true }
+    urgency: HIGH
+    reason_code: TERMINATION_AGREEMENT_URGENT
+    reason_de: "Es wurde eine Aufhebungsvereinbarung unterschrieben oder vorgelegt. Das kann nicht rückgängig zu machende Folgen haben. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_COURT_PROCEEDING
+    description: "Laufendes Gerichtsverfahren oder Ausweisung: ausserhalb von Issue 1, Wechsel zu Issue 6."
+    when: { ref: fact.eviction_or_court_proceeding, op: equals, value: true }
+    urgency: HIGH
+    reason_code: COURT_PROCEEDING_OR_EVICTION
+    reason_de: "Es läuft bereits ein Gerichtsverfahren oder eine Ausweisung. Das liegt ausserhalb dieses Moduls; Standardaussagen werden unterdrückt. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+    routes_to_issue: CH_TENANCY_EVICTION
+    suppress_standard_statements: true
+
+  - id: TT_ILLNESS_AT_RECEIPT
+    description: "Krankheit beim Empfang: vom Bundesgericht offen gelassen (BGE 143 III 15 E. 4.3)."
+    when: { ref: fact.illness_at_receipt, op: equals, value: true }
+    urgency: HIGH
+    reason_code: ILLNESS_AT_RECEIPT_OPEN_QUESTION
+    reason_de: "Die Klientin war beim Empfang krank. Ob das den Fristbeginn beeinflusst, hat das Bundesgericht offen gelassen. Sofortige juristische Prüfung."
+    professionals: [tenancy_law_counsel]
+
+  - id: TT_EXPERT_REQUESTED
+    description: "Klientin oder Sozialarbeiterin wünscht eine Fachperson (Autonomie)."
+    when: { ref: fact.client_requests_expert, op: equals, value: true }
+    urgency: LOW
+    reason_code: EXPERT_REQUESTED
+    reason_de: "Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert."
+    professionals: [tenancy_law_counsel]
+
+# --------------------------------------------------------------------------------------------
+# Rechtliche Regeln: HINT = freigegebene, quellengebundene allgemeine Aussage (Dossier Abschnitt 6,
+# «Erlaubte Aussagen»); REVIEW_POINT = Prüfhinweis für die Fachperson. Jede braucht eine Quelle.
+# Aussagen werden gegen policies/forbidden_statements.yaml geprüft.
+# --------------------------------------------------------------------------------------------
+legal_rules:
+  - id: TT_HINT_30_DAYS
+    description: "Anfechtungsfrist (allgemeiner Hinweis, ohne Datum)."
+    kind: HINT
+    when: { ref: ctx.has_user_input, op: equals, value: true }
+    result_code: HINT_CONTEST_30_DAYS
+    result_de: "Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten werden."
+    legal_source_ids: [CH_OR_273_1]
+
+  - id: TT_HINT_REGISTERED_MAIL
+    description: "Empfang bei Einschreiben."
+    kind: HINT
+    when: { ref: fact.delivery_method, op: equals, value: eingeschrieben }
+    result_code: HINT_REGISTERED_MAIL_RECEIPT
+    result_de: "Beim Einschreiben gilt die Kündigung in der Regel am Tag nach dem Einwurf der Abholungseinladung als empfangen, nicht erst bei der Abholung. Auch Ferien ändern daran nichts."
+    legal_source_ids: [BGE_143_III_15, BGE_140_III_244]
+
+  - id: TT_HINT_OFFICIAL_FORM
+    description: "Amtliches Formular (nur wenn nicht verwendet oder unbekannt)."
+    kind: HINT
+    when:
+      any:
+        - { ref: fact.official_form_used, op: equals, value: false }
+        - { ref: fact.official_form_used, op: is_unknown }
+    result_code: HINT_OFFICIAL_FORM
+    result_de: "Die Vermieterschaft muss auf dem amtlichen Formular kündigen. Ob hier ein Mangel vorliegt, soll eine Fachperson prüfen."
+    legal_source_ids: [CH_OR_266L, CH_OR_266O]
+
+  - id: TT_HINT_REASON_ON_REQUEST
+    description: "Begründung verlangen."
+    kind: HINT
+    when: { ref: ctx.has_user_input, op: equals, value: true }
+    result_code: HINT_REQUEST_REASON
+    result_de: "Die Klientin kann verlangen, dass die Kündigung begründet wird. Die Begründung ist aber keine Gültigkeitsvoraussetzung."
+    legal_source_ids: [CH_OR_271, BGE_143_III_344]
+
+  - id: TT_HINT_HARDSHIP
+    description: "Härte und Erstreckung."
+    kind: HINT
+    when: { ref: fact.hardship_present, op: equals, value: true }
+    result_code: HINT_HARDSHIP_EXTENSION
+    result_de: "Eine besondere Härte macht die Kündigung nicht ungültig, kann aber eine Erstreckung rechtfertigen, bei Wohnungen um höchstens vier Jahre."
+    legal_source_ids: [BGE_142_III_91, CH_OR_272, CH_OR_272B]
+
+  - id: TT_HINT_WRONG_TERMIN
+    description: "Falscher Kündigungstermin."
+    kind: HINT
+    when: { ref: fact.termination_date, op: exists }
+    result_code: HINT_TERMINATION_DATE
+    result_de: "Ist der Kündigungstermin falsch, gilt die Kündigung auf den nächstmöglichen Termin."
+    legal_source_ids: [CH_OR_266A]
+
+  - id: TT_HINT_VENUE_COSTS
+    description: "Zuständigkeit und Kosten der Schlichtung."
+    kind: HINT
+    when: { ref: ctx.has_user_input, op: equals, value: true }
+    result_code: HINT_VENUE_AND_COSTS
+    result_de: "Zuständig ist die Schlichtungsbehörde im Bezirk, in dem die Wohnung liegt. Das Schlichtungsverfahren kostet keine Gerichtskosten."
+    legal_source_ids: [CH_ZPO_33, CH_ZPO_113]
+
+  - id: TT_HINT_PROPOSAL
+    description: "Entscheidvorschlag der Schlichtungsbehörde."
+    kind: HINT
+    when: { ref: ctx.has_user_input, op: equals, value: true }
+    result_code: HINT_DECISION_PROPOSAL
+    result_de: "Lehnt eine Partei einen Entscheidvorschlag der Schlichtungsbehörde ab, muss sie selbst innert 30 Tagen klagen."
+    legal_source_ids: [CH_ZPO_211, CH_ZPO_209_4]
+
+  - id: TT_HINT_FURNISHED_ROOM
+    description: "Möbliertes Zimmer: eigener Fristhinweis."
+    kind: HINT
+    when: { ref: fact.object_type, op: equals, value: moebliertes_zimmer }
+    result_code: HINT_FURNISHED_ROOM
+    result_de: "Für möblierte Zimmer gilt eine eigene Kündigungsfrist von zwei Wochen auf Ende einer einmonatigen Mietdauer; ob Formular- und Anfechtungsregeln gelten, ist zu klären."
+    legal_source_ids: [CH_OR_266E]
+
+  - id: TT_REVIEW_FORM
+    description: "Prüfpunkt Formmangel."
+    kind: REVIEW_POINT
+    when: { ref: fact.official_form_used, op: equals, value: false }
+    result_code: REVIEW_FORM_ART_266L_266O
+    result_de: "Art. 266l–266o OR: Formmangel (amtliches Formular) prüfen; die rechtliche Folge beurteilt die Fachperson. Ein veraltetes Formular mit denselben Informationen führt nicht zur Nichtigkeit (BGE 140 III 244)."
+    legal_source_ids: [CH_OR_266L, CH_OR_266O, BGE_140_III_244]
+
+  - id: TT_REVIEW_FAMILY_HOME
+    description: "Prüfpunkt Familienwohnung."
+    kind: REVIEW_POINT
+    when: { ref: fact.family_home_with_spouse, op: equals, value: true }
+    result_code: REVIEW_FAMILY_HOME
+    result_de: "Familienwohnung (Art. 266n, 273a OR): separate Zustellung an die Partnerperson prüfen. Die Berufung auf eine fehlende Zustellung an eine ausgezogene, desinteressierte Partnerperson kann rechtsmissbräuchlich sein (BGE 139 III 7)."
+    legal_source_ids: [CH_OR_266N, CH_OR_273A_1, BGE_139_III_7]
+
+  - id: TT_REVIEW_CO_TENANTS
+    description: "Prüfpunkt Mitmieter."
+    kind: REVIEW_POINT
+    when: { ref: fact.co_tenants_exist, op: equals, value: true }
+    result_code: REVIEW_CO_TENANTS
+    result_de: "Mitmiete: Die Kündigung muss gegenüber allen Mietern erfolgen (BGE 140 III 491)."
+    legal_source_ids: [BGE_140_III_491]
+
+  - id: TT_REVIEW_271A
+    description: "Prüfpunkt Art. 271/271a OR (Vorgeschichte)."
+    kind: REVIEW_POINT
+    when:
+      any:
+        - { ref: fact.prior_dispute_3y, op: equals, value: true }
+        - { ref: fact.family_change_recent, op: equals, value: true }
+    result_code: REVIEW_ART_271A
+    result_de: "Art. 271 und 271a OR prüfen (Treu und Glauben; Anfechtungsgründe, Sperrfristen und deren Ausnahmen nach Abs. 3)."
+    legal_source_ids: [CH_OR_271, CH_OR_271A_1, CH_OR_271A_3]
+
+  - id: TT_REVIEW_REASON
+    description: "Prüfpunkt angegebener Grund."
+    kind: REVIEW_POINT
+    when: { ref: fact.stated_reason, op: in, value: [sanierung, abbruch, eigenbedarf] }
+    result_code: REVIEW_STATED_REASON
+    result_de: "Angegebenen Grund prüfen: Sanierung setzt ein genügend ausgereiftes Projekt im Kündigungszeitpunkt voraus (BGE 142 III 91); bei Abbruch ist kein ausgereiftes Projekt nötig (BGE 151 III 481); zu Eigenbedarf vgl. BGE 145 III 143. Eine Erfolgsprognose gibt das System nicht ab."
+    legal_source_ids: [BGE_142_III_91, BGE_151_III_481, BGE_145_III_143]
+
+  - id: TT_REVIEW_AGREEMENT
+    description: "Prüfpunkt Aufhebungsvereinbarung."
+    kind: REVIEW_POINT
+    when: { ref: fact.termination_agreement_signed_or_offered, op: equals, value: true }
+    result_code: REVIEW_TERMINATION_AGREEMENT
+    result_de: "Aufhebungsvereinbarung: Ein Verzicht auf Schutzrechte im Voraus ist nichtig (Art. 273c OR); ob die Vereinbarung gültig ist, ist eine Einzelfallfrage."
+    legal_source_ids: [CH_OR_273C]
+
+  - id: TT_REVIEW_ILLNESS
+    description: "Prüfpunkt Krankheit beim Empfang."
+    kind: REVIEW_POINT
+    when: { ref: fact.illness_at_receipt, op: equals, value: true }
+    result_code: REVIEW_ILLNESS_AT_RECEIPT
+    result_de: "Krankheit beim Empfang: Das Bundesgericht hat offen gelassen, ob sie anders zu behandeln wäre (BGE 143 III 15 E. 4.3)."
+    legal_source_ids: [BGE_143_III_15]
+
+legal_source_ids:
+  - CH_OR_266L
+  - CH_OR_266N
+  - CH_OR_266O
+  - CH_OR_271
+  - CH_OR_273_1
+  - CH_ZPO_33
+  - BGE_140_III_244
+  - BGE_143_III_15
+
+default_professionals: [tenancy_law_counsel]
+briefing_template: expert_briefing_v1
+
+# --------------------------------------------------------------------------------------------
+# Issue-spezifische Darstellung des Briefings (Dossier: Briefing ca. 200 Wörter, 9 Teile).
+# Die allgemeinen 11 Abschnitte bleiben bestehen; dies ergänzt sie um die Sicht der Juristen.
+# --------------------------------------------------------------------------------------------
+briefing_profile:
+  intro_de: "Kündigung durch die Vermieterschaft – Kanton Zürich"
+  groups:
+    - id: prescreening
+      title_de: "Vorprüfung des Mietverhältnisses"
+      fact_ids: [tenant_role, co_tenants_exist, co_tenants_all_notified, object_type, property_municipality, property_in_canton_zh, contract_term_type]
+    - id: delivery
+      title_de: "Zustellung und Empfang"
+      fact_ids: [delivery_method, pickup_notice_date, receipt_date, absence_at_receipt, illness_at_receipt]
+    - id: form
+      title_de: "Form der Kündigung"
+      fact_ids: [official_form_used, form_photo_available, termination_signed, family_home_with_spouse, spouse_still_lives_there, separate_delivery_to_spouse]
+    - id: content
+      title_de: "Inhalt und Kündigungsgrund"
+      fact_ids: [termination_kind, termination_date, stated_reason]
+    - id: history
+      title_de: "Vorgeschichte"
+      fact_ids: [prior_dispute_3y, family_change_recent, already_reacted, termination_agreement_signed_or_offered, eviction_or_court_proceeding]
+    - id: social
+      title_de: "Härtegründe und soziale Umstände"
+      fact_ids: [hardship_present, hardship_details, rent_amount_chf, rent_payer, vulnerability_present, client_requests_expert]
+  review_points:
+    - text_de: "Fristbeginn: absolute Empfangstheorie; bei Einschreiben in der Regel der Tag nach Einwurf der Abholungseinladung."
+      source_ids: [BGE_140_III_244, BGE_143_III_15, CH_OR_273_1]
+    - text_de: "Form: Art. 266l–266o OR (amtliches Formular, Schriftlichkeit, separate Zustellung bei Familienwohnung)."
+      source_ids: [CH_OR_266L, CH_OR_266N, CH_OR_266O]
+    - text_de: "Anfechtbarkeit: Art. 271 und 271a OR (Treu und Glauben, Sperrfristen)."
+      source_ids: [CH_OR_271, CH_OR_271A_1]
+    - text_de: "Erstreckung: eventualiter im Anfechtungsbegehren verlangen; Art. 273 Abs. 2 und 5 OR."
+      source_ids: [CH_OR_273_2, CH_OR_273_4_5]
+  documents_to_request:
+    - "Kündigungsformular (beide Seiten)"
+    - "Briefumschlag bzw. Abholungseinladung"
+    - "Mietvertrag"
+    - "Allfällige Korrespondenz mit der Vermieterschaft der letzten drei Jahre"
+  authority_ids:
+    - SCHLICHTUNGSBEHOERDE_MIETE_ZH
+    - RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+    - RECHTSAUSKUNFT_BEZIRKSGERICHT_ZUERICH
+    - MIETERVERBAND_ZH
+    - RECHTSAUSKUNFT_BEZIRKSGERICHTE_ZH
+    - ZAV_RECHTSAUSKUNFT
+    - SOZIALDIENST_WOHNGEMEINDE

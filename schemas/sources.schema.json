@@ -1,0 +1,301 @@
+{
+  "$defs": {
+    "SourceDef": {
+      "additionalProperties": false,
+      "description": "A legal source.\n\nTwo DIFFERENT statuses, never to be confused:\n* ``dossier_status``      - what the law team's dossier states (checked against their uploaded\n                             PDFs / full texts, or still pending, or only mentioned without text).\n* ``verification_status`` - live verification BY THIS SYSTEM (e.g. via Fedlex). Stays UNVERIFIED\n                             until such a mechanism really exists and ran.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "provider": {
+          "default": "fedlex",
+          "enum": [
+            "fedlex",
+            "entscheidsuche",
+            "bger",
+            "other"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "type": {
+          "default": "statute",
+          "enum": [
+            "statute",
+            "case_law",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "sr_number": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sr Number"
+        },
+        "statute": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Statute"
+        },
+        "article": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Article"
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paragraph"
+        },
+        "language": {
+          "default": "de",
+          "title": "Language",
+          "type": "string"
+        },
+        "title_de": {
+          "title": "Title De",
+          "type": "string"
+        },
+        "text_de": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text De"
+        },
+        "legal_question_de": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legal Question De"
+        },
+        "valid_as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid As Of"
+        },
+        "origin_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Origin Ref"
+        },
+        "dossier_status": {
+          "default": "DOSSIER_PENDING",
+          "enum": [
+            "DOSSIER_CHECKED",
+            "DOSSIER_PENDING",
+            "REFERENCED_ONLY"
+          ],
+          "title": "Dossier Status",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "UNVERIFIED",
+          "enum": [
+            "VERIFIED",
+            "UNVERIFIED",
+            "FAILED"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "case_number": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Case Number"
+        },
+        "decision_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision Date"
+        },
+        "considerations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Considerations",
+          "type": "array"
+        },
+        "core_statement_de": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Core Statement De"
+        },
+        "scope_de": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope De"
+        },
+        "limits_de": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limits De"
+        },
+        "relevant_fact_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relevant Fact Ids",
+          "type": "array"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "id",
+        "title_de"
+      ],
+      "title": "SourceDef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_status": {
+      "default": "DRAFT",
+      "enum": [
+        "DEMO_SYNTHETIC",
+        "DRAFT",
+        "LEGALLY_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "sources": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SourceDef"
+      },
+      "title": "Sources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "SourcesFile",
+  "type": "object"
+}
