@@ -255,11 +255,10 @@ def test_zurich_tenancy_gets_concrete_contacts_from_the_knowledge_base(client): 
     assert ids(r["primary"]) == ["schlichtungsbehoerde_miete_bezirk_zuerich", "mieterverband_zh"]
     assert "rechtsauskunft_miete_bezirksgericht_zuerich" in ids(r["more"])
     sch = r["primary"][0]
-    assert (
-        sch["phones"][0]["display"] == "058 111 70 30" and sch["phones"][0]["tel"] == "0581117030"
-    )
-    assert sch["web"].startswith("https://www.gerichte-zh.ch/") and sch["quality"] == "DIRECTORY"
-    assert "bestätigen" in sch["quality_label_de"]
+    # v1.2 (Law-Team-Korrektur): keine Telefonnummer der Schlichtungsbehörde Zürich mehr; Kontakt über die offizielle Seite
+    assert sch["phones"] == [] and sch["web"].startswith("https://www.gerichte-zh.ch/")
+    assert sch["quality"] == "OFFICIAL" and "offiziellen Website" in sch["quality_label_de"]
+    assert sch["scope_de"] == "Zuständig für Gemeinde Zürich, Bezirk Zürich"
     assert r["location_de"] == "Kanton ZH, Gemeinde Zürich"
 
 
@@ -268,9 +267,9 @@ def test_winterthur_resolves_regionally_where_configured(client):  # H
     say(client, cid, RENT_ZH.replace("Zürich", "Winterthur"))
     r = decision(client, cid)["referrals"]
     assert "mieterverband_zh_winterthur" in ids(r["primary"])
-    assert "schlichtungsbehoerde_miete_zh_verzeichnis" in ids(
+    assert "schlichtungsbehoerde_miete_winterthur" in ids(
         r["primary"]
-    )  # per district, no Zürich-city entry
+    )  # v1.2: eigener Eintrag je Bezirk
     assert "schlichtungsbehoerde_miete_bezirk_zuerich" not in ids(r["primary"] + r["more"])
     assert "rechtsauskunft_miete_bezirksgericht_zuerich" not in ids(
         r["primary"] + r["more"]
@@ -346,10 +345,12 @@ def test_unsafe_link_schemes_and_bad_values_are_dropped():
 def test_contact_quality_is_not_confused_with_verified(kb):
     net = kb.referral_network
     cards = {o.id: build_card(o) for o in net.professionals}
+    # v1.2: Mieterverband-Kontakte wurden auf der offiziellen Seite geprüft (primary); «verified» bleibt getrennt davon
     assert (
-        cards["mieterverband_zh"].quality == "DIRECTORY"
+        cards["mieterverband_zh"].quality == "OFFICIAL"
         and cards["mieterverband_zh"].verified is True
     )
+    assert any(c.quality == "DIRECTORY" for c in cards.values())  # secondary sources remain marked
     assert cards["schlichtungsbehoerde_miete_zh_verzeichnis"].quality == "OFFICIAL"
     assert (
         cards["tenancy_lawyer"].quality == "UNDOCUMENTED" and cards["tenancy_lawyer"].phones == []

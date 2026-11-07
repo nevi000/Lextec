@@ -80,7 +80,7 @@ Unterschieden werden (getestet): (1) **interne Dringlichkeit** (Tage-Zahl, syste
 | Einstellung | Standard |
 |---|---|
 | `AI_MAX_CALLS_PER_CASE` | 12 |
-| `AI_MAX_INPUT_TOKENS_PER_CALL` | 8000 (lokale, konservative Schätzung) |
+| `AI_MAX_INPUT_TOKENS_PER_CALL` | 15000 (lokale, konservative Schätzung) |
 | `AI_MAX_OUTPUT_TOKENS_PER_CALL` | 2500 (hartes Limit an Gemini, inkl. Denken) |
 | `AI_DAILY_REQUEST_LIMIT` | 30 |
 | `AI_DAILY_TOKEN_LIMIT` | 150 000 |

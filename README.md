@@ -6,6 +6,8 @@ A social worker records a consultation in natural language. LexTec Bridge identi
 
 > **Not a lawyer.** The system supports information gathering and escalation. The social worker stays in control: every AI-extracted fact can be inspected and corrected, and corrections are never silently overwritten.
 
+> **Product scope: seven Swiss tenancy-law issues** (termination by the landlord, payment warning, termination for arrears, extension, defects, eviction/clearance, rent increase). All other legal areas (employment, family, immigration …) are **not assessed**: they are recognised as *«nicht abgedeckt»* and left to a human expert. Mixed cases are split: the tenancy part gets the rule-based analysis, the other area is flagged separately. Synthetic demo issues (`content_status: DEMO_SYNTHETIC`: `employment_termination`, `unpaid_salary`, `tenancy_defects`) stay loaded so old cases remain readable, but are **never offered to the classifier** for new cases. `DRAFT` (law-team dossier, not yet legally released) is classifiable; it only means *«not legally released»*, not *«not supported»*.
+
 > ⚠️ **Prototype with synthetic content.** All legal content in `knowledge_base/` is `DEMO / SYNTHETIC / NOT LEGALLY VALIDATED`. **Do not enter real client data** before data-protection, contractual and access-control reviews (revDSG). In Gemini mode, text is sent to Google's API.
 
 ## Features
@@ -14,6 +16,7 @@ A social worker records a consultation in natural language. LexTec Bridge identi
 * **YAML knowledge base** maintained by the law team without code changes, with validation tooling and JSON Schemas for editor support.
 * **Expert Briefing**: 11 structured sections, versioned, printable (browser *Save as PDF*), reported vs. inferred facts, source verification status (currently always "not verified").
 * **Evaluation center** running YAML scenarios against the engine; distinguishes synthetic technical tests from legally validated ones; no fabricated accuracy score.
+* **Sprachbrücke**: one QR code per case; the client answers the current questions on their own phone in de/en/ar/uk, the social worker confirms every answer ([docs/MULTILINGUAL_QR_BRIDGE.md](docs/MULTILINGUAL_QR_BRIDGE.md); `.\scripts\dev.ps1 -Lan` for the two-device demo).
 * **Gemini or mock AI**, strict Pydantic-validated structured output, evidence checked against the stored messages.
 
 ## Quick start (Windows)
@@ -72,6 +75,8 @@ Misconfiguration is a clear startup error (missing key) or a visible analysis fa
 .\scripts\check.ps1          # ruff, KB validation, pytest, typecheck, vitest, production build
 .\scripts\check.ps1 -E2E     # + Playwright browser tests (first time: cd apps\web; npx playwright install chromium)
 ```
+**Test strategy while developing** (a full `pytest` run takes several minutes): run only what the change touches, e.g. `.venv\Scripts\python.exe -m pytest tests/test_classification_regression.py -q -x --tb=short`; repeat failed tests on their own; run the neighbouring suites after a coherent change (knowledge-base changes touch classification, rule engine and referrals); run `.\scripts\check.ps1` (optionally `-E2E`) once before finishing. Never skip, delete or weaken a test to save time, and never call the real Gemini API from tests. Find slow tests with `pytest -q --durations=20`.
+
 Individually: `cd apps\api; .venv\Scripts\python.exe -m pytest` · `cd apps\web; npm test` · `npm run e2e` (uses ports 8100/5273 and a throw-away DB).
 No test calls the real Gemini API (tests force the mock provider even if `.env` contains a key). The only real call is the manual `python -m app.cli live-test --confirm` (one request, no retry).
 

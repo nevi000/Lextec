@@ -30,7 +30,7 @@ issue_sections:
         - {label: "Familienwohnung", fact_id: family_home_with_spouse}
         - {label: "Mietbeginn"}
         - {label: "Vertragsart / Befristung", fact_id: contract_term_type}
-        - {label: "Kündigungsfristen und -termine"}
+        - {label: "Kündigungsfristen und -termine", fact_id: contract_termination_dates}
         - {label: "Mietzins / Mt. (CHF)", fact_id: rent_amount_chf}
         - {label: "Nebenkosten / Mt."}
         - {label: "Kaution"}

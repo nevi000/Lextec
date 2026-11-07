@@ -76,3 +76,237 @@ forbidden:
     patterns:
       - '\b(Sie|die\s+Klientin|die\s+Mieterin)\s+(muss|müssen|braucht|brauchen)\s+(nicht\s+|nicht\s+zwingend\s+)?(auszuziehen|ausziehen|zu\s+räumen|die\s+Wohnung\s+(zu\s+)?(verlassen|räumen))\b'
     source_ids: []
+
+  # ============================================================================================
+  # Issues 2-7 (Law-Dossiers vom 7.11.2026, Abschnitt 6 «Verbotene Aussagen»). Je Muster ein Testfall in
+  # apps/api/tests/test_issues_2_7.py (verbotene Beispielsätze müssen treffen, erlaubte Aussagen nicht).
+  # ============================================================================================
+  - id: FB_PARTIAL_PAYMENT_ENOUGH
+    description_de: "«Eine Teilzahlung reicht» / «der kleine Rest ist egal» (falsch, BGE 140 III 591 E. 2)."
+    patterns:
+      - '\bTeilzahlung\b[^.?!\n]{0,30}\b(reicht|genügt|ausreichend)\b'
+      - '\bkleine[rn]?\s+Rest(betrag|betrags)?\b[^.?!\n]{0,30}\b(egal|spielt\s+keine\s+Rolle|unbedeutend)\b'
+    source_ids: [BGE_140_III_591]
+
+  - id: FB_DISPUTED_NO_PAYMENT
+    description_de: "«Wenn Sie den Betrag bestreiten, müssen Sie nicht zahlen.» (falsch, BGE 140 III 591 E. 3.2)"
+    patterns:
+      - '\bbestreit\w*\b[^.?!\n]{0,40}\b(müssen|muss|brauchen|braucht)\s+(Sie\s+)?nicht\s+(zu\s+)?zahlen\b'
+    source_ids: [BGE_140_III_591]
+
+  - id: FB_LAST_DAY_TRANSFER
+    description_de: "«Es reicht, wenn Sie am letzten Tag der Frist überweisen.» (falsch, BGE 119 II 232 E. 2)"
+    patterns:
+      - '\b(reicht|genügt)\b[^.?!\n]{0,30}\bam\s+letzten\s+Tag\b[^.?!\n]{0,30}\büberweis'
+    source_ids: [BGE_119_II_232]
+
+  - id: FB_PROTEST_STOPS_TERMINATION
+    description_de: "«Mit einem Rechtsvorschlag ist die Kündigung abgewendet.» (falsch: nur die Betreibung)"
+    patterns:
+      - '\bRechtsvorschlag\b[^.?!\n]{0,60}\bKündigung\b[^.?!\n]{0,30}\b(abgewendet|verhindert|erledigt|hinfällig)\b'
+    source_ids: [CH_SCHKG_74_1]
+
+  - id: FB_WITHHOLD_OR_DEPOSIT_ADVICE
+    description_de: "«Sie dürfen die Miete zurückbehalten/kürzen/hinterlegen» bzw. «Zahlen Sie die Miete einfach nicht» (falsch, Art. 257d, 259g OR)."
+    patterns:
+      - '\b(dürfen|können)\b[^.?!\n]{0,30}\b(Miete|Mietzins)\b[^.?!\n]{0,30}\b(zurückbehalten|kürzen|hinterlegen)\b'
+      - '\bZahlen\s+Sie\s+(die\s+)?Miete\s+einfach\s+nicht\b'
+      - '\bhinterlegen\s+Sie\s+(den\s+)?Rückstand\b'
+      - '\bzahlen\s+Sie\s+einfach\s+weiter\s+die\s+alte\s+Miete\b'
+    source_ids: [CH_OR_259G, BGE_147_III_218]
+
+  - id: FB_LATER_PAYMENT_FINE
+    description_de: "«Wenn Sie später zahlen, ist alles in Ordnung» / «Annahme der Zahlung = keine Kündigung mehr» / «Sie bekommen noch eine Erinnerung»."
+    patterns:
+      - '\b(später|nachträglich)\s+zahlen\b[^.?!\n]{0,30}\b(alles\s+in\s+Ordnung|kein\s+Problem|erledigt|hinfällig)\b'
+      - '\bannimmt\b[^.?!\n]{0,40}\bnicht\s+mehr\s+kündigen\b'
+      - '\bnoch\s+eine\s+(Erinnerung|Mahnung)\b[^.?!\n]{0,20}\bbekommen\b'
+      - '\bbekommen\b[^.?!\n]{0,20}\bnoch\s+eine\s+(Erinnerung|Mahnung)\b'
+      - '\bGeld\s+angenommen\b[^.?!\n]{0,30}\bKündigung\b[^.?!\n]{0,15}\bnicht\b'
+    source_ids: [BGE_119_II_232, BGE_140_III_591]
+
+  - id: FB_PAYMENT_HEALS_TERMINATION
+    description_de: "«Wenn Sie jetzt zahlen, ist die Kündigung hinfällig/erledigt.» (falsch, OG ZH LF260018 E. 4.2)"
+    patterns:
+      - '\b(jetzt|nachzahlen|nachzahlt|nachträglich)\b[^.?!\n]{0,40}\bKündigung\b[^.?!\n]{0,20}\b(hinfällig|erledigt|gegenstandslos|unwirksam)\b'
+    source_ids: [OGZH_LF260018]
+
+  - id: FB_DEPOSIT_COVERS_ARREARS
+    description_de: "«Die Kaution deckt den Rückstand.» (falsch, Lehrbuch N 3005e)"
+    patterns:
+      - '\bKaution\b[^.?!\n]{0,30}\b(deckt|ersetzt|genügt)\b'
+    source_ids: [LEHRBUCH_MIETE_31]
+
+  - id: FB_CONTEST_PROTECTS
+    description_de: "«Solange Sie anfechten, können Sie sicher bleiben / nicht ausgewiesen werden.» (falsch, BGE 141 III 262 E. 3.3)"
+    patterns:
+      - '\b(solange|während)\b[^.?!\n]{0,30}\banfecht\w*\b[^.?!\n]{0,40}\b(sicher|nicht\s+ausgewiesen|geschützt)\b'
+    source_ids: [BGE_141_III_262]
+
+  - id: FB_EXTENSION_PROMISE
+    description_de: "Zusagen zur Erstreckung («sicher», «vier Jahre mit Kindern», «bleiben bis neue Wohnung», bei Zahlungsverzug «möglich»)."
+    patterns:
+      - '\bbekommen\s+Sie\s+(sicher|bestimmt|auf\s+jeden\s+Fall)\s+(eine\s+)?(Erstreckung|mehr\s+Zeit)\b'
+      - '\bmit\s+Kindern\b[^.?!\n]{0,30}\b(vier\s+Jahre|sicher\s+Zeit|mehr\s+Zeit)\b'
+      - '\bwegen\s+der\s+Kinder\b[^.?!\n]{0,30}\bmehr\s+Zeit\b'
+      - '\bSie\s+können\s+bleiben\b[^.?!\n]{0,40}\b(bis|solange)\b[^.?!\n]{0,30}\b(neue\s+Wohnung|gefunden)\b'
+      - '\b(Zahlungsverzug|Zahlungsrückstand)\b[^.?!\n]{0,60}\bErstreckung\b[^.?!\n]{0,30}\b(möglich|verlangen)\b'
+    source_ids: [BGE_142_III_336, CH_OR_272A_1_A]
+
+  - id: FB_EXTENSION_DELAY
+    description_de: "«Mit der Suche können Sie warten» / «die Frist können Sie später nachholen» (falsch, BGer 4A_72/2011; Verwirkungsfrist)."
+    patterns:
+      - '\bmit\s+der\s+Suche\b[^.?!\n]{0,30}\bwarten\b'
+      - '\bFrist\b[^.?!\n]{0,30}\b(später|nachträglich)\s+(noch\s+)?nachholen\b'
+    source_ids: [BGER_4A_72_2011, BGE_139_III_7]
+
+  - id: FB_HARDSHIP_INVALIDATES
+    description_de: "«Weil der Auszug hart ist, ist die Kündigung ungültig.» (falsch, BGE 142 III 91 E. 3.2.1)"
+    patterns:
+      - '\b(Härte|hart)\b[^.?!\n]{0,40}\b(ist\s+die\s+Kündigung|Kündigung\s+ist)\s+(ungültig|nichtig|unwirksam)\b'
+    source_ids: [BGE_142_III_91]
+
+  - id: FB_RENT_REDUCTION_PERCENT
+    description_de: "«Sie dürfen die Miete um X % kürzen» oder jede andere Prozentzahl zur Mietzinsherabsetzung (BGE 130 III 504 E. 4.1)."
+    patterns:
+      - '\b\d{1,2}[.,]?\d{0,2}\s?(%|Prozent)\s[^.?!\n]{0,40}\b(kürzen|Herabsetzung|Mietzinsreduktion|reduzieren)\b'
+      - '\b(kürzen|reduzieren|herabsetzen)\b[^.?!\n]{0,40}\b\d{1,2}[.,]?\d{0,2}\s?(%|Prozent)'
+    source_ids: [BGE_130_III_504]
+
+  - id: FB_DEFECT_SEVERITY
+    description_de: "«Das ist ein schwerer/leichter Mangel.» (Einordnung macht die Rechtsperson, Lehrbuch N 2942)"
+    patterns:
+      - '\b(ist|handelt\s+sich\s+um)\s+(ein|einen)\s+(schwere[rn]?|leichte[rn]?|mittelschwere[rn]?)\s+Mangel\b'
+    source_ids: [LEHRBUCH_MIETE_31]
+
+  - id: FB_IMMEDIATE_TERMINATION_ADVICE
+    description_de: "«Sie können fristlos kündigen und ausziehen.» (Art. 259b lit. a OR; nur mit Rechtsperson)"
+    patterns:
+      - '\b(Sie|die\s+Klientin)\s+(können|kann|dürfen|darf)\s+(fristlos\s+kündigen|sofort\s+ausziehen)\b'
+    source_ids: [CH_OR_259B]
+
+  - id: FB_SELF_REPAIR_ADVICE
+    description_de: "«Lassen Sie es reparieren und schicken Sie die Rechnung der Vermieterschaft.» (Art. 259b lit. b OR)"
+    patterns:
+      - '\bschicken\s+Sie\s+die\s+Rechnung\b'
+      - '\bLassen\s+Sie\s+es\s+reparieren\b'
+    source_ids: [CH_OR_259B]
+
+  - id: FB_LANDLORD_REPAIR_DEADLINE
+    description_de: "«Die Vermieterschaft muss bis zum [Datum] reparieren.» (kein berechnetes Fristende)"
+    patterns:
+      - '\bVermieterschaft\b[^.?!\n]{0,20}\bmuss\b[^.?!\n]{0,20}\bbis\s+(zum\s+)?\d'
+    source_ids: [CH_OR_259B]
+
+  - id: FB_BLAME_TENANT
+    description_de: "«Sie sind selbst schuld» / «das haben Sie verursacht» (keine Schuldzuweisung durch das System)."
+    patterns:
+      - '\bSie\s+sind\s+selbst\s+schuld\b'
+      - '\bdas\s+haben\s+Sie\s+verursacht\b'
+    source_ids: [CH_OR_259A]
+
+  - id: FB_HEALTH_CAUSE_OR_DIAGNOSIS
+    description_de: "Ursachen- oder Diagnoseaussage zu Gesundheit und Schimmel; «harmlos» / «gesundheitsgefährlich» als Einzelfalleinschätzung (Dossier Issue 5, 3a)."
+    patterns:
+      - '\b(Schimmel|Feuchtigkeit)\b[^.?!\n]{0,40}\b(hat|haben)\b[^.?!\n]{0,40}\b(verursacht|ausgelöst)\b'
+      - '\bwegen\s+(des\s+)?Schimmels?\b[^.?!\n]{0,30}\b(krank|erkrankt|Asthma\s+bekommen)\b'
+      - '\bist\s+(harmlos|gesundheitsgefährlich|gesundheitsschädlich)\b'
+    source_ids: [BAG_SCHIMMEL_2021]
+
+  - id: FB_RIGHT_TO_REPLACEMENT_HOUSING
+    description_de: "«Sie haben ein Recht auf eine Ersatzwohnung.» (Art. 41 Abs. 4 BV: kein automatischer Anspruch)"
+    patterns:
+      - '\bRecht\s+auf\s+(eine\s+)?(Ersatzwohnung|Notunterkunft|Wohnung)\b'
+    source_ids: [CH_BV_12]
+
+  - id: FB_IGNORE_AUTHORITY_LETTER
+    description_de: "«Ignorieren Sie das Schreiben» / «Sie müssen nicht öffnen, wenn das Ammannamt kommt.»"
+    patterns:
+      - '\bignorieren\s+Sie\b[^.?!\n]{0,30}\b(Schreiben|Brief)\b'
+      - '\bmüssen\s+nicht\s+öffnen\b'
+    source_ids: [CH_ZPO_343_1_D]
+
+  - id: FB_EVICTION_OUTCOME_PREDICTION
+    description_de: "«Sie haben gute Chancen» / «das Gericht wird nicht eintreten» / «Wenn das Gericht nicht eintritt, haben Sie gewonnen.»"
+    patterns:
+      - '\bgute[rn]?\s+(Chancen|Erfolgsaussichten)\b'
+      - '\bGericht\s+wird\s+nicht\s+eintreten\b'
+      - '\bnicht\s+eintritt\b[^.?!\n]{0,30}\bgewonnen\b'
+    source_ids: [BGE_140_III_315]
+
+  - id: FB_CHILDREN_PROTECT_FROM_EVICTION
+    description_de: "«Mit Kindern darf man Sie nicht auf die Strasse stellen» / «Sie bekommen sicher noch Zeit.» (BGer 4A_391/2013 E. 7)"
+    patterns:
+      - '\bnicht\s+auf\s+die\s+Strasse\s+stellen\b'
+      - '\bsicher\s+noch\s+Zeit\b'
+    source_ids: [BGER_4A_391_2013]
+
+  - id: FB_THIRD_PARTY_PAYMENT_NOT_COUNTING
+    description_de: "«Zahlungen des Sozialdienstes zählen nicht, weil der Vertrag auf Sie lautet.» (falsch, Art. 68 OR; BGer 4A_68/2014 E. 4.2)"
+    patterns:
+      - '\b(Sozialdienst|Dritte)\b[^.?!\n]{0,40}\b(zählen\s+nicht|kann\s+nicht\s+für\s+Sie\s+zahlen)\b'
+      - '\bweil\s+der\s+Vertrag\s+auf\s+Sie\s+lautet\b'
+    source_ids: [BGER_4A_68_2014]
+
+  - id: FB_INCREASE_ABUSIVE_CONCLUSION
+    description_de: "«Die Erhöhung ist missbräuchlich / berechtigt / unzulässig.» (die Missbräuchlichkeit beurteilt nur eine Fachperson)"
+    patterns:
+      - '\bErhöhung\b[^.?!\n]{0,30}\bist\s+(\w+\s+)?(missbräuchlich|berechtigt|unberechtigt|zulässig|unzulässig)\b'
+    source_ids: [CH_OR_269]
+
+  - id: FB_REFERENCE_RATE_VALUE
+    description_de: "«Der Referenzzinssatz beträgt zurzeit …» oder eigene Berechnung mit Referenzzins/Teuerung (kein aktueller Wert im System)."
+    patterns:
+      - '\bReferenzzinssatz\b[^.?!\n]{0,30}\b(beträgt|liegt\s+bei|ist\s+(derzeit|aktuell|zurzeit))\b'
+      - '\bReferenzzinssatz\b[^.?!\n]{0,40}\d[.,]\d{1,2}\s?%'
+    source_ids: [CH_VMWG_12A]
+
+  - id: FB_INCREASE_VOID_NOTHING_TO_DO
+    description_de: "«Die Erhöhung ist ungültig, Sie müssen nichts tun.» (auch bei vermutetem Formfehler vorsorglich Frist wahren)"
+    patterns:
+      - '\bErhöhung\b[^.?!\n]{0,20}\bist\s+(ungültig|nichtig|unwirksam)\b'
+      - '\bmüssen\s+nichts\s+tun\b'
+    source_ids: [CH_OR_269D_2]
+
+  - id: FB_ORIGINAL_SIGNATURE_REQUIRED
+    description_de: "«Ohne Originalunterschrift ist die Erhöhung ungültig.» (falsch seit 1.10.2025, Art. 269d Abs. 4 OR)"
+    patterns:
+      - '\bohne\s+Originalunterschrift\b[^.?!\n]{0,40}\b(ungültig|nichtig|unwirksam)\b'
+    source_ids: [CH_OR_269D_4]
+
+  - id: FB_FIGURES_GIVE_MORE_TIME
+    description_de: "«Fragen Sie zuerst nach den Zahlen, dann haben Sie mehr Zeit.» (falsch, Art. 20 Abs. 1 VMWG)"
+    patterns:
+      - '\bzuerst\b[^.?!\n]{0,30}\bZahlen\b[^.?!\n]{0,30}\bmehr\s+Zeit\b'
+    source_ids: [CH_VMWG_20_1]
+
+  - id: FB_WARNING_INVALID_NO_PAYMENT
+    description_de: "«Die Mahnung ist ungültig, Sie müssen nichts zahlen.» (die Gültigkeit beurteilt eine Fachperson; im Zweifel zahlen)"
+    patterns:
+      - '\bMahnung\b[^.?!\n]{0,20}\bist\s+(ungültig|nichtig|unwirksam)\b'
+      - '\bmüssen\s+nichts\s+zahlen\b'
+    source_ids: [CH_OR_257D_1]
+
+  - id: FB_DEADLINE_STARTS_AT_PICKUP
+    description_de: "«Die Frist beginnt erst, wenn Sie den Brief abholen» ohne Hinweis auf die 7-Tage-Grenze (BGE 119 II 147 E. 2)."
+    patterns:
+      - '\bFrist\s+beginnt\s+erst\b[^.?!\n]{0,30}\babholen\b'
+    source_ids: [BGE_119_II_147]
+
+  - id: FB_TERMINATION_ABUSIVE_CONCLUSION
+    description_de: "«Weil Sie lange dort wohnen / pünktlich gezahlt haben, ist die Kündigung missbräuchlich.» (BGE 140 III 591 E. 5)"
+    patterns:
+      - '\bist\s+die\s+Kündigung\s+(\w+\s+)?(missbräuchlich|ungültig|nichtig|unwirksam)\b'
+    source_ids: [BGE_140_III_591]
+
+  - id: FB_SIGN_SETTLEMENT_CALMLY
+    description_de: "«Unterschreiben Sie den Vergleich ruhig» ohne Hinweis auf einen möglichen Verzicht auf die zweite Erstreckung (Art. 272b Abs. 2 OR)."
+    patterns:
+      - '\bUnterschreiben\s+Sie\b[^.?!\n]{0,30}\bruhig\b'
+    source_ids: [CH_OR_272B_2]
+
+  - id: FB_PRIOR_WARNING_IRRELEVANT
+    description_de: "«Da nur ordentlich gekündigt wurde, spielt die frühere Mahnung keine Rolle.» (falsch, BGE 117 II 415 E. 4)"
+    patterns:
+      - '\bMahnung\b[^.?!\n]{0,30}\bkeine\s+Rolle\b'
+    source_ids: [BGE_117_II_415]

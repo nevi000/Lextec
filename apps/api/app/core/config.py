@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     ai_provider: Literal["mock", "gemini"] = "mock"
     gemini_api_key: SecretStr | None = None
     gemini_model: str = "gemini-3.8-flash"
-    ai_timeout_seconds: float = 30.0
+    ai_timeout_seconds: float = 60.0  # a long case answer is thousands of tokens; 30 s cut it off
     ai_max_retries: int = 1  # transient errors only; every attempt counts against the limits
     ai_rephrase_questions: bool = False
     ai_thinking_level: str = (
@@ -32,10 +32,11 @@ class Settings(BaseSettings):
 
     # --- cost control (application-level limits, NOT a guaranteed Google billing cap) ---
     ai_max_calls_per_case: int = 12
-    ai_max_input_tokens_per_call: int = 8000
-    ai_max_output_tokens_per_call: int = (
-        2500  # hard cap sent to Gemini (incl. thinking tokens); live test used 1367
-    )
+    ai_max_input_tokens_per_call: int = 15000
+    # hard cap sent to Gemini (incl. thinking tokens). A long, realistic case description yields a long fact list: the
+    # former 2500 truncated the JSON (finish_reason MAX_TOKENS → «entsprach nicht dem erwarteten Schema»).
+    ai_max_output_tokens_per_call: int = 4096
+    ai_max_output_tokens_retry: int = 8192  # cap for the single retry after a truncated answer
     ai_daily_request_limit: int = 30
     ai_daily_token_limit: int = 150_000
     ai_daily_budget_usd: float = 0.50
@@ -47,6 +48,21 @@ class Settings(BaseSettings):
     # Reference date for derived values (days since receipt). Default: today. Set e.g. 2026-11-07 for
     # reproducible demos/tests.
     app_today: date | None = None
+
+    # --- Sprachbrücke (phone companion on the local network) ---
+    bridge_ttl_minutes: int = 120
+    bridge_translate_inline: bool = (
+        False  # tests only: translate synchronously instead of in the background
+    )
+    bridge_public_base_url: str | None = (
+        None  # e.g. http://192.168.1.20:5173 ; default: LAN IP + web port
+    )
+    # requests that do not come from this machine may only use /api/bridge/* (the phone's endpoints)
+    restrict_remote_access: bool = True
+
+    # --- PDF import of a written case description (text only, nothing is stored) ---
+    pdf_import_max_bytes: int = 10 * 1024 * 1024
+    pdf_import_max_pages: int = 30
 
     # --- Fedlex (official Swiss federal law; public, no API key; deterministic, never uses the LLM) ---
     fedlex_enabled: bool = True  # False = cache only, no network at all

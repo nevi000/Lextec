@@ -30,6 +30,7 @@ import {
 import type { FactView } from "@/types";
 import { CasePanel } from "./CasePanel";
 import { CaseSummary } from "./CaseSummary";
+import { BridgePanel } from "@/features/bridge/BridgePanel";
 import { Composer } from "./Composer";
 import { DeferDialog } from "./DeferDialog";
 import { FactDialog } from "./FactDialog";
@@ -277,13 +278,17 @@ export function WorkspacePage() {
             value={draft}
             onChange={setDraft}
             onSubmit={(text) => {
-              setDraft("");
-              post.mutate({ content: text, kind: "DESCRIPTION" });
+              // keep the text visible until the server has stored it; a network error must not lose it
+              post.mutate({ content: text, kind: "DESCRIPTION" }, { onSuccess: () => setDraft("") });
             }}
           />
         ) : (
           <>
             <CaseSummary detail={detail} facts={facts} onOpenAll={() => setInfoOpen(true)} />
+
+            {!closed && !emergency && (
+              <BridgePanel caseId={caseId} disabled={closed} onCaseChanged={() => void invalidate()} />
+            )}
 
             {emergency ? (
               <details data-testid="legal-secondary" className="group rounded-lg border border-line bg-surface">
@@ -314,8 +319,7 @@ export function WorkspacePage() {
                     value={draft}
                     onChange={setDraft}
                     onSubmit={(text) => {
-                      setDraft("");
-                      post.mutate({ content: text, kind: "NOTE" });
+                      post.mutate({ content: text, kind: "NOTE" }, { onSuccess: () => setDraft("") });
                     }}
                   />
                 )}

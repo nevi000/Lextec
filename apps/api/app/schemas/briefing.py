@@ -59,6 +59,9 @@ class BriefingFact(BaseModel):
     confirmed: bool
     documented: bool = False
     evidence_quote: str | None
+    updated_at: datetime | None = (
+        None  # when the value was last written (e.g. consent_briefing: Zeitpunkt)
+    )
 
 
 class BriefingUncertainty(BaseModel):
@@ -113,6 +116,10 @@ class IssueRow(BaseModel):
     evidence_level: EvidenceLevel
     evidence_label_de: str
     evidence_quote: str | None = None
+    # How the row relates to the case (None = stored before this existed: shown as before):
+    # KNOWN | MISSING_REQUIRED | DEFERRED | ASKED_UNKNOWN | UNCLEAR | CONTRADICTORY | OPTIONAL_UNANSWERED | NOT_APPLICABLE
+    relevance: str | None = None
+    note_de: str | None = None  # e.g. «Ja – Art der Reaktion nicht näher bestimmt»
 
 
 class IssueGroup(BaseModel):

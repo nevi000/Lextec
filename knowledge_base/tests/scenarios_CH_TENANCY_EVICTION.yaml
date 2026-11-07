@@ -1,0 +1,266 @@
+# GENERIERT aus scripts/kb/specs/issue_06.py - SYNTHETIC_TECHNICAL, keine echten Fälle.
+schema_version: 1
+version: 1.0-issues
+scenarios:
+- id: SC_EV_T601
+  title_de: T6-01 Verfügung des Einzelgerichts mit Frist zur Stellungnahme
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: gesuch_oder_vorladung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_GRUNDREGEL
+- id: SC_EV_T602
+  title_de: 'T6-02 Stadtammannamt: Räumung am Dienstag'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: ammannamt_raeumungstermin
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_RAEUMUNG_STEHT
+- id: SC_EV_T603
+  title_de: T6-03 Schloss gewechselt, kein Gericht
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: raeumung_heute_oder_schloss
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: true
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_SELBSTHILFE
+- id: SC_EV_T604
+  title_de: T6-04 Rückstand nach Fristablauf bezahlt, Gesuch liegt vor
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: gesuch_oder_vorladung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nach_fristablauf
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_NACHZAHLUNG
+- id: SC_EV_T605
+  title_de: T6-05 Anfechtung hängig, nun Ausweisungsgesuch
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: gesuch_oder_vorladung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: true
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_ANFECHTUNG_HAENGIG
+- id: SC_EV_T606
+  title_de: 'T6-06 Nur ''Klientin muss raus'', kein Dokument: Stadium unklar, sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  unknown_facts:
+  - eviction_stage
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_STADIUM_UNKLAR
+  - EV_GRUNDREGEL
+- id: SC_EV_T607
+  title_de: T6-07 Nur Kündigung wegen Zahlungsverzug -> Issue 3
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: nur_kuendigung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_NUR_KUENDIGUNG_ZAHLUNGSVERZUG
+  expected_route_issue_ids:
+  - CH_TENANCY_PAYMENT_DEFAULT
+- id: SC_EV_08_DRITTZAHLUNG
+  title_de: Sozialdienst hat innert Frist gezahlt
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: gesuch_oder_vorladung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: true
+    household_description: Alleinstehend
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_DRITTZAHLUNG
+- id: SC_EV_09_UNTERSCHRIFT
+  title_de: Klientin will Auszugstermin unterschreiben
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    family_home_with_spouse: false
+    eviction_stage: gesuch_oder_vorladung
+    eviction_document_available: true
+    document_receipt_date: '2026-11-05'
+    deadline_quoted_text: Stellungnahme innert 10 Tagen
+    eviction_termination_reason: zahlungsverzug
+    arrears_paid_timing: nicht_bezahlt
+    post_termination_agreement: false
+    challenge_filed: false
+    housing_solution_available: true
+    landlord_self_help: false
+    third_party_payment: false
+    household_description: Alleinstehend
+    client_wants_to_sign_move_out: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_UNTERSCHRIFT_AUSZUG
+- id: SC_EV_10_KEINE_RUECKFRAGE_RUNDE
+  title_de: 'Fehlende Angaben: Eskalation wartet nicht (keine Rückfrage-Schleife)'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EVICTION
+    confidence: 0.9
+  facts:
+    eviction_stage: gesuch_oder_vorladung
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EV_GRUNDREGEL

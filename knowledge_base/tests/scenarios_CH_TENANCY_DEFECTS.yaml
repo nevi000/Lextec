@@ -1,0 +1,629 @@
+# GENERIERT aus scripts/kb/specs/issue_05.py - SYNTHETIC_TECHNICAL, keine echten Fälle.
+schema_version: 1
+version: 1.0-issues
+scenarios:
+- id: SC_DF_T501
+  title_de: 'T5-01 Schimmel Schlafzimmer, gemeldet, volle Miete: KI_WEITER'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: PROCEED
+- id: SC_DF_T502
+  title_de: 'T5-02 wie T5-01 aber Miete gekürzt: Recht bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: gekuerzt_oder_zurueckbehalten
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - DF_MIETE_GEKUERZT
+- id: SC_DF_T503
+  title_de: 'T5-03 gekürzt + Brief mit Kündigungsandrohung: sofort, Issue 2 aktiviert'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: gekuerzt_oder_zurueckbehalten
+    payment_warning_received: true
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_ZAHLUNGSAUFFORDERUNG
+  expected_route_issue_ids:
+  - CH_TENANCY_PAYMENT_WARNING
+- id: SC_DF_T504
+  title_de: T5-04 Starker Schimmel, Kleinkind mit Atemproblemen, ärztliches Zeugnis
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: groesser
+    health_symptoms_reported: true
+    medical_risk_reported: true
+    children_exposed: true
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_H1_BESCHWERDEN
+  - DF_H2_GROSSER_BEFALL
+- id: SC_DF_T505
+  title_de: 'T5-05 Hinterlegung vor 3 Wochen: sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: true
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_HINTERLEGUNG_LAEUFT
+- id: SC_DF_T506
+  title_de: 'T5-06 Heizung im Januar defekt: Gesundheit/Sicherheit sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: heizung_wasser_strom
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: true
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_GESUNDHEIT_GEFAHR
+- id: SC_DF_T507
+  title_de: 'T5-07 Glühbirne im Bad: KI_WEITER'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: kleiner_unterhalt
+    defect_description: Glühbirne im Bad defekt
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: true
+    landlord_informed: false
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: PROCEED
+- id: SC_DF_T508
+  title_de: T5-08 Kündigung zwei Wochen nach Mängelmeldung -> Issue 1
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: true
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_KUENDIGUNG_NACH_MELDUNG
+  expected_route_issue_ids:
+  - CH_TENANCY_TERMINATION
+- id: SC_DF_T509
+  title_de: T5-09 Klientin will wegen Lärm ausziehen
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: laerm_bau
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: ausziehen
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - DF_AUSZIEHEN
+  - DF_LAERM_BAU
+- id: SC_DF_T510
+  title_de: 'T5-10 Zahlungsstatus nicht erhoben: Rückfrage'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ASK
+  expected_missing_facts:
+  - rent_payment_status
+- id: SC_DF_T511
+  title_de: T5-11 Schimmel mehrere Stellen im Kinderzimmer, Kind hustet, kein anderer Raum
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: groesser
+    health_symptoms_reported: true
+    medical_risk_reported: false
+    children_exposed: true
+    can_avoid_affected_rooms: false
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_H1_BESCHWERDEN
+  - DF_H2_GROSSER_BEFALL
+  - DF_H3_NICHT_MEIDBAR
+- id: SC_DF_T512
+  title_de: 'T5-12 Kleine Stelle im Bad, keine Beschwerden, meidbar: KI_WEITER'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: false
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: PROCEED
+- id: SC_DF_T513
+  title_de: T5-13 Grosser Befall Schlafzimmer, medical_risk unbekannt nach Rückfrage
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: groesser
+    health_symptoms_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  unknown_facts:
+  - medical_risk_reported
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_H2_GROSSER_BEFALL
+  - DF_H7_GESUNDHEIT_UNBEKANNT
+- id: SC_DF_T514
+  title_de: 'T5-14 Starker Befall, nicht meidbar, keine Zwischenunterkunft: SOZIAL sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: groesser
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: false
+    safe_alternative_available: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - DF_H2_GROSSER_BEFALL
+  - DF_H3_NICHT_MEIDBAR
+  - DF_H4_KEINE_ZWISCHENUNTERKUNFT
+- id: SC_DF_T515
+  title_de: 'T5-15 Schimmel in zugewiesener Notwohnung: Recht bald + G4'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: zugewiesene_unterkunft
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: false
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - DF_H5_GEMEINDE_ZUWEISUNG
+- id: SC_DF_T516
+  title_de: 'T5-16 ''Asthma bekommen'' gemeldet: H1 ohne Ursachenaussage'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_DEFECTS
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    defect_type: schimmel
+    defect_description: Schimmel im Schlafzimmer seit zwei Monaten
+    defect_effect: Schlafzimmer eingeschränkt nutzbar
+    health_safety_danger: false
+    defect_at_move_in: false
+    possibly_tenant_caused: false
+    minor_repair_possible: false
+    landlord_informed: true
+    landlord_informed_in_writing: true
+    landlord_reacted: true
+    rent_payment_status: voll_bezahlt
+    payment_warning_received: false
+    rent_deposit_started: false
+    termination_after_report: false
+    client_wish: reparatur
+    housing_arrangement: privat
+    sleeping_room_affected: true
+    reported_extent: klein
+    health_symptoms_reported: true
+    medical_risk_reported: false
+    children_exposed: false
+    can_avoid_affected_rooms: true
+    safe_alternative_available: true
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - DF_H1_BESCHWERDEN

@@ -8,9 +8,9 @@
   <div class="kv{% if quote %} withq{% endif %}">
     <div class="k">{{ f.label }}</div>
     {%- if f.value is none %}
-    <div class="v missing">Fehlt</div><div class="s">{{ f.note or "ungeklärt" }}</div>
+    <div class="v missing">{{ "Offen" if f.note in ("wichtige Angabe offen", "zurückgestellt") else ("Unbekannt" if f.note == "erfragt, derzeit unbekannt" else "Unklar" if f.note in ("unklar", "widersprüchlich") else "Fehlt") }}</div><div class="s">{{ f.note or "ungeklärt" }}</div>
     {%- else %}
-    <div class="v">{{ f.value }}{% if quote and f.evidence and f.evidence != f.value %}<span class="ev">«{{ f.evidence }}»</span>{% endif %}</div>
+    <div class="v">{{ f.value }}{% if f.detail %}<span class="ev unclear">{{ f.detail }}</span>{% endif %}{% if quote and f.evidence and f.evidence != f.value %}<span class="ev">«{{ f.evidence }}»</span>{% endif %}</div>
     <div class="s{% if f.src == 'ai' %} open{% endif %}">{{ SRC.get(f.src, f.src) }}</div>
     {%- endif %}
   </div>
@@ -27,7 +27,7 @@
 {%- macro bodies_table(items) -%}
     <table class="bodies">
       {% for s in items %}
-      <tr><td class="name">{{ s.label }}{% if s.unverified or not s.contact_primary %}<span class="dot"></span>{% endif %}<small>{{ s.purpose }}</small>{% if s.not_emergency_number %}<small><b>Beratung, keine Notrufnummer</b></small>{% endif %}</td>
+      <tr><td class="name">{{ s.label }}{% if s.unverified or not s.contact_primary %}<span class="dot"></span>{% endif %}<small>{{ s.purpose }}</small>{% if s.scope %}<small>{{ s.scope }}</small>{% endif %}{% if s.local_note %}<small class="local-note"><b>Hinweis:</b> {{ s.local_note }}</small>{% endif %}{% if s.not_emergency_number %}<small><b>Beratung, keine Notrufnummer</b></small>{% endif %}</td>
           <td class="contact">{{ contact_cell(s) }}<small class="q">{{ s.quality }}</small></td>
           <td class="why">{{ s.costs or "Kosten nicht angegeben" }}</td></tr>
       {% endfor %}
@@ -86,6 +86,8 @@
   .groups { column-count: 2; column-gap: 9mm; }
   .kv .k { hyphens: auto; overflow-wrap: anywhere; }
   .kv.withq { grid-template-columns: 31mm 1fr auto; }
+  .open-list { margin: .6mm 0 0; font-size: 8.4pt; line-height: 1.4; }
+  .ev.unclear { color: var(--red); }
   .ev { display: block; color: var(--faint); font-weight: 400; font-size: 7pt; margin-top: .3mm; }
   .group { margin-bottom: 3.6mm; break-inside: avoid; }
   .group h3 { font-weight: 600; font-size: 8.6pt; margin: 0 0 .8mm; color: var(--ink); }
@@ -181,8 +183,8 @@
   <div class="hero">
     <div>
       <h1>{{ b.issue_label }}</h1>
-      <p class="client">{{ b.client.label }} <span class="missing" style="font-size:8pt">Name nicht erfasst</span></p>
-      <p class="contact-line"><span class="missing">Kontaktangaben fehlen.</span>&ensp;Erfasst durch {{ b.client.submitted_by }}.</p>
+      <p class="client">{{ b.client.label }}</p>
+      <p class="contact-line">Erfasst durch {{ b.client.submitted_by }}. Personalien werden in LexTec Bridge nicht erfasst und sind für die Einschätzung nicht erforderlich.</p>
       <p class="stand">{% if b.municipality %}Gemeinde {{ b.municipality }}{% if b.canton %}, Kanton {{ b.canton }}{% endif %}{% elif b.canton %}Kanton {{ b.canton }}{% else %}Wohnort nicht erfasst{% endif %}. Version {{ b.version }}, Fallstand {{ b.case_state }}, erstellt {{ b.created_at }}. Wissensbasis {{ b.kb_version }}.</p>
     </div>
     <div class="signal {{ b.tl.level }}">
@@ -205,10 +207,12 @@
     <p class="refs">{{ b.summary_source }}.</p>
   </div>
 
+  {% if b.person %}
   <div class="section">
-    <h2>Personendaten <small class="legend">LexTec Bridge speichert (noch) keine Personalien</small></h2>
-    <p class="person-line"><span class="missing">Nicht erfasst:</span> {% for p in b.person %}{{ p.label }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>
+    <h2>Personendaten</h2>
+    <div class="eckdaten persons">{% for p in b.person %}<div class="kv"><div class="k">{{ p.label }}</div><div class="v">{{ p.value }}</div></div>{% endfor %}</div>
   </div>
+  {% endif %}
 
   {% for sec in b.sections %}
   <div class="section">
@@ -250,7 +254,7 @@
       <li><span>Entscheid</span><div><b>{{ b.decision.label }}.</b> Empfohlene Stelle: {{ b.handover.to }} ({{ b.handover.status | replace(".", "") }}).</div></li>
       {% if b.next_steps %}<li><span>Nächster Schritt</span><div>{{ b.next_steps[0].title.rstrip('.') }}.{% if b.next_steps[0].detail %} {{ b.next_steps[0].detail }}{% endif %}</div></li>{% endif %}
       {% if b.missing_all %}<li><span>Noch offen</span><div class="missing-soft">{{ b.missing_all[:6] | join(", ") }}{% if b.missing_all | length > 6 %} und {{ b.missing_all | length - 6 }} weitere{% endif %}</div></li>{% endif %}
-      {% if known %}<li><span>Bekannt</span><div>{{ known[:8] | join("; ") }}{% if known | length > 8 %}; weitere auf Seite 4{% endif %}</div></li>{% endif %}
+      {% if known %}<li><span>Bekannt</span><div>{{ known[:8] | join("; ") }}{% if known | length > 8 %}; weitere im Anhang{% endif %}</div></li>{% endif %}
     </ul>
   </div>
 
@@ -270,12 +274,31 @@
     <div class="meta">{{ b.decision.effective_action }}<br>{{ b.decision.code }}<br>{{ b.decision.rules_fired | join(", ") }}<br>Dringlichkeit: {{ b.urgency.level }}</div>
   </div>
 
+  {% if b.open_points or b.asked_unknown or b.contradictions or b.unconfirmed_ai %}
+  <div class="section">
+    <h2>Offene Punkte und Unklarheiten</h2>
+    <div class="split">
+      <div>
+        {% if b.open_points %}<div class="g-k">Wichtige Angaben, die noch fehlen ({{ b.open_points | length }})</div>
+        <p class="open-list">{% for o in b.open_points[:10] %}{{ o.label }}{% if o.deferred %} <span class="refs">(zurückgestellt)</span>{% endif %}{% if not loop.last %}; {% endif %}{% endfor %}{% if b.open_points | length > 10 %}; und {{ b.open_points | length - 10 }} weitere{% endif %}.</p>
+        {% else %}<p class="empty">Alle wichtigen Angaben sind erfasst.</p>{% endif %}
+        {% if b.asked_unknown %}<div class="g-k" style="margin-top:2mm">Erfragt, derzeit unbekannt</div><p class="refs" style="margin:0">{{ b.asked_unknown | join(", ") }}</p>{% endif %}
+      </div>
+      <div>
+        {% if b.contradictions %}<div class="g-k">Widersprüche und Unklarheiten</div><ul class="plain">{% for c in b.contradictions %}<li>{{ c }}</li>{% endfor %}</ul>{% endif %}
+        {% if b.unconfirmed_ai %}<div class="g-k" style="margin-top:{{ '2mm' if b.contradictions else '0' }}">Aus der Schilderung erkannt, nicht bestätigt (KI)</div><p class="refs" style="margin:0">{{ b.unconfirmed_ai | join(", ") }}</p>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="section">
     <h2>Prozess</h2>
     <ol class="steps">
     {% for st in b.next_steps %}<li><div><b>{{ st.title.rstrip('.') }}.</b>{% if st.detail %}<span>{{ st.detail }}</span>{% endif %}</div></li>{% endfor %}
     </ol>
     <p class="refs">Ein Fallbericht ist keine Kontaktaufnahme. Übergabestatus: {{ b.handover.status }}</p>
+    {% if b.handover.consent %}<p class="refs"><b>Einwilligung zur Weitergabe an eine externe Rechtsperson:</b> {{ b.handover.consent.status }}{% if b.handover.consent.recorded_at %} Erfasst am {{ b.handover.consent.recorded_at }}{% if b.handover.consent.recorded_by %} von {{ b.handover.consent.recorded_by }}{% endif %}.{% endif %} Geltungsbereich: {{ b.handover.consent.scope }} {{ b.handover.consent.privacy_note }}</p>{% endif %}
   </div>
 
   <div class="section">
@@ -283,17 +306,7 @@
     {% if b.bodies %}{{ bodies_table(b.bodies) }}{% else %}<p class="empty">Keine konkrete Stelle aus der Wissensbasis ermittelt. Empfohlen: {{ b.handover.to }}.</p>{% endif %}
     <p class="refs">{{ b.bodies_note }}</p>
   </div>
-  <div class="notes" style="margin-top:6mm">
-    <h2>Notizen</h2>
-    <div class="note-meta"><span>Bearbeitet von</span><span>Datum</span><span>Weitergeleitet an</span></div>
-    {% for i in range(5) %}<div class="note-line"></div>{% endfor %}
-  </div>
-</section>
-
-<!-- ===================== RECHTLICHE PRUEFUNG ===================== -->
-<section class="page">
-  {{ masthead() }}
-  <div class="page-head"><h1 class="display">Rechtliche Prüfung</h1><span>Quellen im Volltext im Anhang</span></div>
+  <div class="page-head" style="margin-top:6mm; break-after:avoid"><h1 class="display">Rechtliche Prüfung</h1><span>Quellen im Anhang</span></div>
   <div class="section">
     <h2>Juristische Prüfpunkte</h2>
     <p class="refs" style="margin:-1mm 0 2mm">Eine Rechtsquelle belegt nicht, dass ein Prüfpunkt erfüllt ist. «Regel ausgelöst» heisst: das System hat einen Anlass für die Prüfung festgestellt, die Beurteilung macht die Fachperson.</p>
@@ -314,37 +327,32 @@
   </div>
 
   <div class="split">
-    <div class="section">
-      <h2>Erkannte rechtliche Risiken</h2>
-      {% if b.risks %}<ul class="plain">{% for r in b.risks %}<li>{{ r }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine Hinweise aus den Prüfregeln.</p>{% endif %}
-    </div>
+    {% if b.risks %}<div class="section">
+      <h2>Weitere Hinweise aus den Prüfregeln</h2>
+      <ul class="plain">{% for r in b.risks %}<li>{{ r }}</li>{% endfor %}</ul>
+    </div>{% endif %}
     <div class="section">
       <h2>Erkannte Rechtsgebiete</h2>
       {% for a in b.legal_areas %}<p><b>{{ a.label }}</b>{% if a.confidence is not none %}&ensp;<span class="empty">Sicherheit der KI-Zuordnung {{ (a.confidence * 100) | round | int }} %</span>{% endif %}</p>
-      {% if a.evidence %}<p class="refs" style="font-size:7.2pt">«{{ a.evidence }}»</p>{% endif %}{% endfor %}
+      {% endfor %}
       {% for u in b.unsupported %}<p><b>{{ u }}</b>&ensp;<span class="missing-soft">nicht abgedeckt: eine Fachperson muss beurteilen</span></p>{% endfor %}
     </div>
   </div>
-</section>
-
-<!-- ===================== ERFASSTE ANGABEN ===================== -->
-<section class="page">
-  {{ masthead() }}
-  <div class="page-head"><h1 class="display">Erfasste Angaben</h1><span>{{ b.inputs_count }} Eingaben, Fallstand {{ b.case_state }}</span></div>
-
-  <div class="split">
-    <div class="section">
-      <h2>Offene Fragen</h2>
-      {% if b.open_mandatory_questions %}<ul class="plain q">{% for q in b.open_mandatory_questions %}<li>{{ q }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine offenen Pflichtfragen.</p>{% endif %}
-    </div>
-    <div class="section">
-      <h2>Widersprüche und Unklarheiten</h2>
-      {% if b.contradictions %}<ul class="plain">{% for c in b.contradictions %}<li>{{ c }}</li>{% endfor %}</ul>{% else %}<p class="empty">Keine Widersprüche erkannt.</p>{% endif %}
-      {% if b.unconfirmed_ai %}<h2 style="margin-top:3mm">Unbestätigte KI-Angaben</h2><p class="refs" style="margin:0">{{ b.unconfirmed_ai | join(", ") }}</p>{% endif %}
-    </div>
+  <div class="notes" style="margin-top:5mm">
+    <h2>Notizen</h2>
+    <div class="note-meta"><span>Bearbeitet von</span><span>Datum</span><span>Weitergeleitet an</span></div>
+    {% for i in range(2) %}<div class="note-line"></div>{% endfor %}
   </div>
 
-  <p class="refs" style="margin:-1mm 0 3mm">Antworten aus dem Gespräch stehen im Wortlaut unter dem Wert. «KI» heisst: aus dem Gesprächstext abgeleitet und noch nicht von der Fachperson bestätigt. «Fehlt» heisst: nicht erfasst, nie geschätzt.</p>
+</section>
+
+<!-- ===================== ANHANG: ERFASSTE ANGABEN, CHRONOLOGIE ===================== -->
+<section class="annex">
+  {{ masthead("Anhang") }}
+  <div class="page-head"><h1 class="display">Erfasste Angaben</h1><span>{{ b.inputs_count }} Eingaben, Fallstand {{ b.case_state }}</span></div>
+
+  <p class="refs" style="margin:-1mm 0 3mm">Es werden nur Angaben gezeigt, die erfasst wurden oder für den Fall nach der Wissensbasis nötig sind. Antworten aus dem Gespräch stehen im Wortlaut unter dem Wert. «KI» heisst: aus dem Gesprächstext abgeleitet und noch nicht bestätigt. Nicht zutreffende oder optionale, nicht beantwortete Fragen werden nicht aufgelistet.</p>
+  {% if not b.fact_groups %}<p class="empty">Noch keine Angaben erfasst.</p>{% endif %}
   <div class="groups">
   {% for g in b.fact_groups %}
   <div class="group">
@@ -353,12 +361,8 @@
   </div>
   {% endfor %}
   </div>
-</section>
 
-<!-- ===================== CHRONOLOGIE, GESPRAECH, UNTERLAGEN ===================== -->
-<section class="page">
-  {{ masthead() }}
-  <div class="page-head"><h1 class="display">Chronologie, Gespräch und Unterlagen</h1><span>aus dem gespeicherten Fall</span></div>
+  <div class="page-head" style="margin-top:6mm; break-after:avoid"><h1 class="display">Chronologie, Gespräch und Unterlagen</h1><span>aus dem gespeicherten Fall</span></div>
 
   <div class="section">
     <h2>Chronologie</h2>
@@ -383,21 +387,19 @@
 
   <div class="section">
     <h2>Unterlagenübersicht</h2>
-    <p class="docs-note">In LexTec Bridge können derzeit keine Dokumente hochgeladen werden. Deshalb sind keine Originaldokumente oder Scans angehängt und keine Angaben aus Dokumenten extrahiert.
-    {% if b.documents_received %}Als durch Unterlagen belegt markiert: {{ b.documents_received | join("; ") }}.{% endif %}</p>
-    {% if b.documents_requested %}
-    <ul class="docs compact" style="margin-top:2mm">
-      {% for d in b.documents_requested %}<li class="absent"><span class="n">✗</span><div><div class="t">{{ d }}</div><div class="x">Dokumenttyp laut Wissensbasis, noch nicht vorliegend</div></div><div class="r">fehlt</div></li>{% endfor %}
-    </ul>{% endif %}
+    <p class="docs-note">Es sind keine Dokumente im System (Upload ist noch nicht vorhanden); alle Angaben stammen aus dem Gespräch.
+    {% if b.documents_received %}Als durch Unterlagen belegt markiert: {{ b.documents_received | join("; ") }}.{% endif %}
+    {% if b.documents_requested %}<b>Benötigte Unterlagen:</b> {{ b.documents_requested | join("; ") }}.{% endif %}</p>
   </div>
 </section>
 
 <!-- ===================== ANHANG: RECHTSQUELLEN ===================== -->
-<section class="annex">
+<section class="annex" style="break-before:auto">
   {{ masthead("Anhang") }}
-  <div class="page-head"><h1 class="display">Rechtsquellen</h1><span>{{ b.sources | length }} Quellen</span></div>
-  <p class="refs" style="margin-bottom:3mm">{{ b.sources_note }}</p>
-  {% for s in b.sources %}
+  {% set rel = b.sources | selectattr("relevant") | list %}{% set oth = b.sources | rejectattr("relevant") | list %}
+  <div class="page-head"><h1 class="display">Rechtsquellen</h1><span>{{ rel | length }} mit Wortlaut, {{ oth | length }} als Kurzverweis</span></div>
+  <p class="refs" style="margin-bottom:3mm">{{ b.sources_note }} Der Wortlaut wird nur für Quellen gezeigt, die einen ausgelösten Prüfpunkt stützen; weitere im Bericht zitierte Quellen stehen als Kurzverweis. Nicht zitierte Quellen der Wissensbasis werden nicht aufgelistet.</p>
+  {% for s in rel %}
   <div class="src-card">
     <div class="src-head"><b>{{ s.title }}</b><span class="id">{{ s.id }}</span></div>
     <div class="src-law">{{ s.law }}</div>
@@ -412,9 +414,13 @@
     <div class="src-meta">{{ s.meta }}{% if s.meta %}. {% endif %}Referenziert von {{ s.referenced_by | join(", ") }}.{% for l in s.links %} <a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.label }}</a>{% endfor %}</div>
   </div>
   {% endfor %}
+  {% if oth %}
+  <h2 style="margin-top:4mm">Weitere Quellen (Kurzverweis)</h2>
+  <ul class="plain">
+    {% for s in oth %}<li><b>{{ s.title }}</b>{% if s.summary %} <span class="refs">{{ s.summary }}</span>{% endif %} <span class="refs">{{ s.law }}. {{ "Im Law-Dossier geprüft" if s.status.dossier else "Dossier: noch offen" }}; {{ "amtlicher Wortlaut abgerufen" if s.status.official_text else "nicht live verifiziert" }}; Interpretation {{ "freigegeben" if s.status.interpretation_reviewed else "noch nicht freigegeben" }}.{% for l in s.links %} <a href="{{ l.url }}" target="_blank" rel="noopener noreferrer">{{ l.label }}</a>{% endfor %}</span></li>{% endfor %}
+  </ul>
+  {% endif %}
 
-  <h2 style="margin-top:5mm">Dokumentenverzeichnis</h2>
-  <p class="docs-note">Keine hochgeladenen Originaldokumente (Funktion noch nicht vorhanden). Muster-Scans aus der Vorlage werden nie in echten Berichten verwendet.</p>
 
   <div class="audit" style="margin-top:5mm">
     <b>Nachvollziehbarkeit.</b> {{ b.case_id }}, Version {{ b.version }}, Fallstand {{ b.case_state }}, {{ b.inputs_count }} Eingaben, erstellt {{ b.created_at }}.

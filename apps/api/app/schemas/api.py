@@ -112,6 +112,8 @@ class MessageView(ORM):
     answers_fact_id: str | None
     analysis_status: AnalysisStatus
     analysis_error: str | None
+    origin: str | None = None
+    original_language: str | None = None
     created_at: datetime
 
 

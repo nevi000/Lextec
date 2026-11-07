@@ -37,6 +37,9 @@ PROVENANCE = {
     FactOrigin.USER_CORRECTION.value: "CORRECTED_BY_USER",
 }
 
+# answer entered by the client on the phone (Sprachbrücke), accepted by the social worker; no legal verification implied
+BRIDGE_LABEL_DE = "Angabe der ratsuchenden Person, via Sprachbrücke erfasst und durch die Sozialarbeiterin bestätigt"
+
 EVIDENCE_LABEL_DE = {
     "DOCUMENTED": "Dokumentarisch belegt",
     "CONFIRMED": "Von der Sozialarbeiterin bestätigt oder korrigiert",
@@ -143,17 +146,41 @@ def _authority(kb: KnowledgeBase, aid: str) -> AuthorityOut | None:
     )
 
 
+def _relevance(fd, status: FactStatus, required_now: dict) -> str:
+    """Maps stored fact state + knowledge-base applicability to the report's meaning (no new legal criteria)."""
+    if status == FactStatus.KNOWN:
+        return "KNOWN"
+    if status == FactStatus.UNKNOWN:
+        return "ASKED_UNKNOWN"
+    if status == FactStatus.CONTRADICTORY:
+        return "CONTRADICTORY"
+    if status == FactStatus.AMBIGUOUS:
+        return "UNCLEAR"
+    if status == FactStatus.NOT_APPLICABLE:
+        return "NOT_APPLICABLE"
+    m = required_now.get(fd.id)
+    if m is not None:
+        return "DEFERRED" if m.deferred else "MISSING_REQUIRED"
+    if fd.required_if is not None and not fd.required:
+        return "NOT_APPLICABLE"  # condition of the knowledge base is not met (e.g. no family home)
+    return "OPTIONAL_UNANSWERED"
+
+
 def _issue_briefing(
     kb: KnowledgeBase,
     issue: IssueDefinition,
     rows: dict[str, CaseFact],
     decision: DecisionResult,
     case: Case,
+    bridge_message_ids: frozenset[str] = frozenset(),
 ) -> IssueBriefing | None:
     prof = issue.briefing_profile
     if prof is None:
         return None
     defs = {f.id: f for f in issue.facts}
+    required_now = {
+        m.fact_id: m for m in decision.missing_facts
+    }  # required (or conditionally required) and open
     groups: list[IssueGroup] = []
     unknown_facts: list[str] = []
     for g in prof.groups:
@@ -170,14 +197,26 @@ def _issue_briefing(
                 unknown_facts.append(fd.label_de)
             else:
                 shown = "–"
+            relevance = _relevance(fd, status, required_now)
+            note = (
+                fd.true_value_note_de
+                if status == FactStatus.KNOWN and row is not None and row.value is True
+                else None
+            ) or None
             out_rows.append(
                 IssueRow(
+                    relevance=relevance,
+                    note_de=note,
                     fact_id=fid,
                     label_de=fd.label_de,
                     value_display=shown,
                     status=status,
                     evidence_level=level,  # type: ignore[arg-type]
-                    evidence_label_de=EVIDENCE_LABEL_DE[level],
+                    evidence_label_de=BRIDGE_LABEL_DE
+                    if row is not None
+                    and row.source_message_id in bridge_message_ids
+                    and level in ("STATED", "CONFIRMED")
+                    else EVIDENCE_LABEL_DE[level],
                     evidence_quote=row.evidence_quote
                     if row and status == FactStatus.KNOWN
                     else None,
@@ -244,6 +283,7 @@ def build_briefing(
     handover: Handover | None,
     ai_external: bool,
     registry: SourceRegistry | None = None,
+    bridge_message_ids: frozenset[str] = frozenset(),
 ) -> CaseBriefing:
     registry = registry or SourceRegistry(kb)
     now = datetime.now(UTC)
@@ -270,7 +310,7 @@ def build_briefing(
                     content_status=d.content_status,
                 )
             )
-            ib = _issue_briefing(kb, d, rows, decision, case)
+            ib = _issue_briefing(kb, d, rows, decision, case, bridge_message_ids)
             if ib is not None:
                 issue_briefings.append(ib)
         else:
@@ -306,6 +346,7 @@ def build_briefing(
                     confirmed=f.confirmed,
                     documented=bool(f.documented),
                     evidence_quote=f.evidence_quote,
+                    updated_at=getattr(f, "updated_at", None),
                 )
             )
         elif f.status in (

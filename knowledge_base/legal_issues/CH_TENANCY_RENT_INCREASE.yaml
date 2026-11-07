@@ -1,0 +1,1098 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Mietzinserhöhung und einseitige Vertragsänderung (Issue 7)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_07.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_07.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_RENT_INCREASE
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: rent_increase
+title_de: Mietzinserhöhung und einseitige Vertragsänderung (Issue 7)
+description: Mietzinserhöhung und andere einseitige Vertragsänderungen während eines unbefristeten Mietverhältnisses
+  (Art. 269 ff. OR, VMWG; Änderungen seit 1.10.2025). Das System erkennt Formfehler-Hinweise und die 30-Tage-Frist,
+  beurteilt die Missbräuchlichkeit nie.
+provenance_de: 'Law-Dossier Issue 7 vom 7.11.2026; Teamentscheide: Eskalation ab 20 Tagen oder bei unbekanntem
+  Empfang, Formular-Vorprüfung nur als Hinweis.'
+classification:
+  description: 'Passt bei Mietzinserhöhung, neuen Nebenkosten oder einseitigem Leistungsabbau (Waschküche,
+    Parkplatz) durch die Vermieterschaft während eines laufenden Mietverhältnisses, auch wenn nur die
+    Mitteilung / das Formular vorliegt. NICHT passend: Kündigung (Issue 1), Mängel (Issue 5).'
+  typical_situations:
+  - Der Vermieter hat die Miete erhöht.
+  - Meine Klientin hat eine Mietzinserhöhung erhalten.
+  - Die Verwaltung verlangt neu Nebenkosten für die Hauswartung.
+  - Mitteilung einer Mietzinsanpassung wegen Referenzzinssatz.
+  related_issues: []
+derived:
+- id: days_since_increase_receipt
+  kind: days_since_earliest
+  facts:
+  - increase_pickup_notice_date
+  - increase_receipt_date
+  description: Tage seit dem frühesten bekannten Empfangshinweis der Mitteilung (INTERNE Schwelle, kein
+    Fristende).
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: contract_term_type
+  group: prescreening
+  label_de: Vertragsart
+  data_type: enum
+  enum_values:
+  - unbefristet
+  - befristet
+  enum_labels_de:
+    unbefristet: Unbefristet
+    befristet: Befristet
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_273_2
+  question_de: Ist der Mietvertrag unbefristet oder befristet?
+  why_needed_de: Die Frist für ein Erstreckungsbegehren hängt von der Vertragsart ab (Art. 273 Abs. 2
+    OR).
+- id: contract_termination_dates
+  group: content
+  label_de: Kündigungstermine laut Mietvertrag
+  data_type: string
+  priority: low
+  source_ids:
+  - CH_OR_266C
+  extraction_hint_de: Nur wörtlich übernehmen, was der Mietvertrag zu Kündigungsfrist und -terminen sagt
+    (z. B. 'Ende März, Juni, September, Dezember'). Nichts ergänzen oder raten.
+  question_de: Welche Kündigungstermine nennt der Mietvertrag?
+  why_needed_de: Die Kündigungsfrist von 3 Monaten gilt auf den vertraglichen, sonst auf den ortsüblichen
+    Termin (Art. 266c OR). Ortsübliche Termine sind im System nicht hinterlegt und werden nur als Prüfhinweis
+    ausgegeben.
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: housing_arrangement
+  group: health
+  label_de: Wohnform
+  data_type: enum
+  enum_values:
+  - privat
+  - genossenschaft
+  - gemeindewohnung
+  - subventioniert
+  - zugewiesene_unterkunft
+  enum_labels_de:
+    privat: Privater Mietvertrag
+    genossenschaft: Genossenschaft
+    gemeindewohnung: Gemeindewohnung
+    subventioniert: Subventionierte Wohnung
+    zugewiesene_unterkunft: Vom Sozialdienst zugewiesene Unterkunft
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253B_2_3
+  question_de: Privater Mietvertrag, Genossenschaft, Gemeindewohnung, subventionierte Wohnung oder zugewiesene
+    Unterkunft?
+  why_needed_de: Vorprüfung; Art. 253b Abs. 3 OR; evtl. kein Mietvertrag. UNBEKANNT bleibt unbekannt.
+- id: social_assistance_received
+  group: social
+  label_de: Bezug von Sozialhilfe
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_DSG_6_7
+  question_de: "Bezieht die Klientin Sozialhilfe?"
+  why_needed_de: Mietzinsgarantie, Übernahme eines Rückstands, Mietzinslimite. Daten über Sozialhilfe
+    sind besonders schützenswert (Art. 5 lit. c Ziff. 6 DSG).
+- id: increase_letter_available
+  group: letter
+  label_de: Schreiben vollständig hochgeladen
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_1
+  question_de: "Liegt das Schreiben der Vermieterschaft vollständig vor (alle Seiten, Umschlag)?"
+  why_needed_de: Grundlage für alles Weitere; Formular, Begründung und Daten liest die Sozialarbeiterin
+    daraus ab.
+- id: increase_delivery_method
+  group: letter
+  label_de: Zustellart des Schreibens
+  data_type: enum
+  enum_values:
+  - persoenlich
+  - eingeschrieben
+  - normale_post
+  - email
+  enum_labels_de:
+    persoenlich: Persönlich übergeben
+    eingeschrieben: Eingeschrieben (Post)
+    normale_post: Normale Post
+    email: E-Mail
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_270B
+  - BGE_137_III_208
+  question_de: 'Wie wurde das Schreiben zugestellt: eingeschrieben, normale Post, persönlich oder per
+    E-Mail?'
+  why_needed_de: 'Beginn der 30-Tage-Frist (Art. 270b OR; relative Empfangstheorie, BGE 137 III 208 E.
+    3.1.3); nicht abgeholtes Einschreiben: spätestens 7. Tag der Abholfrist.'
+- id: increase_pickup_notice_date
+  group: letter
+  label_de: Abholungseinladung (Erhöhung)
+  data_type: date
+  required_if:
+    ref: fact.increase_delivery_method
+    op: equals
+    value: eingeschrieben
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - increase_delivery_method
+  source_ids:
+  - CH_OR_270B
+  question_de: 'Falls nicht abgeholt: Wann lag die Abholungseinladung im Briefkasten?'
+  why_needed_de: 'Konservative Schwelle: der früheste bekannte Empfangshinweis zählt für die interne Dringlichkeit.'
+- id: increase_receipt_date
+  group: letter
+  label_de: Empfang des Schreibens
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_270B
+  - BGE_137_III_208
+  question_de: "An welchem Datum wurde das Schreiben empfangen oder auf der Post abgeholt?"
+  why_needed_de: Beginn der 30-Tage-Frist (Art. 270b OR; relative Empfangstheorie BGE 137 III 208). Das
+    System nennt kein Fristende.
+- id: form_official_used
+  group: form
+  label_de: Amtliches Formular
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_2
+  - BGE_121_III_214
+  question_de: "Ist das Schreiben das amtliche Formular «Mitteilung von Mietzinserhöhungen und einseitigen Vertragsänderungen (Art. 269d OR)» (Zürich, drei Seiten) und nicht bloss ein Brief oder eine E-Mail?"
+  why_needed_de: 'Mögliche Nichtigkeit (Art. 269d Abs. 2 lit. a OR; BGE 121 III 214). Nur ein Hinweis:
+    die Rechtsperson beurteilt.'
+- id: form_old_new_rent_stated
+  group: form
+  label_de: Formular nennt bisherigen und neuen Mietzins
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Nennt das Formular den bisherigen und den neuen Mietzins?
+  why_needed_de: Pflichtangabe Art. 19 Abs. 1 lit. a VMWG (Hinweis, von der Sozialarbeiterin am Original
+    bestätigt).
+- id: form_effective_date_stated
+  group: form
+  label_de: Formular nennt den Zeitpunkt
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Nennt das Formular den Zeitpunkt, ab dem die Erhöhung gelten soll?
+  why_needed_de: Pflichtangabe Art. 19 VMWG (Hinweis).
+- id: form_reason_present
+  group: form
+  label_de: Begründung enthalten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_2
+  - BGE_142_III_375
+  - BGE_137_III_362
+  question_de: Steht eine Begründung im Formular (z. B. Referenzzinssatz, Teuerung, Kostensteigerung,
+    Renovation, ortsübliche Miete)?
+  why_needed_de: Nichtigkeit bei fehlender Begründung (Art. 269d Abs. 2 lit. b OR; BGE 142 III 375, BGE
+    137 III 362). Das System bewertet die Begründung nicht.
+- id: form_cover_letter_reference
+  group: form
+  label_de: Begleitschreiben ausdrücklich verwiesen
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1BIS
+  question_de: Ist ein Begleitschreiben dabei, und verweist das Formular ausdrücklich darauf?
+  why_needed_de: Begründung im Begleitschreiben nur mit ausdrücklichem Verweis (Art. 19 Abs. 1bis VMWG).
+- id: form_appeal_notice_present
+  group: form
+  label_de: Anfechtungshinweis (Rechtsmittelbelehrung)
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Enthält das Formular den Hinweis auf die Anfechtung (Rechtsmittelbelehrung)?
+  why_needed_de: Pflichtangabe nach Art. 19 VMWG (Hinweis).
+- id: form_page3_present
+  group: form
+  label_de: Seite 3 des Formulars vorhanden
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Ist Seite 3 (OR-Auszug/Anfechtungshinweise) vorhanden?
+  why_needed_de: Vollständigkeit des Formulars (Hinweis).
+- id: form_signed
+  group: form
+  label_de: Unterschrift der Vermieterschaft
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_OR_269D_4
+  question_de: Ist das Formular unterschrieben (auch gedruckte/Faksimile-Unterschrift)?
+  why_needed_de: Seit 1.10.2025 genügt eine auf mechanischem Weg nachgebildete Unterschrift (Art. 269d
+    Abs. 4 OR); eine gedruckte Unterschrift ist KEIN Formfehler.
+- id: termination_threat_in_letter
+  group: form
+  label_de: Kündigungsandrohung im Schreiben
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_2
+  question_de: Droht das Schreiben mit Kündigung (z. B. «bei Nichtakzeptanz wird gekündigt»)?
+  why_needed_de: Nichtigkeit (Art. 269d Abs. 2 lit. c OR).
+- id: letter_contains_termination
+  group: form
+  label_de: Schreiben enthält zugleich eine Kündigung
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_2
+  - CH_OR_271A_1_B_D_E
+  question_de: Enthält das Schreiben zugleich eine Kündigung?
+  why_needed_de: 'Andere Fristen: Wechsel zu Issue 1.'
+- id: change_type
+  group: content
+  label_de: Art der Änderung
+  data_type: enum
+  enum_values:
+  - mietzinserhoehung
+  - neue_nebenkosten
+  - leistungsabbau
+  - andere
+  enum_labels_de:
+    mietzinserhoehung: Mietzinserhöhung
+    neue_nebenkosten: Neue Nebenkosten
+    leistungsabbau: Weniger Leistungen
+    andere: Andere einseitige Änderung
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_269D_3
+  - CH_OR_270B
+  question_de: Mietzinserhöhung, neue Nebenkosten oder weniger Leistungen (z. B. Waschküche, Parkplatz)?
+  why_needed_de: Gleich behandeln wie eine Mietzinserhöhung (Art. 269d Abs. 3, 270b Abs. 2 OR).
+- id: old_rent_chf
+  group: content
+  label_de: Bisheriger Mietzins (CHF)
+  data_type: integer
+  required: true
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Wie hoch ist die bisherige Miete?
+  why_needed_de: Grundlage der Prüfung durch die Rechtsperson (keine Berechnung durch das System).
+- id: new_rent_chf
+  group: content
+  label_de: Neuer Mietzins (CHF)
+  data_type: integer
+  required: true
+  priority: medium
+  source_ids:
+  - CH_VMWG_19_1_A
+  question_de: Wie hoch ist die neue Miete laut Schreiben?
+  why_needed_de: Grundlage der Prüfung durch die Rechtsperson.
+- id: effective_date_in_letter
+  group: content
+  label_de: Datum laut Schreiben
+  data_type: date
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_269D_1
+  question_de: "Ab welchem Datum soll die Änderung gelten?"
+  why_needed_de: Fristprüfung durch die Rechtsperson (Art. 269d Abs. 1 OR); das System nennt kein Datum,
+    ab dem die Erhöhung gilt.
+- id: rent_model
+  group: content
+  label_de: Index- oder Staffelmiete
+  data_type: enum
+  enum_values:
+  - keine
+  - indexmiete
+  - staffelmiete
+  enum_labels_de:
+    keine: Weder Index- noch Staffelmiete
+    indexmiete: Indexmiete
+    staffelmiete: Staffelmiete
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269B_269C
+  - CH_OR_270C_270D
+  question_de: Ist eine Index- oder Staffelmiete vereinbart?
+  why_needed_de: 'Art. 269b, 269c, 270c, 270d OR: Staffelerhöhungen nicht anfechtbar.'
+- id: luxury_or_large_house
+  group: content
+  label_de: Luxuswohnung oder Einfamilienhaus ab 6 Zimmern
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253B_2_3
+  question_de: Handelt es sich um eine Luxuswohnung oder ein Einfamilienhaus mit sechs oder mehr Wohnräumen?
+  why_needed_de: Missbrauchsschutz gilt dafür nicht (Art. 253b Abs. 2 OR).
+- id: increase_already_paying
+  group: history
+  label_de: Zahlt schon den neuen Betrag
+  data_type: boolean
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_269D_2
+  question_de: "Zahlt die Klientin schon den neuen Betrag?"
+  why_needed_de: Rückforderung bei Nichtigkeit; kein Verzicht ohne Rechtsprüfung.
+- id: increase_already_reacted
+  group: history
+  label_de: Bereits zugestimmt, unterschrieben, angefochten oder gekündigt
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_270B
+  question_de: Hat die Klientin schon zugestimmt, unterschrieben, angefochten oder gekündigt?
+  why_needed_de: G9 Unterschrift; laufendes Verfahren.
+- id: asked_to_sign
+  group: history
+  label_de: Klientin soll etwas unterschreiben
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Soll die Klientin etwas unterschreiben (Zustimmung, neuer Vertrag)?
+  why_needed_de: 'Global G9: nicht unterschreiben, bevor die Rechtsperson geprüft hat.'
+- id: last_rent_adjustment
+  group: history
+  label_de: Letzte Anpassung
+  data_type: string
+  priority: low
+  source_ids:
+  - CH_OR_269A
+  question_de: Wann wurde die Miete zuletzt angepasst, und gab es damals einen Vorbehalt?
+  why_needed_de: Relative Methode (Rechtsperson).
+- id: renovation_before
+  group: history
+  label_de: Renovationsarbeiten vorher
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_269A
+  - CH_VMWG_14_1
+  question_de: Gab es vorher Renovationsarbeiten?
+  why_needed_de: Mehrleistung (Art. 269a lit. b OR); Bezug Issue 5 während der Bauarbeiten.
+- id: wants_to_terminate_instead
+  group: history
+  label_de: Klientin will lieber kündigen
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_269D_1
+  question_de: Möchte die Klientin lieber kündigen als anfechten?
+  why_needed_de: Die Bedenkfrist von zehn Tagen bezweckt genau diese Wahl; Wohnungsverlust abwägen.
+- id: rent_affordable
+  group: social
+  label_de: Neue Miete finanzierbar
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_DSG_6_7
+  question_de: "Kann die Klientin die neue Miete bezahlen?"
+  why_needed_de: Route SOZIAL; Daten über Sozialhilfe sind besonders schützenswert (Art. 5 lit. c Ziff.
+    6 DSG).
+escalation_rules:
+- id: RI_OUT_OF_SCOPE
+  description: 'Untermiete/Geschäftsraum/Notunterkunft: ausserhalb des Moduls.'
+  when:
+    any:
+    - ref: fact.tenant_role
+      op: in
+      value:
+      - untermieterin
+      - andere
+    - ref: fact.object_type
+      op: in
+      value:
+      - notwohnung_heim
+      - ferienwohnung_bis_3_monate
+      - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Mietverhältnis fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls (z. B. Untermiete,
+    Geschäftsraum, Notunterkunft). Es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson
+    muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: RI_FRIST_20_ODER_UNBEKANNT
+  description: 'PRODUKTSCHWELLE (Teamentscheid 7.11.2026): 20+ Tage seit Empfang oder Empfang unbekannt.'
+  when:
+    any:
+    - ref: fact.increase_receipt_date
+      op: is_unknown
+    - ref: fact.increase_delivery_method
+      op: is_unknown
+    - ref: fact.increase_pickup_notice_date
+      op: is_unknown
+    - ref: derived.days_since_increase_receipt
+      op: greater_than
+      value: 19
+  urgency: HIGH
+  reason_code: INCREASE_30_DAY_DEADLINE_TIGHT
+  reason_de: Der Empfang der Mitteilung ist unbekannt oder liegt 20 oder mehr Tage zurück. Die Anfechtungsfrist
+    von 30 Tagen (Art. 270b OR) ist knapp oder unbestimmbar (Produktschwelle, kein Fristende). Rechtsperson
+    sofort.
+  professionals: &id001
+  - tenancy_law_counsel
+- id: RI_KEIN_FORMULAR
+  description: 'Kein amtliches Formular oder keine Begründung: mögliche Nichtigkeit (Hinweis).'
+  when:
+    any:
+    - ref: fact.form_official_used
+      op: equals
+      value: false
+    - ref: fact.form_reason_present
+      op: equals
+      value: false
+  urgency: MEDIUM
+  reason_code: INCREASE_POSSIBLY_VOID_FORM
+  reason_de: Es fehlt laut Angabe das amtliche Formular oder die Begründung. Das kann zur Nichtigkeit
+    führen; das ist nur ein Hinweis, die Rechtsperson beurteilt (bald). Trotzdem vorsorglich die Frist
+    wahren.
+  professionals: *id001
+- id: RI_KUENDIGUNGSDROHUNG
+  description: 'Kündigungsandrohung im Schreiben: mögliche Nichtigkeit.'
+  when:
+    ref: fact.termination_threat_in_letter
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: INCREASE_WITH_TERMINATION_THREAT
+  reason_de: Das Schreiben droht mit Kündigung. Das kann zur Nichtigkeit führen; die Rechtsperson prüft
+    sofort. Prüfen, ob zugleich eine Kündigung vorliegt.
+  professionals: *id001
+- id: RI_KUENDIGUNG_IM_SCHREIBEN
+  description: Schreiben enthält zugleich eine Kündigung -> Issue 1.
+  when:
+    ref: fact.letter_contains_termination
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: INCREASE_LETTER_CONTAINS_TERMINATION
+  reason_de: Das Schreiben enthält zugleich eine Kündigung. Dafür gelten andere Fristen (Issue 1); sofortige
+    juristische Prüfung.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_TERMINATION
+- id: RI_PRUEFUNG_GRUNDREGEL
+  description: 'Formgültige Erhöhung (nicht Staffelmiete): Missbräuchlichkeit nur durch eine Fachperson.'
+  when:
+    ref: fact.rent_model
+    op: not_equals
+    value: staffelmiete
+  urgency: MEDIUM
+  reason_code: INCREASE_LEGAL_REVIEW_STANDARD
+  reason_de: Ob eine Mietzinserhöhung missbräuchlich ist, beurteilt nur eine Fachperson; das System rechnet
+    nicht mit Referenzzinssatz oder Teuerung. Rechtsperson bald, Unterlagen sichern.
+  professionals: *id001
+- id: RI_SUBVENTIONIERT_GENOSSENSCHAFT
+  description: Subventionierte Wohnung oder Genossenschaft.
+  when:
+    ref: fact.housing_arrangement
+    op: in
+    value:
+    - subventioniert
+    - genossenschaft
+    - gemeindewohnung
+    - zugewiesene_unterkunft
+  urgency: MEDIUM
+  reason_code: INCREASE_SUBSIDISED_OR_COOPERATIVE
+  reason_de: Bei subventionierten Wohnungen mit kontrolliertem Mietzins, Genossenschaften oder Gemeindewohnungen
+    können besondere Regeln gelten (Art. 253b Abs. 3 OR, Statuten). Zuständige Stelle klären; Rechtsperson
+    bald.
+  professionals: *id001
+- id: RI_LUXUS
+  description: 'Luxuswohnung/grosses Einfamilienhaus: Missbrauchsschutz gilt nicht.'
+  when:
+    ref: fact.luxury_or_large_house
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: INCREASE_LUXURY_EXCLUSION
+  reason_de: Bei Luxuswohnungen und Einfamilienhäusern ab sechs Wohnräumen gilt der Missbrauchsschutz
+    nicht (Art. 253b Abs. 2 OR). Rechtsperson bald.
+  professionals: *id001
+- id: RI_UNTERSCHRIFT
+  description: Klientin soll unterschreiben oder hat zugestimmt (G9).
+  when:
+    any:
+    - ref: fact.asked_to_sign
+      op: equals
+      value: true
+    - ref: fact.increase_already_reacted
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: INCREASE_SIGNATURE_OR_CONSENT
+  reason_de: 'Die Klientin soll etwas unterschreiben oder hat schon zugestimmt. Das kann die Anfechtung
+    ausschliessen: nicht unterschreiben, bevor die Rechtsperson geprüft hat. Rechtsperson sofort.'
+  professionals: *id001
+- id: RI_NICHT_FINANZIERBAR
+  description: 'Erhöhung nicht finanzierbar oder über der Mietzinslimite der Sozialhilfe: SOZIAL (+ RECHT).'
+  when:
+    ref: fact.rent_affordable
+    op: equals
+    value: false
+  urgency: MEDIUM
+  reason_code: INCREASE_NOT_AFFORDABLE
+  reason_de: Die erhöhte Miete ist nicht finanzierbar oder liegt über der Mietzinslimite. Die Sozialarbeiterin
+    klärt Finanzierung bzw. Mietzinslimite, um Wohnungsverlust zu vermeiden; Rechtsperson parallel (bald).
+  professionals:
+  - social_counselling
+  - tenancy_law_counsel
+- id: RI_BEFRISTET
+  description: 'Befristeter Vertrag ohne Index-/Staffelklausel: Erhöhung grundsätzlich ausgeschlossen.'
+  when:
+    all:
+    - ref: fact.contract_term_type
+      op: equals
+      value: befristet
+    - ref: fact.rent_model
+      op: equals
+      value: keine
+  urgency: MEDIUM
+  reason_code: INCREASE_FIXED_TERM_CONTRACT
+  reason_de: Bei einem echt befristeten Vertrag ohne Index- oder Staffelklausel ist eine Erhöhung grundsätzlich
+    ausgeschlossen. Die Rechtsperson prüft (bald).
+  professionals: *id001
+- id: RI_WILL_KUENDIGEN
+  description: Klientin will lieber kündigen statt anfechten.
+  when:
+    ref: fact.wants_to_terminate_instead
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: INCREASE_TENANT_WANTS_TO_TERMINATE
+  reason_de: Die Klientin möchte lieber kündigen. Der Wohnungsverlust ist abzuwägen; Rechtsperson und
+    Sozialarbeiterin besprechen das (bald).
+  professionals: &id002
+  - tenancy_law_counsel
+  - social_counselling
+- id: RI_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id002
+- id: RI_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht.
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id001
+legal_rules:
+- id: RI_HINT_FORM
+  description: Formular und Begründung.
+  kind: HINT
+  when: &id003
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  result_code: HINT_FORM_AND_REASON
+  result_de: Eine Mietzinserhöhung muss auf einem amtlichen Formular mitgeteilt und begründet werden.
+    Ob das hier erfüllt ist, prüft eine Fachperson.
+  legal_source_ids:
+  - CH_OR_269D_1
+  - CH_OR_269D_2
+- id: RI_HINT_ANFECHTUNG
+  description: Anfechtung 30 Tage.
+  kind: HINT
+  when: *id003
+  result_code: HINT_CONTEST_30_DAYS
+  result_de: Wer eine Erhöhung für missbräuchlich hält, kann sie innert 30 Tagen nach Empfang bei der
+    Schlichtungsbehörde anfechten. Wird die Frist verpasst, gilt die Erhöhung.
+  legal_source_ids:
+  - CH_OR_270B
+  - BGE_131_III_566
+- id: RI_HINT_ALTER_MIETZINS
+  description: Während der Anfechtung gilt der bisherige Mietzins.
+  kind: HINT
+  when: *id003
+  result_code: HINT_OLD_RENT_DURING_CONTEST
+  result_de: Während der Anfechtung muss nur die bisherige Miete bezahlt werden. Es lohnt sich aber, die
+    Differenz zur Seite zu legen, falls die Erhöhung bestätigt wird.
+  legal_source_ids:
+  - CH_OR_270E
+  - LEHRBUCH_MIETE_31
+- id: RI_HINT_KOSTENLOS
+  description: Schlichtungsverfahren kostenlos.
+  kind: HINT
+  when: *id003
+  result_code: HINT_NO_COURT_COSTS
+  result_de: Das Verfahren vor der Schlichtungsbehörde kostet keine Gerichtskosten.
+  legal_source_ids:
+  - CH_ZPO_113_2_C
+- id: RI_HINT_KUENDIGUNG_NACH_ANFECHTUNG
+  description: Kündigung wegen Anfechtung ist anfechtbar.
+  kind: HINT
+  when: *id003
+  result_code: HINT_TERMINATION_AFTER_CONTEST
+  result_de: Eine Kündigung, die erfolgt, weil jemand eine Erhöhung anficht, kann ihrerseits angefochten
+    werden.
+  legal_source_ids:
+  - CH_OR_271A_1_B_D_E
+- id: RI_HINT_NEBENKOSTEN
+  description: Neue Nebenkosten und Leistungsabbau.
+  kind: HINT
+  when:
+    ref: fact.change_type
+    op: in
+    value:
+    - neue_nebenkosten
+    - leistungsabbau
+    - andere
+  result_code: HINT_OTHER_CHANGES_LIKE_INCREASE
+  result_de: Dasselbe gilt für neue Nebenkosten oder wenn Leistungen gestrichen werden.
+  legal_source_ids:
+  - CH_OR_269D_3
+  - CH_OR_270B
+- id: RI_HINT_ZAHLEN_VERLANGEN
+  description: Zahlen offenlegen lassen, Frist läuft weiter.
+  kind: HINT
+  when: *id003
+  result_code: HINT_REQUEST_FIGURES_DEADLINE_RUNS
+  result_de: Bei Erhöhungen wegen Kostensteigerungen oder Renovationen kann man verlangen, dass die Vermieterschaft
+    die Zahlen offenlegt. Die 30-Tage-Frist läuft dabei aber weiter.
+  legal_source_ids:
+  - CH_VMWG_20_1
+- id: RI_HINT_BERATUNG
+  description: Schlichtungsbehörde berät auch ohne Verfahren.
+  kind: HINT
+  when: *id003
+  result_code: HINT_CONCILIATION_ADVICE
+  result_de: Die Schlichtungsbehörde berät auch ohne Verfahren und hilft einzuschätzen, ob eine Erhöhung
+    missbräuchlich ist.
+  legal_source_ids:
+  - CH_VMWG_21_2
+- id: RI_REVIEW_FORMHINWEIS
+  description: 'Formular-Vorprüfung: nur ein Hinweis.'
+  kind: REVIEW_POINT
+  when:
+    any:
+    - ref: fact.form_official_used
+      op: equals
+      value: false
+    - ref: fact.form_reason_present
+      op: equals
+      value: false
+    - ref: fact.form_old_new_rent_stated
+      op: equals
+      value: false
+    - ref: fact.form_effective_date_stated
+      op: equals
+      value: false
+    - ref: fact.form_appeal_notice_present
+      op: equals
+      value: false
+    - ref: fact.form_page3_present
+      op: equals
+      value: false
+  result_code: REVIEW_FORM_PRECHECK
+  result_de: 'Formular-Vorprüfung (nur ein Hinweis, keine rechtliche Bewertung): Mindestens eine Pflichtangabe
+    des Formulars scheint zu fehlen. Die Sozialarbeiterin bestätigt am Original; ob die Erhöhung nichtig
+    ist, beurteilt die Rechtsperson.'
+  legal_source_ids:
+  - CH_VMWG_19_1_A
+  - CH_OR_269D_2
+- id: RI_REVIEW_FAKSIMILE
+  description: Gedruckte Unterschrift ist zulässig.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.form_signed
+    op: equals
+    value: true
+  result_code: REVIEW_PRINTED_SIGNATURE_VALID
+  result_de: 'Prüfhinweis: Seit 1.10.2025 genügt eine auf mechanischem Weg nachgebildete (gedruckte) Unterschrift;
+    ein Fehlen der Originalunterschrift ist kein Formfehler.'
+  legal_source_ids:
+  - CH_OR_269D_4
+- id: RI_REVIEW_STAFFEL
+  description: 'Staffelmiete: Erhöhungen nicht anfechtbar.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.rent_model
+    op: equals
+    value: staffelmiete
+  result_code: REVIEW_GRADUATED_RENT
+  result_de: 'Prüfhinweis: Bei einer Staffelmiete sind die vereinbarten Erhöhungen nicht anfechtbar; für
+    die Mitteilung genügt die Schriftform.'
+  legal_source_ids:
+  - CH_OR_270C_270D
+  - CH_OR_269D_4
+- id: RI_REVIEW_INDEX
+  description: 'Indexmiete: nur Einwand zur Indexänderung.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.rent_model
+    op: equals
+    value: indexmiete
+  result_code: REVIEW_INDEXED_RENT
+  result_de: 'Prüfhinweis: Bei einer Indexmiete ist nur der Einwand möglich, die Indexänderung rechtfertige
+    die Erhöhung nicht.'
+  legal_source_ids:
+  - CH_OR_270C_270D
+- id: RI_REVIEW_KURZFRISTIG
+  description: 'Zu kurzfristig: Wirkung erst auf den nächsten Termin.'
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_SHORT_NOTICE_NEXT_TERM
+  result_de: 'Prüfhinweis: Wird eine Erhöhung zu kurzfristig mitgeteilt, ist sie nicht ungültig, sondern
+    wirkt erst auf den nächstfolgenden Termin. Das System nennt kein Datum.'
+  legal_source_ids:
+  - CH_OR_269D_1
+  - BGE_131_III_566
+- id: RI_REVIEW_BEGRUENDUNG_BEGLEITSCHREIBEN
+  description: Begründung nur im Begleitschreiben.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.form_cover_letter_reference
+    op: equals
+    value: false
+  result_code: REVIEW_REASON_IN_COVER_LETTER
+  result_de: 'Prüfhinweis: Eine Begründung nur im Begleitschreiben ist nur zulässig, wenn das Formular
+    ausdrücklich darauf verweist (Art. 19 Abs. 1bis VMWG).'
+  legal_source_ids:
+  - CH_VMWG_19_1BIS
+  - BGE_137_III_362
+- id: RI_REVIEW_FRIST_VERPASST
+  description: 'Frist verpasst: Erhöhung wirksam, Formnichtigkeit bleibt prüfbar.'
+  kind: REVIEW_POINT
+  when:
+    ref: derived.days_since_increase_receipt
+    op: greater_than
+    value: 29
+  result_code: REVIEW_DEADLINE_MISSED
+  result_de: 'Prüfhinweis: Nach Ablauf von 30 Tagen wird die Erhöhung wirksam, auch wenn sie missbräuchlich
+    wäre; Formnichtigkeit kann aber weiterhin geltend gemacht werden. Herabsetzungsbegehren für die Zukunft
+    prüfen.'
+  legal_source_ids:
+  - CH_OR_270B
+  - BGE_131_III_566
+  - BGE_124_III_67
+  - CH_OR_270A
+- id: RI_REVIEW_ORTSUEBLICH
+  description: Kein Referenzzinssatz-Wert im System.
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_NO_REFERENCE_RATE_VALUE
+  result_de: 'Prüfhinweis: Das System nennt keinen aktuellen Referenzzinssatz und rechnet nicht mit Teuerung
+    oder Kosten. Den aktuellen Satz veröffentlicht das Bundesamt für Wohnungswesen (BWO).'
+  legal_source_ids:
+  - CH_VMWG_12A
+legal_source_ids:
+- CH_OR_269D_1
+- CH_OR_269D_2
+- CH_OR_270B
+- BGE_131_III_566
+- CH_OR_270E
+- LEHRBUCH_MIETE_31
+- CH_ZPO_113_2_C
+- CH_OR_271A_1_B_D_E
+- CH_OR_269D_3
+- CH_VMWG_20_1
+- CH_VMWG_21_2
+- CH_VMWG_19_1_A
+- CH_OR_269D_4
+- CH_OR_270C_270D
+- CH_VMWG_19_1BIS
+- BGE_137_III_362
+- BGE_124_III_67
+- CH_OR_270A
+- CH_VMWG_12A
+default_professionals:
+- tenancy_law_counsel
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Mietzinserhöhung / einseitige Vertragsänderung (Art. 269 ff. OR) – Kanton Zürich
+  groups:
+  - id: letter
+    title_de: Schreiben, Empfang und Zustellart
+    fact_ids:
+    - increase_letter_available
+    - increase_delivery_method
+    - increase_pickup_notice_date
+    - increase_receipt_date
+  - id: form
+    title_de: Formular-Vorprüfung (nur Hinweis, am Original bestätigt)
+    fact_ids:
+    - form_official_used
+    - form_reason_present
+    - form_old_new_rent_stated
+    - form_effective_date_stated
+    - form_cover_letter_reference
+    - form_appeal_notice_present
+    - form_page3_present
+    - form_signed
+    - termination_threat_in_letter
+    - letter_contains_termination
+  - id: content
+    title_de: 'Inhalt: Art der Änderung, Beträge, Vertragsart, Wohnform'
+    fact_ids:
+    - change_type
+    - old_rent_chf
+    - new_rent_chf
+    - effective_date_in_letter
+    - contract_term_type
+    - contract_termination_dates
+    - rent_model
+    - housing_arrangement
+    - luxury_or_large_house
+  - id: history
+    title_de: Bisherige Reaktion und Hintergründe
+    fact_ids:
+    - increase_already_paying
+    - increase_already_reacted
+    - asked_to_sign
+    - last_rent_adjustment
+    - renovation_before
+    - wants_to_terminate_instead
+  - id: social
+    title_de: Finanzierbarkeit (Sozialhilfe nur mit Einwilligung)
+    fact_ids:
+    - rent_affordable
+    - social_assistance_received
+    - consent_briefing
+    - vulnerability_present
+    - client_requests_expert
+  - id: situation
+    title_de: Vorprüfung
+    fact_ids:
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+  review_points:
+  - text_de: 'Fristbeginn: relative Empfangstheorie (tatsächlicher Empfang, spätestens 7. Tag der Abholfrist);
+      30 Tage Anfechtung.'
+    source_ids:
+    - CH_OR_270B
+    - BGE_137_III_208
+  - text_de: 'Form (Nichtigkeit): amtliches Formular, Begründung, keine Kündigungsandrohung; Begründung
+      im Begleitschreiben nur mit ausdrücklichem Verweis.'
+    source_ids:
+    - CH_OR_269D_2
+    - CH_VMWG_19_1BIS
+    - BGE_142_III_375
+    - BGE_137_III_362
+  - text_de: Missbräuchlichkeit (Art. 269, 269a OR) beurteilt allein die Rechtsperson; das System rechnet
+      nicht.
+    source_ids:
+    - CH_OR_269
+    - CH_OR_269A
+  - text_de: 'Wohnform: subventioniert / Genossenschaft / Luxus; Vertragsart: befristet, Index, Staffel.'
+    source_ids:
+    - CH_OR_253B_2_3
+    - CH_OR_269B_269C
+    - CH_OR_270C_270D
+  documents_to_request:
+  - Schreiben bzw. Formular der Vermieterschaft (alle Seiten, Umschlag)
+  - Begleitschreiben
+  - Mietvertrag (Kündigungsfrist und Termine)
+  - Letzte Mietzinsanpassung
+  - Nachweis der Zahlungen seit der Mitteilung
+  authority_ids:
+  - SCHLICHTUNGSBEHOERDE_MIETE_ZH
+  - MIETERVERBAND_ZH
+  - RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+  - MIETGERICHT_ZH
+  - SOZIALDIENST_WOHNGEMEINDE
+  - BWO_REFERENZZINSSATZ
+  - KONTROLLBEHOERDE_SUBVENTIONIERT

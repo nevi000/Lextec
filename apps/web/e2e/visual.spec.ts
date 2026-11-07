@@ -15,8 +15,8 @@ for (const vp of [
     await expect(page.getByLabel("Was ist passiert?")).toBeVisible();
     await page.screenshot({ path: out(`${vp.name}-workspace-empty.png`), fullPage: true });
 
-    await page.getByLabel("Was ist passiert?").fill("Mein Arbeitgeber hat mir gekündigt.");
-    await page.getByRole("button", { name: "Situation analysieren" }).click();
+    await page.getByLabel("Was ist passiert?").fill("Mein Vermieter hat der Klientin die Wohnung gekündigt.");
+    await page.getByRole("button", { name: "Fall analysieren" }).click();
     await expect(page.getByRole("region", { name: "Nächste empfohlene Aktion" })).toBeVisible();
     await page.waitForTimeout(400); // let the entrance animation settle
     await page.screenshot({ path: out(`${vp.name}-workspace-ask.png`), fullPage: true });
@@ -43,9 +43,9 @@ test("escalation screen", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
   await page.getByLabel("Was ist passiert?").fill(
-    "Mein Arbeitgeber hat mir gekündigt. Der Vermieter hat der Klientin ausserdem gekündigt, sie ist alleinerziehend.",
+    "Der Vermieter hat der Klientin die Wohnung gekündigt, ohne amtliches Formular. Sie ist alleinerziehend.",
   );
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
   await expect(page.getByText(/Prüfung durch eine Fachperson empfohlen/)).toBeVisible();
   await page.screenshot({ path: out("desktop-workspace-escalate.png"), fullPage: true });
   await page.goto("/evaluation");

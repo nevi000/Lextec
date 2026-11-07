@@ -1,17 +1,12 @@
 # yaml-language-server: $schema=../../schemas/related_issues.schema.json
-# Issues, auf die Issue 1 verweist. Sie sind NOCH NICHT implementiert. Solange kein geladenes Issue mit
-# content_status LEGALLY_REVIEWED unter dieser ID existiert, gilt die Weiterleitung als
-# «nicht verfügbar»: das System empfiehlt menschliche Prüfung und wendet keine Spezialregeln an.
+# Hier stehen nur Issues, die in der Wissensbasis NOCH NICHT als eigene Datei vorliegen (Status PLANNED).
+# Seit der Integration der sieben Law-Dossiers (7.11.2026) sind alle bisher geplanten Issues geladen:
+#   CH_TENANCY_PAYMENT_WARNING (Issue 2), CH_TENANCY_PAYMENT_DEFAULT (Issue 3), CH_TENANCY_EXTENSION (Issue 4),
+#   CH_TENANCY_DEFECTS (Issue 5), CH_TENANCY_EVICTION (Issue 6), CH_TENANCY_RENT_INCREASE (Issue 7).
+# Ein Verweis (routes_to_issue) auf ein geladenes Issue aktiviert dessen Regeln zusätzlich (Status DRAFT = Dossierstand,
+# noch nicht juristisch freigegeben). Neue Issues (z. B. Issue 8, Kaution) zuerst hier als PLANNED eintragen,
+# wenn schon darauf verwiesen werden soll, bevor die Datei existiert; siehe docs/ALL_ISSUES_INTEGRATION.md.
 schema_version: 1
-version: "1.0"
+version: "2.0"
 
-related_issues:
-  - id: CH_TENANCY_PAYMENT_DEFAULT
-    title_de: "Kündigung wegen Zahlungsverzug (Issue 3)"
-    issue_number: 3
-  - id: CH_TENANCY_EXTENSION
-    title_de: "Erstreckung des Mietverhältnisses (Issue 4)"
-    issue_number: 4
-  - id: CH_TENANCY_EVICTION
-    title_de: "Ausweisung / laufendes Verfahren (Issue 6)"
-    issue_number: 6
+related_issues: []

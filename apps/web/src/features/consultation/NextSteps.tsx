@@ -6,6 +6,7 @@ import { OrgCard } from "@/components/shared/OrgCard";
 import { Button } from "@/components/ui/button";
 import { useProfessionals } from "@/lib/queries";
 import { cn } from "@/lib/utils";
+import type { MissingFact, NextQuestion } from "@/types";
 import type { Props } from "./NextActionCard";
 import { QuestionForm } from "./QuestionForm";
 
@@ -27,13 +28,15 @@ const h2 = "text-[18px] font-semibold leading-snug";
 /**
  * Phase 3 in three clearly separated areas:
  *  A) assessment and next action (backend decision, calm colours, red only when urgent)
- *  B) optional supplementary questions (opt-in, one at a time, never blocking)
+ *  B1) «Fallaufnahme vervollständigen»: important open facts, one question at a time, never blocking the handover
+ *  B2) optional supplementary questions (opt-in, one at a time, never blocking)
  *  C) case report (the single primary action) + separate handover status
  */
 export function NextSteps(p: Props) {
   return (
     <div role="region" aria-label="Nächste empfohlene Aktion" className="space-y-4">
       <Assessment {...p} />
+      <Intake {...p} />
       <Supplement {...p} />
       <Report {...p} />
     </div>
@@ -172,7 +175,7 @@ function Assessment({ detail, decision }: Props) {
                 {(decision.related_routes ?? []).map((r) => (
                   <li key={r.issue_id}>
                     <strong>{r.title_de}</strong>{" "}
-                    <Badge tone={r.available ? "proceed" : "incomplete"}>{r.available ? "verfügbar" : "noch nicht verfügbar"}</Badge>
+                    <Badge tone={r.available ? "proceed" : "incomplete"}>{r.available ? "Dossierstand, nicht freigegeben" : "noch nicht verfügbar"}</Badge>
                     <p className="mt-0.5 text-ink-muted">{r.note_de}</p>
                   </li>
                 ))}
@@ -191,14 +194,79 @@ function Assessment({ detail, decision }: Props) {
   );
 }
 
-/* ----------------------------------------------------------------------------------- B */
+/** A backend MissingFact in the shape the question form expects. */
+function asQuestion(m: MissingFact, optional: boolean): NextQuestion {
+  return {
+    fact_id: m.fact_id,
+    question_de: m.question_de,
+    why_needed_de: m.why_needed_de,
+    data_type: m.data_type,
+    enum_values: m.enum_values,
+    enum_labels_de: m.enum_labels_de,
+    deferred: m.deferred,
+    optional,
+  } as NextQuestion;
+}
+
+/* ----------------------------------------------------------------------------------- B1 */
+/**
+ * An escalation means human help is needed, NOT that the intake is over. Important open facts (required /
+ * conditionally required, from the knowledge base) stay askable, one at a time. Nothing here blocks the report
+ * or the handover; for urgent cases the contact recommendation above stays the main action.
+ */
+function Intake({ decision, detail, busy, onAnswer, onUnknown, onDefer }: Props) {
+  const closed = detail.status === "CLOSED";
+  const urgent = decision.max_urgency === "HIGH";
+  const open = decision.missing_facts.filter((m) => !m.deferred);
+  const n = decision.intake?.important_open ?? open.length;
+  const first = open[0];
+  const q = first ? asQuestion(first, false) : null;
+  if (decision.action !== "ESCALATE") return null;
+
+  return (
+    <Section title="Fallaufnahme vervollständigen">
+      <h2 className={h2}>Fallaufnahme vervollständigen</h2>
+      {q ? (
+        <>
+          <p className="mt-1 text-[13.5px] text-ink-muted">
+            <strong className="font-semibold text-ink">{n === 1 ? "Noch 1 wichtige Angabe offen." : `Noch ${n} wichtige Angaben offen.`}</strong>{" "}
+            Diese Informationen helfen der Fachperson bei der Prüfung.{" "}
+            {urgent
+              ? "Sie können parallel ergänzen. Die Kontaktaufnahme mit der Fachperson muss nicht warten."
+              : "Sie können den Fallbericht jederzeit erstellen, auch wenn noch Fragen offen sind."}
+          </p>
+          <div className="mt-4 rounded-md border border-line bg-canvas p-4">
+            <QuestionForm
+              key={q.fact_id as string}
+              question={q}
+              busy={busy}
+              disabled={closed}
+              onAnswer={(t) => onAnswer(q.fact_id as string, t)}
+              onUnknown={() => onUnknown(q.fact_id as string)}
+              onDefer={() => onDefer(q.fact_id as string, q.question_de)}
+            />
+          </div>
+        </>
+      ) : (
+        <p className="mt-1 text-[13.5px] text-ink-muted">
+          Alle wichtigen Angaben sind erfasst
+          {(decision.intake?.deferred ?? 0) + (decision.intake?.unknown ?? 0) > 0
+            ? "; zurückgestellte oder unbekannte Angaben bleiben im Fallbericht sichtbar."
+            : "."}
+        </p>
+      )}
+    </Section>
+  );
+}
+
+/* ----------------------------------------------------------------------------------- B2 */
 function Supplement({ decision, detail, busy, onAnswer, onUnknown, onSkip, onOpenMore }: Props) {
   const [asking, setAsking] = useState(false);
   const closed = detail.status === "CLOSED";
   // questions the backend still offers (required ones left open + optional ones), minus those already skipped
-  const available = [...decision.missing_facts, ...(decision.optional_open_facts ?? [])].filter((m) => !m.deferred);
-  const q = decision.next_question;
-  const current = !!q?.fact_id && !q.deferred ? q : null;
+  const available = (decision.optional_open_facts ?? []).filter((m) => !m.deferred);
+  const firstOptional = available[0];
+  const current = firstOptional ? asQuestion(firstOptional, true) : null;
 
   return (
     <Section title="Ergänzende Angaben (optional)">

@@ -1,11 +1,77 @@
 {
   "$defs": {
+    "InterpretationReview": {
+      "additionalProperties": false,
+      "description": "Law-team review of how a source is USED (interpretation), independent of the wording check.\nWithout an entry the interpretation counts as NOT reviewed.",
+      "properties": {
+        "status": {
+          "default": "NOT_REVIEWED",
+          "enum": [
+            "NOT_REVIEWED",
+            "REVIEWED"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed By"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "title": "InterpretationReview",
+      "type": "object"
+    },
     "SourceDef": {
       "additionalProperties": false,
       "description": "A legal source.\n\nTwo DIFFERENT statuses, never to be confused:\n* ``dossier_status``      - what the law team's dossier states (checked against their uploaded\n                             PDFs / full texts, or still pending, or only mentioned without text).\n* ``verification_status`` - live verification BY THIS SYSTEM (e.g. via Fedlex). Stays UNVERIFIED\n                             until such a mechanism really exists and ran.",
       "properties": {
         "id": {
           "title": "Id",
+          "type": "string"
+        },
+        "aliases": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "jurisdiction": {
+          "default": "CH",
+          "title": "Jurisdiction",
           "type": "string"
         },
         "provider": {
@@ -76,6 +142,32 @@
           ],
           "default": null,
           "title": "Paragraph"
+        },
+        "letter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Letter"
+        },
+        "fedlex_sync": {
+          "default": true,
+          "title": "Fedlex Sync",
+          "type": "boolean"
+        },
+        "interpretation_review": {
+          "$ref": "#/$defs/InterpretationReview",
+          "default": {
+            "status": "NOT_REVIEWED",
+            "reviewed_by": null,
+            "reviewed_at": null,
+            "note": null
+          }
         },
         "language": {
           "default": "de",

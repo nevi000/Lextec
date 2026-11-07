@@ -66,7 +66,9 @@ def test_report_from_a_real_stored_case(client):
     assert "Kündigung durch die Vermieterschaft" in t and "Fachperson nötig" in t
     assert "Version 1" in t and "Fallstand v" in t and "Wissensbasis kb-" in t
     assert "TT_FORM_MISSING" in t  # rule trace from the backend, not recomputed
-    assert "Schlichtungsbehörde" in t and "058 111 70 30" in t  # referral from the knowledge base
+    assert (
+        "Schlichtungsbehörde" in t and "gerichte-zh.ch" in t
+    )  # referral from the knowledge base (v1.2: Kontakt über die Website)
     assert "Chronologie" in t and "04.11.2026" in t  # derived from stored facts, not invented
     assert "Gesprächsinformationen" in t and "Meine Klientin hat in Zürich" in t
     assert "Interpretation noch nicht freigegeben" in t  # never claims a verified interpretation
@@ -91,11 +93,13 @@ def test_unknown_briefing_is_404_and_cases_are_isolated(client):
 def test_sparse_case_marks_missing_data_and_invents_nothing(client):
     cid, bid = make_report(client, "Meine Klientin hat eine Wohnungskündigung erhalten.")
     t = plain(preview(client, cid, bid))
-    assert "Nicht erfasst:" in t and "Name nicht erfasst" in t and "Kontaktangaben fehlen" in t
-    assert "Keine Unterlagen im System" in t
+    # compact: no list of «missing» personal fields; one calm note, nothing invented
+    assert "Personalien werden in LexTec Bridge nicht erfasst" in t
+    assert "Name nicht erfasst" not in t and "Kontaktangaben fehlen" not in t
+    assert "Es sind keine Dokumente im System" in t
     for invented in ("Mustermann", "Meier", "@example", "044 000"):
         assert invented not in t
-    assert "Keine hochgeladenen Originaldokumente" in t  # no upload support: documented, not faked
+    assert "Fehlt nicht erfasst" not in t  # no catalogue of unasked fields
 
 
 # ---- E: safety first -----------------------------------------------------------------------------------------------
@@ -118,10 +122,10 @@ def test_acute_danger_is_prominent_and_the_traffic_light_is_never_lower(client):
 def test_multiple_issues_render_without_breaking(client):
     cid, bid = make_report(
         client,
-        "Mein Arbeitgeber hat mir gekündigt. Der Vermieter hat der Klientin ausserdem gekündigt, sie ist alleinerziehend.",
+        "Der Vermieter hat der Klientin gekündigt, sie ist alleinerziehend. Ausserdem gibt es Schimmel in der Wohnung.",
     )
     t = plain(preview(client, cid, bid))
-    assert "Arbeitskündigung" in t and "Kündigung durch die Vermieterschaft" in t
+    assert "Mängel an der Mietsache" in t and "Kündigung durch die Vermieterschaft" in t
     assert "Rechtliche Prüfung" in t and "Erfasste Angaben" in t
 
 
@@ -218,7 +222,6 @@ def test_bridge_sample_matches_the_reference_pdf(kb):
         data["decision"]["code"],
         data["handover"]["to"],
         "Bald bearbeiten",
-        "Kontaktangaben fehlen",
     ]
     must += [s["id"] for s in data["sources"]]
     must += [b["label"] for b in data["bodies"][:3]]

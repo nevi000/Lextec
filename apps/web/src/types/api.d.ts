@@ -58,6 +58,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/intake/pdf-text": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Pdf Text
+         * @description Extract the text of a written case description (raw PDF bytes as request body).
+         *
+         *     Purely a text-entry helper: nothing is stored or analysed here, no AI call is made. The browser
+         *     puts the text into the normal description field; analysis then works exactly as for typed text.
+         */
+        post: operations["import_pdf_text_api_intake_pdf_text_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dashboard": {
         parameters: {
             query?: never;
@@ -340,6 +363,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/cases/{case_id}/briefings/{briefing_id}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Briefing Preview
+         * @description A4 preview of a stored report version (HTML, self-contained, no scripts, no external resources).
+         */
+        get: operations["briefing_preview_api_cases__case_id__briefings__briefing_id__preview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/briefings/{briefing_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Briefing Pdf
+         * @description Real PDF of a stored report version. No AI call; built from the stored version only.
+         */
+        get: operations["briefing_pdf_api_cases__case_id__briefings__briefing_id__pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/briefings": {
         parameters: {
             query?: never;
@@ -488,6 +551,194 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/cases/{case_id}/voice-bridge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get State */
+        get: operations["get_state_api_cases__case_id__voice_bridge_get"];
+        put?: never;
+        /** Start */
+        post: operations["start_api_cases__case_id__voice_bridge_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pause */
+        post: operations["pause_api_cases__case_id__voice_bridge_pause_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resume */
+        post: operations["resume_api_cases__case_id__voice_bridge_resume_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** End */
+        post: operations["end_api_cases__case_id__voice_bridge_end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/answer/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept */
+        post: operations["accept_api_cases__case_id__voice_bridge_answer_accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/answer/reask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reask */
+        post: operations["reask_api_cases__case_id__voice_bridge_answer_reask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Skip */
+        post: operations["skip_api_cases__case_id__voice_bridge_skip_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/voice-bridge/retry-translation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry Translation */
+        post: operations["retry_translation_api_cases__case_id__voice_bridge_retry_translation_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bridge/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mobile State */
+        get: operations["mobile_state_api_bridge_state_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bridge/language": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mobile Language */
+        post: operations["mobile_language_api_bridge_language_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/bridge/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mobile Answer */
+        post: operations["mobile_answer_api_bridge_answer_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -627,6 +878,13 @@ export interface components {
             /** Verification Note De */
             verification_note_de: string;
         };
+        /** BridgeOption */
+        BridgeOption: {
+            /** Value */
+            value: string;
+            /** Label */
+            label: string;
+        };
         /** BriefingDecision */
         BriefingDecision: {
             action: components["schemas"]["Action"];
@@ -676,6 +934,8 @@ export interface components {
             documented: boolean;
             /** Evidence Quote */
             evidence_quote: string | null;
+            /** Updated At */
+            updated_at?: string | null;
         };
         /** BriefingHandover */
         BriefingHandover: {
@@ -881,6 +1141,7 @@ export interface components {
              * @default []
              */
             recommended_referral_ids: string[];
+            extras?: components["schemas"]["ReportExtras"] | null;
         };
         /** CaseCreate */
         CaseCreate: {
@@ -970,6 +1231,20 @@ export interface components {
          * @enum {string}
          */
         CaseStatus: "OPEN" | "CLOSED";
+        /** ChronologyEvent */
+        ChronologyEvent: {
+            /** Date */
+            date: string | null;
+            /** Label De */
+            label_de: string;
+            /** Source De */
+            source_de: string;
+            /**
+             * Future
+             * @default false
+             */
+            future: boolean;
+        };
         /** ContactPhone */
         ContactPhone: {
             /** Label De */
@@ -978,6 +1253,24 @@ export interface components {
             display: string;
             /** Tel */
             tel?: string | null;
+            /** Note De */
+            note_de?: string | null;
+        };
+        /** ConversationItem */
+        ConversationItem: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "DESCRIPTION" | "ANSWER" | "NOTE";
+            /** At */
+            at: string;
+            /** Question De */
+            question_de?: string | null;
+            /** Text */
+            text: string;
+            /** Status De */
+            status_de?: string | null;
         };
         /** DashboardData */
         DashboardData: {
@@ -1050,6 +1343,17 @@ export interface components {
              * @default []
              */
             optional_open_facts: components["schemas"]["MissingFact"][];
+            /**
+             * @default {
+             *       "important_open": 0,
+             *       "optional_open": 0,
+             *       "deferred": 0,
+             *       "unknown": 0,
+             *       "known": 0,
+             *       "complete": false
+             *     }
+             */
+            intake: components["schemas"]["IntakeState"];
             next_question?: components["schemas"]["NextQuestion"] | null;
             /**
              * Recommended Professionals
@@ -1449,6 +1753,11 @@ export interface components {
             /** Newer Version */
             newer_version: string | null;
         };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
         /** HandoverComplete */
         HandoverComplete: {
             /** Note */
@@ -1472,6 +1781,42 @@ export interface components {
             completed_at: string | null;
             /** Completion Note */
             completion_note: string | null;
+        };
+        /**
+         * IntakeState
+         * @description How complete the case information is. Independent of the decision (ESCALATE never closes the intake).
+         */
+        IntakeState: {
+            /**
+             * Important Open
+             * @default 0
+             */
+            important_open: number;
+            /**
+             * Optional Open
+             * @default 0
+             */
+            optional_open: number;
+            /**
+             * Deferred
+             * @default 0
+             */
+            deferred: number;
+            /**
+             * Unknown
+             * @default 0
+             */
+            unknown: number;
+            /**
+             * Known
+             * @default 0
+             */
+            known: number;
+            /**
+             * Complete
+             * @default false
+             */
+            complete: boolean;
         };
         /** IssueBriefing */
         IssueBriefing: {
@@ -1537,6 +1882,10 @@ export interface components {
             evidence_label_de: string;
             /** Evidence Quote */
             evidence_quote?: string | null;
+            /** Relevance */
+            relevance?: string | null;
+            /** Note De */
+            note_de?: string | null;
         };
         /**
          * IssueStatus
@@ -1696,6 +2045,10 @@ export interface components {
             analysis_status: components["schemas"]["AnalysisStatus"];
             /** Analysis Error */
             analysis_error: string | null;
+            /** Origin */
+            origin?: string | null;
+            /** Original Language */
+            original_language?: string | null;
             /**
              * Created At
              * Format: date-time
@@ -1742,6 +2095,81 @@ export interface components {
             enum_labels_de: {
                 [key: string]: string;
             };
+            /**
+             * Handover Priority
+             * @default normal
+             * @enum {string}
+             */
+            handover_priority: "high" | "normal";
+        };
+        /** MobileAnswer */
+        MobileAnswer: {
+            /** Instance Id */
+            instance_id: string;
+            /** Request Id */
+            request_id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "value" | "unknown" | "text";
+            /** Value */
+            value?: string | null;
+        };
+        /** MobileLanguage */
+        MobileLanguage: {
+            /** Language */
+            language: string;
+        };
+        /** MobileQuestion */
+        MobileQuestion: {
+            /** Instance Id */
+            instance_id: string;
+            /**
+             * Data Type
+             * @enum {string}
+             */
+            data_type: "string" | "boolean" | "date" | "integer" | "enum";
+            /** Text */
+            text: string;
+            /**
+             * Why
+             * @default
+             */
+            why: string;
+            /**
+             * Options
+             * @default []
+             */
+            options: components["schemas"]["BridgeOption"][];
+            /**
+             * Optional
+             * @default false
+             */
+            optional: boolean;
+        };
+        /**
+         * MobileState
+         * @description Everything the phone may see: no case id, no title, no facts, no decision.
+         */
+        MobileState: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "WAITING_FOR_CONNECTION" | "WAITING_FOR_QUESTION" | "QUESTION_ACTIVE" | "AWAITING_WORKER_REVIEW" | "PAUSED" | "COMPLETED" | "EXPIRED";
+            /** Rev */
+            rev: number;
+            /** Language */
+            language: string | null;
+            /**
+             * Rtl
+             * @default false
+             */
+            rtl: boolean;
+            question?: components["schemas"]["MobileQuestion"] | null;
+            /** Notice */
+            notice?: "translation_failed" | null;
         };
         /** NextQuestion */
         NextQuestion: {
@@ -1781,6 +2209,38 @@ export interface components {
              * @default false
              */
             optional: boolean;
+        };
+        /** PdfTextResult */
+        PdfTextResult: {
+            /** Text */
+            text: string;
+            /** Pages */
+            pages: number;
+            /** Truncated */
+            truncated: boolean;
+        };
+        /** PendingAnswer */
+        PendingAnswer: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "value" | "unknown" | "text";
+            /** Original */
+            original: string;
+            /** Language */
+            language: string;
+            /** German */
+            german: string;
+            /** Machine Translated */
+            machine_translated: boolean;
+            /**
+             * Translation Status
+             * @enum {string}
+             */
+            translation_status: "STRUCTURED" | "ORIGINAL_GERMAN" | "MACHINE" | "FAILED";
+            /** Submitted At */
+            submitted_at: string;
         };
         /** ProfessionalOut */
         ProfessionalOut: {
@@ -1863,6 +2323,12 @@ export interface components {
             for_audience_de?: string | null;
             /** Reason De */
             reason_de?: string | null;
+            /** Scope De */
+            scope_de?: string | null;
+            /** Local Note De */
+            local_note_de?: string | null;
+            /** Option Of Role */
+            option_of_role?: string | null;
             /** Rule Ref */
             rule_ref?: string | null;
         };
@@ -1893,7 +2359,7 @@ export interface components {
         };
         /**
          * RelatedRoute
-         * @description Hand-over to another issue. `available` only if that issue is loaded AND legally reviewed.
+         * @description Hand-over to another issue. `available` if that issue is loaded in the KB (its status is stated in the note).
          */
         RelatedRoute: {
             /** Issue Id */
@@ -1906,6 +2372,55 @@ export interface components {
             note_de: string;
             /** From Rule Id */
             from_rule_id: string;
+        };
+        /**
+         * ReportExtras
+         * @description Everything the case report needs beyond the structured briefing. Captured at creation time so that every
+         *     stored version renders exactly as it was. Documents: LexTec Bridge has no upload yet, so the list stays empty.
+         */
+        ReportExtras: {
+            /** Location Canton */
+            location_canton?: string | null;
+            /** Location Municipality */
+            location_municipality?: string | null;
+            safety?: components["schemas"]["SafetyAssessment"] | null;
+            referrals?: components["schemas"]["ReferralPlan"] | null;
+            /**
+             * Chronology
+             * @default []
+             */
+            chronology: components["schemas"]["ChronologyEvent"][];
+            /**
+             * Conversation
+             * @default []
+             */
+            conversation: components["schemas"]["ConversationItem"][];
+            /**
+             * Documents
+             * @default []
+             */
+            documents: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Extraction Model
+             * @default
+             */
+            extraction_model: string;
+            /** Kb Status */
+            kb_status?: string | null;
+            /**
+             * Inputs Count
+             * @default 0
+             */
+            inputs_count: number;
+            /** Effective Action */
+            effective_action?: string | null;
+            /**
+             * Created By Note
+             * @default eine Sozialarbeiterin
+             */
+            created_by_note: string;
         };
         /** ReviewPointOut */
         ReviewPointOut: {
@@ -2186,11 +2701,99 @@ export interface components {
             /** Routes To Issue */
             routes_to_issue?: string | null;
         };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
         /**
          * VerificationStatus
          * @enum {string}
          */
         VerificationStatus: "VERIFIED" | "UNVERIFIED" | "FAILED";
+        /** WorkerAccept */
+        WorkerAccept: {
+            /** Corrected Value */
+            corrected_value?: string | null;
+            /** Corrected Text De */
+            corrected_text_de?: string | null;
+        };
+        /** WorkerQuestion */
+        WorkerQuestion: {
+            /** Instance Id */
+            instance_id: string;
+            /** Fact Id */
+            fact_id: string;
+            /** Text De */
+            text_de: string;
+            /** Text Translated */
+            text_translated: string | null;
+            /**
+             * Translation Status
+             * @enum {string}
+             */
+            translation_status: "NONE" | "OK" | "FAILED";
+            /** Translation Error */
+            translation_error?: string | null;
+            /** Data Type */
+            data_type: string;
+            /**
+             * Options
+             * @default []
+             */
+            options: components["schemas"]["BridgeOption"][];
+            /**
+             * Options De
+             * @default []
+             */
+            options_de: components["schemas"]["BridgeOption"][];
+        };
+        /** WorkerState */
+        WorkerState: {
+            /** Active */
+            active: boolean;
+            /** Session Id */
+            session_id?: string | null;
+            /** Status */
+            status?: ("WAITING_FOR_CONNECTION" | "WAITING_FOR_QUESTION" | "QUESTION_ACTIVE" | "AWAITING_WORKER_REVIEW" | "PAUSED" | "COMPLETED" | "EXPIRED") | null;
+            /**
+             * Rev
+             * @default 0
+             */
+            rev: number;
+            /** Language */
+            language?: string | null;
+            /** Language Name */
+            language_name?: string | null;
+            /**
+             * Phone Connected
+             * @default false
+             */
+            phone_connected: boolean;
+            /** Join Token */
+            join_token?: string | null;
+            /**
+             * Join Path
+             * @default /bridge
+             */
+            join_path: string;
+            /** Lan Ip */
+            lan_ip?: string | null;
+            /** Public Base Url */
+            public_base_url?: string | null;
+            /** Expires At */
+            expires_at?: string | null;
+            question?: components["schemas"]["WorkerQuestion"] | null;
+            answer?: components["schemas"]["PendingAnswer"] | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -2312,6 +2915,53 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AIUsageReport"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    import_pdf_text_api_intake_pdf_text_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PdfTextResult"];
                 };
             };
             /** @description Not Found */
@@ -3355,6 +4005,106 @@ export interface operations {
             };
         };
     };
+    briefing_preview_api_cases__case_id__briefings__briefing_id__preview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+                briefing_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    briefing_pdf_api_cases__case_id__briefings__briefing_id__pdf_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+                briefing_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     all_latest_briefings_api_briefings_get: {
         parameters: {
             query?: never;
@@ -3733,6 +4483,390 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_state_api_cases__case_id__voice_bridge_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_api_cases__case_id__voice_bridge_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    pause_api_cases__case_id__voice_bridge_pause_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    resume_api_cases__case_id__voice_bridge_resume_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    end_api_cases__case_id__voice_bridge_end_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    accept_api_cases__case_id__voice_bridge_answer_accept_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkerAccept"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reask_api_cases__case_id__voice_bridge_answer_reask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    skip_api_cases__case_id__voice_bridge_skip_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_translation_api_cases__case_id__voice_bridge_retry_translation_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mobile_state_api_bridge_state_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-bridge-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MobileState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mobile_language_api_bridge_language_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-bridge-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MobileLanguage"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MobileState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mobile_answer_api_bridge_answer_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-bridge-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MobileAnswer"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MobileState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

@@ -75,6 +75,8 @@ def validate_extraction(
     result: ExtractionResult,
     kb: KnowledgeBase,
     messages: dict[str, str],  # message_id -> content (messages that were sent to the model)
+    allowed_issue_ids: set[str]
+    | None = None,  # ids that were offered in the catalog (None = all of the KB)
 ) -> ValidatedExtraction:
     """Drop everything that references unknown ids or has fabricated evidence."""
     out = ValidatedExtraction(summary=result.summary_de.strip())
@@ -85,7 +87,9 @@ def validate_extraction(
 
     seen_issue: set[str] = set()
     for di in result.detected_issues:
-        if di.issue_id not in kb.issues:
+        if di.issue_id not in kb.issues or (
+            allowed_issue_ids is not None and di.issue_id not in allowed_issue_ids
+        ):
             out.warnings.append(f"Unbekannte Issue-ID verworfen: {di.issue_id!r}.")
             continue
         content = messages.get(di.source_message_id)

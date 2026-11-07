@@ -1,0 +1,1059 @@
+{
+ "file": "issue_02.docx",
+ "title": "Issue 2 – Zahlungsaufforderung mit Kündigungsandrohung",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 2 – Zahlungsaufforderung mit Kündigungsandrohung",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 2 betrifft den Moment vor der Kündigung: Die Vermieterschaft hat schriftlich eine Zahlungsfrist angesetzt und die Kündigung angedroht (Art. 257d Abs. 1 OR). Es ist das Issue mit dem grössten Hebel für die Sozialarbeit: Wird der ganze Rückstand rechtzeitig bezahlt, darf deswegen nicht gekündigt werden. Die erste Massnahme ist deshalb sozial (Zahlung sichern), parallel läuft die rechtliche Prüfung. Es gilt ausschliesslich Schweizer Recht, Fokus Kanton Zürich."
+    },
+    {
+     "type": "p",
+     "text": "Abgrenzung: Läuft die Frist ungenutzt ab und kommt die Kündigung, wechselt der Fall zu Issue 3. Hat die Klientin den Mietzins wegen Mängeln zurückbehalten, besteht ein Bezug zu Issue 5."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: Gesetzeswortlaut aus OR_admin.pdf (SR 220, Stand 1.10.2026), ZPO.pdf (SR 272, Stand 1.7.2026) und SCHKG.pdf (SR 281.1, Stand 1.1.2026), mit PDF-Seite. Alle Leitentscheide sind am Volltext eurer Dateien geprüft: BGE 119 II 147, 119 II 232, 120 II 31, 124 III 145, 140 III 244 (Urteil 4A_120/2014), 140 III 491, 140 III 591, 143 III 15, 147 III 218 sowie Urteil 4A_332/2025."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut wörtlich aus OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 257d Abs. 1 OR",
+       "«Ist der Mieter nach der Übernahme der Sache mit der Zahlung fälliger Mietzinse oder Nebenkosten im Rückstand, so kann ihm der Vermieter schriftlich eine Zahlungsfrist setzen und ihm androhen, dass bei unbenütztem Ablauf der Frist das Mietverhältnis gekündigt werde. Diese Frist beträgt mindestens zehn Tage, bei Wohn- und Geschäftsräumen mindestens 30 Tage.»",
+       "OR 68",
+       "Kernnorm: Voraussetzungen der Mahnung"
+      ],
+      [
+       "Art. 257d Abs. 2 OR",
+       "«Bezahlt der Mieter innert der gesetzten Frist nicht, so kann der Vermieter fristlos, bei Wohn- und Geschäftsräumen mit einer Frist von mindestens 30 Tagen auf Ende eines Monats kündigen.»",
+       "OR 68",
+       "Folge bei Nichtzahlung → Issue 3"
+      ],
+      [
+       "Art. 257 OR",
+       "«Der Mietzins ist das Entgelt, das der Mieter dem Vermieter für die Überlassung der Sache schuldet.»",
+       "OR 67",
+       "Was zählt als Mietzins"
+      ],
+      [
+       "Art. 257a OR",
+       "«1 Die Nebenkosten sind das Entgelt für die Leistungen des Vermieters oder eines Dritten, die mit dem Gebrauch der Sache zusammenhängen. 2 Der Mieter muss die Nebenkosten nur bezahlen, wenn er dies mit dem Vermieter besonders vereinbart hat.»",
+       "OR 67",
+       "Nebenkosten nur bei Vereinbarung"
+      ],
+      [
+       "Art. 257c OR",
+       "«Der Mieter muss den Mietzins und allenfalls die Nebenkosten am Ende jedes Monats, spätestens aber am Ende der Mietzeit bezahlen, wenn kein anderer Zeitpunkt vereinbart oder ortsüblich ist.»",
+       "OR 68",
+       "Fälligkeit (meist vertraglich im Voraus)"
+      ],
+      [
+       "Art. 266n OR",
+       "«Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung (Art. 257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen Partner separat zuzustellen.»",
+       "OR 76",
+       "Familienwohnung: auch die Mahnung separat"
+      ],
+      [
+       "Art. 266o OR",
+       "«Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.»",
+       "OR 76",
+       "Folge eines Zustellungsmangels"
+      ],
+      [
+       "Art. 259g OR",
+       "«1 Verlangt der Mieter einer unbeweglichen Sache vom Vermieter die Beseitigung eines Mangels, so muss er ihm dazu schriftlich eine angemessene Frist setzen und kann ihm androhen, dass er bei unbenütztem Ablauf der Frist Mietzinse, die künftig fällig werden, bei einer vom Kanton bezeichneten Stelle hinterlegen wird. Er muss die Hinterlegung dem Vermieter schriftlich ankündigen. 2 Mit der Hinterlegung gelten die Mietzinse als bezahlt.»",
+       "OR 71",
+       "Schutzregel: nur Hinterlegung, kein Zurückbehalten"
+      ],
+      [
+       "Art. 265 OR",
+       "«Der Vermieter und der Mieter können nicht im Voraus auf das Recht verzichten, Forderungen und Schulden aus dem Mietverhältnis zu verrechnen.»",
+       "OR 74",
+       "Verrechnung möglich"
+      ],
+      [
+       "Art. 120 Abs. 1–2 OR",
+       "«1 Wenn zwei Personen einander Geldsummen … schulden, so kann jede ihre Schuld, insofern beide Forderungen fällig sind, mit ihrer Forderung verrechnen. 2 Der Schuldner kann die Verrechnung geltend machen, auch wenn seine Gegenforderung bestritten wird.»",
+       "OR 32",
+       "Voraussetzungen der Verrechnung"
+      ],
+      [
+       "Art. 74 Abs. 2 Ziff. 1 OR",
+       "«Geldschulden sind an dem Orte zu zahlen, wo der Gläubiger zur Zeit der Erfüllung seinen Wohnsitz hat»",
+       "OR 21",
+       "Rechtzeitigkeit der Zahlung (Bringschuld)"
+      ],
+      [
+       "Art. 271a Abs. 3 lit. b OR",
+       "Sperrfristen nach Abs. 1 lit. d und e gelten nicht bei Kündigungen «wegen Zahlungsrückstand des Mieters (Art. 257d)»",
+       "OR 81",
+       "Kein Schutz durch Sperrfrist"
+      ],
+      [
+       "Art. 272a Abs. 1 lit. a OR",
+       "«Die Erstreckung ist ausgeschlossen bei Kündigungen: a. wegen Zahlungsrückstand des Mieters (Art. 257d)»",
+       "OR 82",
+       "Warum Zahlung so wichtig ist"
+      ],
+      [
+       "Art. 257 Abs. 1 ZPO",
+       "Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort beweisbar ist; und b. die Rechtslage klar ist.»",
+       "ZPO 73",
+       "Schnelle Ausweisung nach Kündigung → Issue 6"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Betreibung – wörtlich aus SCHKG.pdf (SR 281.1, Stand 1.1.2026), falls die Vermieterschaft zusätzlich betreibt:"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 69 Abs. 2 Ziff. 3 SchKG",
+       "Der Zahlungsbefehl enthält «die Mitteilung, dass der Schuldner, welcher die Forderung … bestreiten will, innerhalb zehn Tagen nach Zustellung des Zahlungsbefehls dem Betreibungsamte dies zu erklären (Rechtsvorschlag zu erheben) hat»",
+       "SchKG 28",
+       "Erkennen eines Zahlungsbefehls"
+      ],
+      [
+       "Art. 74 Abs. 1 SchKG",
+       "«Will der Betriebene Rechtsvorschlag erheben, so hat er dies sofort dem Überbringer des Zahlungsbefehls oder innert zehn Tagen nach der Zustellung dem Betreibungsamt mündlich oder schriftlich zu erklären.»",
+       "SchKG 29",
+       "10-Tage-Frist"
+      ],
+      [
+       "Art. 74 Abs. 2 SchKG",
+       "«Bestreitet der Betriebene die Forderung nur teilweise, so hat er den bestrittenen Betrag genau anzugeben; unterlässt er dies, so gilt die ganze Forderung als bestritten.»",
+       "SchKG 29",
+       "Teilbestreitung"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Wichtig: Ein Rechtsvorschlag stoppt nur die Betreibung. Er verhindert nicht die Kündigung nach Art. 257d OR; dafür zählt allein die Zahlung innert der Mahnfrist (vgl. BGE 140 III 591: Betreibung mit Rechtsvorschlag, danach trotzdem gültige Kündigung)."
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide (8 BGE)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die Entscheide decken vier Fragen ab: Fristbeginn (1–3), rechtzeitige und vollständige Zahlung (4, 6, 8), Zustellung bei Familienwohnung (5) und Treu und Glauben (6, 7). Seitenangaben = amtliche BGE-Seite («S. …»), bei Urteilen 4A_… nur Erwägung."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "BGE",
+       "Kernaussage mit Fundstelle",
+       "Prüfstand",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 119 II 147 (6.4.1993)",
+       "Die 30-Tage-Frist läuft ab dem Tag, an dem die Mieterin die Zahlungsaufforderung tatsächlich in Empfang nimmt; holt sie das Einschreiben nicht ab, gilt der letzte Tag der 7-tägigen Abholfrist (E. 2, S. 149–150). Die Vermieterschaft muss den Fristablauf abwarten; eine Kündigung während laufender Frist ist nicht nichtig, aber innert 30 Tagen anfechtbar (E. 3–4, S. 151–155).",
+       "Volltext (eure Datei)",
+       "Fristbeginn anders als bei Issue 1"
+      ],
+      [
+       "2",
+       "BGE 140 III 244 (Urteil 4A_120/2014)",
+       "Bestätigt: Relative Empfangstheorie im Mietrecht nur für Mietzinserhöhungen und für die Zahlungsaufforderung nach Art. 257d Abs. 1 OR (E. 5.1, Seite 5; E. 5.2, Seite 6).",
+       "Volltext (eure Datei)",
+       "Abgrenzung zu Issue 1"
+      ],
+      [
+       "3",
+       "BGE 143 III 15",
+       "Bestätigt die beiden Ausnahmen von der absoluten Empfangstheorie (E. 4.1, S. 17; E. 4.3, S. 19–20).",
+       "Volltext (eure Datei)",
+       "Abgrenzung zu Issue 1"
+      ],
+      [
+       "4",
+       "BGE 124 III 145 (20.3.1998)",
+       "Liegt der Mahnung ein Einzahlungsschein bei, ist die Bareinzahlung am Postschalter innert Frist rechtzeitig; Verbuchungsverzögerungen trägt die Vermieterschaft; Kündigung ungültig (E. 2a–2b, S. 147–149). Grundregel nach BGE 119 II 232 (15.6.1993): Geldschulden sind Bringschulden; zahlt die Mieterin über Post oder Bank, muss der Auftrag so früh erteilt werden, dass das Geld bei Fristablauf im Verfügungsbereich der Vermieterschaft ist; bis dahin trägt sie das Verzögerungsrisiko. Eine am Abend des letzten Tages erteilte Postanweisung ist zu spät (E. 2, S. 234–235). Wer verspätete Zahlungen annimmt und trotzdem kündigt, handelt nicht rechtsmissbräuchlich (E. 3, S. 235).",
+       "Volltext (eure Datei)",
+       "Faktum «Zahlungsweg»; Einzahlungsschein verwenden"
+      ],
+      [
+       "5",
+       "BGE 140 III 491",
+       "Bei Familienwohnung müssen auch die Zahlungsaufforderung und die Kündigung beiden Ehegatten separat zugestellt werden (E. 4.1, S. 492); nach definitivem Auszug keine Familienwohnung mehr (S. 492–493). Bei Mitmiete müssen alle erfasst sein; Berufung darauf kann rechtsmissbräuchlich sein (E. 4.2.1–4.2.4, S. 493–495).",
+       "Volltext (eure Datei)",
+       "Faktum «Familienwohnung / Mitmieter»"
+      ],
+      [
+       "6",
+       "BGE 140 III 591 (4A_271/2014, 19.11.2014)",
+       "Eine korrekte Zahlungsverzugskündigung ist nur «très exceptionnel» treuwidrig, z. B. wenn ein deutlich zu hoher Betrag verlangt wurde, obwohl der geschuldete unsicher war; wenn der Ausstand unbedeutend ist oder sehr kurz nach Fristablauf bezahlt wurde und bisher immer pünktlich gezahlt wurde; oder wenn erst lange nach Fristablauf gekündigt wird. Beweislast bei der Mieterschaft (E. 1, S. 594). CHF 164.65 sind nicht unbedeutend; massgebend ist der Betrag an sich, nicht im Verhältnis zur Miete oder zu den Finanzen der Parteien (E. 2, S. 594–595). Art. 257d verlangt nur eine fällige, nicht eine unbestrittene Forderung; wer bestreitet und nicht zahlt, trägt das Risiko (E. 3.2, S. 595–596). Eine zweite Mahnung oder Erinnerung ist nicht nötig (E. 5, S. 597).",
+       "Volltext (eure Datei)",
+       "Verbote «bestrittener Betrag muss nicht bezahlt werden» und «kleiner Betrag ist egal»; Fall betraf Nebenkostensaldo"
+      ],
+      [
+       "7",
+       "BGE 120 II 31 (20.1.1994)",
+       "Art. 271 OR gilt auch für Kündigungen wegen Zahlungsverzug, aber nur bei besonderen Umständen; kein offenbarer Rechtsmissbrauch nötig (E. 4a, S. 32–33). CHF 286 sind nicht unbedeutend. Treuwidrig handelt, wer mit Kündigung droht, bevor er Gewissheit über den geschuldeten Betrag hat: Hier wurden irrtümlich über CHF 1000 statt CHF 436 verlangt und zur Prüfung aufgefordert; Kündigung aufgehoben (E. 4b, S. 33–34).",
+       "Volltext (eure Datei)",
+       "Prüfhinweis bei falschem Betrag"
+      ],
+      [
+       "8",
+       "BGE 147 III 218 (4A_571/2020, 23.3.2021)",
+       "Hinterlegung wirkt als Zahlung nur, wenn alle Voraussetzungen von Art. 259g OR erfüllt sind, u. a. schriftliche Frist an die Vermieterschaft, Androhung, kantonale Stelle und nur künftig fällige Mietzinse (E. 3.3.1, S. 220). Die Hinterlegung bereits fälliger Mietzinse tilgt die Schuld nicht (E. 3.3.2.6, S. 223–224); die Schuld ist dann erst getilgt, wenn der Betrag der Vermieterschaft ausgehändigt oder gutgeschrieben wurde (E. 3.3.4, S. 224). Im Fall: keine Zahlung innert 30 Tagen, Kündigung gültig (E. 3.3.5, S. 224–225).",
+       "Volltext (eure Datei)",
+       "Schutzregel: nach der Mahnung nicht hinterlegen, sondern zahlen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Ergänzende Praxis (keine BGE):"
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_332/2025 vom 29.10.2025 (Volltext, eure Datei; Vorinstanz Obergericht ZH NG240017; Geschäftsraum): Die Mahnung muss den Rückstand so klar und detailliert bezeichnen, dass die Mieterin erkennt, was sie zahlen muss; beziffert oder einwandfrei bestimmbar, beurteilt nach den Auslegungsregeln für Willenserklärungen (E. 3.1). Ein zu hoher Betrag macht die Kündigung nicht zwingend unwirksam: Wer weder auf den Fehler hinweist noch den tatsächlich geschuldeten Betrag zahlt, wird nicht geschützt (E. 3.1). Wer dagegen den nach eigenem Wissen geschuldeten Betrag zahlt und informiert, wird geschützt; die Vermieterschaft muss dann klar nachmahnen (E. 3.5.2). Ergebnis: Kündigung unwirksam (E. 3.6)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_333/2022 vom 9.11.2022 (laut law.ch): Verrechnung mit Mängelansprüchen im Ausweisungsverfahren nur, wenn sofort beweisbar."
+    },
+    {
+     "type": "bullet",
+     "text": "Obergericht ZH LF250009 vom 14.4.2025: Verrechnungserklärung innert der 30-Tage-Frist und gegenüber der Vermieterschaft (E. 3.1); Vollstreckungsbehörde prüft fürsorgerische Massnahmen (E. 3.4)."
+    },
+    {
+     "type": "bullet",
+     "text": "Mietgericht Zürich, ZMP 2018 Nr. 1: «kann gekündigt werden» genügt als Androhung; Kündigung kurz vor einem vereinbarten Gespräch über Gegenforderungen war treuwidrig."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_68/2014 vom 16.6.2014 (Volltext, eure Datei; vollständiges Urteil zu BGE 140 III 315; Wohnung VD): Mahnung über CHF 3000 mit 30-Tage-Frist; der Sozialdienst zahlte innert Frist insgesamt mehr als den Rückstand, teils ausdrücklich für die Partnerin des Mieters. Eine Geldschuld muss nicht persönlich erfüllt werden; zahlt ein Dritter, tilgt das die Schuld der Mieterin (Art. 68 OR). Die Vermieter hatten den Betrag für die Partnerin erst nach Fristende zurücküberwiesen und ihn damit angenommen; hätten sie ihn vor Fristende zurückgeschickt, hätte der Sozialdienst noch für den Mieter zahlen können (E. 4.2). Anrechnung auf die Monate nach Art. 86–87 OR (E. 4.3). Ergebnis: Schuld innert Frist getilgt, kein Zahlungsverzug (E. 4.4); Ausweisung im klaren Fall scheiterte (Nichteintreten, E. 5.3 = BGE 140 III 315 E. 5.3, S. 320)."
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wie bei Issue 1: «noch nicht gefragt» führt zur Rückfrage, «weiss nicht» meist zur Eskalation. Die Vorprüfung (Mieterin? Objektart? Gemeinde?) übernimmt das System aus Issue 1."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Inhalt der Mahnung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Schriftlich",
+       "Liegt die Mahnung schriftlich vor (Foto)?",
+       "ja",
+       "Art. 257d Abs. 1 OR"
+      ],
+      [
+       "Kündigungsandrohung",
+       "Steht drin, dass bei Nichtzahlung gekündigt wird oder werden kann?",
+       "ja",
+       "Ohne Androhung keine Mahnung nach Art. 257d (ZMP 2018 Nr. 1; 4A_332/2025)"
+      ],
+      [
+       "Betrag und Monate",
+       "Welcher Betrag für welche Monate wird verlangt? Ist er klar bezeichnet?",
+       "ja",
+       "Bestimmtheit (4A_332/2025); nur Mietzins und Nebenkosten zählen"
+      ],
+      [
+       "Art der Forderung",
+       "Geht es um Miete und Nebenkosten oder um Mahngebühren, Schadenersatz, Kaution?",
+       "ja",
+       "Nur Mietzins und Nebenkosten fallen unter Art. 257d OR (Art. 257, 257a OR)"
+      ],
+      [
+       "Angesetzte Frist",
+       "Welche Frist steht drin (Anzahl Tage oder Datum)?",
+       "ja",
+       "Mindestens 30 Tage bei Wohnungen (Art. 257d Abs. 1 OR)"
+      ],
+      [
+       "Zustellung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Zustellart",
+       "Eingeschrieben, normale Post oder persönlich?",
+       "ja",
+       "Fristbeginn (BGE 119 II 147 E. 2)"
+      ],
+      [
+       "Tatsächlicher Empfang",
+       "Wann hat die Klientin das Schreiben in den Händen gehabt bzw. auf der Post abgeholt?",
+       "ja",
+       "Relative Empfangstheorie"
+      ],
+      [
+       "Abholungseinladung",
+       "Falls nicht abgeholt: Wann lag der gelbe Zettel im Briefkasten?",
+       "ja, bei Einschreiben",
+       "Empfang am 7. Tag der Abholfrist"
+      ],
+      [
+       "Familienwohnung",
+       "Verheiratet oder eingetragen, und wohnt die Partnerperson noch dort?",
+       "ja",
+       "Art. 266n OR; BGE 140 III 491 E. 4.1"
+      ],
+      [
+       "Separate Zustellung",
+       "Hat die Partnerperson eine eigene Mahnung erhalten?",
+       "ja, bei Familienwohnung",
+       "Art. 266n, 266o OR"
+      ],
+      [
+       "Mitmieter",
+       "Steht noch jemand im Mietvertrag?",
+       "ja",
+       "BGE 140 III 491 E. 4.2.1"
+      ],
+      [
+       "Zahlung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Bereits bezahlt",
+       "Wurde seit der Mahnung etwas bezahlt? Wann, wie viel, wie?",
+       "ja",
+       "Nur vollständige Zahlung innert Frist verhindert die Kündigung"
+      ],
+      [
+       "Zahlungsweg",
+       "Liegt der Mahnung ein Einzahlungsschein bei? Über welchen Weg wird gezahlt?",
+       "ja",
+       "Rechtzeitigkeit: mit Einzahlungsschein der Vermieterschaft zählt die Einzahlung (BGE 124 III 145 E. 2), sonst der Eingang beim Gläubiger (BGE 119 II 232 E. 2)"
+      ],
+      [
+       "Wer zahlt die Miete",
+       "Zahlt die Klientin selbst oder der Sozialdienst direkt an die Vermieterschaft?",
+       "ja",
+       "Interessenkonflikt, Zahlungskette prüfen"
+      ],
+      [
+       "Zahlungen Dritter",
+       "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)? Wann, wie viel, mit welchem Zahlungszweck? Belege hochladen.",
+       "ja",
+       "Zahlung durch Dritte tilgt die Mietschuld (Art. 68 OR; BGer 4A_68/2014 E. 4.2)"
+      ],
+      [
+       "Rücküberweisung",
+       "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt? Wann genau (vor oder nach Fristende)?",
+       "ja, wenn Dritte gezahlt haben",
+       "Erst nach Fristende zurücküberwiesen = angenommen (BGer 4A_68/2014 E. 4.2)"
+      ],
+      [
+       "Finanzierbarkeit",
+       "Kann der Betrag vor Fristablauf aufgebracht werden (eigene Mittel, Sozialhilfe, Stiftung)?",
+       "ja",
+       "Wichtigste soziale Massnahme"
+      ],
+      [
+       "Gegenforderungen",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Mängel / Zurückbehalten",
+       "Hat die Klientin wegen Mängeln bewusst nicht bezahlt?",
+       "ja",
+       "Schutzregel (Art. 259g OR; BGE 147 III 218)"
+      ],
+      [
+       "Gegenforderung",
+       "Hat die Klientin Forderungen gegen die Vermieterschaft (z. B. Herabsetzung, Nebenkostenguthaben)?",
+       "nein",
+       "Verrechnung nur innert Frist, gegenüber Vermieterschaft, beweisbar (Art. 120 OR; OG ZH LF250009 E. 3.1)"
+      ],
+      [
+       "Bestrittener Betrag",
+       "Bestreitet die Klientin den Betrag?",
+       "nein",
+       "Fälligkeit genügt (BGE 140 III 591 E. 3.2)"
+      ],
+      [
+       "Vorgeschichte",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Absprachen",
+       "Gab es eine Ratenvereinbarung, Stundung oder ein vereinbartes Gespräch mit der Vermieterschaft?",
+       "nein",
+       "Treu und Glauben (ZMP 2018 Nr. 1)"
+      ],
+      [
+       "Bereits gekündigt",
+       "Ist schon eine Kündigung eingetroffen?",
+       "ja",
+       "Wechsel zu Issue 3"
+      ],
+      [
+       "Betreibung",
+       "Gibt es einen Zahlungsbefehl für die Miete?",
+       "nein",
+       "Rechtsvorschlag innert 10 Tagen (Art. 74 Abs. 1 SchKG, S. 29); verhindert die Kündigung nicht"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Dokumente, die angefordert werden sollen: Mahnung (alle Seiten), Briefumschlag bzw. Abholungseinladung oder Sendungsverfolgung, Mietvertrag (Fälligkeit, Zahlungsweg), Zahlungsbelege der letzten Monate, allfällige Korrespondenz über Mängel oder Abmachungen."
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Frist unter 30 Tagen",
+       "Art. 257d Abs. 1 OR verlangt mindestens 30 Tage (OR S. 68). Umstritten: Nach wohl herrschender Lehre ist eine Kündigung nach zu kurzer Frist unwirksam bzw. nichtig (CHK-Hulliger/Heinrich, Art. 257d N 9; SVIT-Reudt, Art. 257d N 30; Mietrecht für die Praxis-Spirig, 710; BSK-Weber, Art. 257d N 5); nach anderer Ansicht wird die Frist in eine gesetzeskonforme umgedeutet (ZK-Higi, Art. 257d N 39; Blumer, N 856). Das Bundesgericht hat die Frage offengelassen, hält die Berufung auf Unwirksamkeit aber für rechtsmissbräuchlich, wenn die Mieterin ohnehin nie zahlen wollte (BGer 4C.88/2003; 4A_245/2017 E. 5.1, 5.3). Alles nach Lehrbuch § 31, N 2968h, S. 929 f.",
+       "Trotzdem so schnell wie möglich zahlen; Rechtsperson"
+      ],
+      [
+       "Keine oder unklare Kündigungsandrohung",
+       "Keine Mahnung im Sinne von Art. 257d; unklare Androhung kann die spätere Kündigung ungültig machen (4A_332/2025); «kann gekündigt werden» genügt aber (ZMP 2018 Nr. 1)",
+       "Keine Entwarnung; Rechtsperson"
+      ],
+      [
+       "Betrag unklar oder enthält anderes (Mahngebühren, Schaden, Kaution)",
+       "Nur Mietzins und Nebenkosten (Art. 257, 257a OR, S. 67); Rückstand muss klar bestimmbar sein (4A_332/2025)",
+       "Rechtsperson; trotzdem den unbestrittenen Mietzins zahlen"
+      ],
+      [
+       "Nebenkosten ohne Vereinbarung",
+       "Nebenkosten nur geschuldet, wenn besonders vereinbart (Art. 257a Abs. 2 OR, S. 67)",
+       "Prüfhinweis"
+      ],
+      [
+       "Familienwohnung, Mahnung nur an einen Ehegatten",
+       "Separate Zustellung nötig (Art. 266n OR, S. 76; BGE 140 III 491 E. 4.1); Berufung darauf kann bei ausgezogenem Partner rechtsmissbräuchlich sein (E. 4.2.4)",
+       "Keine Entwarnung; Rechtsperson"
+      ],
+      [
+       "Konkubinat",
+       "Keine Familienwohnung (BGE 139 III 7 E. 2.3.1, vgl. Issue 1)",
+       "Prüfen, ob Partner Mitmieter ist"
+      ],
+      [
+       "Mietzins wegen Mängeln zurückbehalten",
+       "Kein Recht dazu ausserhalb der Hinterlegung nach Art. 259g OR (S. 71); Hinterlegung nur für künftig fällige Mietzinse und nach schriftlicher Frist an die Vermieterschaft; bereits fällige Mietzinse zu hinterlegen tilgt die Schuld nicht (BGE 147 III 218 E. 3.3.1, S. 220; E. 3.3.2.6, S. 223–224)",
+       "Warnung; Rechtsperson; Bezug Issue 5"
+      ],
+      [
+       "Gegenforderung (Verrechnung)",
+       "Möglich (Art. 120, 265 OR), aber Gegenforderung muss fällig sein, die Erklärung innert Frist gegenüber der Vermieterschaft erfolgen und beweisbar sein (OG ZH LF250009 E. 3.1; 4A_333/2022)",
+       "Nur mit Fachperson; im Zweifel zahlen"
+      ],
+      [
+       "Betrag bestritten",
+       "Fälligkeit genügt; wer bestreitet und nicht zahlt, trägt das Risiko (BGE 140 III 591 E. 3.2, S. 595–596). Ist der Betrag zu hoch: geschuldeten Teil fristgerecht zahlen und Vermieterschaft schriftlich auf den Fehler hinweisen (4A_332/2025 E. 3.1, 3.5.2; BGE 120 II 31 E. 4b)",
+       "Im Zweifel zahlen, Bestreitung durch Fachperson"
+      ],
+      [
+       "Teilzahlung",
+       "Nur vollständige Zahlung innert Frist wendet die Kündigung sicher ab (Art. 257d Abs. 2 OR); schon CHF 164.65 Restbetrag sind nicht unbedeutend (BGE 140 III 591 E. 2, S. 594–595)",
+       "Warnung"
+      ],
+      [
+       "Zahlung kurz nach Fristablauf",
+       "Kündigung grundsätzlich zulässig; Treuwidrigkeit nur «sehr ausnahmsweise», z. B. bei unbedeutendem Ausstand oder Zahlung sehr kurz nach Fristablauf bei bisher pünktlicher Zahlung; eine zweite Mahnung ist nicht nötig (BGE 140 III 591 E. 1, S. 594; E. 5, S. 597)",
+       "Wechsel zu Issue 3, Rechtsperson, sofort"
+      ],
+      [
+       "Kündigung während laufender Frist",
+       "Nach BGE 119 II 147 E. 4 (S. 154–155) nicht nichtig, aber innert 30 Tagen anfechtbar. Neuere Praxis: unwirksam (BGer 4A_585/2010 E. 3.1; Lehrbuch § 31, N 2968i, S. 930); Ausnahme, wenn am letzten Tag verfasst und erst nach Fristablauf zugestellt (4A_585/2010 E. 3.5). Frist für eine Anfechtung vorsorglich wahren",
+       "Rechtsperson, sofort"
+      ],
+      [
+       "Ratenvereinbarung, Stundung, vereinbartes Gespräch",
+       "Kann eine spätere Kündigung treuwidrig machen (ZMP 2018 Nr. 1)",
+       "Rechtsperson; schriftlich festhalten"
+      ],
+      [
+       "Sozialdienst zahlt direkt, Zahlung ausgeblieben",
+       "Sozialdienst ist selbst beteiligt",
+       "Sofort intern klären + unabhängige Beratung"
+      ],
+      [
+       "Sozialdienst oder andere Dritte zahlen innert Frist",
+       "Tilgt die Schuld der Mieterin, auch wenn der Vertrag nur auf sie lautet; eine Geldschuld muss nicht persönlich erfüllt werden (Art. 68 OR; BGer 4A_68/2014 E. 4.2, vollständiges Urteil zu BGE 140 III 315). Anrechnung auf die Monate nach Art. 86–87 OR (E. 4.3)",
+       "Sozialdienst soll innert Frist direkt an die Vermieterschaft zahlen und Mieterin und Monate angeben; Belege sichern"
+      ],
+      [
+       "Vermieterschaft schickt eine Zahlung zurück oder lehnt sie ab",
+       "Wird erst nach Fristende zurücküberwiesen, gilt die Zahlung als angenommen; im Fall war der Rückstand damit innert Frist bezahlt und die Ausweisung scheiterte (4A_68/2014 E. 4.2, 4.4; BGE 140 III 315 E. 5.3, S. 320). Wird vor Fristende zurückgeschickt, muss sofort neu gezahlt werden",
+       "Sozialarbeiterin + Rechtsperson sofort; Datum der Rücküberweisung festhalten"
+      ],
+      [
+       "Geschäftsraum oder Ferienwohnung bis 3 Monate",
+       "Andere Regeln bzw. kein Wohnraum-Mietrecht",
+       "Ausserhalb des Moduls"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Entscheidend ist die Zahlungsfrist von mindestens 30 Tagen. Anders als bei der Kündigung beginnt sie erst mit dem tatsächlichen Empfang, spätestens am 7. Tag der Abholfrist (relative Empfangstheorie, BGE 119 II 147 E. 2). Es gibt in dieser Phase kein Verfahren bei der Schlichtungsbehörde; der Weg ist die Zahlung."
+    },
+    {
+     "type": "p",
+     "text": "Ablauf:"
+    },
+    {
+     "type": "bullet",
+     "text": "Mahnung trifft ein. Empfang je nach Zustellung: Übergabe, Abholung auf der Post oder 7. Tag der Abholfrist."
+    },
+    {
+     "type": "bullet",
+     "text": "Sofort prüfen, ob und wie bezahlt werden kann (Sozialarbeiterin): Budget, Sozialhilfe, Stiftung, Ratenwunsch an die Vermieterschaft."
+    },
+    {
+     "type": "bullet",
+     "text": "Vollständig und rechtzeitig zahlen, am sichersten mit dem beigelegten Einzahlungsschein und Quittung (BGE 124 III 145 E. 2). Bei Überweisung oder Zahlung durch den Sozialdienst muss das Geld spätestens am letzten Tag der Frist bei der Vermieterschaft verfügbar sein; den Auftrag deshalb mehrere Arbeitstage vorher erteilen (Art. 74 OR; BGE 119 II 232 E. 2, S. 234–235). Bestätigt in BGer 4A_366/2008 E. 4: Das Konto der Vermieterschaft muss bis zum letzten Tag gutgeschrieben sein; eine Gutschrift am nächsten Arbeitstag war zu spät."
+    },
+    {
+     "type": "bullet",
+     "text": "Parallel rechtliche Prüfung, wenn die Mahnung Mängel haben könnte oder Gegenforderungen bestehen. Eine Verrechnung muss innert Frist und gegenüber der Vermieterschaft erklärt werden (OG ZH LF250009 E. 3.1)."
+    },
+    {
+     "type": "bullet",
+     "text": "Nach Fristablauf ohne vollständige Zahlung: Kündigung mit mindestens 30 Tagen auf Ende eines Monats möglich (Art. 257d Abs. 2 OR) → Issue 3. Erstreckung ausgeschlossen (Art. 272a Abs. 1 lit. a OR), Ausweisung im schnellen Verfahren möglich (Art. 257 ZPO) → Issue 6."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Rechtsgrundlage"
+      ],
+      [
+       "Zahlungsfrist Wohnung",
+       "mindestens 30 Tage",
+       "Tatsächlicher Empfang, spätestens 7. Tag der Abholfrist",
+       "Art. 257d Abs. 1 OR (OR-PDF S. 68); BGE 119 II 147 E. 2"
+      ],
+      [
+       "Abholfrist Post (Einschreiben)",
+       "7 Tage",
+       "Einwurf der Abholungseinladung",
+       "BGE 119 II 147 E. 2"
+      ],
+      [
+       "Kündigungsfrist nach Fristablauf",
+       "mindestens 30 Tage auf Ende eines Monats",
+       "Nach unbenütztem Fristablauf",
+       "Art. 257d Abs. 2 OR (S. 68)"
+      ],
+      [
+       "Verrechnungserklärung",
+       "innerhalb der Zahlungsfrist",
+       "–",
+       "OG ZH LF250009 E. 3.1"
+      ],
+      [
+       "Anfechtung einer verfrühten Kündigung",
+       "30 Tage",
+       "Empfang der Kündigung",
+       "Art. 273 Abs. 1 OR; BGE 119 II 147 E. 4"
+      ],
+      [
+       "Rechtsvorschlag bei Betreibung",
+       "10 Tage",
+       "Zustellung Zahlungsbefehl",
+       "Art. 74 Abs. 1 SchKG (SchKG-PDF S. 29)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Nie im System: ein berechnetes Fristende. Das System sagt: «Die Frist kann laufen; so früh wie möglich vollständig zahlen und das Datum durch eine Fachperson bestimmen lassen.»"
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "p",
+     "text": "In dieser Phase ist die wichtigste Stelle der Sozialdienst selbst: Er kann die Zahlung sichern. Die Schlichtungsbehörde ist erst zuständig, wenn gekündigt wurde (Issue 3)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Kosten",
+       "Quelle"
+      ],
+      [
+       "Sozialdienst der Wohngemeinde",
+       "Finanzierung des Rückstands, Budget, Direktzahlung klären; Zahlung innert Frist direkt an die Vermieterschaft mit Angabe von Mieterin und Monaten (BGer 4A_68/2014)",
+       "–",
+       "Gemeinde der Klientin"
+      ],
+      [
+       "Schuldenberatung Kanton Zürich",
+       "Mietrückstände, Betreibungen, Zahlungsplan",
+       "Kontakt und Kosten prüfen",
+       "– (noch zu ergänzen)"
+      ],
+      [
+       "Mieterinnen- und Mieterverband Zürich",
+       "Prüfung der Mahnung, Verrechnung, Gespräch mit Vermieterschaft",
+       "Mitglieder gratis (ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung",
+       "mieterverband.ch/mv-zh; Heilsarmee-Übersicht 07/2026"
+      ],
+      [
+       "Rechtsauskunft der Schlichtungsbehörde / Bezirksgerichte",
+       "Neutrale Information, keine Rechtsberatung",
+       "gratis bzw. auf der Seite nicht angegeben",
+       "gerichte-zh.ch/rechtsauskunft"
+      ],
+      [
+       "Hinterlegungsstelle (nur für Issue 5)",
+       "Hinterlegung nach Art. 259g OR, nur nach korrektem Verfahren",
+       "–",
+       "Vom Kanton bezeichnet, noch zu ergänzen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Vor der Demo: Kontakt der Schuldenberatung und der Zürcher Hinterlegungsstelle auf offiziellen Seiten nachtragen."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 2 ist das Beispiel für parallele Eskalation: Die Sozialarbeiterin handelt sofort (Zahlung sichern), die Rechtsperson prüft gleichzeitig. Schwellen sind Produktentscheide."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Begründung"
+      ],
+      [
+       "Ein zwingendes Faktum ist noch nicht erhoben",
+       "Rückfrage",
+       "–",
+       "Nicht annehmen, nachfragen"
+      ],
+      [
+       "Frist läuft möglicherweise noch, nicht vollständig bezahlt",
+       "Sozialarbeiterin + Rechtsperson",
+       "sofort",
+       "Zahlung innert Frist verhindert die Kündigung; sonst keine Erstreckung"
+      ],
+      [
+       "Empfangsdatum oder Frist unbekannt",
+       "Sozialarbeiterin + Rechtsperson",
+       "sofort",
+       "So handeln, als liefe die Frist"
+      ],
+      [
+       "Frist unter 30 Tagen",
+       "Rechtsperson",
+       "sofort",
+       "Möglicher Mangel, aber keine Entwarnung"
+      ],
+      [
+       "Keine/unklare Androhung oder unklarer Betrag",
+       "Rechtsperson",
+       "sofort",
+       "Möglicher Mangel (4A_332/2025)"
+      ],
+      [
+       "Familienwohnung oder Mitmieter, nicht separat zugestellt",
+       "Rechtsperson",
+       "sofort",
+       "Art. 266n OR; BGE 140 III 491"
+      ],
+      [
+       "Miete wegen Mängeln zurückbehalten",
+       "Rechtsperson",
+       "sofort",
+       "Schutzregel; Bezug Issue 5"
+      ],
+      [
+       "Gegenforderung, Verrechnung gewünscht",
+       "Rechtsperson",
+       "sofort",
+       "Nur innert Frist und beweisbar"
+      ],
+      [
+       "Sozialdienst zahlt direkt, Zahlung ausgeblieben",
+       "Sozialarbeiterin intern + unabhängige Rechtsperson",
+       "sofort",
+       "Interessenkonflikt"
+      ],
+      [
+       "Dritte (z. B. Sozialdienst) haben gezahlt; Vermieterschaft bestreitet die Zahlung oder schickt Geld zurück",
+       "Sozialarbeiterin + Rechtsperson",
+       "sofort",
+       "Tilgung durch Dritte (BGer 4A_68/2014); vor Fristende sofort neu zahlen"
+      ],
+      [
+       "Frist möglicherweise abgelaufen, nicht bezahlt",
+       "Sozialarbeiterin + Rechtsperson",
+       "sofort",
+       "Kündigung zu erwarten → Issue 3"
+      ],
+      [
+       "Kündigung bereits erhalten",
+       "Wechsel zu Issue 3",
+       "sofort",
+       "Andere Regeln"
+      ],
+      [
+       "Ratenvereinbarung oder Gespräch vereinbart",
+       "Rechtsperson",
+       "bald",
+       "Treu und Glauben (ZMP 2018 Nr. 1)"
+      ],
+      [
+       "Zahlungsbefehl erhalten",
+       "Rechtsperson",
+       "sofort",
+       "Rechtsvorschlag innert 10 Tagen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (je mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wird der ganze ausstehende Betrag innerhalb der gesetzten Frist bezahlt, darf deswegen nicht gekündigt werden.» (Art. 257d Abs. 1 und 2 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bei Wohnungen muss die Zahlungsfrist mindestens 30 Tage betragen.» (Art. 257d Abs. 1 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Frist beginnt, wenn die Mahnung tatsächlich in Empfang genommen wird; wird ein Einschreiben nicht abgeholt, spätestens am letzten Tag der 7-tägigen Abholfrist. Bitte trotzdem so früh wie möglich zahlen.» (BGE 119 II 147 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Am sichersten ist die Zahlung mit dem Einzahlungsschein, der der Mahnung beiliegt; Quittung aufbewahren. Bei einer Überweisung muss das Geld spätestens am letzten Tag der Frist bei der Vermieterschaft sein; den Auftrag deshalb mehrere Arbeitstage vorher erteilen.» (BGE 124 III 145 E. 2; BGE 119 II 232 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Auch kleine Restbeträge zählen. Bitte den ganzen Betrag zahlen.» (BGE 140 III 591 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wer den Betrag für falsch hält, sollte den nach eigener Kenntnis geschuldeten Betrag fristgerecht zahlen und die Vermieterschaft schriftlich auf den Fehler hinweisen. Nicht zu zahlen ist riskant.» (BGE 140 III 591 E. 3.2; 4A_332/2025 E. 3.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bei einer Familienwohnung muss auch die Mahnung beiden Ehegatten separat zugestellt werden. Ob das eingehalten wurde, prüft eine Fachperson.» (Art. 266n OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wird nicht rechtzeitig bezahlt, kann mit mindestens 30 Tagen auf Ende eines Monats gekündigt werden, und eine Erstreckung ist dann ausgeschlossen. Eine zweite Mahnung ist nicht nötig.» (Art. 257d Abs. 2, 272a Abs. 1 lit. a OR; BGE 140 III 591 E. 5)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Den Mietzins wegen Mängeln zurückzubehalten oder bereits fällige Mietzinse zu hinterlegen schützt nicht vor der Kündigung. Bitte vorher eine Fachperson fragen.» (Art. 259g OR; BGE 147 III 218 E. 3.3.2.6)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Miete kann auch der Sozialdienst oder eine andere Person bezahlen; das zählt wie eine Zahlung der Klientin. Wichtig: innert Frist, direkt an die Vermieterschaft und mit Angabe von Mieterin und Monaten.» (Art. 68 OR; BGer 4A_68/2014 E. 4.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Schickt die Vermieterschaft eine Zahlung zurück, bitte sofort melden und das Datum festhalten.» (BGer 4A_68/2014 E. 4.2)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "Jedes berechnete Fristende."
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Mahnung ist ungültig, Sie müssen nichts zahlen.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine Teilzahlung reicht» oder «der kleine Rest ist egal.» (falsch, BGE 140 III 591 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn Sie den Betrag bestreiten, müssen Sie nicht zahlen.» (falsch, BGE 140 III 591 E. 3.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Es reicht, wenn Sie am letzten Tag der Frist überweisen.» (falsch, BGE 119 II 232 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Mit einem Rechtsvorschlag gegen die Betreibung ist die Kündigung abgewendet.» (falsch; der Rechtsvorschlag betrifft nur die Betreibung)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie dürfen wegen der Mängel die Miete zurückbehalten» oder «hinterlegen Sie den Rückstand.» (falsch, BGE 147 III 218)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn Sie später zahlen, ist alles in Ordnung», «wenn die Vermieterschaft die Zahlung annimmt, kann sie nicht mehr kündigen» oder «Sie bekommen noch eine Erinnerung.» (falsch, BGE 119 II 232 E. 3; BGE 140 III 591 E. 5)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Frist beginnt erst, wenn Sie den Brief abholen» ohne Hinweis auf die 7-Tage-Grenze."
+    },
+    {
+     "type": "bullet",
+     "text": "«Der Sozialdienst kann nicht für Sie zahlen, weil der Vertrag auf Sie lautet.» (falsch, Art. 68 OR; BGer 4A_68/2014 E. 4.2)"
+    },
+    {
+     "type": "p",
+     "text": "Briefing für die Fachperson (Struktur)"
+    },
+    {
+     "type": "bullet",
+     "text": "Anliegen in einem Satz"
+    },
+    {
+     "type": "bullet",
+     "text": "Vorprüfung (aus Issue 1)"
+    },
+    {
+     "type": "bullet",
+     "text": "Mahnung: Datum, Betrag und Monate, Art der Forderung, angesetzte Frist, Androhung (Wortlaut)"
+    },
+    {
+     "type": "bullet",
+     "text": "Zustellung: Art, Empfang bzw. Abholungseinladung (mit Status), Familienwohnung, Mitmieter"
+    },
+    {
+     "type": "bullet",
+     "text": "Zahlungsstand: bezahlt ja/teilweise/nein, Weg, Belege, wer zahlt; Zahlungen Dritter mit Datum und Zahlungszweck; Rücküberweisungen der Vermieterschaft mit Datum"
+    },
+    {
+     "type": "bullet",
+     "text": "Gegenforderungen, Mängel, Absprachen"
+    },
+    {
+     "type": "bullet",
+     "text": "Soziale Massnahmen eingeleitet (Finanzierung)"
+    },
+    {
+     "type": "bullet",
+     "text": "Ausgelöste Regeln mit Dringlichkeit, offene Fragen"
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Überweisung: Das System empfiehlt, eine Überweisung (auch durch den Sozialdienst) spätestens 3 Arbeitstage vor Fristende auszulösen; sicherer ist die Einzahlung mit dem beiliegenden Einzahlungsschein. Begründung: Massgebend ist die Gutschrift bei der Vermieterschaft am letzten Tag (BGE 119 II 232 E. 2; BGer 4A_366/2008 E. 4); 3 Tage geben Puffer für Bankverarbeitung und Wochenende."
+    },
+    {
+     "type": "bullet",
+     "text": "Frist läuft möglicherweise noch oder Empfang unbekannt: immer SOFORT an Sozialarbeiterin und Rechtsperson (so handeln, als liefe die Frist)."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: höchstens 2 Rückfrage-Runden, danach Eskalation (G7). Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz deshalb voraussichtlich nach IDG ZH (§ 3 Abs. 1 lit. c, § 6 IDG). Angaben über Sozialhilfe sind besondere Personendaten (§ 3 Abs. 4 lit. a Ziff. 3 IDG; Art. 5 lit. c Ziff. 6 DSG); vor jedem Briefing an eine externe Rechtsperson holt die Sozialarbeiterin die ausdrückliche Einwilligung der Klientin ein (consent_briefing)."
+    }
+   ]
+  },
+  {
+   "heading": "Was wir noch von euch brauchen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Bitte als PDF oder HTML hochladen, wie bei Issue 1:"
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: eine Muster-Mahnung nach Art. 257d OR aus der Praxis (für den Upload-Test)"
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: die kommunale Richtlinie eurer Zielgemeinde zur Übernahme von Mietrückständen durch die Sozialhilfe (soziale Seite)"
+    },
+    {
+     "type": "p",
+     "text": "Erledigt: Alle angefragten Entscheide (inkl. BGE 119 II 147, 119 II 232, 124 III 145) und das SchKG sind im Volltext eingearbeitet. Juristisch ist Issue 2 damit vollständig belegt."
+    },
+    {
+     "type": "p",
+     "text": "Offene Prüfpunkte"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Volltexte aller Leitentscheide und SchKG eingearbeitet"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Rechtzeitigkeit ohne Einzahlungsschein geklärt: Eingang bei der Vermieterschaft bis Fristende massgeblich (BGE 119 II 232 E. 2); Ausnahme bei beigelegtem Einzahlungsschein (BGE 124 III 145 E. 2)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Erledigt: Folgen einer zu kurzen Zahlungsfrist sind umstritten (h. L. unwirksam/nichtig, Minderheit Umdeutung; BGer offen; Lehrbuch § 31, N 2968h). Im System: keine Entwarnung, trotzdem zahlen, Rechtsperson sofort"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ 4A_332/2025 betrifft einen Geschäftsraum; Übertragbarkeit auf Wohnungen ist naheliegend (gleicher Art. 257d), aber im Team festhalten"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kontakt Schuldenberatung Kanton Zürich und Zürcher Hinterlegungsstelle nachtragen"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Entschieden (7.11.2026): Überweisung spätestens 3 Arbeitstage vor Fristende (siehe Teamentscheide)"
+    },
+    {
+     "type": "p",
+     "text": "Neu aus dem Lehrbuch (§ 31 Miete, eure Datei) – zu klären:"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kündigung vor Fristablauf: Geklärt mit dem Volltext von BGer 4A_585/2010: unwirksam (E. 3.1), Ausnahme bei Zugang nach Fristablauf (E. 3.5). Details in Issue 3."
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Gutgläubige Hinterlegung: Das Lehrbuch (N 2968d, S. 928) schliesst die Kündigung aus, wenn rechtmässig «oder zumindest gutgläubig» hinterlegt wurde (Blumer, N 848; BK-Giger, Art. 257d N 26). BGE 147 III 218 E. 3.3.3 (S. 224) lässt Gutgläubigkeit nur anklingen. Die Schutzregel «nicht hinterlegen, sondern zahlen» bleibt bis zur Klärung."
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Bestätigt durch das Lehrbuch: Verweis nur auf Art. 257d OR ohne ausdrückliche Androhung genügt nicht (N 2968e, S. 929; BGE 136 III 196 E. 2.4.1); Verrechnungserklärung muss innert Frist bei der Vermieterschaft eintreffen (N 2968d, S. 928; BGer 4A_140/2014 E. 5.2); nur Mietzinse, Nebenkosten und Verzugszinse, nicht Betreibungskosten, Kaution oder Schadenersatz (N 2968c, S. 928); zu langes Zuwarten nach Fristablauf kann als Verzicht gelten (N 2968i, S. 930)."
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Genaue bibliografische Angabe des Lehrbuchs (Autor:in, Titel, Auflage) ergänzen"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: OR_admin.pdf (SR 220, Stand 1.10.2026), ZPO.pdf (SR 272, Stand 1.7.2026), SCHKG.pdf (SR 281.1, Stand 1.1.2026)"
+    },
+    {
+     "type": "bullet",
+     "text": "Volltexte (eure Dateien): BGE 119 II 147, 119 II 232, 120 II 31, 124 III 145, 140 III 491, 140 III 591, 143 III 15, 147 III 218; Urteil 4A_120/2014 (= BGE 140 III 244); Urteil 4A_332/2025 vom 29.10.2025; Urteil 4A_68/2014 vom 16.6.2014 (vollständiges Urteil zu BGE 140 III 315)"
+    },
+    {
+     "type": "bullet",
+     "text": "Kantonale Entscheide: Mietgericht Zürich, ZMP 2018 Nr. 1, Obergericht ZH LF250009"
+    },
+    {
+     "type": "bullet",
+     "text": "Sekundärquelle: law.ch zu 4A_333/2022"
+    },
+    {
+     "type": "bullet",
+     "text": "Stellen: Heilsarmee Sozialberatung Zürich, Rechtsberatung 07/2026, Obergericht ZH, Rechtsauskunft"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

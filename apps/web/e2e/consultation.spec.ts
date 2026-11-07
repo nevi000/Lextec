@@ -9,7 +9,7 @@ async function newCase(page: Page) {
 
 async function describe(page: Page, text: string) {
   await page.getByLabel("Was ist passiert?").fill(text);
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
 }
 
 const action = (page: Page) => page.getByRole("region", { name: "Nächste empfohlene Aktion" });
@@ -32,23 +32,24 @@ test("start page is a plain case list: no dashboard cards, no technical navigati
 
 test("ASK flow: describe → one question → answer → next question → persistence", async ({ page }) => {
   await newCase(page);
-  await describe(page, "Mein Arbeitgeber hat mir gekündigt.");
+  await describe(page, "Mein Vermieter hat der Klientin die Wohnung gekündigt.");
 
   // recognised problem in plain words, ONE prominent question
-  await expect(action(page).getByText("An welchem Datum wurde die Kündigung zugestellt bzw. übergeben?")).toBeVisible();
+  await expect(action(page).getByText(/Ist die Klientin selbst Mieterin laut Vertrag/)).toBeVisible();
   const summary = page.getByRole("region", { name: "Dieser Fall" });
-  await expect(summary.getByText("Arbeitskündigung")).toBeVisible();
+  await expect(summary.getByText("Kündigung durch die Vermieterschaft")).toBeVisible();
   expect(await page.locator("main").innerText()).not.toMatch(/\d+ ?%|MISSING_REQUIRED_FACTS/);
   await expect(page.locator("main").getByRole("complementary")).toHaveCount(0); // no permanent technical side panel
 
   // answer → rules re-evaluated → next question
-  await page.locator("#answer-input").fill("2026-01-15");
+  await action(page).getByRole("radio", { name: /Klientin ist selbst Mieterin laut Vertrag/ }).click();
   await action(page).getByRole("button", { name: "Antwort speichern und weiter" }).click();
-  await expect(action(page).getByText(/Ist eine Frist bekannt, die in nächster Zeit abläuft/)).toBeVisible();
+  await expect(action(page).getByText(/Ist die Klientin selbst Mieterin laut Vertrag/)).toHaveCount(0); // answered: next question
+  await expect(action(page).getByRole("button", { name: /Weiss nicht/ })).toBeVisible();
 
   // facts live behind one click
   const panel = await openAllInfo(page);
-  await expect(panel.getByText("15.01.2026")).toBeVisible();
+  await expect(panel.getByText("Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)").first()).toBeVisible();
   await page.getByRole("button", { name: "Schliessen" }).first().click();
 
   // «Weiss nicht» is stored as asked-but-unknown and not re-asked
@@ -60,13 +61,12 @@ test("ASK flow: describe → one question → answer → next question → persi
   await page.goto(`${caseUrl}/briefing`);
   await page.getByRole("button", { name: "Fallbericht erstellen", exact: true }).click();
   const report = page.frameLocator('iframe[title="Fallbericht-Vorschau"]');
-  await expect(report.getByText("Kündigung durch Arbeitgeber erhalten").first()).toBeVisible();
-  await expect(report.getByText("15.01.2026").first()).toBeVisible();
+  await expect(report.getByText("Kündigung durch die Vermieterschaft").first()).toBeVisible();
   await expect(report.getByText(/Version 1/).first()).toBeVisible();
 
   // case remains available after a full reload, with a plain-language status
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /Arbeitskündigung/ }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Kündigung durch die Vermieterschaft/ }).first()).toBeVisible();
   await expect(page.getByText(/Weitere Angaben nötig|In Bearbeitung|Fachperson empfohlen/).first()).toBeVisible();
   await page.goto(caseUrl);
   await expect(action(page)).toBeVisible();
@@ -74,7 +74,7 @@ test("ASK flow: describe → one question → answer → next question → persi
 
 test("ASK flow: a question can be deferred with a reason and the free text stays available", async ({ page }) => {
   await newCase(page);
-  await describe(page, "Mein Arbeitgeber hat mir gekündigt.");
+  await describe(page, "Mein Vermieter hat der Klientin die Wohnung gekündigt.");
   await action(page).getByRole("button", { name: /Später beantworten/ }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Zurückstellen" }).click();
   await expect(page.getByRole("dialog").getByRole("alert")).toContainText("mind. 3 Zeichen");
@@ -92,7 +92,7 @@ test("ESCALATE flow: simple recommendation first, rule details one click away, h
   await newCase(page);
   await describe(
     page,
-    "Mein Arbeitgeber hat mir gekündigt. Der Vermieter hat der Klientin ausserdem gekündigt, sie ist alleinerziehend.",
+    "Der Vermieter hat der Klientin die Wohnung gekündigt, ohne amtliches Formular. Sie ist alleinerziehend.",
   );
   await expect(action(page).getByText(/Prüfung durch eine Fachperson empfohlen/)).toBeVisible();
   await expect(action(page).getByText("Mietrechtsberatung", { exact: true })).toBeVisible();
@@ -107,7 +107,6 @@ test("ESCALATE flow: simple recommendation first, rule details one click away, h
   await expect(action(page).getByText("HARDSHIP_EXTENSION_AND_SOCIAL").first()).toBeVisible();
 
   const panel = await openAllInfo(page);
-  await expect(panel.getByText("Arbeitskündigung")).toBeVisible();
   await expect(panel.getByText("Kündigung durch die Vermieterschaft")).toBeVisible();
   await page.getByRole("button", { name: "Schliessen" }).first().click();
 
@@ -120,18 +119,18 @@ test("ESCALATE flow: unsupported legal area is not treated as understood", async
   await newCase(page);
   await describe(page, "Ich brauche Hilfe bei meiner Scheidung.");
   await expect(action(page).getByText(/Prüfung durch eine Fachperson empfohlen/)).toBeVisible();
-  await expect(page.getByRole("region", { name: "Dieser Fall" }).getByText(/noch nicht abgedeckt/).first()).toBeVisible();
+  await expect(page.getByRole("region", { name: "Dieser Fall" }).getByText(/nicht abgedeckt/).first()).toBeVisible();
   await action(page).getByText("Rechtliche Details ansehen").click();
   await expect(action(page).getByText("GLOBAL_UNSUPPORTED_ISSUE").first()).toBeVisible();
 });
 
 test("fact correction is visible, confirmed and survives new input", async ({ page }) => {
   await newCase(page);
-  await describe(page, "Mein Arbeitgeber hat mir gekündigt.");
+  await describe(page, "Mein Vermieter hat der Klientin die Wohnung gekündigt, ohne amtliches Formular, in Zürich.");
   const panel = await openAllInfo(page);
-  await panel.getByRole("button", { name: /Kündigung durch Arbeitgeber erhalten/ }).click();
+  await panel.getByRole("button", { name: /Amtliches Kündigungsformular verwendet/ }).click();
   const dialog = page.getByRole("dialog").last();
-  await dialog.getByLabel("Wert korrigieren oder ergänzen").selectOption("nein");
+  await dialog.getByLabel("Wert korrigieren oder ergänzen").selectOption("ja");
   await dialog.getByRole("button", { name: "Speichern" }).click();
   await expect(panel.getByText("Von Ihnen korrigiert")).toBeVisible();
   await expect(panel.getByText("Bestätigt")).toBeVisible();
@@ -139,7 +138,7 @@ test("fact correction is visible, confirmed and survives new input", async ({ pa
   await page.keyboard.press("Escape");
 
   await page.getByRole("button", { name: /Weitere Informationen aus dem Gespräch ergänzen/ }).click();
-  await page.getByLabel("Weitere Informationen aus dem Gespräch").fill("Mein Arbeitgeber hat mir gekündigt, wie gesagt.");
+  await page.getByLabel("Weitere Informationen aus dem Gespräch").fill("Mein Vermieter hat gekündigt, ohne amtliches Formular, wie gesagt.");
   await page.getByRole("button", { name: "Erfassen", exact: true }).click();
   await expect(page.getByText("Erfasst und analysiert").first()).toBeVisible();
   const again = await openAllInfo(page);
@@ -148,11 +147,11 @@ test("fact correction is visible, confirmed and survives new input", async ({ pa
 
 test("conversation history is secondary and opens on demand", async ({ page }) => {
   await newCase(page);
-  await describe(page, "Mein Arbeitgeber hat mir gekündigt.");
+  await describe(page, "Mein Vermieter hat der Klientin die Wohnung gekündigt.");
   const history = page.getByTestId("timeline");
   await expect(history).not.toHaveAttribute("open", "");
   await history.getByText("Gesprächsverlauf anzeigen").click();
-  await expect(history.getByText("Mein Arbeitgeber hat mir gekündigt.")).toBeVisible();
+  await expect(history.getByText("Mein Vermieter hat der Klientin die Wohnung gekündigt.")).toBeVisible();
 });
 
 test("developer tools are outside the normal navigation but still available", async ({ page }) => {

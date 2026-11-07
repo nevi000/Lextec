@@ -26,14 +26,16 @@ function routes(decision: DecisionResult, over: Record<string, unknown> = {}, me
 }
 
 const optionalQ = { ...escalateDecision.next_question!, fact_id: "rent_amount", question_de: "Wie hoch ist der Mietzins?", data_type: "integer", optional: true };
-const escalateWithOptional = { ...escalateDecision, next_question: optionalQ, max_urgency: "HIGH" } as unknown as DecisionResult;
+const optionalFact = { fact_id: "rent_amount", issue_ids: [], label_de: "Mietzins", status: "MISSING", priority: "low", question_de: "Wie hoch ist der Mietzins?", why_needed_de: "", deferred: false, data_type: "integer", enum_values: [], enum_labels_de: {}, handover_priority: "normal" };
+// escalation, no important facts left open, one optional question available
+const escalateWithOptional = { ...escalateDecision, missing_facts: [], optional_open_facts: [optionalFact], intake: { important_open: 0, optional_open: 1, deferred: 0, unknown: 0, known: 3, complete: true }, next_question: optionalQ, max_urgency: "HIGH" } as unknown as DecisionResult;
 
 describe("three phases", () => {
   it("phase 1: only the plain question, no summary, no stepper lock", async () => {
     mockApi(routes(askDecision, {}, []));
     renderApp("/cases/case-1");
     expect(await screen.findByLabelText("Was ist passiert?")).toBeInTheDocument();
-    expect(screen.getByText(/Sie müssen keine juristischen Begriffe verwenden/)).toBeInTheDocument();
+    expect(screen.getByText(/oder importieren Sie eine bereits verfasste Fallbeschreibung als PDF/)).toBeInTheDocument();
     expect(screen.getByRole("listitem", { current: "step" })).toHaveTextContent("Situation erfassen");
     expect(screen.queryByText("Alle Fallinformationen")).toBeNull();
   });
@@ -61,12 +63,28 @@ describe("three phases", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(/Fallbericht ersetzt diese Kontaktaufnahme nicht/);
     // three clearly separated areas
     expect(screen.getByRole("region", { name: "Einschätzung" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Fallaufnahme vervollständigen" })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Ergänzende Angaben (optional)" })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Fallbericht" })).toBeInTheDocument();
     // optional questions never block or auto-start; the report stays one click away
     expect(screen.queryByText("Wie hoch ist der Mietzins?")).toBeNull();
     expect(screen.getByText("1 ergänzende Frage verfügbar")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Fallbericht erstellen/ })).toBeEnabled();
+  });
+});
+
+describe("intake continues after an escalation", () => {
+  it("shows the important open facts one at a time, with count, without blocking the report", async () => {
+    const q = { fact_id: "official_form_used", issue_ids: [], label_de: "Formular", status: "MISSING", priority: "high", question_de: "Wurde das amtliche Formular verwendet?", why_needed_de: "Formmangel", deferred: false, data_type: "boolean", enum_values: [], enum_labels_de: {}, handover_priority: "high" };
+    const d = { ...escalateDecision, max_urgency: "HIGH", missing_facts: [q, { ...q, fact_id: "x2", question_de: "Zweite Frage?" }], optional_open_facts: [], intake: { important_open: 2, optional_open: 0, deferred: 0, unknown: 0, known: 1, complete: false } } as unknown as DecisionResult;
+    mockApi(routes(d));
+    renderApp("/cases/case-1");
+    const region = await screen.findByRole("region", { name: "Fallaufnahme vervollständigen" });
+    expect(within(region).getByText("Noch 2 wichtige Angaben offen.")).toBeInTheDocument();
+    expect(within(region).getByText("Wurde das amtliche Formular verwendet?")).toBeInTheDocument();
+    expect(within(region).queryByText("Zweite Frage?")).toBeNull(); // exactly one question
+    expect(within(region).getByText(/Kontaktaufnahme mit der Fachperson muss nicht warten/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Fallbericht erstellen/ })).toBeEnabled(); // report any time
   });
 });
 
@@ -175,7 +193,7 @@ describe("optional questions", () => {
   });
 
   it("do not reappear once skipped (deferred questions are not offered again)", async () => {
-    mockApi(routes({ ...escalateWithOptional, next_question: { ...optionalQ, deferred: true } } as unknown as DecisionResult));
+    mockApi(routes({ ...escalateWithOptional, optional_open_facts: [{ ...optionalFact, deferred: true }] } as unknown as DecisionResult));
     renderApp("/cases/case-1");
     await screen.findByText("Dringende Prüfung durch eine Fachperson empfohlen");
     expect(screen.queryByRole("button", { name: "Ergänzende Fragen beantworten" })).toBeNull();

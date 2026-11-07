@@ -27,6 +27,18 @@ class MissingFact(BaseModel):
     data_type: str = "string"
     enum_values: list[str] = []
     enum_labels_de: dict[str, str] = {}
+    handover_priority: Literal["high", "normal"] = "normal"
+
+
+class IntakeState(BaseModel):
+    """How complete the case information is. Independent of the decision (ESCALATE never closes the intake)."""
+
+    important_open: int = 0  # required / conditionally required facts still to ask (not deferred)
+    optional_open: int = 0  # helpful optional facts not yet asked or skipped
+    deferred: int = 0  # postponed or skipped by the social worker
+    unknown: int = 0  # asked, answered "weiss nicht" (documented, never re-asked)
+    known: int = 0  # known facts of the active issues
+    complete: bool = False  # no important question left open
 
 
 class NextQuestion(BaseModel):
@@ -80,7 +92,7 @@ class ApprovedStatement(BaseModel):
 
 
 class RelatedRoute(BaseModel):
-    """Hand-over to another issue. `available` only if that issue is loaded AND legally reviewed."""
+    """Hand-over to another issue. `available` if that issue is loaded in the KB (its status is stated in the note)."""
 
     issue_id: str
     title_de: str
@@ -104,6 +116,7 @@ class DecisionResult(BaseModel):
     missing_facts: list[MissingFact] = []
     unknown_required_facts: list[MissingFact] = []  # asked, person does not know (never re-asked)
     optional_open_facts: list[MissingFact] = []
+    intake: IntakeState = IntakeState()
     next_question: NextQuestion | None = None
     recommended_professionals: list[str] = []
     active_issue_ids: list[str] = []

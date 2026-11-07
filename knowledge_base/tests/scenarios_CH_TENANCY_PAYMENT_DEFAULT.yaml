@@ -1,0 +1,553 @@
+# GENERIERT aus scripts/kb/specs/issue_03.py - SYNTHETIC_TECHNICAL, keine echten Fälle.
+schema_version: 1
+version: 1.0-issues
+scenarios:
+- id: SC_PD_01_GRUNDREGEL
+  title_de: 'Jede Zahlungsverzugskündigung: sofort, Recht + Soziales'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_GRUNDREGEL
+  expected_reason_codes:
+  - PAYMENT_DEFAULT_TERMINATION_IMMEDIATE
+- id: SC_PD_02_FEHLENDES_FAKTUM
+  title_de: 'Zwingendes Faktum fehlt: Grundregel eskaliert trotzdem'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_GRUNDREGEL
+  expected_missing_facts:
+  - paid_in_time
+- id: SC_PD_03_EMPFANG_UNBEKANNT
+  title_de: Empfangsdatum der Kündigung unbekannt
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  unknown_facts:
+  - receipt_date
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_EMPFANG_UNBEKANNT_ODER_GE20
+- id: SC_PD_04_GE_20_TAGE
+  title_de: 21 Tage seit Empfang
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-10-17'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_EMPFANG_UNBEKANNT_ODER_GE20
+- id: SC_PD_05_UNTER_20_TAGE
+  title_de: '5 Tage seit Empfang: Schwelle nicht erreicht'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-02'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_not_rule_ids:
+  - PD_EMPFANG_UNBEKANNT_ODER_GE20
+- id: SC_PD_06_MAHNUNG_FEHLT
+  title_de: Keine Mahnung
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: false
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_PRUEFFRAGE1_MAHNUNG
+- id: SC_PD_07_RECHTZEITIG_BEZAHLT
+  title_de: 'Angabe: innert Frist bezahlt'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: vollstaendig_rechtzeitig
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_PRUEFFRAGE2_ZAHLUNG
+- id: SC_PD_08_VOR_FRIST
+  title_de: Kündigung vor Fristablauf
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: true
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_PRUEFFRAGE3_FORM
+- id: SC_PD_09_KEIN_FORMULAR
+  title_de: Kein amtliches Formular
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: false
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_PRUEFFRAGE3_FORM
+- id: SC_PD_10_GERICHT
+  title_de: Gesuch ans Gericht -> Issue 6
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: true
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_GERICHT
+  expected_route_issue_ids:
+  - CH_TENANCY_EVICTION
+- id: SC_PD_11_SELBSTHILFE
+  title_de: Vermieter wechselt das Schloss
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+    landlord_self_help: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_SELBSTHILFE
+- id: SC_PD_12_SOZIALDIENST_ZAHLT
+  title_de: Sozialdienst zahlt direkt
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: sozialdienst
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_SOZIALDIENST_ZAHLT
+- id: SC_PD_13_KEINE_ANSCHLUSSLOESUNG
+  title_de: Keine Anschlusslösung, Kinder
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: false
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+    children_in_household: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_KEINE_ANSCHLUSSLOESUNG
+- id: SC_PD_14_WARTEZEIT
+  title_de: 'Kündigung 20 Tage nach Fristablauf: Prüfhinweis (Verzicht?)'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+    days_between_deadline_and_termination: 20
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+- id: SC_PD_15_UNTERMIETE
+  title_de: 'Untermiete: ausserhalb des Moduls'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_PAYMENT_DEFAULT
+    confidence: 0.9
+  facts:
+    tenant_role: untermieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    co_tenants_exist: false
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    official_form_used: true
+    family_home_with_spouse: false
+    eviction_or_court_proceeding: false
+    warning_written: true
+    warning_threat_present: true
+    warning_amount_clear: true
+    warning_deadline_days: 30
+    warning_delivery_method: persoenlich
+    warning_receipt_date: '2026-09-01'
+    paid_in_time: nicht_bezahlt
+    setoff_or_deposit_done: false
+    third_party_payment: false
+    termination_before_deadline_end: false
+    challenge_filed: false
+    housing_solution_available: true
+    rent_payer: klientin
+    rent_withheld_for_defects: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - PD_OUT_OF_SCOPE_ROLE

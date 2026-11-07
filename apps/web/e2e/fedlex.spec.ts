@@ -12,7 +12,7 @@ test("rent termination: ESCALATE, and the briefing shows Art. 266l and 266o OR w
   await page.goto("/");
   await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
   await page.getByLabel("Was ist passiert?").fill(TEXT);
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
 
   const action = page.getByRole("region", { name: "Nächste empfohlene Aktion" });
   await expect(action.getByText(/Prüfung durch eine Fachperson empfohlen/)).toBeVisible();

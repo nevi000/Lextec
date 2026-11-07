@@ -1,0 +1,994 @@
+{
+ "file": "issue_04.docx",
+ "title": "Issue 4 – Erstreckung des Mietverhältnisses",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 4 – Erstreckung des Mietverhältnisses",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 4 betrifft Klientinnen, deren Mietverhältnis gültig endet (ordentliche Kündigung oder Ablauf eines befristeten Vertrags), für die ein Auszug aber eine Härte wäre, typischerweise Familien mit Kindern, die keine Wohnung finden. Die Erstreckung gibt Zeit, aber kein Bleiberecht auf Dauer: höchstens vier Jahre bei Wohnungen, nach Interessenabwägung im Ermessen der Behörde (Art. 272, 272b OR). Es gilt ausschliesslich Schweizer Recht, Fokus Kanton Zürich."
+    },
+    {
+     "type": "p",
+     "text": "Die vier Voraussetzungen (Lehrbuch N 3024, S. 987):"
+    },
+    {
+     "type": "bullet",
+     "text": "Das Mietverhältnis endet durch gültige Kündigung oder Zeitablauf."
+    },
+    {
+     "type": "bullet",
+     "text": "Der Auszug wäre für die Mieterin oder ihre Familie eine Härte, die durch die Interessen der Vermieterschaft nicht zu rechtfertigen ist (Art. 272 OR)."
+    },
+    {
+     "type": "bullet",
+     "text": "Kein gesetzlicher Ausschlussgrund (Art. 272a OR), v. a. keine Kündigung wegen Zahlungsverzug."
+    },
+    {
+     "type": "bullet",
+     "text": "Das Begehren wurde fristgerecht bei der Schlichtungsbehörde eingereicht (Art. 273 Abs. 2 und 3 OR)."
+    },
+    {
+     "type": "p",
+     "text": "Abgrenzung: Issue 4 wird meist aus Issue 1 aktiviert (Härtegründe bei ordentlicher Kündigung). Bei Issue 3 ist die Erstreckung ausgeschlossen. Eine Härte macht eine Kündigung nicht anfechtbar, sie ist nur für die Erstreckung relevant (BGE 142 III 91 E. 3.2.1)."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: Gesetz aus OR_admin.pdf (Stand 1.10.2026) und ZPO.pdf (Stand 1.7.2026), mit PDF-Seite. Lehrbuch: euer Auszug «§ 31 Miete», N 3024–3024g (S. 987–989). Volltexte aus euren Dateien, soweit vorhanden; die zentralen Erstreckungs-BGE (v. a. BGE 142 III 336) kenne ich nur aus dem Lehrbuch."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut wörtlich aus OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 272 Abs. 1 OR",
+       "«Der Mieter kann die Erstreckung eines befristeten oder unbefristeten Mietverhältnisses verlangen, wenn die Beendigung der Miete für ihn oder seine Familie eine Härte zur Folge hätte, die durch die Interessen des Vermieters nicht zu rechtfertigen wäre.»",
+       "OR 82",
+       "Grundtatbestand"
+      ],
+      [
+       "Art. 272 Abs. 2 OR",
+       "Interessenabwägung «insbesondere: a. die Umstände des Vertragsabschlusses und den Inhalt des Vertrags; b. die Dauer des Mietverhältnisses; c. die persönlichen, familiären und wirtschaftlichen Verhältnisse der Parteien und deren Verhalten; d. einen allfälligen Eigenbedarf des Vermieters … sowie die Dringlichkeit dieses Bedarfs; e. die Verhältnisse auf dem örtlichen Markt für Wohn- und Geschäftsräume.»",
+       "OR 82",
+       "Fakten für das Briefing"
+      ],
+      [
+       "Art. 272 Abs. 3 OR",
+       "«Verlangt der Mieter eine zweite Erstreckung, so berücksichtigt die zuständige Behörde auch, ob er zur Abwendung der Härte alles unternommen hat, was ihm zuzumuten war.»",
+       "OR 82",
+       "Suchbemühungen"
+      ],
+      [
+       "Art. 272a Abs. 1 OR",
+       "Erstreckung ausgeschlossen bei Kündigungen «a. wegen Zahlungsrückstand des Mieters (Art. 257d); b. wegen schwerer Verletzung der Pflicht des Mieters zu Sorgfalt und Rücksichtnahme (Art. 257f Abs. 3 und 4); c. wegen Konkurs des Mieters (Art. 266h). d. eines Mietvertrages, welcher im Hinblick auf ein bevorstehendes Umbau- oder Abbruchvorhaben ausdrücklich nur für die beschränkte Zeit bis zum Baubeginn oder bis zum Erhalt der erforderlichen Bewilligung abgeschlossen wurde.»",
+       "OR 82",
+       "Ausschlussgründe (abschliessend)"
+      ],
+      [
+       "Art. 272a Abs. 2 OR",
+       "«Die Erstreckung ist in der Regel ausgeschlossen, wenn der Vermieter dem Mieter einen gleichwertigen Ersatz für die Wohn- oder Geschäftsräume anbietet.»",
+       "OR 82",
+       "Ersatzangebot"
+      ],
+      [
+       "Art. 272b Abs. 1 OR",
+       "«Das Mietverhältnis kann für Wohnräume um höchstens vier … Jahre erstreckt werden. Im Rahmen der Höchstdauer können eine oder zwei Erstreckungen gewährt werden.»",
+       "OR 83",
+       "Höchstdauer"
+      ],
+      [
+       "Art. 272b Abs. 2 OR",
+       "«Vereinbaren die Parteien eine Erstreckung des Mietverhältnisses, so sind sie an keine Höchstdauer gebunden, und der Mieter kann auf eine zweite Erstreckung verzichten.»",
+       "OR 83",
+       "Vereinbarung (Vorsicht)"
+      ],
+      [
+       "Art. 272c OR",
+       "Vertrag kann im Erstreckungsentscheid veränderten Verhältnissen angepasst werden; sonst gilt er unverändert weiter",
+       "OR 83",
+       "Mietzins während Erstreckung"
+      ],
+      [
+       "Art. 272d OR",
+       "Kündigung durch Mieter während Erstreckung: «a. bei Erstreckung bis zu einem Jahr mit einer einmonatigen Frist auf Ende eines Monats; b. bei Erstreckung von mehr als einem Jahr mit einer dreimonatigen Frist auf einen gesetzlichen Termin.»",
+       "OR 83",
+       "Ausstieg bei neuer Wohnung"
+      ],
+      [
+       "Art. 273 Abs. 2 OR",
+       "Erstreckungsbegehren an die Schlichtungsbehörde: «a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung; b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.»",
+       "OR 83",
+       "Zentrale Fristen"
+      ],
+      [
+       "Art. 273 Abs. 3 OR",
+       "«Das Begehren um eine zweite Erstreckung muss der Mieter der Schlichtungsbehörde spätestens 60 Tage vor Ablauf der ersten einreichen.»",
+       "OR 83",
+       "Zweiterstreckung"
+      ],
+      [
+       "Art. 273 Abs. 5 OR",
+       "Bei Abweisung der Anfechtung prüft die Behörde «von Amtes wegen, ob das Mietverhältnis erstreckt werden kann.»",
+       "OR 84",
+       "Anfechtung schliesst Erstreckung ein"
+      ],
+      [
+       "Art. 273a OR",
+       "Familienwohnung: auch der Ehegatte kann Erstreckung verlangen; «Vereinbarungen über die Erstreckung sind nur gültig, wenn sie mit beiden Ehegatten abgeschlossen werden.»",
+       "OR 84",
+       "Familienwohnung"
+      ],
+      [
+       "Art. 273b Abs. 1 OR",
+       "Untermiete «kann nur für die Dauer des Hauptmietverhältnisses erstreckt werden.»",
+       "OR 84",
+       "Grenze Untermiete"
+      ],
+      [
+       "Art. 273c OR",
+       "Verzicht auf diese Rechte nur, wo ausdrücklich vorgesehen; «Abweichende Vereinbarungen sind nichtig.»",
+       "OR 84",
+       "Kein Vorausverzicht"
+      ],
+      [
+       "Art. 113 Abs. 2 lit. c ZPO / Art. 210 Abs. 1 lit. b, 211 ZPO",
+       "Keine Gerichtskosten im Schlichtungsverfahren; Entscheidvorschlag möglich bei «Erstreckung»; Ablehnung innert 20 Tagen",
+       "ZPO 29, 57",
+       "Verfahren (wie Issue 1)"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide",
+   "items": [
+    {
+     "type": "p",
+     "text": "Alle Einträge der ersten Tabelle sind jetzt am Volltext geprüft, mit Erwägung und Seite. Vorsicht bei der Übertragung: BGE 142 III 336, BGE 135 III 121 und BGer 4A_72/2011 betreffen Geschäftsräume; ihre allgemeinen Grundsätze (Zweck, Abwägung, Ermessen, Suchbemühungen) gelten für Wohnungen gleich, die konkreten Dauern nicht. BGE 105 II 197 erging zum alten Recht (Art. 267a aOR); die Aussagen zur Härte werden in der Lehre weiter zitiert (Lehrbuch Fn. 757), sind aber als ältere Praxis zu kennzeichnen."
+    },
+    {
+     "type": "p",
+     "text": "Aus euren Volltexten"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "Entscheid",
+       "Kernaussage mit Fundstelle",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 142 III 91",
+       "Eine Härte für die Mieterin macht die Kündigung nicht treuwidrig; sie ist nur für die Erstreckung relevant (E. 3.2.1, S. 92).",
+       "Abgrenzung Anfechtung vs. Erstreckung"
+      ],
+      [
+       "2",
+       "BGE 139 III 7",
+       "Wer das Erstreckungsbegehren nicht innert 30 Tagen nach Empfang der Kündigung einreicht, verliert es; das Mietverhältnis endet, die Wohnung ist zurückzugeben (E. 2.4, S. 13).",
+       "Frist ist hart"
+      ],
+      [
+       "3",
+       "BGE 143 III 15 / BGE 140 III 244",
+       "Auch für die 30-Tage-Frist gilt die absolute Empfangstheorie; Ferien ändern nichts (143 III 15 E. 4.1, S. 17–19; 140 III 244 E. 5).",
+       "Fristbeginn wie Issue 1"
+      ],
+      [
+       "4",
+       "BGE 151 III 481",
+       "Wird die Kündigung bestätigt, ist die eventualiter verlangte Erstreckung zu prüfen, inkl. Feststellungen zu den Suchbemühungen (E. 5.1, S. 489).",
+       "Immer eventualiter Erstreckung verlangen; Suche dokumentieren"
+      ],
+      [
+       "5",
+       "BGE 135 III 441",
+       "Art. 266a Abs. 2 OR korrigiert nur Terminfehler (E. 3.3, S. 445).",
+       "Abgrenzung"
+      ],
+      [
+       "6",
+       "BGE 142 III 336 (Geschäftsräume, Kündigung nach Art. 261 OR)",
+       "Auch bei gültiger Kündigung entscheidet die Behörde von Amtes wegen über die Erstreckung (E. 5.3, S. 344; Art. 273 Abs. 5 OR). Zweck: Zeit für eine Ersatzlösung oder Milderung der Folgen; Abwägung der Interessen beider Seiten; die Aufzählung in Art. 272 Abs. 2 OR ist nicht abschliessend; keine Erstreckung bis zu einem unbestimmten Datum; nicht ohne Weiteres die Maximaldauer, sondern allenfalls zuerst eine kürzere und später eine zweite (E. 5.3.1, S. 344 f.). Freies Ermessen (Art. 4 ZGB), das Bundesgericht greift nur zurückhaltend ein (E. 5.3.2, S. 345).",
+       "Grundsatz der Abwägung; Begründung für das Verbot jeder Prognose zur Dauer"
+      ],
+      [
+       "7",
+       "BGE 135 III 121 (Geschäftsräume)",
+       "Ermessensentscheid unter Berücksichtigung aller Umstände (E. 2, S. 123 f.). Keine Erstreckung, deren Ende an ein ungewisses Ereignis geknüpft ist (E. 4, S. 125). Erste Erstreckung unter dem Maximum mit Möglichkeit einer zweiten ist zulässig (E. 5, S. 125 f.).",
+       "Keine Aussage zur Dauer; Hinweis auf zweite Erstreckung"
+      ],
+      [
+       "8",
+       "BGE 117 II 415",
+       "Der Ausschluss nach Art. 272a Abs. 1 lit. a OR setzt eine gültige Zahlungsaufforderung nach Art. 257d OR voraus (schriftlich, mind. 30 Tage, Androhung; bei Familienwohnung separat an beide Ehegatten); ein blosser Zahlungsrückstand genügt nicht (E. 3, S. 416; E. 5a, S. 418 f.). Der Ausschluss greift aber auch, wenn die Vermieterschaft nach erfolgloser Mahnung nur ordentlich kündigt (E. 4, S. 417). Die Ausschlussgründe sind abschliessend; frühere Ausschlussgründe des alten Rechts fliessen nur noch in die Interessenabwägung ein (E. 5b, S. 419).",
+       "Neues Faktum «frühere erfolglose Mahnung»; Ausschluss nur bei gültiger Mahnung"
+      ],
+      [
+       "9",
+       "BGE 105 II 197 (altes Recht, Art. 267a aOR)",
+       "Die Folgen eines Umzugs an sich sind keine Härte; erstreckt wird nur, wenn die Erstreckung diese Folgen mildern kann (E. 3a, S. 197 f.). Wer bei Vertragsschluss von einem geplanten Abbruch wusste, kann sich kaum auf Härte berufen; von ihm wird erwartet, schon vorher zu suchen (E. 3b, S. 198 f.). Konkubinatspartner sind keine «Familie» (E. 3c, S. 199).",
+       "Grenzfälle «Umzug an sich», «Abbruch bekannt», Konkubinat"
+      ],
+      [
+       "10",
+       "BGer 4A_72/2011 (Geschäftsräume Genf)",
+       "Unannehmlichkeiten eines Umzugs sind keine Härte. Suchbemühungen sind schon für die erste Erstreckung nötig (mit Hinweis auf BGE 110 II 249 E. 4; 116 II 446 E. 3a); fehlen sie, kommt höchstens eine einmalige kurze Erstreckung in Frage. Ein Mangel an Ersatzobjekten ist nicht notorisch, sondern muss festgestellt werden (E. 3–4).",
+       "Suche ab Kündigung dokumentieren; Marktlage belegen"
+      ],
+      [
+       "11",
+       "BGer 4A_673/2014 (Glarus)",
+       "Massgebend sind die Verhältnisse im Zeitpunkt des Erstreckungsentscheids; aktuelle Arztzeugnisse sind zu berücksichtigen. Bedürfnisse der Lebenspartnerin zählen als eigenes Interesse, wenn man zusammenlebt; im Fall ging es um den Eigenbedarf der Vermieterseite. Erstreckung abgelehnt (E. 3.2).",
+       "Härtegründe aktuell halten; Konkubinat nur als Analogie"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Weiterhin nur über das Lehrbuch zitiert (optional)"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Entscheid",
+       "Kernaussage laut Lehrbuch",
+       "Fundstelle Lehrbuch",
+       "Bedarf"
+      ],
+      [
+       "BGE 128 III 82 E. 2d bb",
+       "Ausschlussgründe von Art. 272a OR abschliessend; Härte dann unbeachtlich",
+       "N 3024c, Fn. 764 (S. 988)",
+       "Nicht mehr nötig: Aussage ist durch BGE 117 II 415 E. 5b (S. 419) im Volltext belegt"
+      ],
+      [
+       "BGE 114 II 165 E. 2a",
+       "Fristen von Art. 273 OR sind Verwirkungsfristen",
+       "N 3024d, Fn. 767 (S. 988)",
+       "Nicht zwingend: Folge des Fristverpassens ist durch BGE 139 III 7 E. 2.4 (S. 13) belegt"
+      ],
+      [
+       "BGE 110 II 249 E. 4; 116 II 446 E. 3a",
+       "Suchbemühungen schon für die erste Erstreckung",
+       "zitiert in BGer 4A_72/2011 E. 3",
+       "Optional, falls ihr die Aussage direkt am Leitentscheid wollt"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die Fakten zur Kündigung kommen aus Issue 1. Für die Erstreckung braucht die Fachperson vor allem Härtegründe und Suchbemühungen, beides kann die Sozialarbeiterin gut erheben."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Beendigung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Grund der Beendigung",
+       "Ordentliche Kündigung, Kündigung wegen Zahlungsverzug, andere ausserordentliche Kündigung oder Ablauf eines befristeten Vertrags?",
+       "ja",
+       "Ausschlussgründe (Art. 272a Abs. 1 OR)"
+      ],
+      [
+       "Vertragsart",
+       "Unbefristet oder befristet? Bei Befristung: Wurde der Vertrag ausdrücklich nur bis zu einem Umbau/Abbruch abgeschlossen?",
+       "ja",
+       "Frist (Art. 273 Abs. 2 OR); Ausschluss lit. d"
+      ],
+      [
+       "Empfang der Kündigung",
+       "Wann und wie zugestellt? Abholungseinladung?",
+       "ja, bei unbefristet",
+       "30-Tage-Frist, absolute Empfangstheorie"
+      ],
+      [
+       "Ende der Vertragsdauer",
+       "Bei befristetem Vertrag: An welchem Datum endet er?",
+       "ja, bei befristet",
+       "60 Tage vorher (Art. 273 Abs. 2 lit. b OR)"
+      ],
+      [
+       "Bereits erstreckt",
+       "Wurde schon einmal erstreckt (Entscheid oder Vereinbarung)? Bis wann? Auf zweite Erstreckung verzichtet?",
+       "ja",
+       "Zweiterstreckung (Art. 272 Abs. 3, 272b, 273 Abs. 3 OR)"
+      ],
+      [
+       "Anfechtung läuft",
+       "Wurde die Kündigung bereits angefochten?",
+       "ja",
+       "Erstreckung wird dann von Amtes wegen geprüft (Art. 273 Abs. 5 OR)"
+      ],
+      [
+       "Härtegründe (Art. 272 Abs. 2 OR)",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Haushalt",
+       "Wer wohnt in der Wohnung (Kinder, Alter, Ehe-/Lebenspartner, Pflegebedürftige)?",
+       "ja",
+       "«Familie»; Konkubinat umstritten (Lehrbuch Fn. 757)"
+      ],
+      [
+       "Kinder",
+       "Schulpflichtige Kinder? Schulwechsel nötig?",
+       "nein",
+       "lit. c"
+      ],
+      [
+       "Gesundheit, Alter, Behinderung",
+       "Gibt es gesundheitliche Einschränkungen, die die Suche oder den Umzug erschweren?",
+       "nein",
+       "lit. c"
+      ],
+      [
+       "Wirtschaftliche Lage",
+       "Einkommen, Sozialhilfe, Betreibungen (erschweren die Suche)",
+       "nein",
+       "lit. c"
+      ],
+      [
+       "Mietdauer",
+       "Seit wann wohnt die Klientin dort?",
+       "ja",
+       "lit. b"
+      ],
+      [
+       "Lokaler Markt",
+       "Wie ist der Wohnungsmarkt in der Gemeinde (Leerwohnungsziffer)?",
+       "nein",
+       "lit. e"
+      ],
+      [
+       "Vertragsabschluss",
+       "Besondere Umstände beim Abschluss (z. B. Zusicherung langer Dauer, eigene Investitionen)?",
+       "nein",
+       "lit. a"
+      ],
+      [
+       "Interessen der Vermieterschaft",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Kündigungsgrund",
+       "Welcher Grund wurde angegeben (Eigenbedarf, Sanierung, Abbruch, Verkauf)? Wie dringend?",
+       "ja",
+       "lit. d; Abwägung"
+      ],
+      [
+       "Ersatzangebot",
+       "Hat die Vermieterschaft eine gleichwertige Ersatzwohnung angeboten?",
+       "ja",
+       "Art. 272a Abs. 2 OR"
+      ],
+      [
+       "Suchbemühungen",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Bisherige Suche",
+       "Sucht die Klientin bereits? Seit wann? Wie viele Bewerbungen, Absagen? Dokumentiert?",
+       "ja",
+       "Abwägung; Dauer (4A_72/2011); zwingend bei Zweiterstreckung"
+      ],
+      [
+       "Unterstützung",
+       "Unterstützt der Sozialdienst bei der Suche (Mietzinsgarantie, Kautionsgutsprache)?",
+       "nein",
+       "Soziale Massnahme, stärkt Suchbemühungen"
+      ],
+      [
+       "Frühere Mahnung",
+       "Gab es vor der Kündigung eine schriftliche Zahlungsaufforderung mit Frist und Kündigungsandrohung, die nicht erfüllt wurde? Brief hochladen.",
+       "ja",
+       "Ausschluss auch bei ordentlicher Kündigung (BGE 117 II 415 E. 4, S. 417); nur bei gültiger Mahnung (E. 5a)"
+      ],
+      [
+       "Abbruch/Umbau bekannt",
+       "Wusste die Klientin schon bei Vertragsschluss von einem geplanten Abbruch oder Umbau?",
+       "nein",
+       "Härte kaum anerkannt (BGE 105 II 197 E. 3b, S. 198 f.); evtl. lit. d"
+      ],
+      [
+       "Aktuelle Belege",
+       "Gibt es aktuelle Arztzeugnisse oder andere Belege zu den Härtegründen?",
+       "nein",
+       "Massgebend sind die Verhältnisse im Entscheidzeitpunkt (BGer 4A_673/2014 E. 3.2)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Dokumente, die angefordert werden sollen: Kündigung bzw. befristeter Vertrag, Umschlag/Abholungseinladung, Nachweise der Wohnungssuche (Bewerbungen, Absagen, Inserate), Arztzeugnisse oder Schulbestätigungen, falls relevant, allfällige frühere Erstreckungsentscheide."
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Kündigung wegen Zahlungsverzug",
+       "Erstreckung ausgeschlossen, Härte unbeachtlich (Art. 272a Abs. 1 lit. a OR, S. 82; Lehrbuch N 3024c, S. 988)",
+       "Wechsel zu Issue 3; Verbot «Erstreckung möglich»"
+      ],
+      [
+       "Kündigung wegen schwerer Pflichtverletzung (Art. 257f) oder Konkurs",
+       "Erstreckung ausgeschlossen (Art. 272a Abs. 1 lit. b–c OR)",
+       "Rechtsperson"
+      ],
+      [
+       "Befristeter Vertrag «bis Baubeginn»",
+       "Erstreckung ausgeschlossen, wenn ausdrücklich so abgeschlossen (Art. 272a Abs. 1 lit. d OR)",
+       "Rechtsperson prüft Vertragswortlaut"
+      ],
+      [
+       "Gleichwertige Ersatzwohnung angeboten",
+       "Erstreckung «in der Regel» ausgeschlossen (Art. 272a Abs. 2 OR)",
+       "Rechtsperson; Angebot nicht vorschnell ablehnen"
+      ],
+      [
+       "Frist verpasst",
+       "Verwirkt; keine Erstreckung mehr (BGE 139 III 7 E. 2.4, S. 13; BGE 114 II 165 E. 2a laut Lehrbuch)",
+       "Rechtsperson sofort (evtl. andere Wege); Sozialarbeiterin plant Auszug"
+      ],
+      [
+       "Nur Härte, kein Kündigungsmangel",
+       "Anfechtung chancenlos, Erstreckung möglich (BGE 142 III 91 E. 3.2.1)",
+       "Erstreckung verlangen, nicht Anfechtung versprechen"
+      ],
+      [
+       "Härte allein",
+       "Begründet noch keinen Anspruch; Behörde wägt ab und entscheidet nach Ermessen (BGE 142 III 336 E. 5.3.1–5.3.2, S. 344 f.; BGE 135 III 121 E. 2, S. 123 f.; Lehrbuch N 3024a, S. 988)",
+       "Keine Prognose zur Dauer"
+      ],
+      [
+       "Konkubinat",
+       "Lebenspartner nach älterer Praxis zum alten Recht nicht «Familie» (BGE 105 II 197 E. 3c, S. 199); Lehre kritisch (Lehrbuch Fn. 757). BGer 4A_673/2014 E. 3.2 rechnet die Bedürfnisse der zusammenlebenden Lebenspartnerin dem eigenen Interesse zu, betraf aber den Eigenbedarf der Vermieterseite, also nur Analogie",
+       "Prüfhinweis"
+      ],
+      [
+       "Untermiete",
+       "Erstreckung nur für die Dauer des Hauptmietverhältnisses (Art. 273b Abs. 1 OR)",
+       "Rechtsperson"
+      ],
+      [
+       "Zweite Erstreckung",
+       "Nur wenn alles Zumutbare unternommen wurde; deutlich höhere Anforderungen an Suchbemühungen; Frist 60 Tage vor Ablauf der ersten (Art. 272 Abs. 3, 273 Abs. 3 OR; Lehrbuch N 3024b, S. 988)",
+       "Suchbemühungen früh dokumentieren"
+      ],
+      [
+       "Vereinbarung über Erstreckung (z. B. Vergleich)",
+       "Keine Höchstdauer; Mieterin kann auf zweite Erstreckung verzichten (Art. 272b Abs. 2 OR); bei Familienwohnung nur mit beiden Ehegatten gültig (Art. 273a Abs. 2 OR)",
+       "Vor Unterschrift Rechtsperson (Verzicht!)"
+      ],
+      [
+       "Neue Wohnung während Erstreckung gefunden",
+       "Mieterin kann mit verkürzten Fristen kündigen (Art. 272d OR; Lehrbuch N 3024g, S. 989)",
+       "Information erlaubt"
+      ],
+      [
+       "Familienwohnung",
+       "Auch der Ehegatte kann Erstreckung verlangen (Art. 273a Abs. 1 OR)",
+       "Faktum erfassen"
+      ],
+      [
+       "Ordentliche Kündigung nach erfolgloser Mahnung (Art. 257d)",
+       "Erstreckung trotzdem ausgeschlossen, wenn die Mahnung gültig war (BGE 117 II 415 E. 4, S. 417). War die Mahnung ungültig, greift der Ausschluss nicht (E. 5a, S. 418 f.).",
+       "Rechtsperson; Gültigkeit der Mahnung nach Issue 2 prüfen; keine Aussage «Erstreckung möglich»"
+      ],
+      [
+       "Abbruch oder Umbau bei Vertragsschluss bekannt",
+       "Härte wird kaum anerkannt; Suche wird schon vorher erwartet (BGE 105 II 197 E. 3b, S. 198 f., altes Recht). Abgrenzung zum Ausschluss nach Art. 272a Abs. 1 lit. d OR.",
+       "Rechtsperson; keine Aussage zur Chance"
+      ],
+      [
+       "Nur Umzugsaufwand, sonst keine besonderen Umstände",
+       "Die Folgen eines Umzugs an sich sind keine Härte (BGE 105 II 197 E. 3a, S. 197 f.; BGer 4A_72/2011 E. 3).",
+       "Nach konkreten Härtegründen fragen; keine Erwartungen wecken"
+      ],
+      [
+       "Keine Suchbemühungen",
+       "Schon für die erste Erstreckung nötig; fehlen sie, höchstens eine einmalige kurze Erstreckung (BGer 4A_72/2011 E. 3–4).",
+       "Sofort Suche beginnen und dokumentieren"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die Fristen sind Verwirkungsfristen (Lehrbuch N 3024d, S. 988): Wer sie verpasst, verliert den Anspruch. Bei unbefristeten Verträgen läuft dieselbe 30-Tage-Frist wie für die Anfechtung."
+    },
+    {
+     "type": "p",
+     "text": "Ablauf:"
+    },
+    {
+     "type": "bullet",
+     "text": "Beendigung steht fest (Kündigung empfangen oder befristetes Ende absehbar)."
+    },
+    {
+     "type": "bullet",
+     "text": "Begehren bei der Schlichtungsbehörde am Ort der Wohnung: bei unbefristetem Vertrag innert 30 Tagen nach Empfang, bei befristetem spätestens 60 Tage vor Ablauf (Art. 273 Abs. 2 OR). Wer die Kündigung anficht, muss nicht zusätzlich Erstreckung verlangen; die Behörde prüft sie bei Abweisung von Amtes wegen (Art. 273 Abs. 5 OR; Lehrbuch N 3024e, S. 988 f.). In der Praxis wird sie trotzdem meist eventualiter beantragt (vgl. BGE 151 III 481 E. 5.1)."
+    },
+    {
+     "type": "bullet",
+     "text": "Während des Verfahrens gilt das Mietverhältnis als vorläufig erstreckt; die Mieterin muss nicht ausziehen, solange kein Vergleich oder rechtskräftiger Entscheid vorliegt (Lehrbuch N 3024d, S. 988)."
+    },
+    {
+     "type": "bullet",
+     "text": "Schlichtungsverhandlung: Einigung (Vergleich), Entscheidvorschlag (Ablehnung innert 20 Tagen, Art. 211 ZPO) oder Klagebewilligung (Klage innert 30 Tagen, Art. 209 Abs. 4 ZPO). Kostenlos (Art. 113 Abs. 2 lit. c ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Entscheid: Art und Dauer im Ermessen der Behörde, höchstens vier Jahre bei Wohnungen, eine oder zwei Erstreckungen (Art. 272b Abs. 1 OR; Lehrbuch N 3024f, S. 989)."
+    },
+    {
+     "type": "bullet",
+     "text": "Während der Erstreckung weitersuchen und dokumentieren; bei neuer Wohnung mit verkürzter Frist kündigen (Art. 272d OR)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Rechtsgrundlage"
+      ],
+      [
+       "Erstreckungsbegehren, unbefristet",
+       "30 Tage",
+       "Empfang der Kündigung (absolute Empfangstheorie)",
+       "Art. 273 Abs. 2 lit. a OR (OR-PDF S. 83); BGE 143 III 15 E. 4.1"
+      ],
+      [
+       "Erstreckungsbegehren, befristet",
+       "spätestens 60 Tage vor Ablauf",
+       "–",
+       "Art. 273 Abs. 2 lit. b OR (S. 83)"
+      ],
+      [
+       "Zweite Erstreckung",
+       "spätestens 60 Tage vor Ablauf der ersten",
+       "–",
+       "Art. 273 Abs. 3 OR (S. 83)"
+      ],
+      [
+       "Höchstdauer Wohnung",
+       "4 Jahre insgesamt",
+       "–",
+       "Art. 272b Abs. 1 OR (S. 83)"
+      ],
+      [
+       "Kündigung durch Mieterin während Erstreckung ≤ 1 Jahr",
+       "1 Monat auf Ende eines Monats",
+       "–",
+       "Art. 272d lit. a OR (S. 83)"
+      ],
+      [
+       "Kündigung durch Mieterin während Erstreckung > 1 Jahr",
+       "3 Monate auf gesetzlichen Termin",
+       "–",
+       "Art. 272d lit. b OR (S. 83)"
+      ],
+      [
+       "Ablehnung Entscheidvorschlag",
+       "20 Tage",
+       "schriftliche Eröffnung",
+       "Art. 211 Abs. 1 ZPO (ZPO-PDF S. 57)"
+      ],
+      [
+       "Klage nach Klagebewilligung",
+       "30 Tage",
+       "Eröffnung",
+       "Art. 209 Abs. 4 ZPO (S. 57)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Nie im System: ein berechnetes Fristende oder eine Prognose zur Erstreckungsdauer."
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Rechtlich zuständig ist die Schlichtungsbehörde am Ort der Wohnung. Sozial entscheidet der Sozialdienst mit, weil Suchbemühungen und Unterstützung die Erstreckung stärken."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Kosten",
+       "Quelle"
+      ],
+      [
+       "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)",
+       "Erstreckungsbegehren einreichen; Formular «Kündigungsschutz»",
+       "keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)",
+       "gerichte-zh.ch, Schlichtungsbehörden; Formular Kündigungsschutz"
+      ],
+      [
+       "Mieterinnen- und Mieterverband Zürich",
+       "Begehren vorbereiten, Begleitung, Vergleichsverhandlung",
+       "Mitglieder gratis (ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung",
+       "mieterverband.ch/mv-zh; Heilsarmee-Übersicht 07/2026"
+      ],
+      [
+       "Rechtsauskunft der Schlichtungsbehörde / Bezirksgerichte",
+       "Neutrale Information zu Fristen und Verfahren",
+       "gratis",
+       "gerichte-zh.ch/rechtsauskunft"
+      ],
+      [
+       "Sozialdienst der Wohngemeinde",
+       "Wohnungssuche, Mietzinsgarantie, Kautionsgutsprache, Dokumentation der Suche",
+       "–",
+       "Gemeinde der Klientin"
+      ],
+      [
+       "Fachstellen für Wohnungssuche (z. B. Wohnhilfe der Gemeinde oder von Stiftungen)",
+       "Unterstützung bei der Suche",
+       "unterschiedlich",
+       "noch zu ergänzen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Vor der Demo: Zuständige Schlichtungsbehörde der Zielgemeinde und kommunale Wohnhilfe nachtragen."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 4 eskaliert immer an eine Rechtsperson, weil die Abwägung im Ermessen liegt. Gleichzeitig hat die Sozialarbeiterin einen grossen Beitrag: Härtegründe und Suchbemühungen sauber dokumentieren. Das Briefing ist hier besonders wertvoll."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Begründung"
+      ],
+      [
+       "Ausschlussgrund (Zahlungsverzug, Pflichtverletzung, Konkurs)",
+       "Wechsel zu Issue 3 bzw. Rechtsperson",
+       "sofort",
+       "Keine Erstreckung möglich"
+      ],
+      [
+       "Unbefristet: Empfang unbekannt oder ≥ 20 Tage seit Empfang",
+       "Rechtsperson",
+       "sofort",
+       "30-Tage-Frist knapp oder unbestimmbar (Produktschwelle wie Issue 1)"
+      ],
+      [
+       "Befristet: weniger als 75 Tage bis Vertragsende oder Ende unbekannt",
+       "Rechtsperson",
+       "sofort",
+       "60-Tage-Frist mit Puffer (Produktschwelle)"
+      ],
+      [
+       "Zweite Erstreckung: weniger als 75 Tage bis Ende der ersten",
+       "Rechtsperson",
+       "sofort",
+       "Art. 273 Abs. 3 OR"
+      ],
+      [
+       "Frist möglicherweise verpasst",
+       "Rechtsperson + Sozialarbeiterin",
+       "sofort",
+       "Verwirkt; andere Wege prüfen, Auszug planen"
+      ],
+      [
+       "Fristen gewahrt, Härtegründe vorhanden",
+       "Rechtsperson + Sozialarbeiterin",
+       "bald",
+       "Abwägung im Ermessen; Suche dokumentieren"
+      ],
+      [
+       "Vermieterschaft bietet Ersatzwohnung oder Vergleich mit Verzicht an",
+       "Rechtsperson",
+       "sofort",
+       "Art. 272a Abs. 2, 272b Abs. 2 OR"
+      ],
+      [
+       "Keine Suchbemühungen bisher",
+       "Sozialarbeiterin",
+       "bald",
+       "Suche starten, sonst kürzere Erstreckung (4A_72/2011)"
+      ],
+      [
+       "Konkubinat, Untermiete, Familienwohnung",
+       "Rechtsperson",
+       "bald",
+       "Sonderfragen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (je mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn der Auszug für die Klientin oder ihre Familie eine besondere Härte bedeutet, kann sie eine Erstreckung des Mietverhältnisses verlangen.» (Art. 272 Abs. 1 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bei einem unbefristeten Vertrag muss das Begehren innert 30 Tagen nach Empfang der Kündigung bei der Schlichtungsbehörde eingehen, bei einem befristeten spätestens 60 Tage vor Ablauf. Wer die Frist verpasst, verliert den Anspruch.» (Art. 273 Abs. 2 OR; BGE 139 III 7 E. 2.4)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Berücksichtigt werden unter anderem die Dauer des Mietverhältnisses, die persönlichen, familiären und finanziellen Verhältnisse, ein allfälliger Eigenbedarf der Vermieterschaft und die Lage auf dem Wohnungsmarkt. Die Behörde wägt die Interessen beider Seiten ab.» (Art. 272 Abs. 2 OR; BGE 142 III 336 E. 5.3.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bei Wohnungen kann um insgesamt höchstens vier Jahre erstreckt werden. Wie lange, entscheidet die Behörde im Einzelfall; oft wird zuerst kürzer erstreckt.» (Art. 272b Abs. 1 OR; BGE 142 III 336 E. 5.3.1; BGE 135 III 121 E. 5)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Klientin sollte sofort mit der Wohnungssuche beginnen und alles dokumentieren (Bewerbungen, Absagen). Das ist schon für die erste Erstreckung wichtig.» (BGer 4A_72/2011 E. 3; BGE 151 III 481 E. 5.1; Art. 272 Abs. 3 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Umzugsmühe allein reicht nicht; entscheidend sind konkrete Umstände wie Kinder, Gesundheit, Alter oder finanzielle Lage.» (BGE 105 II 197 E. 3a; BGer 4A_72/2011 E. 3)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Während des Verfahrens muss die Klientin die Wohnung nicht verlassen.» (Lehrbuch N 3024d)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Findet die Klientin während der Erstreckung eine Wohnung, kann sie mit verkürzter Frist kündigen.» (Art. 272d OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Das Verfahren vor der Schlichtungsbehörde kostet keine Gerichtskosten.» (Art. 113 Abs. 2 lit. c ZPO)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "Jedes berechnete Fristende."
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie bekommen sicher eine Erstreckung» oder «mit Kindern bekommen Sie vier Jahre.» (BGE 142 III 336 E. 5.3.2: Ermessen)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie können bleiben, bis Sie eine neue Wohnung gefunden haben.» (BGE 135 III 121 E. 4; BGE 142 III 336 E. 5.3.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Weil der Auszug hart ist, ist die Kündigung ungültig.» (BGE 142 III 91 E. 3.2.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Auch nach einer Kündigung wegen Zahlungsverzug können Sie Erstreckung verlangen.» (Art. 272a Abs. 1 lit. a OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Da nur ordentlich gekündigt wurde, spielt die frühere Mahnung keine Rolle.» (BGE 117 II 415 E. 4)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Mit der Suche können Sie warten, bis über die Erstreckung entschieden ist.» (BGer 4A_72/2011 E. 3)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie können die Frist später noch nachholen.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Unterschreiben Sie den Vergleich ruhig» ohne Hinweis auf einen möglichen Verzicht auf die zweite Erstreckung."
+    },
+    {
+     "type": "p",
+     "text": "Briefing für die Fachperson (Struktur)"
+    },
+    {
+     "type": "bullet",
+     "text": "Anliegen und Dringlichkeit (Frist, Status)"
+    },
+    {
+     "type": "bullet",
+     "text": "Beendigung: Art, Grund, Datum, befristet/unbefristet, frühere Erstreckung"
+    },
+    {
+     "type": "bullet",
+     "text": "Ausschlussgründe geprüft (Art. 272a OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "Härtegründe nach Art. 272 Abs. 2 lit. a–e OR, mit Belegen"
+    },
+    {
+     "type": "bullet",
+     "text": "Interessen der Vermieterschaft (angegebener Grund, Dringlichkeit, Ersatzangebot)"
+    },
+    {
+     "type": "bullet",
+     "text": "Suchbemühungen: seit wann, wie viele, Belege"
+    },
+    {
+     "type": "bullet",
+     "text": "Soziale Unterstützung eingeleitet"
+    },
+    {
+     "type": "bullet",
+     "text": "Ausgelöste Regeln, offene Fragen"
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Befristete Verträge: Ab 75 Tagen vor Ablauf eines befristeten Vertrags eskaliert das System SOFORT (Erstreckungsbegehren spätestens 60 Tage vor Ablauf, Art. 273 Abs. 2 lit. b OR; 15 Tage Puffer)."
+    },
+    {
+     "type": "bullet",
+     "text": "Konkubinat / Lebenspartnerschaft ohne Eintragung: wird nur als Faktum erfasst (wer wohnt mit, seit wann, wer hat unterschrieben); die rechtliche Bewertung (z. B. Mitmieterschaft, Familienwohnung) macht immer die Rechtsperson."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: höchstens 2 Rückfrage-Runden, danach Eskalation (G7). Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz voraussichtlich nach IDG ZH (§ 3 Abs. 1 lit. c, § 6 IDG). Vor jedem Briefing an eine externe Rechtsperson ausdrückliche Einwilligung der Klientin (consent_briefing; § 17 Abs. 1 lit. b IDG; Art. 6 Abs. 7 lit. a DSG)."
+    }
+   ]
+  },
+  {
+   "heading": "Was wir noch von euch brauchen",
+   "items": [
+    {
+     "type": "bullet",
+     "text": "Erledigt: BGE 142 III 336, 135 III 121, 117 II 415, 105 II 197, BGer 4A_72/2011, 4A_673/2014 (Volltexte eingearbeitet)."
+    },
+    {
+     "type": "bullet",
+     "text": "Empfohlen: ein bis zwei Entscheide des Mietgerichts oder Obergerichts Zürich zur Erstreckung bei Wohnungen mit Kindern oder gesundheitlichen Problemen (entscheidsuche.ch, Suchbegriffe «Erstreckung», «Kinder», «Suchbemühungen», Filter ZH). Grund: Die Bundesgerichtsentscheide zur Dauer betreffen fast alle Geschäftsräume."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: BGE 110 II 249 und 116 II 446 (Suchbemühungen schon bei der ersten Erstreckung, direkt am Leitentscheid)."
+    },
+    {
+     "type": "bullet",
+     "text": "Bibliografische Angabe des Lehrbuchs (Autor:in, Titel, Auflage)."
+    },
+    {
+     "type": "p",
+     "text": "Offene Prüfpunkte"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Kernaussagen der Lehrbuch-Zitate am Volltext bestätigt (BGE 142 III 336, 135 III 121, 117 II 415, 105 II 197, 4A_72/2011, 4A_673/2014)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Produktschwelle für befristete Verträge festlegen (Vorschlag: 75 Tage vor Ablauf = sofort)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Konkubinat: Soll das System Lebenspartner als Härtegrund erfassen? Volltextlage: BGE 105 II 197 E. 3c verneint «Familie» (altes Recht); 4A_673/2014 betrifft nur die Vermieterseite. Vorschlag: Faktum erfassen, Bewertung der Rechtsperson überlassen"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Zürcher Wohnhilfe- bzw. Wohnungssuche-Stellen ergänzen"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: OR_admin.pdf (SR 220, Stand 1.10.2026), Art. 272–273c OR (S. 82–84); ZPO.pdf (SR 272, Stand 1.7.2026)"
+    },
+    {
+     "type": "bullet",
+     "text": "Lehrbuch: euer Auszug «§ 31 Miete», N 3023b–3024g (S. 986–989)"
+    },
+    {
+     "type": "bullet",
+     "text": "Volltexte (eure Dateien): BGE 105 II 197, 117 II 415, 135 III 121, 135 III 441, 139 III 7, 140 III 244 (Urteil 4A_120/2014), 142 III 91, 142 III 336, 143 III 15, 151 III 481; BGer 4A_72/2011, 4A_673/2014"
+    },
+    {
+     "type": "bullet",
+     "text": "Stellen: Obergericht ZH, Schlichtungsbehörden, Formular Kündigungsschutz, Heilsarmee Sozialberatung Zürich, Rechtsberatung 07/2026"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

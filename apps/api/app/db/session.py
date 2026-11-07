@@ -22,6 +22,12 @@ def make_engine(url: str) -> Engine:
         def _fk_pragma(dbapi_conn, _):  # noqa: ANN001
             cur = dbapi_conn.cursor()
             cur.execute("PRAGMA foreign_keys=ON")
+            # desktop and phone poll/write at the same time: readers must not block the writer and a busy database
+            # file is waited for instead of failing at once with «database is locked» (HTTP 500)
+            cur.execute("PRAGMA busy_timeout=10000")
+            if ":memory:" not in url:
+                cur.execute("PRAGMA journal_mode=WAL")
+                cur.execute("PRAGMA synchronous=NORMAL")
             cur.close()
 
     return engine

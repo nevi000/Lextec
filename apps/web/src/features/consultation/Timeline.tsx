@@ -51,6 +51,11 @@ export function Timeline({
                       : "Schilderung"}
                 </span>
                 <span>· {formatDateTime(e.message.created_at)}</span>
+                {e.message.origin === "VOICE_BRIDGE" && (
+                  <Badge tone="neutral">
+                    Via Sprachbrücke beantwortet, durch Sozialarbeiterin bestätigt
+                  </Badge>
+                )}
                 {e.message.analysis_status === "FAILED" && <Badge tone="error">Analyse fehlgeschlagen</Badge>}
                 {e.message.analysis_status === "PENDING" && <Badge tone="warning">Analyse ausstehend</Badge>}
               </div>

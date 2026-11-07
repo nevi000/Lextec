@@ -9,6 +9,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from alembic import command
+from app.api.bridge_routes import mobile as bridge_mobile
+from app.api.bridge_routes import worker as bridge_worker
 from app.api.deps import AppContext
 from app.api.routes import router
 from app.core.config import Settings, get_settings
@@ -75,8 +77,55 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["*"],
     )
     install_error_handlers(app)
+
+    @app.middleware("http")
+    async def _restrict_remote(request, call_next):  # noqa: ANN001
+        """Devices on the network (the phone, reached through the dev proxy) may only use the bridge endpoints.
+
+        Every hop of X-Forwarded-For counts: one non-local hop is enough to restrict the request."""
+        if (
+            settings.restrict_remote_access
+            and _is_remote(request)
+            and not _remote_allowed(request.url.path)
+        ):
+            from fastapi.responses import JSONResponse
+
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "error": {
+                        "code": "remote_forbidden",
+                        "message": "Kein Zugriff von diesem Gerät.",
+                    }
+                },
+            )
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("Referrer-Policy", "no-referrer")
+        if "/voice-bridge" in request.url.path or request.url.path.startswith("/api/bridge/"):
+            response.headers["Cache-Control"] = (
+                "no-store"  # question/answer text and the join token are never cached
+            )
+        return response
+
     app.include_router(router)
+    app.include_router(bridge_worker)
+    app.include_router(bridge_mobile)
     return app
+
+
+_LOCAL = {"127.0.0.1", "::1", "localhost", "testclient"}
+
+
+def _is_remote(request) -> bool:  # noqa: ANN001
+    hosts = [request.client.host] if request.client else []
+    fwd = request.headers.get("x-forwarded-for", "")
+    hosts += [h.strip() for h in fwd.split(",") if h.strip()]
+    return any(h not in _LOCAL and h != "::ffff:127.0.0.1" for h in hosts)
+
+
+def _remote_allowed(path: str) -> bool:
+    return path.startswith("/api/bridge/") or path == "/api/health"
 
 
 app = create_app()

@@ -18,12 +18,17 @@ from app.services.ai.base import (
     AIBudgetExceededError,
     AIConfigurationError,
     AIInvalidResponseError,
+    AIOutputTruncatedError,
     AIProviderError,
     AIRateLimitError,
     AIUnavailableError,
     CallContext,
 )
-from app.services.ai.prompts import CLARIFICATION_WORDING_V1, EXTRACTION_SYSTEM_PROMPT
+from app.services.ai.prompts import (
+    CLARIFICATION_WORDING_V1,
+    EXTRACTION_SYSTEM_PROMPT,
+    TRANSLATION_V1,
+)
 from app.services.ai.schemas import ExtractionInput, ExtractionResult
 from app.services.ai.usage import estimate_tokens
 
@@ -51,6 +56,7 @@ class GeminiProvider:
         self._timeout = settings.ai_timeout_seconds
         self._retries = settings.ai_max_retries
         self._max_out = settings.ai_max_output_tokens_per_call
+        self._max_out_retry = settings.ai_max_output_tokens_retry
         self._thinking_level = settings.ai_thinking_level
         self._client = genai.Client(
             api_key=settings.gemini_api_key.get_secret_value(),
@@ -58,12 +64,12 @@ class GeminiProvider:
         )
 
     # ---- low level -----------------------------------------------------------------------
-    def _config(self, system: str, json_schema: dict | None):
+    def _config(self, system: str, json_schema: dict | None, max_out: int | None = None):
         t = self._types
         kwargs: dict = {
             "system_instruction": system,
             "temperature": 0.0,
-            "max_output_tokens": self._max_out,
+            "max_output_tokens": max_out or self._max_out,
         }
         # Extraction does not need reasoning: keep thinking minimal so tokens (and cost) stay small.
         if self.model.startswith("gemini-3"):
@@ -78,11 +84,17 @@ class GeminiProvider:
         return t.GenerateContentConfig(**kwargs)
 
     def _call(
-        self, *, system: str, contents: str, json_schema: dict | None, ctx: CallContext | None
+        self,
+        *,
+        system: str,
+        contents: str,
+        json_schema: dict | None,
+        ctx: CallContext | None,
+        max_out: int | None = None,
     ) -> str:
         from google.genai import errors
 
-        config = self._config(system, json_schema)
+        config = self._config(system, json_schema, max_out)
         est = estimate_tokens(system + contents)
         function = ctx.function if ctx else "unknown"
         case_id = ctx.case_id if ctx else None
@@ -94,6 +106,7 @@ class GeminiProvider:
                 usage_id = self._gate.reserve(  # may raise AIBudgetExceededError: nothing is sent
                     case_id=case_id, function=function, model=self.model, est_input_tokens=est
                 )
+            t_api = time.monotonic()
             try:
                 resp = self._client.models.generate_content(
                     model=self.model, contents=contents, config=config
@@ -147,6 +160,23 @@ class GeminiProvider:
                     self._gate.complete(
                         usage_id, usage_metadata=getattr(resp, "usage_metadata", None), status="OK"
                     )
+                finish = _finish_reason(resp)
+                meta = getattr(resp, "usage_metadata", None)
+                log.info(
+                    "gemini call function=%s attempt=%d api_ms=%d in_tokens=%s out_tokens=%s finish=%s",
+                    function,
+                    attempt + 1,
+                    int((time.monotonic() - t_api) * 1000),
+                    getattr(meta, "prompt_token_count", None),
+                    getattr(meta, "candidates_token_count", None),
+                    finish,
+                )
+                if finish == "MAX_TOKENS":
+                    # the JSON is cut off: never parsed, never «repaired»
+                    raise AIOutputTruncatedError(
+                        "Die Gemini-Antwort wurde wegen ihrer Länge abgeschnitten. Bitte erneut analysieren "
+                        "(die Eingabe bleibt erhalten) oder die Schilderung kürzen."
+                    )
                 text = resp.text
                 if not text:
                     raise AIInvalidResponseError("Gemini lieferte eine leere Antwort.")
@@ -156,19 +186,59 @@ class GeminiProvider:
 
     # ---- tasks ---------------------------------------------------------------------------
     def extract(self, data: ExtractionInput, ctx: CallContext | None = None) -> ExtractionResult:
-        payload = json.dumps(data.model_dump(exclude_defaults=True), ensure_ascii=False)
-        text = self._call(
-            system=EXTRACTION_SYSTEM_PROMPT,
-            contents=payload,
-            json_schema=ExtractionResult.model_json_schema(),
-            ctx=ctx,
-        )
-        try:
-            return ExtractionResult.model_validate_json(text)
-        except ValidationError as exc:
-            raise AIInvalidResponseError(
-                "Die Gemini-Antwort entsprach nicht dem erwarteten Schema."
-            ) from exc
+        """One structured call; at most ONE targeted retry, and only for a deterministic cause:
+
+        * truncated answer (MAX_TOKENS)  → retry with a higher output cap and the instruction to be more compact
+        * schema violation               → retry once with the failing field PATHS (never values) as a hint
+        Partial results are never used and the JSON is never repaired."""
+        base = data.model_dump(exclude_defaults=True)
+        max_out: int | None = None
+        hint: str | None = None
+        for attempt in (1, 2):
+            payload = dict(base)
+            if hint:
+                payload["retry_hinweis"] = hint
+            text = None
+            try:
+                text = self._call(
+                    system=EXTRACTION_SYSTEM_PROMPT,
+                    contents=json.dumps(payload, ensure_ascii=False),
+                    json_schema=ExtractionResult.model_json_schema(),
+                    ctx=ctx,
+                    max_out=max_out,
+                )
+                t0 = time.monotonic()
+                result = ExtractionResult.model_validate_json(text)
+                log.info(
+                    "gemini parse ms=%d attempt=%d", int((time.monotonic() - t0) * 1000), attempt
+                )
+                return result
+            except AIOutputTruncatedError:
+                if attempt == 2:
+                    raise
+                log.warning("gemini extract truncated; retrying once with a higher output cap")
+                max_out = self._max_out_retry
+                hint = (
+                    "Die vorige Antwort war zu lang und wurde abgeschnitten. Antworte kompakter: höchstens die "
+                    "wichtigsten belegten Fakten, kürzeste wörtliche Zitate, keine leeren Felder."
+                )
+            except ValidationError as exc:
+                where = ", ".join(
+                    sorted(
+                        {
+                            ".".join(str(x) for x in e["loc"]) + f" ({e['type']})"
+                            for e in exc.errors()[:6]
+                        }
+                    )
+                )
+                log.warning("gemini extract schema violation attempt=%d fields=%s", attempt, where)
+                if attempt == 2:
+                    raise AIInvalidResponseError(
+                        "Die Gemini-Antwort entsprach nicht dem erwarteten Schema.",
+                        code="ai_schema_mismatch",
+                    ) from exc
+                hint = f"Die vorige Antwort verletzte das Schema bei: {where}. Halte dich exakt an das Schema."
+        raise AIInvalidResponseError("Die Gemini-Antwort war nicht verwertbar.")  # pragma: no cover
 
     def rephrase_question(
         self, question_de: str, context: str, ctx: CallContext | None = None
@@ -183,5 +253,51 @@ class GeminiProvider:
             raise AIInvalidResponseError("Umformulierte Frage unbrauchbar.")
         return text
 
+    def translate(
+        self, texts: list[str], source: str, target: str, ctx: CallContext | None = None
+    ) -> list[str]:
+        """Faithful translation of short texts. The result is validated: same count, no empty entries, and every
+        number of the source must still be present (negations/dates/amounts must not drift)."""
+        if source == target:
+            return list(texts)
+        names = {"de": "Deutsch", "en": "Englisch", "ar": "Arabisch", "uk": "Ukrainisch"}
+        payload = json.dumps(
+            {"von": names.get(source, source), "nach": names.get(target, target), "texte": texts},
+            ensure_ascii=False,
+        )
+        raw = self._call(
+            system=TRANSLATION_V1,
+            contents=payload,
+            json_schema={"type": "array", "items": {"type": "string"}},
+            ctx=ctx,
+        )
+        try:
+            out = json.loads(raw)
+        except ValueError as exc:
+            raise AIInvalidResponseError("Die Übersetzung war nicht lesbar.") from exc
+        if (
+            not isinstance(out, list)
+            or len(out) != len(texts)
+            or not all(isinstance(o, str) and o.strip() for o in out)
+        ):
+            raise AIInvalidResponseError("Die Übersetzung war unvollständig.")
+        import re
+
+        for src, dst in zip(texts, out, strict=True):
+            digits = re.findall(r"\d+", src)
+            latin_dst = dst.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
+            if any(d not in latin_dst for d in digits):
+                raise AIInvalidResponseError("Die Übersetzung hat Zahlen verändert.")
+        return [o.strip() for o in out]
+
 
 _ = (AIBudgetExceededError, AIProviderError)  # re-exported for callers that import from here
+
+
+def _finish_reason(resp) -> str | None:
+    """Name of the first candidate's finish reason («STOP», «MAX_TOKENS» …) or None if the SDK does not provide it."""
+    try:
+        fr = resp.candidates[0].finish_reason
+    except (AttributeError, IndexError, TypeError):
+        return None
+    return getattr(fr, "name", None) or (str(fr) if fr is not None else None)

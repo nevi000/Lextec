@@ -1,0 +1,1291 @@
+{
+"CH_TENANCY_DEFECTS:affected_rooms": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_DEFECTS:authority_letter_received": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:can_avoid_affected_rooms": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:children_exposed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:children_in_household": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_DEFECTS:client_wish": {
+"enum": [
+"reparatur",
+"herabsetzung",
+"schadenersatz",
+"ausziehen",
+"selbst_reparieren",
+"unklar"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:construction_nearby": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:damage_or_extra_costs": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:deadline_set_in_writing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:defect_at_move_in": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:defect_description": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_DEFECTS:defect_effect": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_DEFECTS:defect_since": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_DEFECTS:defect_type": {
+"enum": [
+"schimmel",
+"heizung_wasser_strom",
+"laerm_bau",
+"kleiner_unterhalt",
+"anderes"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:deposit_planned": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:eviction_or_court_proceeding": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:evidence_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:health_safety_danger": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:health_symptoms_reported": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:housing_arrangement": {
+"enum": [
+"privat",
+"genossenschaft",
+"gemeindewohnung",
+"subventioniert",
+"zugewiesene_unterkunft"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:landlord_informed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:landlord_informed_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_DEFECTS:landlord_informed_in_writing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:landlord_offered_replacement": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:landlord_reacted": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:medical_risk_reported": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:minor_repair_possible": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:payment_warning_received": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:possibly_tenant_caused": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_DEFECTS:rent_deposit_started": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:rent_payment_status": {
+"enum": [
+"voll_bezahlt",
+"gekuerzt_oder_zurueckbehalten"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:reported_extent": {
+"enum": [
+"klein",
+"groesser",
+"nur_geruch"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:safe_alternative_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:sleeping_room_affected": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:support_needed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_DEFECTS:termination_after_report": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_DEFECTS:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:arrears_paid_timing": {
+"enum": [
+"nicht_bezahlt",
+"vor_fristablauf",
+"nach_fristablauf"
+],
+"type": "enum"
+},
+"CH_TENANCY_EVICTION:belongings_plan": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:challenge_filed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:children_in_household": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:client_wants_to_sign_move_out": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:court_reference": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:deadline_quoted_text": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:document_receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EVICTION:eviction_document_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:eviction_stage": {
+"enum": [
+"nur_kuendigung",
+"gesuch_oder_vorladung",
+"gerichtsentscheid",
+"ammannamt_raeumungstermin",
+"raeumung_heute_oder_schloss"
+],
+"type": "enum"
+},
+"CH_TENANCY_EVICTION:eviction_termination_reason": {
+"enum": [
+"zahlungsverzug",
+"ordentlich",
+"vertragsende",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_EVICTION:family_home_with_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:household_description": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:housing_solution_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:landlord_self_help": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_EVICTION:payment_returned_by_landlord": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:post_termination_agreement": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EVICTION:separate_delivery_to_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:social_assistance_received": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:spouse_still_lives_there": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_EVICTION:third_party_payment": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EVICTION:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:challenge_filed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:children_in_household": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EXTENSION:cohabitant_partner": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:conclusion_circumstances": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:contract_end_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EXTENSION:contract_term_type": {
+"enum": [
+"unbefristet",
+"befristet"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:deadline_possibly_missed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:demolition_known_at_signing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:economic_difficulty": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:ending_reason": {
+"enum": [
+"ordentliche_kuendigung",
+"zahlungsverzug",
+"andere_ausserordentlich",
+"ablauf_befristet"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:family_home_with_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:hardship_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:health_limitations": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:household_description": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EXTENSION:limited_to_demolition": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:local_market_note": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EXTENSION:medical_evidence_current": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EXTENSION:previous_extension": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:previous_extension_end_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EXTENSION:prior_payment_warning": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_EXTENSION:receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EXTENSION:replacement_offered": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:school_change_needed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:search_efforts": {
+"enum": [
+"keine",
+"laufend_nicht_dokumentiert",
+"laufend_dokumentiert"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:settlement_with_waiver_offered": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:social_search_support": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_EXTENSION:stated_reason": {
+"enum": [
+"keine_angabe",
+"eigenbedarf",
+"sanierung",
+"abbruch",
+"anderer_grund"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:tenancy_start_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_EXTENSION:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_EXTENSION:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:amount_disputed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:challenge_filed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:children_in_household": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:co_tenants_all_notified": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:co_tenants_exist": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:days_between_deadline_and_termination": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:eviction_or_court_proceeding": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:family_home_with_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:housing_solution_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:landlord_self_help": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:official_form_used": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:paid_in_time": {
+"enum": [
+"vollstaendig_rechtzeitig",
+"teilweise",
+"nicht_bezahlt",
+"nur_nach_fristablauf"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:partial_payment_with_notice": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:payment_after_deadline_accepted": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:payment_agreement_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:payment_path": {
+"enum": [
+"einzahlungsschein",
+"ueberweisung",
+"bar_oder_andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:payment_returned_by_landlord": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:rent_payer": {
+"enum": [
+"klientin",
+"sozialdienst",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:rent_withheld_for_defects": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:separate_delivery_to_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:setoff_or_deposit_done": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:social_payment_failed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:special_circumstances": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:spouse_still_lives_there": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:termination_before_deadline_end": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:termination_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:third_party_payment": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_amount_clear": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_deadline_days": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_threat_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_DEFAULT:warning_written": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:amount_disputed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_PAYMENT_WARNING:co_tenants_exist": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:counterclaim_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:days_since_deadline_end": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_PAYMENT_WARNING:deadline_possibly_expired": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:debt_enforcement_order": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:family_home_with_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:payment_agreement_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:payment_financeable": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:payment_path": {
+"enum": [
+"einzahlungsschein",
+"ueberweisung",
+"bar_oder_andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:payment_returned_by_landlord": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:payment_status": {
+"enum": [
+"nicht_bezahlt",
+"teilweise",
+"vollstaendig"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_PAYMENT_WARNING:rent_amount_chf": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_PAYMENT_WARNING:rent_payer": {
+"enum": [
+"klientin",
+"sozialdienst",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:rent_withheld_for_defects": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:social_payment_failed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:spouse_still_lives_there": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:termination_already_received": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:third_party_payment": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_amount_clear": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_claim_type": {
+"enum": [
+"nur_miete_nebenkosten",
+"enthaelt_anderes",
+"unklar"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_cotenants_all_notified": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_deadline_days": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post"
+],
+"type": "enum"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_family_separate": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_threat_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_PAYMENT_WARNING:warning_written": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:asked_to_sign": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:change_type": {
+"enum": [
+"mietzinserhoehung",
+"neue_nebenkosten",
+"leistungsabbau",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_RENT_INCREASE:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:contract_term_type": {
+"enum": [
+"unbefristet",
+"befristet"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:contract_termination_dates": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_RENT_INCREASE:effective_date_in_letter": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_RENT_INCREASE:form_appeal_notice_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_cover_letter_reference": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_effective_date_stated": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_official_used": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_old_new_rent_stated": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_page3_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_reason_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:form_signed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:housing_arrangement": {
+"enum": [
+"privat",
+"genossenschaft",
+"gemeindewohnung",
+"subventioniert",
+"zugewiesene_unterkunft"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:increase_already_paying": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:increase_already_reacted": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:increase_delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post",
+"email"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:increase_letter_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:increase_pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_RENT_INCREASE:increase_receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_RENT_INCREASE:last_rent_adjustment": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_RENT_INCREASE:letter_contains_termination": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:luxury_or_large_house": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:new_rent_chf": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_RENT_INCREASE:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:old_rent_chf": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_RENT_INCREASE:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_RENT_INCREASE:renovation_before": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:rent_affordable": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:rent_model": {
+"enum": [
+"keine",
+"indexmiete",
+"staffelmiete"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:social_assistance_received": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_RENT_INCREASE:termination_threat_in_letter": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_RENT_INCREASE:wants_to_terminate_instead": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:absence_at_receipt": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:already_reacted": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:client_requests_expert": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:client_residence_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_TERMINATION:co_tenants_all_notified": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:co_tenants_exist": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:consent_briefing": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:contract_end_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_TERMINATION:contract_term_type": {
+"enum": [
+"unbefristet",
+"befristet"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:contract_termination_dates": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_TERMINATION:delivery_method": {
+"enum": [
+"persoenlich",
+"eingeschrieben",
+"normale_post"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:eviction_or_court_proceeding": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:family_change_recent": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:family_home_with_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:form_photo_available": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:hardship_details": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_TERMINATION:hardship_present": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:illness_at_receipt": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:object_type": {
+"enum": [
+"wohnung",
+"moebliertes_zimmer",
+"notwohnung_heim",
+"ferienwohnung_bis_3_monate",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:official_form_used": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:pickup_notice_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_TERMINATION:prior_dispute_3y": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:property_in_canton_zh": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:property_municipality": {
+"enum": [],
+"type": "string"
+},
+"CH_TENANCY_TERMINATION:receipt_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_TERMINATION:rent_amount_chf": {
+"enum": [],
+"type": "integer"
+},
+"CH_TENANCY_TERMINATION:rent_payer": {
+"enum": [
+"klientin",
+"sozialdienst",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:separate_delivery_to_spouse": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:spouse_still_lives_there": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:stated_reason": {
+"enum": [
+"keine_angabe",
+"eigenbedarf",
+"sanierung",
+"abbruch",
+"anderer_grund"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:tenant_role": {
+"enum": [
+"hauptmieterin",
+"untermieterin",
+"andere"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:termination_agreement_signed_or_offered": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:termination_date": {
+"enum": [],
+"type": "date"
+},
+"CH_TENANCY_TERMINATION:termination_kind": {
+"enum": [
+"ordentlich",
+"zahlungsverzug"
+],
+"type": "enum"
+},
+"CH_TENANCY_TERMINATION:termination_signed": {
+"enum": [],
+"type": "boolean"
+},
+"CH_TENANCY_TERMINATION:vulnerability_present": {
+"enum": [],
+"type": "boolean"
+}
+}

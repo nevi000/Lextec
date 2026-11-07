@@ -1,0 +1,948 @@
+{
+ "file": "issue_03.docx",
+ "title": "Issue 3 – Kündigung wegen Zahlungsverzug",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 3 – Kündigung wegen Zahlungsverzug",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 3 beginnt, wenn die Vermieterschaft nach einer Mahnung wegen Zahlungsverzug gekündigt hat (Art. 257d Abs. 2 OR). Es ist das härteste Issue: Eine Erstreckung ist ausgeschlossen (Art. 272a Abs. 1 lit. a OR), eine spätere Zahlung heilt die Kündigung grundsätzlich nicht, und die Ausweisung kann im schnellen Verfahren folgen (Art. 257 ZPO). Das System eskaliert deshalb immer sofort, rechtlich und sozial parallel. Es gilt ausschliesslich Schweizer Recht, Fokus Kanton Zürich."
+    },
+    {
+     "type": "p",
+     "text": "Die drei Prüffragen an jede solche Kündigung:"
+    },
+    {
+     "type": "bullet",
+     "text": "War die Mahnung gültig (Issue 2: Frist, Androhung, Betrag, Zustellung)?"
+    },
+    {
+     "type": "bullet",
+     "text": "Wurde innert Frist vollständig bezahlt (oder verrechnet)?"
+    },
+    {
+     "type": "bullet",
+     "text": "Ist die Kündigung selbst formgültig (Formular, Familienwohnung, Termin, nach Fristablauf) und nicht ausnahmsweise treuwidrig?"
+    },
+    {
+     "type": "p",
+     "text": "Abgrenzung: Vorstufe = Issue 2 (Mahnung). Kommt ein Gerichtsentscheid oder Ausweisungsgesuch = Issue 6. Erstreckung ist hier ausgeschlossen; Issue 4 greift nur, wenn die Kündigung als Zahlungsverzugskündigung scheitert und eine ordentliche Kündigung folgt."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: Gesetz aus OR_admin.pdf (Stand 1.10.2026) und ZPO.pdf (Stand 1.7.2026), mit PDF-Seite. Leitentscheide aus euren Volltexten (aus Issue 1 und 2). Lehrbuch: euer Auszug «§ 31 Miete», zitiert mit Randziffer (N) und Buchseite (S.); bibliografische Angabe noch offen."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut wörtlich aus OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 257d Abs. 2 OR",
+       "«Bezahlt der Mieter innert der gesetzten Frist nicht, so kann der Vermieter fristlos, bei Wohn- und Geschäftsräumen mit einer Frist von mindestens 30 Tagen auf Ende eines Monats kündigen.»",
+       "OR 68",
+       "Kernnorm: Frist und Termin der Kündigung"
+      ],
+      [
+       "Art. 257d Abs. 1 OR",
+       "Voraussetzung: schriftliche Zahlungsfrist (bei Wohnungen mind. 30 Tage) mit Kündigungsandrohung (Wortlaut s. Issue 2)",
+       "OR 68",
+       "Prüfung der Mahnung"
+      ],
+      [
+       "Art. 266a Abs. 2 OR",
+       "«Halten die Parteien die Frist oder den Termin nicht ein, so gilt die Kündigung für den nächstmöglichen Termin.»",
+       "OR 74",
+       "Falscher Termin = Verschiebung (analog, Lehrbuch N 2968j)"
+      ],
+      [
+       "Art. 266l OR",
+       "«1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist …»",
+       "OR 76",
+       "Formular auch hier zwingend"
+      ],
+      [
+       "Art. 266n OR",
+       "Kündigung und Zahlungsfrist mit Kündigungsandrohung «sind dem Mieter und seinem Ehegatten … separat zuzustellen.»",
+       "OR 76",
+       "Familienwohnung"
+      ],
+      [
+       "Art. 266o OR",
+       "«Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.»",
+       "OR 76",
+       "Formmangel = nichtig"
+      ],
+      [
+       "Art. 271 Abs. 1 OR",
+       "«Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst.»",
+       "OR 81",
+       "Nur sehr ausnahmsweise (BGE 140 III 591)"
+      ],
+      [
+       "Art. 271a Abs. 3 lit. b OR",
+       "Sperrfristen (Abs. 1 lit. d und e) gelten nicht bei Kündigungen «wegen Zahlungsrückstand des Mieters (Art. 257d)»",
+       "OR 81",
+       "Laufendes Verfahren schützt nicht"
+      ],
+      [
+       "Art. 272a Abs. 1 lit. a OR",
+       "«Die Erstreckung ist ausgeschlossen bei Kündigungen: a. wegen Zahlungsrückstand des Mieters (Art. 257d)»",
+       "OR 82",
+       "Keine Erstreckung"
+      ],
+      [
+       "Art. 273 Abs. 1 OR",
+       "«Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.»",
+       "OR 83",
+       "Anfechtungsfrist (absolute Empfangstheorie)"
+      ],
+      [
+       "Art. 273a Abs. 1 OR",
+       "Bei Familienwohnung kann auch der Ehegatte die Kündigung anfechten",
+       "OR 84",
+       "Familienwohnung"
+      ],
+      [
+       "Art. 267 Abs. 1 OR",
+       "«Der Mieter muss die Sache in dem Zustand zurückgeben, der sich aus dem vertragsgemässen Gebrauch ergibt.»",
+       "OR 76",
+       "Rückgabepflicht nach Ende"
+      ],
+      [
+       "Art. 257 ZPO",
+       "Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort beweisbar ist; und b. die Rechtslage klar ist.» Abs. 3: sonst Nichteintreten",
+       "ZPO 73",
+       "Schnelle Ausweisung → Issue 6"
+      ],
+      [
+       "Art. 248 lit. b ZPO",
+       "Summarisches Verfahren «für den Rechtsschutz in klaren Fällen»",
+       "ZPO 67",
+       "Verfahrensart"
+      ],
+      [
+       "Art. 198 lit. a ZPO",
+       "Das Schlichtungsverfahren entfällt «im summarischen Verfahren»",
+       "ZPO 52",
+       "Ausweisungsgesuch geht direkt ans Gericht"
+      ],
+      [
+       "Art. 243 Abs. 2 lit. c ZPO",
+       "Vereinfachtes Verfahren unabhängig vom Streitwert bei Kündigungsschutz",
+       "ZPO 65–66",
+       "Anfechtungsverfahren"
+      ],
+      [
+       "Art. 113 Abs. 2 lit. c ZPO",
+       "Keine Gerichtskosten im Schlichtungsverfahren bei Wohnraummiete",
+       "ZPO 29",
+       "Kostenlose Anfechtung"
+      ],
+      [
+       "Art. 343 Abs. 1 lit. d ZPO",
+       "Vollstreckung durch «eine Zwangsmassnahme wie … Räumung eines Grundstückes»",
+       "ZPO 99",
+       "Zwangsräumung → Issue 6"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide",
+   "items": [
+    {
+     "type": "p",
+     "text": "Acht Entscheide aus euren Volltexten, geordnet nach den drei Prüffragen, dazu drei weitere Volltexte zu Ausweisung, verfrühter und ungültiger Kündigung."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "Entscheid",
+       "Kernaussage mit Fundstelle",
+       "Prüfstand",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 119 II 147",
+       "Die Vermieterschaft muss den Ablauf der Zahlungsfrist abwarten (E. 3); nach diesem älteren Entscheid ist eine Kündigung während laufender Frist nicht nichtig, aber anfechtbar (E. 4, S. 154–155). Die neuere Praxis nennt sie unwirksam (BGer 4A_585/2010 E. 3.1, s. unten).",
+       "Volltext",
+       "Prüffrage 3: Kündigung zu früh?"
+      ],
+      [
+       "2",
+       "BGE 124 III 145",
+       "Bareinzahlung am Postschalter innert Frist mit beigelegtem Einzahlungsschein ist rechtzeitig; die darauf gestützte Kündigung war ungültig (E. 2a–2b, S. 147–149).",
+       "Volltext",
+       "Prüffrage 2: rechtzeitig bezahlt?"
+      ],
+      [
+       "3",
+       "BGE 119 II 232",
+       "Bei Überweisung zählt, dass das Geld bei Fristablauf bei der Vermieterschaft verfügbar ist; Postanweisung am Abend des letzten Tages zu spät (E. 2, S. 234–235). Wer verspätete Zahlungen annimmt und trotzdem kündigt, handelt nicht rechtsmissbräuchlich (E. 3, S. 235).",
+       "Volltext",
+       "Verbot «Annahme der Zahlung heilt die Kündigung»"
+      ],
+      [
+       "4",
+       "BGE 140 III 591",
+       "Korrekte Zahlungsverzugskündigung nur «très exceptionnel» treuwidrig: deutlich zu hoher Betrag bei Unsicherheit, unbedeutender Ausstand, Zahlung sehr kurz nach Fristablauf bei bisher pünktlicher Zahlung, Kündigung erst lange nach Fristablauf; Beweislast bei der Mieterschaft (E. 1, S. 594). CHF 164.65 nicht unbedeutend (E. 2, S. 594–595). Bestrittene, aber fällige Forderung genügt (E. 3.2, S. 595–596). Keine zweite Mahnung nötig; lange Mietdauer und pünktliche Zahlung allein machen die Kündigung nicht treuwidrig (E. 5, S. 597).",
+       "Volltext",
+       "Prüffrage 3: Treu und Glauben, eng"
+      ],
+      [
+       "5",
+       "BGE 120 II 31",
+       "Art. 271 OR gilt auch bei Zahlungsverzugskündigung, aber nur bei besonderen Umständen (E. 4a, S. 32–33). Kündigung aufgehoben, weil mit deutlich zu hohem Betrag gemahnt und zur Prüfung aufgefordert wurde (E. 4b, S. 33–34).",
+       "Volltext",
+       "Prüfhinweis bei falschem Betrag"
+      ],
+      [
+       "6",
+       "BGer 4A_332/2025",
+       "Unklar bezeichneter Rückstand in der Mahnung macht die darauf gestützte Kündigung unwirksam, wenn die Mieterin den nach ihrem Wissen geschuldeten Betrag zahlte (E. 3.1, 3.5.2, 3.6).",
+       "Volltext",
+       "Prüffrage 1: Mahnung gültig?"
+      ],
+      [
+       "7",
+       "BGE 140 III 491",
+       "Familienwohnung: Mahnung und Kündigung separat an beide Ehegatten (E. 4.1, S. 492); Mitmieter: Kündigung an alle, sonst nichtig; Berufung darauf kann rechtsmissbräuchlich sein (E. 4.2.1–4.2.4, S. 493–495). Fall: Zahlungsverzugskündigung bestätigt.",
+       "Volltext",
+       "Prüffrage 3: Form"
+      ],
+      [
+       "8",
+       "BGE 147 III 218",
+       "Hinterlegung bereits fälliger Mietzinse tilgt nicht (E. 3.3.2.6, S. 223–224); ohne Zahlung innert 30 Tagen ist die Kündigung gültig und die Ausweisung im Verfahren für klare Fälle zulässig (E. 3.3.5, S. 224–225; Sachverhalt S. 219).",
+       "Volltext",
+       "Prüffrage 2; Verbindung zu Issue 6"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Fristbeginn der Anfechtung: Absolute Empfangstheorie wie bei Issue 1 (BGE 140 III 244 E. 5; BGE 143 III 15 E. 4.1, S. 17–19; Lehrbuch N 3009a, S. 964)."
+    },
+    {
+     "type": "p",
+     "text": "Weitere Volltexte (eure Dateien):"
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 141 III 262 (4A_184/2015, 11.8.2015): Ein Ausweisungsgesuch im Verfahren für klare Fälle ist grundsätzlich auch zulässig, wenn die Mieterin die Kündigung angefochten hat und dieses Verfahren hängig ist (E. 3.3, S. 265). Das Ausweisungsgericht prüft die Gültigkeit der Kündigung als Vorfrage; ist diese nicht liquid (Sachverhalt bestritten oder Rechtslage unklar), tritt es nicht ein (E. 3.2, S. 264–265; Art. 257 Abs. 3 ZPO). Gerade Zahlungsverzugsfälle gelten laut Botschaft als typische klare Fälle (E. 3.2, S. 264). Fall: Schlichtungsbehörde und Handelsgericht Zürich."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_585/2010 (2.2.2011): Art. 257d OR verlangt ein zweistufiges Vorgehen; die Vermieterschaft darf erst nach Fristablauf und in Kenntnis des Ausstands entscheiden, ob sie kündigt; bedingte Kündigungen sind unzulässig. Eine vor Ablauf der Zahlungsfrist ausgesprochene Kündigung ist unwirksam (E. 3.1, mit Verweis auf BGE 121 III 156 E. 1c/aa). Ausnahme: Kündigung am letzten Tag der Frist verfasst, aber erst nach Fristablauf zugestellt und in Kenntnis des Ausstands; dann ist die Berufung auf die Verfrühung rechtsmissbräuchlich (E. 3.5). Treuwidrigkeit nur unter speziellen Umständen (E. 4.1)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 135 III 441 (Regeste; E. 3): Eine unwirksame ausserordentliche Kündigung ist «dénué d'effet» (E. 3.1, S. 441) und kann nicht in eine ordentliche Kündigung umgedeutet werden, weil die Kündigung ein Gestaltungsrecht ist und klar sein muss; Art. 266a Abs. 2 OR korrigiert nur Fehler beim Termin, nicht bei den Voraussetzungen (E. 3.3, S. 444–445). Fall betraf Art. 261 Abs. 2 lit. a OR; die Übertragung auf Art. 257d OR stützt das Lehrbuch (N 3006, S. 961)."
+    },
+    {
+     "type": "bullet",
+     "text": "Nur über das Lehrbuch: BGE 127 III 548 E. 5 – Schadenersatz der Mieterin (positives Interesse) bis zur möglichen Weitervermietung, längstens bis zum nächsten ordentlichen Termin (Lehrbuch N 2968k, S. 930–931)."
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die Fakten aus Issue 2 (Mahnung, Zustellung, Zahlung) werden übernommen bzw. nacherhoben. Neu sind die Fakten zur Kündigung selbst und zur Lage danach."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Prüffrage 1: Mahnung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Mahnung vorhanden",
+       "Gab es vorher eine schriftliche Mahnung mit Frist und Kündigungsandrohung? Foto?",
+       "ja",
+       "Voraussetzung (Art. 257d Abs. 1 OR); ohne Androhung keine solche Kündigung (Lehrbuch N 2968e)"
+      ],
+      [
+       "Inhalt der Mahnung",
+       "Frist (Tage), Betrag und Monate, Wortlaut der Androhung",
+       "ja",
+       "Frist ≥ 30 Tage; Betrag bestimmbar (4A_332/2025)"
+      ],
+      [
+       "Empfang der Mahnung",
+       "Wann tatsächlich erhalten bzw. abgeholt? Abholungseinladung?",
+       "ja",
+       "Relative Empfangstheorie (BGE 119 II 147 E. 2)"
+      ],
+      [
+       "Prüffrage 2: Zahlung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Bezahlt innert Frist",
+       "Wurde der ganze Betrag innert Frist bezahlt? Wann, wie, Belege?",
+       "ja",
+       "Rechtzeitig = Kündigung unwirksam (BGE 124 III 145)"
+      ],
+      [
+       "Zahlungsweg",
+       "Einzahlungsschein der Vermieterschaft oder Überweisung? Wann Auftrag, wann Gutschrift?",
+       "ja",
+       "BGE 124 III 145 vs. 119 II 232"
+      ],
+      [
+       "Teilzahlung",
+       "Wurde nur ein Teil bezahlt? Welcher? Mit Hinweis an die Vermieterschaft?",
+       "ja",
+       "4A_332/2025 E. 3.5.2; BGE 140 III 591 E. 2"
+      ],
+      [
+       "Verrechnung / Hinterlegung",
+       "Wurde verrechnet oder hinterlegt? Wann, gegenüber wem?",
+       "ja",
+       "Lehrbuch N 2968d; BGE 147 III 218"
+      ],
+      [
+       "Zahlung nach Fristablauf",
+       "Wurde nach Fristablauf bezahlt? Hat die Vermieterschaft das Geld angenommen?",
+       "nein",
+       "Heilt nicht (BGE 119 II 232 E. 3)"
+      ],
+      [
+       "Prüffrage 3: Kündigung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Datum der Kündigung und Empfang",
+       "Wann ausgestellt, wie zugestellt, wann erhalten bzw. Abholungseinladung?",
+       "ja",
+       "30-Tage-Anfechtungsfrist (Art. 273 Abs. 1 OR), absolute Empfangstheorie"
+      ],
+      [
+       "Vor oder nach Fristablauf",
+       "Wurde die Kündigung vor Ablauf der Zahlungsfrist ausgesprochen oder zugestellt?",
+       "ja",
+       "BGE 119 II 147; 4A_585/2010"
+      ],
+      [
+       "Amtliches Formular",
+       "Wurde das kantonale Formular verwendet?",
+       "ja",
+       "Art. 266l, 266o OR"
+      ],
+      [
+       "Familienwohnung / Mitmieter",
+       "Separat an beide Ehegatten bzw. an alle Mitmieter?",
+       "ja",
+       "Art. 266n OR; BGE 140 III 491"
+      ],
+      [
+       "Kündigungstermin",
+       "Auf welches Datum?",
+       "ja",
+       "Mind. 30 Tage auf Monatsende (Art. 257d Abs. 2 OR)"
+      ],
+      [
+       "Zeit zwischen Fristablauf und Kündigung",
+       "Wie lange wartete die Vermieterschaft nach Fristablauf?",
+       "nein",
+       "Zu langes Zuwarten kann Verzicht sein; rund drei Wochen gelten als Grenze (Lehrbuch N 2968i; BGer 4A_366/2008 E. 4)"
+      ],
+      [
+       "Besondere Umstände",
+       "Absprachen, Ratenplan, Gespräch vereinbart, Betrag falsch, sehr kleiner Rest?",
+       "nein",
+       "Treu und Glauben, sehr eng (BGE 140 III 591 E. 1)"
+      ],
+      [
+       "Lage danach",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Bereits angefochten",
+       "Hat die Klientin schon die Schlichtungsbehörde angerufen?",
+       "ja",
+       "Laufendes Verfahren"
+      ],
+      [
+       "Gericht oder Ausweisung",
+       "Gibt es ein Gesuch ans Gericht, eine Vorladung oder einen Entscheid?",
+       "ja",
+       "Wechsel zu Issue 6"
+      ],
+      [
+       "Wohnungssituation",
+       "Gibt es eine Anschlusslösung? Kinder, Gesundheit, Notunterkunft nötig?",
+       "ja",
+       "Soziale Planung (keine Erstreckung)"
+      ],
+      [
+       "Wer zahlt die Miete",
+       "Klientin oder Sozialdienst direkt?",
+       "ja",
+       "Interessenkonflikt"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Dokumente, die angefordert werden sollen: Mahnung und Kündigungsformular (alle Seiten, beide Ehegatten), Umschläge bzw. Abholungseinladungen oder Sendungsverfolgung, Zahlungsbelege mit Datum (Auftrag und Gutschrift), Korrespondenz mit der Vermieterschaft, Mietvertrag."
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Keine oder ungültige Mahnung",
+       "Ohne gültige Mahnung keine Zahlungsverzugskündigung; die Kündigung ist unwirksam, eine Umdeutung in eine ordentliche Kündigung ist ausgeschlossen (Lehrbuch N 2968e, S. 929; N 3006, S. 961; BGE 135 III 441 E. 3.3, S. 444–445)",
+       "Rechtsperson sofort; keine Entwarnung, da die Vermieterschaft neu mahnen oder ordentlich kündigen kann"
+      ],
+      [
+       "Zu kurze Zahlungsfrist",
+       "Umstritten; h. L. unwirksam/nichtig, Minderheit Umdeutung; BGer offen (Lehrbuch N 2968h, S. 929 f.)",
+       "Rechtsperson sofort"
+      ],
+      [
+       "Rechtzeitig vollständig bezahlt",
+       "Kündigung unwirksam (BGE 124 III 145 E. 2b)",
+       "Belege sichern; Rechtsperson sofort"
+      ],
+      [
+       "Mahnung mit unklarem oder zu hohem Betrag, geschuldeter Teil bezahlt",
+       "Kündigung kann unwirksam sein (4A_332/2025 E. 3.5.2, 3.6) oder treuwidrig (BGE 120 II 31 E. 4b)",
+       "Rechtsperson sofort"
+      ],
+      [
+       "Zahlung kurz nach Fristablauf",
+       "Grundsätzlich keine Heilung; Annahme des Geldes ist kein Verzicht (BGE 119 II 232 E. 3); Treuwidrigkeit nur ganz ausnahmsweise (BGE 140 III 591 E. 1)",
+       "Keine Zusicherung; Rechtsperson sofort"
+      ],
+      [
+       "Kündigung vor Ablauf der Zahlungsfrist",
+       "Unwirksam nach neuerer Praxis (4A_585/2010 E. 3.1; BGE 121 III 156 E. 1c/aa; Lehrbuch N 2968i, S. 930); älter BGE 119 II 147 E. 4: anfechtbar. Ausnahme: am letzten Tag verfasst, erst nach Fristablauf zugestellt (4A_585/2010 E. 3.5)",
+       "Rechtsperson sofort; vorsorglich innert 30 Tagen anfechten, weil der Zeitpunkt des Zugangs entscheidet"
+      ],
+      [
+       "Kein Formular, Familienwohnung nicht separat, nicht alle Mitmieter",
+       "Nichtig (Art. 266o OR); Berufung darauf kann bei ausgezogenem, desinteressiertem Partner rechtsmissbräuchlich sein (BGE 140 III 491 E. 4.2.4)",
+       "Keine Entwarnung; Rechtsperson"
+      ],
+      [
+       "Falscher Termin oder zu kurze Kündigungsfrist",
+       "Kündigung gilt auf den nächstmöglichen Termin (Art. 266a Abs. 2 OR analog; Lehrbuch N 2968j, S. 930)",
+       "Prüfhinweis, nicht ungültig"
+      ],
+      [
+       "Vermieterschaft wartet lange nach Fristablauf",
+       "Kann als Verzicht auf das Kündigungsrecht gedeutet werden (Lehrbuch N 2968i, S. 930; BGE 140 III 591 E. 1). Keine feste Grenze: Knapp drei Wochen zwischen Fristablauf und Kündigung sind «probablement à la limite» des Zulässigen; eine noch längere Untätigkeit kann, ausser bei besonderen Umständen, als Verzicht verstanden werden; ein Teil der Lehre hält einen Monat für normal (BGer 4A_366/2008 E. 4, Seite 3)",
+       "Prüfhinweis"
+      ],
+      [
+       "Laufendes Schlichtungs- oder Gerichtsverfahren",
+       "Sperrfrist gilt nicht (Art. 271a Abs. 3 lit. b OR)",
+       "Kein Schutz durch Verfahren"
+      ],
+      [
+       "Härte, Kinder, lange Mietdauer",
+       "Erstreckung ausgeschlossen, Härte unbeachtlich (Art. 272a Abs. 1 lit. a OR; Lehrbuch N 3024c, S. 988)",
+       "Verbot «Erstreckung möglich»; Sozialarbeiterin sofort (Wohnungssuche)"
+      ],
+      [
+       "Kaution vorhanden",
+       "Die Kaution ist keine Vorauszahlung und verhindert die Kündigung nicht (Lehrbuch N 3005e, S. 961)",
+       "Verbot «die Kaution deckt den Rückstand»"
+      ],
+      [
+       "Anfechtung hängig",
+       "Keine Rückgabepflicht, solange Anfechtung hängig (Lehrbuch N 3010a, S. 965); aber Ausweisung im klaren Fall trotzdem möglich (BGE 141 III 262 E. 3.2–3.3, S. 263–265)",
+       "Warnung: Anfechtung schützt nicht sicher vor Ausweisung"
+      ],
+      [
+       "Vermieterschaft räumt selbst, wechselt Schloss",
+       "Selbsthilfe unzulässig, evtl. strafbar (Lehrbuch N 3025d, S. 991)",
+       "Rechtsperson sofort; ggf. Polizei"
+      ],
+      [
+       "Sozialdienst zahlt direkt",
+       "Sozialdienst selbst beteiligt",
+       "Unabhängige Beratung"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Entscheidend ist die 30-Tage-Frist zur Anfechtung ab Empfang der Kündigung (absolute Empfangstheorie, wie Issue 1). Parallel läuft die Gefahr einer schnellen Ausweisung; die soziale Planung muss deshalb sofort beginnen."
+    },
+    {
+     "type": "p",
+     "text": "Ablauf:"
+    },
+    {
+     "type": "bullet",
+     "text": "Kündigung trifft ein (frühestens nach Ablauf der Zahlungsfrist, mind. 30 Tage auf Monatsende)."
+    },
+    {
+     "type": "bullet",
+     "text": "Sofort zwei Spuren: Rechtsperson prüft Mahnung, Zahlung und Kündigung; Sozialarbeiterin plant Wohnung bzw. Notunterkunft, da keine Erstreckung möglich ist."
+    },
+    {
+     "type": "bullet",
+     "text": "Anfechtung bei der Schlichtungsbehörde am Ort der Wohnung innert 30 Tagen (Art. 273 Abs. 1 OR), wenn die Fachperson Erfolgsaussichten sieht oder die Lage unklar ist. Kostenlos (Art. 113 Abs. 2 lit. c ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Schlichtungsverhandlung: Einigung (z. B. Zahlungsvereinbarung und Rückzug der Kündigung), Entscheidvorschlag (Ablehnung innert 20 Tagen, Art. 211 ZPO) oder Klagebewilligung (Klage innert 30 Tagen, Art. 209 Abs. 4 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Ausweisung durch die Vermieterschaft nach Ende des Mietverhältnisses: im Verfahren für klare Fälle direkt beim Gericht ohne Schlichtung (Art. 257, 248 lit. b, 198 lit. a ZPO), sonst im vereinfachten Verfahren (Lehrbuch N 3025e, S. 992) → Issue 6."
+    },
+    {
+     "type": "bullet",
+     "text": "Vollstreckung nur gestützt auf einen Entscheid (Art. 343 Abs. 1 lit. d ZPO; Lehrbuch N 3025f, S. 992 f.)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Rechtsgrundlage"
+      ],
+      [
+       "Kündigungsfrist",
+       "mind. 30 Tage auf Ende eines Monats",
+       "nach unbenütztem Ablauf der Zahlungsfrist",
+       "Art. 257d Abs. 2 OR (OR-PDF S. 68)"
+      ],
+      [
+       "Anfechtung der Kündigung",
+       "30 Tage",
+       "Empfang der Kündigung (absolute Empfangstheorie)",
+       "Art. 273 Abs. 1 OR (S. 83); BGE 143 III 15 E. 4.1"
+      ],
+      [
+       "Ablehnung Entscheidvorschlag",
+       "20 Tage",
+       "schriftliche Eröffnung",
+       "Art. 211 Abs. 1 ZPO (ZPO-PDF S. 57)"
+      ],
+      [
+       "Klage nach Klagebewilligung",
+       "30 Tage",
+       "Eröffnung",
+       "Art. 209 Abs. 4 ZPO (S. 57)"
+      ],
+      [
+       "Erstreckung",
+       "ausgeschlossen",
+       "–",
+       "Art. 272a Abs. 1 lit. a OR (S. 82)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Nie im System: ein berechnetes Fristende oder ein Auszugsdatum. Das System sagt: «Die Anfechtungsfrist kann laufen; heute eine Fachperson beiziehen und parallel eine Unterkunft sichern.»"
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Rechtlich ist jetzt die Schlichtungsbehörde zuständig (Anfechtung), sozial der Sozialdienst (Unterkunft, da keine Erstreckung)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Kosten",
+       "Quelle"
+      ],
+      [
+       "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)",
+       "Anfechtung der Kündigung innert 30 Tagen",
+       "keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)",
+       "gerichte-zh.ch, Schlichtungsbehörden; Bezirk per Gemeindesuche"
+      ],
+      [
+       "Mieterinnen- und Mieterverband Zürich",
+       "Prüfung, Anfechtung, Verhandlung über Zahlungsvereinbarung",
+       "Mitglieder gratis (ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung",
+       "mieterverband.ch/mv-zh; Heilsarmee-Übersicht 07/2026"
+      ],
+      [
+       "Rechtsauskunft in Mietsachen, Bezirksgericht Zürich / Rechtsauskünfte der Bezirksgerichte",
+       "Neutrale Information; in der Stadt Zürich nicht mehr, sobald ein Verfahren läuft",
+       "gratis",
+       "gerichte-zh.ch/rechtsauskunft"
+      ],
+      [
+       "Sozialdienst der Wohngemeinde",
+       "Notunterkunft, Wohnungssuche, Finanzierung einer Einigung",
+       "–",
+       "Gemeinde der Klientin"
+      ],
+      [
+       "Schuldenberatung Kanton Zürich",
+       "Mietschulden, Zahlungsplan als Verhandlungsbasis",
+       "Kontakt und Kosten prüfen",
+       "noch zu ergänzen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Hinweis Obergericht ZH (LF250009, E. 3.4): Bei einer Ausweisung muss die Vollstreckungsbehörde prüfen, ob fürsorgerische Massnahmen nötig sind. Der Sozialdienst sollte deshalb früh informiert sein (Entscheid)."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 3 eskaliert immer sofort an Rechtsperson und Sozialarbeiterin. Der Mehrwert des Systems liegt in der Vollständigkeit des Briefings (drei Prüffragen) und darin, dass es keine falschen Hoffnungen weckt."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Begründung"
+      ],
+      [
+       "Jede Kündigung wegen Zahlungsverzug (Grundregel)",
+       "Rechtsperson + Sozialarbeiterin",
+       "sofort",
+       "30-Tage-Frist, keine Erstreckung, schnelle Ausweisung möglich"
+      ],
+      [
+       "Zwingendes Faktum fehlt",
+       "Rückfrage, parallel Grundregel",
+       "sofort",
+       "Nicht annehmen; Eskalation wartet nicht auf die Antwort"
+      ],
+      [
+       "Empfangsdatum der Kündigung unbekannt oder ≥ 20 Tage",
+       "Rechtsperson",
+       "sofort, höchste Priorität",
+       "Anfechtungsfrist knapp oder unbestimmbar (Produktschwelle wie Issue 1)"
+      ],
+      [
+       "Keine Mahnung, Mahnung fehlerhaft, zu kurze Frist",
+       "Rechtsperson",
+       "sofort",
+       "Prüffrage 1"
+      ],
+      [
+       "Angabe «innert Frist bezahlt» oder Teilzahlung mit Hinweis",
+       "Rechtsperson",
+       "sofort",
+       "Prüffrage 2; Belege sichern"
+      ],
+      [
+       "Kündigung vor Fristablauf, kein Formular, Familienwohnung/Mitmieter nicht separat",
+       "Rechtsperson",
+       "sofort",
+       "Prüffrage 3"
+      ],
+      [
+       "Gesuch ans Gericht, Vorladung, Räumungstermin",
+       "Wechsel zu Issue 6",
+       "sofort",
+       "Laufendes Verfahren"
+      ],
+      [
+       "Vermieterschaft räumt selbst oder sperrt aus",
+       "Rechtsperson (ggf. Polizei) + Sozialarbeiterin",
+       "sofort",
+       "Unzulässige Selbsthilfe"
+      ],
+      [
+       "Sozialdienst zahlt direkt",
+       "Unabhängige Rechtsperson",
+       "sofort",
+       "Interessenkonflikt"
+      ],
+      [
+       "Kinder, Gesundheit, keine Anschlusslösung",
+       "Sozialarbeiterin",
+       "sofort",
+       "Keine Erstreckung: Unterkunft sichern"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (je mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten werden; das Verfahren kostet keine Gerichtskosten.» (Art. 273 Abs. 1 OR; Art. 113 Abs. 2 lit. c ZPO)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bei einer Kündigung wegen Zahlungsverzug ist eine Erstreckung ausgeschlossen. Die Suche nach einer Unterkunft sollte deshalb sofort beginnen.» (Art. 272a Abs. 1 lit. a OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine solche Kündigung setzt eine gültige schriftliche Mahnung mit Frist und ausdrücklicher Kündigungsandrohung voraus. Ob das erfüllt ist, prüft eine Fachperson.» (Art. 257d Abs. 1 OR; Lehrbuch N 2968e)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wurde der ganze Betrag rechtzeitig bezahlt, kann die Kündigung unwirksam sein. Bitte alle Belege mit Datum sichern.» (BGE 124 III 145 E. 2b)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine Zahlung nach Fristablauf macht die Kündigung nicht automatisch unwirksam, auch wenn die Vermieterschaft das Geld annimmt.» (BGE 119 II 232 E. 3)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Auch bei einer Kündigung muss die Vermieterschaft das amtliche Formular verwenden und bei einer Familienwohnung beiden Ehegatten separat zustellen.» (Art. 266l, 266n, 266o OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Vermieterschaft darf die Wohnung nicht selbst räumen; dafür braucht es einen Entscheid einer Behörde oder eines Gerichts.» (Lehrbuch N 3025d; Art. 343 ZPO)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine Anfechtung schützt nicht sicher vor einem schnellen Ausweisungsverfahren.» (BGE 141 III 262 E. 3.3, S. 265)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "Jedes berechnete Fristende oder Auszugsdatum."
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie können eine Erstreckung verlangen» oder «wegen der Kinder bekommen Sie mehr Zeit.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn Sie jetzt zahlen, ist die Kündigung hinfällig» oder «die Vermieterschaft hat das Geld angenommen, also gilt die Kündigung nicht.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Kündigung ist ungültig / nichtig.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Kaution deckt den Rückstand.» (Lehrbuch N 3005e)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Weil Sie lange dort wohnen und immer pünktlich gezahlt haben, ist die Kündigung missbräuchlich.» (BGE 140 III 591 E. 5)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Solange Sie anfechten, können Sie sicher bleiben.»"
+    },
+    {
+     "type": "p",
+     "text": "Briefing für die Fachperson (Struktur)"
+    },
+    {
+     "type": "bullet",
+     "text": "Anliegen und Dringlichkeit (Empfangsdatum der Kündigung, Status)"
+    },
+    {
+     "type": "bullet",
+     "text": "Prüffrage 1 – Mahnung: Datum, Empfang, Frist, Betrag, Androhung, Zustellung"
+    },
+    {
+     "type": "bullet",
+     "text": "Prüffrage 2 – Zahlung: was, wann, wie, Belege, Verrechnung/Hinterlegung, Zahlung nach Fristablauf"
+    },
+    {
+     "type": "bullet",
+     "text": "Prüffrage 3 – Kündigung: Formular, Zustellung (Familienwohnung, Mitmieter), Datum vs. Fristablauf, Termin, besondere Umstände"
+    },
+    {
+     "type": "bullet",
+     "text": "Lage: Anfechtung eingereicht? Gericht? Wohnungssituation, Kinder"
+    },
+    {
+     "type": "bullet",
+     "text": "Soziale Massnahmen eingeleitet"
+    },
+    {
+     "type": "bullet",
+     "text": "Ausgelöste Regeln, offene Fragen, beigelegte Dokumente"
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Wartezeit nach Ablauf der Zahlungsfrist: Ist 14 Tage nach Fristablauf noch keine Kündigung eingetroffen, gibt das System einen Prüfhinweis an die Rechtsperson (möglicher Verzicht; knapp drei Wochen gelten laut BGer 4A_366/2008 E. 4 als Grenze)."
+    },
+    {
+     "type": "bullet",
+     "text": "Anfechtung: Das System empfiehlt nicht selbst, ob angefochten wird; der Entscheid bleibt immer bei der Rechtsperson. Jede Kündigung wegen Zahlungsverzug wird aber SOFORT eskaliert (30-Tage-Frist)."
+    },
+    {
+     "type": "bullet",
+     "text": "Übertragbarkeit: BGE 141 III 262 und BGer 4A_585/2010 betrafen eher Geschäftsräume; ihre Aussagen werden für Wohnungen übernommen, weil dieselben Normen gelten (Art. 257d OR, Art. 257 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: höchstens 2 Rückfrage-Runden, danach Eskalation (G7). Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz voraussichtlich nach IDG ZH. Vor jedem Briefing an eine externe Rechtsperson ausdrückliche Einwilligung der Klientin (consent_briefing)."
+    }
+   ]
+  },
+  {
+   "heading": "Was wir noch von euch brauchen",
+   "items": [
+    {
+     "type": "bullet",
+     "text": "Optional: BGE 127 III 548 – Schadenersatz der Mieterin nach Zahlungsverzugskündigung (für das Briefing)."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: BGE 121 III 156 – Grundlage für «verfrühte Kündigung unwirksam» (in 4A_585/2010 zitiert)."
+    },
+    {
+     "type": "bullet",
+     "text": "Die bibliografische Angabe des Lehrbuchs (Autor:in, Titel, Auflage)."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: ein Muster-Kündigungsformular des Kantons Zürich (für den Upload-Test)."
+    },
+    {
+     "type": "p",
+     "text": "Erledigt: BGE 141 III 262, BGE 135 III 441 und BGer 4A_585/2010 sind im Volltext eingearbeitet."
+    },
+    {
+     "type": "p",
+     "text": "Offene Prüfpunkte"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Widerspruch geklärt: Kündigung vor Fristablauf ist nach neuerer Praxis unwirksam (4A_585/2010 E. 3.1), Ausnahme bei Zugang nach Fristablauf (E. 3.5); BGE 119 II 147 E. 4 ist insoweit überholt bzw. als ältere Praxis zu kennzeichnen"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Geklärt: Wartezeit nach Fristablauf. Keine feste Grenze; knapp drei Wochen «wohl an der Grenze», länger kann Verzicht bedeuten (BGer 4A_366/2008 E. 4). Produktentscheid vorgeschlagen: ab 14 Tagen zwischen Fristablauf und Kündigung Prüfhinweis an die Fachperson, ohne Entwarnung. Optional noch 4C.430/2004 E. 3.1 lesen"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Produktentscheid: Soll das System bei Issue 3 jede Kündigung zur Anfechtung empfehlen oder nur bei erkennbarem Mangel? (Empfehlung: Entscheid immer der Fachperson überlassen, Frist aber als «sofort» markieren)"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ BGE 141 III 262 und 4A_585/2010 betrafen eher Geschäftsräume; Übertragbarkeit auf Wohnungen im Team festhalten (gleiche Normen)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kontakt Schuldenberatung Kanton Zürich nachtragen"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: OR_admin.pdf (SR 220, Stand 1.10.2026), ZPO.pdf (SR 272, Stand 1.7.2026)"
+    },
+    {
+     "type": "bullet",
+     "text": "Volltexte (eure Dateien): BGE 119 II 147, 119 II 232, 120 II 31, 124 III 145, 135 III 441, 140 III 491, 140 III 591, 141 III 262, 143 III 15, 147 III 218; Urteile 4A_120/2014 (= BGE 140 III 244), 4A_332/2025, 4A_585/2010, 4A_366/2008"
+    },
+    {
+     "type": "bullet",
+     "text": "Lehrbuch: euer Auszug «§ 31 Miete (Art. 253–273c OR) und Pacht», N 2968e–2968k (S. 929–931), N 3005e (S. 961), N 3006 (S. 961), N 3009a (S. 964), N 3010a (S. 965), N 3024c (S. 988), N 3025d–3025f (S. 991–993)"
+    },
+    {
+     "type": "bullet",
+     "text": "Online: Obergericht ZH LF250009, Obergericht ZH, Schlichtungsbehörden, Heilsarmee Sozialberatung Zürich, Rechtsberatung 07/2026"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

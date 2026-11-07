@@ -1,0 +1,1128 @@
+{
+ "file": "issue_01.docx",
+ "title": "Issue 1 – Kündigung durch die Vermieterschaft",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 1 – Kündigung durch die Vermieterschaft",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Dieses Dokument liefert alle juristischen Inhalte für Issue 1 nach eurem Raster (Punkte 1–6), damit die CS-Person daraus die Datenbank bauen kann. Es gilt ausschliesslich Schweizer Recht (OR, ZPO), mit Fokus auf den Kanton Zürich."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: Gesetzeswortlaut aus euren Dateien OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026); Seitenangaben = Seite im jeweiligen PDF. Die acht Leitentscheide sind am Volltext der hochgeladenen Dateien geprüft, mit Erwägung und Seite. Nur die Entscheide unter «Reserve» sind noch nicht im Volltext gelesen."
+    },
+    {
+     "type": "p",
+     "text": "Fehlt im Raster noch etwas? Ja, vier Punkte:"
+    },
+    {
+     "type": "bullet",
+     "text": "Vorprüfung (Anwendungsbereich) vor Punkt 2: Ist es überhaupt Wohnraummiete der Klientin? Sonst passt der ganze Rest nicht."
+    },
+    {
+     "type": "bullet",
+     "text": "Eskalationsregeln als eigener Punkt: wann Rückfrage, wann Sozialarbeiter:in, wann Rechtsperson, wie dringend. Das ist der Kern der Challenge und steckt in eurem Punkt 6 nur indirekt."
+    },
+    {
+     "type": "bullet",
+     "text": "Erlaubte und verbotene Aussagen: Was darf das System sagen (mit Quelle), was nie (z. B. «die Kündigung ist ungültig», berechnete Fristenden)?"
+    },
+    {
+     "type": "bullet",
+     "text": "Testfälle pro Issue mit Soll-Route."
+    },
+    {
+     "type": "p",
+     "text": "Zu «8 Leitentscheide»: Eine fixe Zahl ist für Issue 1 sinnvoll, weil es genügend Praxis gibt. Bei kleineren Issues (z. B. Kaution) wird es keine 8 einschlägigen BGE geben. Dort lieber weniger, dafür passende, statt Füllentscheide."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut wörtlich aus OR_admin.pdf (SR 220, Stand 1.10.2026). Diese Texte darf das System wörtlich zitieren; Auslegung nur über geprüfte Aussagen (Abschnitt 6)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 253a Abs. 2 OR",
+       "«Sie gelten nicht für Ferienwohnungen, die für höchstens drei Monate gemietet werden.»",
+       "66",
+       "Vorprüfung: Anwendungsbereich"
+      ],
+      [
+       "Art. 266a OR",
+       "«1 Die Parteien können das unbefristete Mietverhältnis unter Einhaltung der gesetzlichen Fristen und Termine kündigen, sofern sie keine längere Frist oder keinen anderen Termin vereinbart haben. 2 Halten die Parteien die Frist oder den Termin nicht ein, so gilt die Kündigung für den nächstmöglichen Termin.»",
+       "74",
+       "Falscher Termin = keine Unwirksamkeit, sondern Verschiebung"
+      ],
+      [
+       "Art. 266c OR",
+       "«Bei der Miete von Wohnungen können die Parteien mit einer Frist von drei Monaten auf einen ortsüblichen Termin oder, wenn es keinen Ortsgebrauch gibt, auf Ende einer dreimonatigen Mietdauer kündigen.»",
+       "75",
+       "Kündigungsfrist Wohnung"
+      ],
+      [
+       "Art. 266e OR",
+       "«… möblierten Zimmern … mit einer Frist von zwei Wochen auf Ende einer einmonatigen Mietdauer kündigen.»",
+       "75",
+       "Sonderfall möbliertes Zimmer (häufig im Sozialbereich)"
+      ],
+      [
+       "Art. 266l OR",
+       "«1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.»",
+       "76",
+       "Formprüfung"
+      ],
+      [
+       "Art. 266n OR",
+       "«Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung (Art. 257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen Partner separat zuzustellen.»",
+       "76",
+       "Familienwohnung"
+      ],
+      [
+       "Art. 266o OR",
+       "«Die Kündigung ist nichtig, wenn sie den Artikeln 266l–266n nicht entspricht.»",
+       "76",
+       "Rechtsfolge Formmangel"
+      ],
+      [
+       "Art. 271 OR",
+       "«1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst. 2 Die Kündigung muss auf Verlangen begründet werden.»",
+       "81",
+       "Anfechtungsgrund (Generalklausel), Recht auf Begründung"
+      ],
+      [
+       "Art. 271a Abs. 1 OR",
+       "Anfechtbar u. a., wenn ausgesprochen «a. weil der Mieter nach Treu und Glauben Ansprüche aus dem Mietverhältnis geltend macht; … d. während eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens …; e. vor Ablauf von drei Jahren nach Abschluss eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens …; f. wegen Änderungen in der familiären Situation des Mieters, aus denen dem Vermieter keine wesentlichen Nachteile entstehen.» (lit. b und c: Vertragsänderung durchsetzen, Kauf erzwingen)",
+       "81",
+       "Typische Anfechtungsgründe"
+      ],
+      [
+       "Art. 271a Abs. 3 OR",
+       "Abs. 1 lit. d und e nicht anwendbar bei Kündigungen u. a. «a. wegen dringenden Eigenbedarfs …; b. wegen Zahlungsrückstand des Mieters (Art. 257d)» sowie lit. c–f (Pflichtverletzung, Veräusserung, wichtige Gründe, Konkurs)",
+       "81–82",
+       "Ausnahmen von der Sperrfrist"
+      ],
+      [
+       "Art. 273 Abs. 1 OR",
+       "«Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der Kündigung der Schlichtungsbehörde einreichen.»",
+       "83",
+       "Zentrale Frist"
+      ],
+      [
+       "Art. 273 Abs. 2 OR",
+       "Erstreckungsbegehren «a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung; b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.»",
+       "83",
+       "Verbindung zu Issue 4"
+      ],
+      [
+       "Art. 273 Abs. 4 und 5 OR",
+       "«4 Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO. 5 Weist die zuständige Behörde ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen, ob das Mietverhältnis erstreckt werden kann.»",
+       "84",
+       "Verfahren; Erstreckung von Amtes wegen"
+      ],
+      [
+       "Art. 273a Abs. 1 OR",
+       "«Dient die gemietete Sache als Wohnung der Familie, so kann auch der Ehegatte des Mieters die Kündigung anfechten, die Erstreckung des Mietverhältnisses verlangen oder die übrigen Rechte ausüben, die dem Mieter bei Kündigung zustehen.»",
+       "84",
+       "Familienwohnung"
+      ],
+      [
+       "Art. 273b Abs. 1 OR",
+       "«Dieser Abschnitt gilt für die Untermiete, solange das Hauptmietverhältnis nicht aufgelöst ist. Die Untermiete kann nur für die Dauer des Hauptmietverhältnisses erstreckt werden.»",
+       "84",
+       "Grenze: Untermiete"
+      ],
+      [
+       "Art. 273c OR",
+       "«1 Der Mieter kann auf Rechte, die ihm nach diesem Abschnitt zustehen, nur verzichten, wenn dies ausdrücklich vorgesehen ist. 2 Abweichende Vereinbarungen sind nichtig.»",
+       "84",
+       "Zwingender Kündigungsschutz"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Prozessrecht – wörtlich aus ZPO.pdf (SR 272, Stand 1.7.2026):"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 33 ZPO",
+       "«Für Klagen aus Miete und Pacht unbeweglicher Sachen ist das Gericht am Ort der gelegenen Sache zuständig.»",
+       "9",
+       "Zuständige Schlichtungsbehörde"
+      ],
+      [
+       "Art. 35 Abs. 1 lit. b ZPO",
+       "Auf diesen Gerichtsstand kann «die Partei, die Wohn- oder Geschäftsräume gemietet oder gepachtet hat», nicht zum Voraus oder durch Einlassung verzichten.",
+       "10",
+       "Gerichtsstandsklausel im Vertrag unbeachtlich"
+      ],
+      [
+       "Art. 113 Abs. 2 lit. c ZPO",
+       "Im Schlichtungsverfahren werden keine Gerichtskosten gesprochen in Streitigkeiten «aus Miete und Pacht von Wohn- und Geschäftsräumen»; nach Abs. 1 auch keine Parteientschädigungen.",
+       "28–29",
+       "Kostenlose Schlichtung"
+      ],
+      [
+       "Art. 200 Abs. 1 ZPO",
+       "Die Schlichtungsbehörde in Mietsachen «besteht … aus einer vorsitzenden Person und einer paritätischen Vertretung».",
+       "53",
+       "Paritat. Schlichtungsbehörde"
+      ],
+      [
+       "Art. 209 Abs. 4 ZPO",
+       "«In Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen … beträgt die Klagefrist 30 Tage.»",
+       "57",
+       "Frist nach Klagebewilligung"
+      ],
+      [
+       "Art. 210 Abs. 1 lit. b ZPO",
+       "Die Schlichtungsbehörde kann einen Entscheidvorschlag unterbreiten, sofern u. a. «der Kündigungsschutz oder die Erstreckung» betroffen ist.",
+       "57",
+       "Verfahrensschritt"
+      ],
+      [
+       "Art. 211 Abs. 1–3 ZPO",
+       "Entscheidvorschlag gilt als angenommen, «wenn ihn keine Partei innert 20 Tagen seit der schriftlichen Eröffnung ablehnt»; in Mietsachen erhält die ablehnende Partei die Klagebewilligung; klagt sie nicht rechtzeitig, gilt der Vorschlag als anerkannt.",
+       "57",
+       "Warnung: Wer ablehnt, muss klagen"
+      ],
+      [
+       "Art. 243 Abs. 2 lit. c ZPO",
+       "Vereinfachtes Verfahren unabhängig vom Streitwert, wenn u. a. «der Kündigungsschutz oder die Erstreckung» betroffen ist.",
+       "65–66",
+       "Verfahrensart vor Mietgericht"
+      ],
+      [
+       "Art. 257 Abs. 1 ZPO",
+       "Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort beweisbar ist; und b. die Rechtslage klar ist.»",
+       "73",
+       "Verbindung zu Issue 6 (Ausweisung)"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide (8 BGE)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die acht Entscheide decken die drei Kernfragen von Issue 1 ab: Fristbeginn (1–2), Form und Familienwohnung (3–4) und Treu und Glauben (5–8). Geprüft am Volltext der hochgeladenen Dateien (Stand 7.11.2026). Seitenangaben: bei publizierten BGE die amtliche Seite («S. …»), bei 4A_120/2014 die Seite des Ausdrucks von bger.ch («Seite x von 7»)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "BGE",
+       "Urteil",
+       "Kernaussage mit Fundstelle",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 140 III 244 (Volltext: Urteil 4A_120/2014)",
+       "4A_120/2014, 19.5.2014",
+       "Formular: Fehlt das genehmigte Formular, ist die Kündigung nichtig; die Nichtigkeit kann jederzeit geltend gemacht werden und ist von Amtes wegen zu beachten (E. 4.1, Seite 4). Ein veraltetes Formular führt nicht zur Nichtigkeit, wenn es dieselben Informationen enthält (E. 4.2 ff.). Frist: Die 30-Tage-Frist von Art. 273 Abs. 1 OR ist materiellrechtlich; es gilt die absolute Empfangstheorie (E. 5.1–5.2, Seite 5–6). Die relative Theorie gilt im Mietrecht nur für Mietzinserhöhungen (Art. 269d OR) und Zahlungsaufforderungen (Art. 257d Abs. 1 OR) (E. 5.1, Seite 5; E. 5.2, Seite 6).",
+       "Regel Fristbeginn; Verbindung zu Issue 2 und 7 (andere Empfangsregel)"
+      ],
+      [
+       "2",
+       "BGE 143 III 15",
+       "4A_293/2016, 13.12.2016",
+       "Bei Abholungseinladung gilt die Kündigung am Tag des Einwurfs als empfangen, wenn sofortiges Abholen zumutbar ist, sonst in der Regel am Folgetag; die 7-Tage-Abholfiktion der ZPO gilt nicht (E. 4.1, S. 17–18). Ferien oder Abwesenheit trägt die Empfängerin; sie muss sich auch nach Ablauf der Abholfrist bei der Post nach dem Absender erkundigen; späte Kenntnis verkürzt die verbleibende Frist (E. 4.1, S. 18–19). Im Fall: Einwurf 2.12., Empfang 3.12.2013, Klage vom 7.2.2014 verspätet (E. 4.2, S. 19). Ob Krankheit anders zu behandeln wäre, blieb offen (E. 4.3, S. 19).",
+       "Frist ab Abholungseinladung; Warnung Ferien; Krankheit = Eskalation"
+      ],
+      [
+       "3",
+       "BGE 139 III 7",
+       "4A_313/2012, 5.11.2012",
+       "Die Mieterschaft muss beweisen, dass im Kündigungszeitpunkt eine Familienwohnung vorlag (E. 2.2, S. 9–11). Geschützt sind nur Ehegatten und eingetragene Partner; der Familiencharakter entfällt u. a., wenn der geschützte Ehegatte definitiv auszieht (E. 2.3.1, S. 11–12). Berufung auf fehlende Zustellung an den ausgezogenen, desinteressierten Ehegatten ist rechtsmissbräuchlich (E. 2.3.2, S. 12–13). Erstreckungsbegehren nach 30 Tagen verwirkt (E. 2.4, S. 13).",
+       "Fakten «verheiratet/eingetragen» und «wohnt Partner noch dort?»; keine Entwarnung"
+      ],
+      [
+       "4",
+       "BGE 140 III 491",
+       "4A_240/2014, 28.8.2014",
+       "Nach definitivem Auszug der Ehefrau keine Familienwohnung mehr; Art. 266n OR entfällt (E. 4.1, S. 492–493). Bei Mitmiete muss gegenüber allen Mietern gekündigt werden, sonst nichtig (E. 4.2.1, S. 493). Berufung darauf ist rechtsmissbräuchlich, wenn der ausgezogene Mitmieter kein Interesse am Mietvertrag hat (E. 4.2.4, S. 495).",
+       "Faktum «Mitmieter»"
+      ],
+      [
+       "5",
+       "BGE 145 III 143",
+       "4A_563/2017, 19.2.2019",
+       "Ordentliche Kündigung braucht keinen besonderen Grund; treuwidrig, wenn ohne objektives, ernsthaftes, schützenswertes Interesse oder bei vorgeschobenem Grund, dessen wahrer Grund nicht feststellbar ist. Beweislast bei der Mieterschaft; die Vermieterschaft muss auf Verlangen begründen und Unterlagen vorlegen (E. 3.1, S. 146–147). Massgeblich ist der Kündigungszeitpunkt; fällt der Grund später weg, wird die Kündigung nicht nachträglich treuwidrig (E. 3.1, S. 147). Eine Entschädigung ist gesetzlich nicht vorgesehen (E. 3.2, S. 147).",
+       "Grundregel Treu und Glauben; Fall aus dem Bezirk Zürich (Eigenbedarf)"
+      ],
+      [
+       "6",
+       "BGE 142 III 91",
+       "4A_327/2015, 9.2.2016",
+       "Treuwidrig ist eine Kündigung aus reiner Schikane oder bei krassem Interessenmissverhältnis. Eine Härte für die Mieterschaft genügt nicht; sie ist nur für die Erstreckung relevant (E. 3.2.1, S. 92). Sanierungskündigung ist zulässig, wenn die Arbeiten die Weiterbenutzung erheblich einschränken, setzt aber ein genügend ausgereiftes Projekt im Kündigungszeitpunkt voraus (E. 3.2.1, S. 93). Spätere Projektunterlagen zählen nicht (E. 3.2.2, S. 94).",
+       "Prüfhinweis «Sanierung»; Abgrenzung Anfechtung vs. Erstreckung"
+      ],
+      [
+       "7",
+       "BGE 143 III 344",
+       "4A_703/2016, 24.5.2017",
+       "Die Begründung ist keine Gültigkeitsvoraussetzung (E. 5.3.1, S. 345), auch nicht bei Sanierung; BGE 142 III 91 und 140 III 496 waren insoweit missverständlich (E. 5.3.3, S. 346–347). Fehlende, fehlerhafte, pauschale oder später ausgewechselte Gründe können aber ein Indiz gegen ein schützenswertes Interesse sein (E. 5.3.1, S. 345; E. 5.3.4, S. 347–348).",
+       "Verbot «ohne Begründung ungültig»; Hinweis «Begründung verlangen»"
+      ],
+      [
+       "8",
+       "BGE 151 III 481",
+       "4A_576/2024, 29.4.2025",
+       "Beweislast bei der Mieterschaft, Mitwirkungspflicht der Vermieterschaft (E. 3.4, S. 486). Sanierungskündigung wird nicht nachträglich missbräuchlich, wenn die Bewilligung später verweigert wird (E. 3.5.2, S. 487). Abbruchkündigung: Entscheid liegt allein bei der Vermieterschaft, auch zur Ertragserhöhung (E. 3.6.2, S. 487–488); kein ausgereiftes Projekt nötig (E. 3.6.3, S. 488); missbräuchlich nur bei offensichtlicher Unmöglichkeit (z. B. Denkmalschutz) oder vorgeschobenem Grund (E. 3.6.4, S. 488–489). Bei Ungültigkeit ist die eventualiter verlangte Erstreckung zu prüfen, inkl. Suchbemühungen (E. 5.1, S. 489).",
+       "Abgrenzung Abbruch vs. Sanierung; Erstreckung immer eventualiter verlangen"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Weitere einschlägige Entscheide (Reserve):"
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 137 III 208 E. 3.1.2: Grundlage der absoluten Empfangstheorie im Mietrecht (zitiert in BGE 143 III 15 E. 4.1, S. 17). Volltext nicht geprüft."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 148 III 215 E. 3.2: grundlegend zur Sanierungskündigung (zitiert in BGE 151 III 481 E. 3.5, S. 486). Volltext nicht geprüft."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 136 III 257 E. 2.1: Familienwohnung bei Trennung (zitiert in BGE 139 III 7 E. 2.3, S. 11). Volltext nicht geprüft."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 138 III 59 E. 2.1: vorgeschobener Grund; Schutz nach Art. 271a Abs. 1 lit. a OR bei Untermiete nur bei zulässiger Untermiete."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 135 III 112 E. 4.2: umfassende Sanierung rechtfertigt die Kündigung."
+    },
+    {
+     "type": "bullet",
+     "text": "BGE 145 III 281 (laut Obergericht Zürich): Bei Anfechtung durch einen Ehegatten ist der andere mit einzubeziehen. Volltext nicht geprüft."
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Pro Faktum: die Frage an die Sozialarbeiterin, ob das System ohne diese Information keine Aussage machen darf («zwingend»), und wozu es juristisch dient. Gibt die Klientin «weiss nicht» an, ist das etwas anderes als «noch nicht gefragt»: Ersteres führt meist zur Eskalation, Letzteres zur Rückfrage."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Vorprüfung",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Vertragspartei",
+       "Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?",
+       "ja",
+       "Nur die Vertragspartei hat den Kündigungsschutz; Untermiete: Art. 273b OR"
+      ],
+      [
+       "Mitmieter",
+       "Steht noch jemand anderes im Mietvertrag?",
+       "ja",
+       "Kündigung muss allen Mitmietern zugehen (BGE 140 III 491)"
+      ],
+      [
+       "Objektart",
+       "Wohnung, möbliertes Zimmer, Notwohnung, Heim, Ferienwohnung?",
+       "ja",
+       "Art. 253a Abs. 2, 266c, 266e OR; Notunterkunft evtl. keine Miete"
+      ],
+      [
+       "Lage der Wohnung",
+       "In welcher Gemeinde liegt die Wohnung?",
+       "ja",
+       "Zuständige Schlichtungsbehörde (Art. 33 ZPO)"
+      ],
+      [
+       "Vertragsart",
+       "Unbefristet oder befristet?",
+       "ja",
+       "Erstreckungsfrist (Art. 273 Abs. 2 OR)"
+      ],
+      [
+       "Zustellung und Frist",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Art der Zustellung",
+       "Persönlich, eingeschrieben oder normale Post?",
+       "ja",
+       "Fristbeginn (BGE 140 III 244)"
+      ],
+      [
+       "Abholungseinladung",
+       "Wann lag der gelbe Zettel im Briefkasten?",
+       "ja, bei Einschreiben",
+       "Frühester möglicher Empfang (BGE 143 III 15)"
+      ],
+      [
+       "Empfangsdatum",
+       "Wann hatte die Klientin die Kündigung tatsächlich in den Händen?",
+       "ja",
+       "30-Tage-Frist (Art. 273 Abs. 1 OR); Datum auf dem Brief ≠ Empfang"
+      ],
+      [
+       "Form",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Amtliches Formular",
+       "Wurde das kantonale Formular verwendet? Foto vorhanden?",
+       "ja",
+       "Art. 266l Abs. 2, 266o OR"
+      ],
+      [
+       "Schriftlich, unterschrieben",
+       "Ist die Kündigung unterschrieben?",
+       "nein",
+       "Art. 266l Abs. 1 OR"
+      ],
+      [
+       "Familienwohnung",
+       "Wohnt die Klientin mit Ehe- oder eingetragener Partnerperson dort? Wohnt diese noch dort?",
+       "ja",
+       "Art. 266n, 273a OR; BGE 139 III 7"
+      ],
+      [
+       "Separate Zustellung",
+       "Hat die Partnerperson eine eigene Kündigung im separaten Umschlag erhalten?",
+       "ja, bei Familienwohnung",
+       "Art. 266n, 266o OR"
+      ],
+      [
+       "Inhalt",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Art der Kündigung",
+       "Ordentlich oder wegen Zahlungsrückstand?",
+       "ja",
+       "Zahlungsverzug → Issue 3 (andere Regeln)"
+      ],
+      [
+       "Kündigungstermin",
+       "Auf welches Datum wurde gekündigt? Welche Kündigungstermine nennt der Mietvertrag?",
+       "nein",
+       "Art. 266a Abs. 2, 266c OR; Planung. Ortsübliche Termine werden nicht hart kodiert: Nennt der Vertrag keine Termine, gibt das System einen Prüfhinweis «ortsübliche Termine der Gemeinde X prüfen»"
+      ],
+      [
+       "Angegebener Grund",
+       "Steht ein Grund im Schreiben (Eigenbedarf, Sanierung, Abbruch …)?",
+       "nein",
+       "BGE 145 III 143, 142 III 91, 151 III 481"
+      ],
+      [
+       "Vorgeschichte",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Streit mit Vermieterschaft",
+       "Hat die Klientin in den letzten 3 Jahren etwas eingefordert oder ein Verfahren geführt?",
+       "nein",
+       "Art. 271a Abs. 1 lit. a, d, e OR"
+      ],
+      [
+       "Veränderung Familie",
+       "Gab es kürzlich Heirat, Geburt, Trennung, Todesfall?",
+       "nein",
+       "Art. 271a Abs. 1 lit. f OR"
+      ],
+      [
+       "Bereits reagiert",
+       "Schon angefochten, etwas unterschrieben, mit Vermieterschaft verhandelt?",
+       "ja",
+       "Aufhebungsvereinbarung = kein Kündigungsschutz"
+      ],
+      [
+       "Soziales",
+       "",
+       "",
+       ""
+      ],
+      [
+       "Härtegründe",
+       "Kinder, Krankheit, Alter, lange Mietdauer, Einkommen?",
+       "nein",
+       "Erstreckung (Art. 272 Abs. 2 OR) → Issue 4"
+      ],
+      [
+       "Mietzins und Zahler",
+       "Wie hoch ist die Miete, wer zahlt (Klientin oder Sozialdienst)?",
+       "nein",
+       "Interessenkonflikt; Wohnungssuche"
+      ],
+      [
+       "Verletzlichkeit",
+       "Gewalt, Trennungsstreit, Sprachbarriere, akute Krise?",
+       "nein",
+       "Ausserhalb des Moduls → Mensch"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Dokumente, die angefordert werden sollen: Kündigungsformular (beide Seiten), Briefumschlag bzw. Abholungseinladung, Mietvertrag, allfällige Korrespondenz mit der Vermieterschaft der letzten drei Jahre."
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "p",
+     "text": "In diesen Fällen gelten die Regeln von Issue 1 nicht oder nur eingeschränkt. Das System muss sie erkennen und darf dann keine Standardaussagen machen."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Ferienwohnung bis 3 Monate",
+       "Wohnraum-Mietrecht gilt nicht (Art. 253a Abs. 2 OR, S. 66)",
+       "Ausserhalb des Moduls → Rechtsperson"
+      ],
+      [
+       "Notwohnung, Heim, Unterkunft der Gemeinde",
+       "Ob überhaupt Miete vorliegt, ist unklar; Gemeinde ist evtl. zugleich Gegenpartei",
+       "Ausserhalb des Moduls + unabhängige Stelle"
+      ],
+      [
+       "Untermiete",
+       "Kündigungsschutz nur solange das Hauptmietverhältnis besteht (Art. 273b OR, S. 84)",
+       "Rechtsperson"
+      ],
+      [
+       "Möbliertes Zimmer",
+       "Kündigungsfrist zwei Wochen auf Ende einer einmonatigen Mietdauer (Art. 266e OR, S. 75); ob Formular- und Anfechtungsregeln gelten, ist zu klären",
+       "Eigener Fristhinweis, Rechtsperson"
+      ],
+      [
+       "Kündigung wegen Zahlungsverzug",
+       "Eigene Voraussetzungen (Art. 257d OR); Sperrfristen gelten nicht (Art. 271a Abs. 3 lit. b OR, S. 81); keine Erstreckung (Art. 272a Abs. 1 lit. a OR, S. 82)",
+       "Wechsel zu Issue 3"
+      ],
+      [
+       "Ausserordentliche Kündigung aus wichtigen Gründen, Konkurs, Veräusserung",
+       "Sperrfristen gelten nicht (Art. 271a Abs. 3 lit. d–f OR, S. 82)",
+       "Rechtsperson"
+      ],
+      [
+       "Dringender Eigenbedarf",
+       "Sperrfristen nach lit. d und e gelten nicht (Art. 271a Abs. 3 lit. a OR, S. 81); Grund kann vorgeschoben sein (BGE 145 III 143 E. 3.1, S. 146–147)",
+       "Rechtsperson"
+      ],
+      [
+       "Sanierung oder Abbruch",
+       "Sanierung: nur mit ausgereiftem Projekt im Kündigungszeitpunkt (BGE 142 III 91 E. 3.2.1, S. 93); Abbruch: kein Projekt nötig, auch zur Ertragserhöhung zulässig (BGE 151 III 481 E. 3.6.2–3.6.3, S. 487–488)",
+       "Rechtsperson; keine Erfolgsprognose"
+      ],
+      [
+       "Formfehler (kein Formular, Familienwohnung nicht separat, nicht an alle Mitmieter)",
+       "Grundsätzlich nichtig (Art. 266o OR, S. 76); Nichtigkeit jederzeit und von Amtes wegen zu beachten (BGE 140 III 244 / 4A_120/2014 E. 4.1). Aber: veraltetes Formular mit gleicher Information genügt (E. 4.2 ff.); Berufung auf fehlende Zustellung an ausgezogenen Partner kann rechtsmissbräuchlich sein (BGE 139 III 7 E. 2.3.2, S. 12–13; BGE 140 III 491 E. 4.2.4, S. 495)",
+       "Keine Entwarnung; Rechtsperson; Frist trotzdem wahren"
+      ],
+      [
+       "Konkubinat (unverheiratet, nicht eingetragen)",
+       "Keine Familienwohnung im Sinne von Art. 266n OR; geschützt sind nur Ehegatten und eingetragene Partner (BGE 139 III 7 E. 2.3.1, S. 11)",
+       "Keine separate Zustellung nötig; aber prüfen, ob Partner Mitmieter ist"
+      ],
+      [
+       "Ehegatte ausgezogen",
+       "Familiencharakter entfällt bei definitivem Auszug (BGE 139 III 7 E. 2.3.1, S. 11–12; BGE 140 III 491 E. 4.1, S. 492–493)",
+       "Rückfrage «wohnt Partnerperson noch dort?»"
+      ],
+      [
+       "Falscher Kündigungstermin",
+       "Kündigung nicht ungültig, sondern gilt auf den nächstmöglichen Termin (Art. 266a Abs. 2 OR, S. 74)",
+       "Verbot: «Kündigung ungültig, weil Termin falsch»"
+      ],
+      [
+       "Fehlende Begründung",
+       "Keine Gültigkeitsvoraussetzung (BGE 143 III 344 E. 5.3.1, S. 345); Recht auf Begründung auf Verlangen (Art. 271 Abs. 2 OR)",
+       "Hinweis: Begründung verlangen"
+      ],
+      [
+       "Nur Härte, kein treuwidriger Grund",
+       "Härte macht die Kündigung nicht anfechtbar, sie ist nur für die Erstreckung relevant (BGE 142 III 91 E. 3.2.1, S. 92)",
+       "Wechsel zu Issue 4 (Erstreckung)"
+      ],
+      [
+       "Aufhebungsvereinbarung unterschrieben",
+       "Keine Kündigung; Kündigungsschutz greift nicht direkt. Verzicht auf Schutzrechte im Voraus ist nichtig (Art. 273c OR, S. 84); ob die Vereinbarung gültig ist, ist Einzelfallfrage",
+       "Rechtsperson, sofort"
+      ],
+      [
+       "Ferien oder Abwesenheit beim Empfang",
+       "Ändert den Fristbeginn nicht; Pflicht, sich bei der Post zu erkundigen (BGE 143 III 15 E. 4.1, S. 18–19)",
+       "Warnung"
+      ],
+      [
+       "Krankheit beim Empfang",
+       "Vom Bundesgericht offen gelassen (BGE 143 III 15 E. 4.3, S. 19)",
+       "Rechtsperson, sofort"
+      ],
+      [
+       "Laufendes Gerichtsverfahren, Ausweisung",
+       "Ausserhalb von Issue 1 (Art. 257 ZPO, ZPO-PDF S. 73)",
+       "Wechsel zu Issue 6, sofort"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die entscheidende Frist ist die 30-Tage-Frist ab Empfang für Anfechtung und (bei unbefristetem Vertrag) Erstreckung. Sie ist materiellrechtlich und läuft auch während Ferien (BGE 143 III 15)."
+    },
+    {
+     "type": "p",
+     "text": "Ablauf:"
+    },
+    {
+     "type": "bullet",
+     "text": "Empfang der Kündigung. Bei Einschreiben gilt in der Regel der Tag nach Einwurf der Abholungseinladung (BGE 143 III 15 E. 4.1, S. 17–18; BGE 140 III 244)."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: Begründung verlangen (Art. 271 Abs. 2 OR). Das verlängert die Frist nicht."
+    },
+    {
+     "type": "bullet",
+     "text": "Begehren bei der Schlichtungsbehörde am Ort der Wohnung einreichen, innert 30 Tagen (Art. 273 Abs. 1 OR; Art. 33 ZPO): Anfechtung und eventualiter Erstreckung. Weist die Behörde die Anfechtung ab, prüft sie die Erstreckung von Amtes wegen (Art. 273 Abs. 5 OR)."
+    },
+    {
+     "type": "bullet",
+     "text": "Schlichtungsverhandlung (kostenlos, Art. 113 Abs. 2 lit. c ZPO): Einigung, Entscheidvorschlag (Art. 210 Abs. 1 lit. b ZPO) oder Klagebewilligung (Art. 209 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Entscheidvorschlag: Ablehnung innert 20 Tagen; die ablehnende Partei erhält die Klagebewilligung und muss innert 30 Tagen klagen, sonst gilt der Vorschlag als anerkannt (Art. 211, 209 Abs. 4 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Mietgericht im vereinfachten Verfahren (Art. 243 Abs. 2 lit. c ZPO)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Rechtsgrundlage"
+      ],
+      [
+       "Anfechtung der Kündigung",
+       "30 Tage",
+       "Empfang (absolute Empfangstheorie)",
+       "Art. 273 Abs. 1 OR (OR-PDF S. 83); BGE 140 III 244"
+      ],
+      [
+       "Erstreckung, unbefristeter Vertrag",
+       "30 Tage",
+       "Empfang der Kündigung",
+       "Art. 273 Abs. 2 lit. a OR (S. 83)"
+      ],
+      [
+       "Erstreckung, befristeter Vertrag",
+       "spätestens 60 Tage vor Ablauf",
+       "–",
+       "Art. 273 Abs. 2 lit. b OR (S. 83)"
+      ],
+      [
+       "Zweite Erstreckung",
+       "spätestens 60 Tage vor Ablauf der ersten",
+       "–",
+       "Art. 273 Abs. 3 OR (S. 83)"
+      ],
+      [
+       "Kündigungsfrist Wohnung",
+       "3 Monate auf vertraglichen, sonst ortsüblichen Termin der Gemeinde (Prüfhinweis, nicht hart kodiert)",
+       "–",
+       "Art. 266c OR (S. 75)"
+      ],
+      [
+       "Kündigungsfrist möbliertes Zimmer",
+       "2 Wochen auf Ende einer einmonatigen Mietdauer",
+       "–",
+       "Art. 266e OR (S. 75)"
+      ],
+      [
+       "Sperrfrist nach Verfahren",
+       "3 Jahre",
+       "Abschluss des Verfahrens",
+       "Art. 271a Abs. 1 lit. e OR (S. 81)"
+      ],
+      [
+       "Ablehnung Entscheidvorschlag",
+       "20 Tage",
+       "schriftliche Eröffnung",
+       "Art. 211 Abs. 1 ZPO (ZPO-PDF S. 57)"
+      ],
+      [
+       "Klage nach Klagebewilligung",
+       "30 Tage",
+       "Eröffnung der Klagebewilligung",
+       "Art. 209 Abs. 4 ZPO (S. 57)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Ortsübliche Termine: Auch die Obergerichtsseite «Ordentliche Kündigung» (Stand 24.2.2026) nennt für Wohnungen nur «3 Monate» und den Termin «Ortsüblich», ohne konkrete Daten für Zürcher Gemeinden. Sie gilt, «haben die Parteien nichts anderes vereinbart», und bestätigt: Werden Frist oder Termin nicht eingehalten, gilt die Kündigung auf den nächstmöglichen Termin (Art. 266a Abs. 2 OR). Das stützt den Ansatz, zuerst nach den vertraglichen Terminen zu fragen und die ortsüblichen nur als Prüfhinweis auszugeben."
+    },
+    {
+     "type": "p",
+     "text": "Kosten: Im Schlichtungsverfahren werden bei Wohnraummiete weder Gerichtskosten noch Parteientschädigungen gesprochen (Art. 113 Abs. 1 und Abs. 2 lit. c ZPO, ZPO-PDF S. 28–29). Für eure Zielgruppe ist das ein zentraler Punkt."
+    },
+    {
+     "type": "p",
+     "text": "Nie im System: ein berechnetes Fristende. Das System nennt die Frist und ihren Beginn als Prüfhinweis; das Datum bestimmt die Fachperson."
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Zuständig für Anfechtung und Erstreckung ist die paritätische Schlichtungsbehörde in Miet- und Pachtsachen des Bezirks, in dem die Wohnung liegt. Jedes der zwölf Bezirksgerichte hat eine eigene (Obergericht ZH, Schlichtungsbehörden; Zuständigkeit)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Kosten",
+       "Quelle"
+      ],
+      [
+       "Schlichtungsbehörde in Miet- und Pachtsachen (Bezirk der Wohnung)",
+       "Anfechtung, Erstreckung (Begehren einreichen)",
+       "keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)",
+       "gerichte-zh.ch; Bezirk per Gemeindesuche"
+      ],
+      [
+       "Rechtsauskunft der Schlichtungsbehörde",
+       "Neutrale Information zu Rechtslage und Verfahren, «nicht um eine Rechtsberatung»",
+       "auf der Seite nicht angegeben",
+       "gerichte-zh.ch/rechtsauskunft"
+      ],
+      [
+       "Rechtsauskunft in Mietsachen, Bezirksgericht Zürich",
+       "Stadt Zürich; nicht mehr, sobald ein Verfahren läuft",
+       "gratis",
+       "Heilsarmee-Übersicht, Stand 07/2026"
+      ],
+      [
+       "Mieterinnen- und Mieterverband Zürich",
+       "Beratung, Vertretung, Begleitung",
+       "Mitglieder gratis (Beitrag ca. CHF 100/Jahr), sonst ca. CHF 70 pro Beratung",
+       "mieterverband.ch/mv-zh; Angaben laut Heilsarmee-Übersicht"
+      ],
+      [
+       "Unentgeltliche Rechtsauskünfte der Bezirksgerichte",
+       "Allgemeine Orientierung",
+       "gratis",
+       "z. B. Bezirksgericht Dietikon"
+      ],
+      [
+       "Zürcher Anwaltsverband, unentgeltliche Rechtsauskunft",
+       "Kurze Orientierung (ca. 15 Min.), ohne Termin",
+       "gratis",
+       "zav.ch"
+      ],
+      [
+       "Sozialdienst der Wohngemeinde",
+       "Wohnungssuche, Notunterkunft, Finanzierung",
+       "–",
+       "Gemeinde der Klientin"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Formular für die Anfechtung: Das Obergericht bietet unter «Formulare» ein Formular «Kündigungsschutz» an (Link). Inhalt vor der Verwendung prüfen."
+    },
+    {
+     "type": "p",
+     "text": "Vor der Demo: Telefonnummern, Öffnungszeiten und Kosten direkt auf den offiziellen Seiten nachprüfen und mit Datum eintragen. Die Kosten des Mieterverbands stammen aus einer Drittquelle."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 1 endet fast immer bei einer Rechtsperson, weil der Entscheid über eine Anfechtung folgenreich ist. Der Mehrwert liegt in der Dringlichkeit und im Briefing. Die Schwellen (20 Tage, 60 Tage) sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Begründung"
+      ],
+      [
+       "Ein zwingendes Faktum ist noch nicht erhoben",
+       "Rückfrage",
+       "–",
+       "Nicht annehmen, nachfragen"
+      ],
+      [
+       "Empfangsdatum oder Zustellart nach Rückfrage unbekannt",
+       "Rechtsperson",
+       "sofort",
+       "Fristbeginn nicht bestimmbar, Fristverlust irreversibel"
+      ],
+      [
+       "20 oder mehr Tage seit dem frühesten bekannten Datum (Abholungseinladung oder Empfang)",
+       "Rechtsperson",
+       "sofort",
+       "30-Tage-Frist knapp"
+      ],
+      [
+       "Mehr als 30 Tage",
+       "Rechtsperson",
+       "sofort",
+       "Frist evtl. abgelaufen; ob noch Wege offen sind (z. B. Nichtigkeit), klärt die Fachperson"
+      ],
+      [
+       "Weniger als 20 Tage, alles bekannt",
+       "Rechtsperson",
+       "bald",
+       "Entscheid über Anfechtung ist Einzelfall"
+      ],
+      [
+       "Kein Formular oder Familienwohnung nicht separat zugestellt",
+       "Rechtsperson",
+       "bald",
+       "Mögliche Nichtigkeit, keine Entwarnung"
+      ],
+      [
+       "Streit oder Verfahren mit Vermieterschaft in den letzten 3 Jahren",
+       "Rechtsperson",
+       "bald",
+       "Art. 271a OR"
+      ],
+      [
+       "Grund: Sanierung, Abbruch, Eigenbedarf",
+       "Rechtsperson",
+       "bald",
+       "Praxis BGE 142 III 91, 151 III 481, 145 III 143"
+      ],
+      [
+       "Kinder, Krankheit, lange Mietdauer",
+       "+ Sozialarbeiter:in, Issue 4",
+       "bald",
+       "Erstreckung prüfen, Wohnungssuche starten"
+      ],
+      [
+       "Auszug in weniger als 60 Tagen",
+       "+ Sozialarbeiter:in",
+       "bald",
+       "Notfallplanung"
+      ],
+      [
+       "Kündigung wegen Zahlungsverzug",
+       "Wechsel zu Issue 3",
+       "sofort",
+       "Andere Regeln"
+      ],
+      [
+       "Aufhebungsvereinbarung unterschrieben oder vorgelegt",
+       "Rechtsperson",
+       "sofort",
+       "Irreversibel"
+      ],
+      [
+       "Klientin ist nicht Mieterin, Notwohnung, Untermiete",
+       "Rechtsperson (unabhängig)",
+       "bald",
+       "Ausserhalb des Moduls; Modulaussagen unterdrücken"
+      ],
+      [
+       "Klientin oder Sozialarbeiterin wünscht Fachperson",
+       "Rechtsperson",
+       "normal",
+       "Autonomie"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (Auswahl, je mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten werden.» (Art. 273 Abs. 1 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Beim Einschreiben gilt die Kündigung in der Regel am Tag nach dem Einwurf der Abholungseinladung als empfangen, nicht erst bei der Abholung. Auch Ferien ändern daran nichts.» (BGE 143 III 15 E. 4.1; BGE 140 III 244)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Vermieterschaft muss auf dem amtlichen Formular kündigen. Ob hier ein Mangel vorliegt, soll eine Fachperson prüfen.» (Art. 266l Abs. 2, 266o OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Klientin kann verlangen, dass die Kündigung begründet wird. Die Begründung ist aber keine Gültigkeitsvoraussetzung.» (Art. 271 Abs. 2 OR; BGE 143 III 344 E. 5.3.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Eine besondere Härte macht die Kündigung nicht ungültig, kann aber eine Erstreckung rechtfertigen, bei Wohnungen um höchstens vier Jahre.» (BGE 142 III 91 E. 3.2.1; Art. 272, 272b OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Ist der Kündigungstermin falsch, gilt die Kündigung auf den nächstmöglichen Termin.» (Art. 266a Abs. 2 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Zuständig ist die Schlichtungsbehörde im Bezirk, in dem die Wohnung liegt. Das Schlichtungsverfahren kostet keine Gerichtskosten.» (Art. 33, 113 Abs. 2 lit. c ZPO)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Lehnt eine Partei einen Entscheidvorschlag der Schlichtungsbehörde ab, muss sie selbst innert 30 Tagen klagen.» (Art. 211 Abs. 2–3, 209 Abs. 4 ZPO)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "Jedes berechnete Fristende («Sie haben bis am …»)."
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Kündigung ist gültig / ungültig / nichtig.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Ohne Begründung ist die Kündigung ungültig.» (falsch, BGE 143 III 344 E. 5.3.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Weil der Auszug für Sie hart ist, können Sie die Kündigung anfechten.» (falsch, BGE 142 III 91 E. 3.2.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie waren in den Ferien, deshalb läuft die Frist später.» (falsch, BGE 143 III 15 E. 4.1)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Anfechtung hat gute Chancen.» oder «Sie bekommen sicher eine Erstreckung.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Der Eigenbedarf ist vorgeschoben.»"
+    },
+    {
+     "type": "bullet",
+     "text": "Jede Aussage ohne Quelle aus Abschnitt 1."
+    },
+    {
+     "type": "p",
+     "text": "Briefing für die Fachperson (ca. 200 Wörter, Struktur)"
+    },
+    {
+     "type": "bullet",
+     "text": "Anliegen in einem Satz"
+    },
+    {
+     "type": "bullet",
+     "text": "Vorprüfung: Mieterin? Mitmieter? Objektart? Familienwohnung?"
+    },
+    {
+     "type": "bullet",
+     "text": "Zustellung: Art, Abholungseinladung, Empfang (mit Status: belegt / angegeben / unbekannt)"
+    },
+    {
+     "type": "bullet",
+     "text": "Form: Formular ja/nein, separate Zustellung"
+    },
+    {
+     "type": "bullet",
+     "text": "Inhalt: Art, Termin, vertragliche Kündigungstermine, angegebener Grund"
+    },
+    {
+     "type": "bullet",
+     "text": "Vorgeschichte und Härtegründe"
+    },
+    {
+     "type": "bullet",
+     "text": "Ausgelöste Regeln mit Begründung und Dringlichkeit"
+    },
+    {
+     "type": "bullet",
+     "text": "Offene Fragen und vorhandene Dokumente"
+    },
+    {
+     "type": "bullet",
+     "text": "Prüfpunkte: Fristbeginn (absolute Empfangstheorie), Art. 266l–266o OR, Art. 271/271a OR, Erstreckung"
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Anfechtung und Erstreckung (30-Tage-Frist, Art. 273 Abs. 1 und 2 lit. a OR): Ab 20 Tagen seit Empfang der Kündigung (oder Empfang unbekannt) eskaliert das System SOFORT an die Rechtsperson. Begründung: Der Rechtsperson bleiben dann noch mindestens 10 Tage."
+    },
+    {
+     "type": "bullet",
+     "text": "Befristeter Vertrag (Erstreckung spätestens 60 Tage vor Ablauf, Art. 273 Abs. 2 lit. b OR): Ab 75 Tagen vor Vertragsende SOFORT (gleich wie Issue 4)."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: höchstens 2 Rückfrage-Runden, danach Eskalation (G7). Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz deshalb voraussichtlich nach IDG ZH (§ 3 Abs. 1 lit. c, § 6 IDG), der Sozialdienst bleibt verantwortlich. Vor jedem Briefing an eine externe Rechtsperson holt die Sozialarbeiterin die ausdrückliche Einwilligung der Klientin ein (consent_briefing; § 17 Abs. 1 lit. b IDG; Art. 6 Abs. 7 lit. a DSG)."
+    }
+   ]
+  },
+  {
+   "heading": "Offene Prüfpunkte für die Jurist:innen",
+   "items": [
+    {
+     "type": "bullet",
+     "text": "☒ Acht BGE im Volltext geprüft (Fundstellen in Abschnitt 1)"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ ZPO-Artikel gegen ZPO.pdf geprüft (Begriff jetzt «Entscheidvorschlag», nicht mehr «Urteilsvorschlag»)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Reserve-Entscheide bei Bedarf im Volltext lesen (BGE 137 III 208, 148 III 215, 136 III 257, 145 III 281)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Amtliche Quelle für die konkreten ortsüblichen Kündigungstermine der Wohnungsmiete in Zürcher Gemeinden beschaffen (Schlichtungsbehörde oder Mieterverband; die Obergerichtsseite «Ordentliche Kündigung» nennt keine Daten). Nicht verwenden: Merkblatt der Baudirektion vom Juli 2024, es betrifft die landwirtschaftliche Pacht (Art. 16 Abs. 3 LPG)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Aktuelles amtliches Kündigungsformular des Kantons Zürich beschaffen (Muster für die Formprüfung im Upload)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Möbliertes Zimmer: Welche Formvorschriften gelten genau?"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kontaktdaten und Kosten der Stellen in Abschnitt 5 auf den offiziellen Seiten bestätigen"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kantonale Praxis (Obergericht ZH) ergänzen, falls Zeit bleibt (entscheidsuche.ch, Filter ZH_Obergericht)"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Schwellenwerte (20 Tage, 60 Tage) im Team als Produktentscheid festhalten"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026), von euch hochgeladen"
+    },
+    {
+     "type": "bullet",
+     "text": "Entscheide (Volltext, von euch hochgeladen): BGE 139 III 7, 140 III 491, 142 III 91, 143 III 15, 143 III 344, 145 III 143, 151 III 481; Urteil 4A_120/2014 vom 19.5.2014 (= BGE 140 III 244)"
+    },
+    {
+     "type": "bullet",
+     "text": "Reserve: BGE 138 III 59, BGE 135 III 112"
+    },
+    {
+     "type": "bullet",
+     "text": "Behörden: Obergericht ZH, Schlichtungsbehörden, Zuständigkeit, Familienwohnung, Heilsarmee Sozialberatung Zürich, Rechtsberatung 07/2026"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

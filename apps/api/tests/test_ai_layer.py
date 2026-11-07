@@ -151,16 +151,15 @@ class FailingProvider:
 
 
 def test_ai_failure_keeps_message_and_exposes_failed_state_then_retry_succeeds(client, ctx):
-
     mock = ctx.ai
     ctx.ai = FailingProvider(AIRateLimitError("Kontingent erreicht", retryable=True))
     case = new_case(client)
     cid = case["id"]
-    r = say(client, cid, "Mein Arbeitgeber hat mir gekündigt.")
+    r = say(client, cid, "Mein Vermieter hat der Klientin die Wohnung gekündigt.")
     assert r["analysis"]["status"] == "FAILED" and r["analysis"]["error_code"] == "ai_rate_limited"
     assert r["message"]["analysis_status"] == "FAILED"
     msgs = client.get(f"/api/cases/{cid}/messages").json()
-    assert len(msgs) == 1 and msgs[0]["content"].startswith("Mein Arbeitgeber")
+    assert len(msgs) == 1 and msgs[0]["content"].startswith("Mein Vermieter")
     detail = client.get(f"/api/cases/{cid}").json()
     assert detail["analysis"]["status"] == "FAILED"
     assert detail["issues"] == [], "no fabricated analysis"
@@ -188,20 +187,28 @@ def test_gemini_requires_api_key_no_silent_fallback():
 
 
 class _Resp:
-    def __init__(self, text):
+    def __init__(self, text, finish=None):
         self.text = text
+        if finish:  # mirrors resp.candidates[0].finish_reason.name
+            self.candidates = [
+                type("Cand", (), {"finish_reason": type("FR", (), {"name": finish})()})()
+            ]
 
 
 class _Models:
     def __init__(self, behaviour):
         self.behaviour = list(behaviour)
         self.calls = 0
+        self.kwargs: list[dict] = []
 
     def generate_content(self, **kw):
         self.calls += 1
+        self.kwargs.append(kw)
         item = self.behaviour.pop(0)
         if isinstance(item, Exception):
             raise item
+        if isinstance(item, tuple):  # (text, finish_reason)
+            return _Resp(*item)
         return _Resp(item)
 
 
@@ -255,9 +262,10 @@ def test_gemini_error_mapping(monkeypatch, code, exc):
 def test_gemini_invalid_json_and_schema_violation_rejected(monkeypatch):
     monkeypatch.setattr("time.sleep", lambda s: None)
     for bad in ["not json at all", '{"detected_issues": [{"issue_id": 5}]}']:
-        p, _ = make_gemini([bad])
+        p, m = make_gemini([bad, bad])  # one targeted retry, then a clear error
         with pytest.raises(AIInvalidResponseError):
             p.extract(_input())
+        assert m.calls == 2
 
 
 def test_api_key_is_never_in_status_or_repr(client):

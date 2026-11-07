@@ -1,0 +1,1118 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Erstreckung des Mietverhältnisses (Issue 4)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_04.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_04.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_EXTENSION
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: extension
+title_de: Erstreckung des Mietverhältnisses (Issue 4)
+description: Erstreckung bei gültiger Beendigung des Mietverhältnisses wegen Härte (Art. 272 ff. OR; höchstens
+  vier Jahre bei Wohnungen). Immer Rechtsperson; keine Prognose zur Dauer; bei Zahlungsverzug ausgeschlossen.
+provenance_de: 'Law-Dossier Issue 4 vom 7.11.2026; Teamentscheide: 75-Tage-Schwelle für befristete Verträge,
+  Konkubinat nur als Faktum.'
+classification:
+  description: 'Passt, wenn Klientinnen wegen einer gültigen Kündigung oder des Ablaufs eines befristeten
+    Vertrags ausziehen müssten, der Auszug aber eine Härte wäre (Kinder, Krankheit, keine Ersatzwohnung)
+    und sie mehr Zeit brauchen. NICHT passend: Anfechtung einer fehlerhaften Kündigung (Issue 1), Kündigung
+    wegen Zahlungsverzug (Issue 3, Erstreckung ausgeschlossen).'
+  typical_situations:
+  - Die Klientin findet keine Wohnung und möchte mehr Zeit.
+  - Wir möchten eine Erstreckung des Mietverhältnisses verlangen.
+  - Familie mit Kindern muss ausziehen und findet nichts.
+  - Der befristete Mietvertrag läuft aus, die Klientin braucht mehr Zeit.
+  related_issues: []
+derived:
+- id: days_since_earliest_receipt
+  kind: days_since_earliest
+  facts:
+  - pickup_notice_date
+  - receipt_date
+  description: Tage seit dem frühesten bekannten Empfangshinweis der Kündigung (INTERNE Schwelle, kein
+    Fristende).
+- id: days_until_contract_end
+  kind: days_until
+  facts:
+  - contract_end_date
+  description: Tage bis zum Ende eines befristeten Vertrags (INTERNE Schwelle, kein Fristende).
+- id: days_until_first_extension_end
+  kind: days_until
+  facts:
+  - previous_extension_end_date
+  description: Tage bis zum Ende der ersten Erstreckung (INTERNE Schwelle, kein Fristende).
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: contract_term_type
+  group: prescreening
+  label_de: Vertragsart
+  data_type: enum
+  enum_values:
+  - unbefristet
+  - befristet
+  enum_labels_de:
+    unbefristet: Unbefristet
+    befristet: Befristet
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_273_2
+  question_de: Ist der Mietvertrag unbefristet oder befristet?
+  why_needed_de: Die Frist für ein Erstreckungsbegehren hängt von der Vertragsart ab (Art. 273 Abs. 2
+    OR).
+- id: contract_end_date
+  group: prescreening
+  label_de: Ende des befristeten Vertrags
+  data_type: date
+  required_if:
+    ref: fact.contract_term_type
+    op: equals
+    value: befristet
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - contract_term_type
+  source_ids:
+  - CH_OR_273_2
+  extraction_hint_de: 'Nur bei befristetem Vertrag: Datum, an dem der Vertrag endet.'
+  question_de: 'Bei befristetem Vertrag: An welchem Datum endet er?'
+  why_needed_de: Ein Erstreckungsbegehren muss bei befristetem Vertrag spätestens 60 Tage vor Ablauf gestellt
+    werden (Art. 273 Abs. 2 lit. b OR); das System eskaliert intern früher (Teamentscheid).
+- id: delivery_method
+  group: delivery
+  label_de: Art der Zustellung
+  data_type: enum
+  enum_values:
+  - persoenlich
+  - eingeschrieben
+  - normale_post
+  enum_labels_de:
+    persoenlich: Persönlich übergeben
+    eingeschrieben: Eingeschrieben (Einschreiben)
+    normale_post: Normale Post
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_140_III_244
+  extraction_hint_de: '''gewöhnlicher Brief'', ''normale Post'' = normale_post. Einschreiben nur, wenn
+    ausdrücklich genannt.'
+  question_de: 'Wie wurde die Kündigung zugestellt: persönlich, eingeschrieben oder mit normaler Post?'
+  why_needed_de: Die Zustellart bestimmt den Fristbeginn (BGE 140 III 244).
+- id: pickup_notice_date
+  group: delivery
+  label_de: Datum der Abholungseinladung
+  data_type: date
+  required_if:
+    ref: fact.delivery_method
+    op: equals
+    value: eingeschrieben
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - delivery_method
+  source_ids:
+  - BGE_143_III_15
+  extraction_hint_de: Datum, an dem der gelbe Zettel (Abholungseinladung) im Briefkasten lag. NICHT das
+    Briefdatum.
+  question_de: "An welchem Datum lag der gelbe Zettel (Abholungseinladung) im Briefkasten?"
+  why_needed_de: Frühester möglicher Empfang bei eingeschriebener Post (BGE 143 III 15).
+- id: receipt_date
+  group: delivery
+  label_de: Empfangsdatum
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273_1
+  extraction_hint_de: Datum, an dem die Klientin die Kündigung tatsächlich in den Händen hatte. Das Datum
+    auf dem Brief ist NICHT das Empfangsdatum. Nur setzen, wenn ausdrücklich genannt.
+  question_de: "An welchem Datum hatte die Klientin die Kündigung tatsächlich in den Händen?"
+  why_needed_de: Ausgangspunkt der 30-Tage-Frist (Art. 273 Abs. 1 OR). Das Datum auf dem Brief ist nicht
+    der Empfang.
+- id: stated_reason
+  group: content
+  label_de: Angegebener Kündigungsgrund
+  data_type: enum
+  enum_values:
+  - keine_angabe
+  - eigenbedarf
+  - sanierung
+  - abbruch
+  - anderer_grund
+  enum_labels_de:
+    keine_angabe: Kein Grund angegeben
+    eigenbedarf: Eigenbedarf
+    sanierung: Umbau / Sanierung
+    abbruch: Abbruch
+    anderer_grund: Anderer Grund
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_145_III_143
+  - BGE_142_III_91
+  - BGE_151_III_481
+  - BGE_143_III_344
+  question_de: "Welcher Kündigungsgrund steht im Schreiben (Eigenbedarf, Sanierung, Abbruch, anderer Grund) oder steht keiner darin?"
+  why_needed_de: Der Grund ist für die Prüfung nach Treu und Glauben relevant (BGE 145 III 143, 142 III
+    91, 151 III 481).
+- id: family_home_with_spouse
+  group: form
+  label_de: Familienwohnung (Ehe-/eingetragene Partnerperson)
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_273A_1
+  - BGE_139_III_7
+  extraction_hint_de: true nur bei Ehe oder eingetragener Partnerschaft; Konkubinat = false. 'keine Ehe-
+    oder eingetragene Partnerperson' = false.
+  question_de: Wohnt die Klientin dort mit einer Ehe- oder eingetragenen Partnerperson?
+  why_needed_de: Bei Familienwohnung ist die Kündigung auch der Partnerperson separat zuzustellen (Art.
+    266n OR; BGE 139 III 7). Konkubinat zählt nicht.
+- id: hardship_present
+  group: social
+  label_de: Härtegründe
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_142_III_91
+  - CH_OR_272
+  extraction_hint_de: true bei Kindern, Krankheit, Alter, langer Mietdauer, geringem Einkommen, wenn dies
+    als Belastung geschildert wird.
+  question_de: Gibt es Härtegründe, z. B. Kinder, Krankheit, Alter, lange Mietdauer oder knappes Einkommen?
+  why_needed_de: Härte macht die Kündigung nicht anfechtbar, ist aber für eine Erstreckung relevant (BGE
+    142 III 91).
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: challenge_filed
+  group: history
+  label_de: Kündigung bereits angefochten
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273_1
+  - BGE_141_III_262
+  question_de: "Hat die Klientin die Kündigung schon bei der Schlichtungsbehörde angefochten oder eine Erstreckung verlangt?"
+  why_needed_de: Laufendes Verfahren (Art. 273 OR); schützt aber nicht automatisch vor der Ausweisung
+    (BGE 141 III 262 E. 3.3).
+- id: children_in_household
+  group: social
+  label_de: Kinder im Haushalt
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  extraction_hint_de: true bei Kindern im Haushalt; false bei ausdrücklich keine Kinder.
+  question_de: Leben Kinder in der Wohnung?
+  why_needed_de: Soziale Notfallplanung bzw. Härtegrund; verändert keine Rechtsfolge, wohl aber den Unterstützungsbedarf.
+- id: ending_reason
+  group: ending
+  label_de: Grund der Beendigung
+  data_type: enum
+  enum_values:
+  - ordentliche_kuendigung
+  - zahlungsverzug
+  - andere_ausserordentlich
+  - ablauf_befristet
+  enum_labels_de:
+    ordentliche_kuendigung: Ordentliche Kündigung
+    zahlungsverzug: Kündigung wegen Zahlungsverzug
+    andere_ausserordentlich: Andere ausserordentliche Kündigung (z. B. schwere Pflichtverletzung, Konkurs)
+    ablauf_befristet: Ablauf eines befristeten Vertrags
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_272A_1_A
+  question_de: 'Wie endet das Mietverhältnis: ordentliche Kündigung, Kündigung wegen Zahlungsverzug, andere
+    ausserordentliche Kündigung oder Ablauf eines befristeten Vertrags?'
+  why_needed_de: Ausschlussgründe der Erstreckung (Art. 272a Abs. 1 OR).
+- id: limited_to_demolition
+  group: ending
+  label_de: Vertrag ausdrücklich nur bis Umbau/Abbruch befristet
+  data_type: boolean
+  required_if:
+    ref: fact.contract_term_type
+    op: equals
+    value: befristet
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - contract_term_type
+  source_ids:
+  - CH_OR_272A_1_A
+  - CH_OR_272A_2
+  question_de: 'Bei Befristung: Wurde der Vertrag ausdrücklich nur bis zu einem Umbau oder Abbruch abgeschlossen?'
+  why_needed_de: Ausschluss der Erstreckung (Art. 272a Abs. 1 lit. d OR); der Vertragswortlaut wird von
+    der Rechtsperson geprüft.
+- id: previous_extension
+  group: ending
+  label_de: Bereits einmal erstreckt
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_272_3
+  - CH_OR_272B_1
+  - CH_OR_272B_2
+  question_de: "Wurde das Mietverhältnis schon einmal erstreckt (Entscheid oder Vereinbarung)?"
+  why_needed_de: Zweiterstreckung nur unter strengeren Voraussetzungen (Art. 272 Abs. 3, 272b, 273 Abs.
+    3 OR).
+- id: previous_extension_end_date
+  group: ending
+  label_de: Ende der ersten Erstreckung
+  data_type: date
+  required_if:
+    ref: fact.previous_extension
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - previous_extension
+  source_ids:
+  - CH_OR_273_3
+  question_de: "Bis zu welchem Datum läuft die erste Erstreckung?"
+  why_needed_de: Das Begehren um eine zweite Erstreckung muss spätestens 60 Tage vor Ablauf der ersten
+    gestellt werden (Art. 273 Abs. 3 OR).
+- id: deadline_possibly_missed
+  group: ending
+  label_de: Frist möglicherweise verpasst
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_139_III_7
+  - BGE_114_II_165
+  question_de: Ist die Frist für das Erstreckungsbegehren möglicherweise schon verpasst?
+  why_needed_de: Die Fristen sind Verwirkungsfristen (BGE 139 III 7 E. 2.4); das System berechnet kein
+    Fristende.
+- id: household_description
+  group: hardship
+  label_de: Haushalt
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_272_2
+  question_de: Wer wohnt in der Wohnung (Kinder, Alter, Ehe-/Lebenspartner, Pflegebedürftige)?
+  why_needed_de: Familie im Sinn von Art. 272 Abs. 2 OR; Konkubinat umstritten (nur als Faktum erfasst,
+    Bewertung durch die Rechtsperson).
+- id: tenancy_start_date
+  group: hardship
+  label_de: Beginn des Mietverhältnisses
+  data_type: date
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_272_2
+  question_de: "Ab welchem Datum wohnt die Klientin dort (Mietbeginn, ungefähr genügt)?"
+  why_needed_de: Dauer des Mietverhältnisses als Abwägungselement (Art. 272 Abs. 2 lit. b OR).
+- id: school_change_needed
+  group: hardship
+  label_de: Schulwechsel nötig
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_272_2
+  question_de: "Wäre für schulpflichtige Kinder ein Schulwechsel nötig?"
+  why_needed_de: Persönliche und familiäre Verhältnisse (lit. c).
+- id: health_limitations
+  group: hardship
+  label_de: Gesundheitliche Einschränkungen
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_OR_272_2
+  question_de: Gibt es gesundheitliche Einschränkungen, Alter oder Behinderung, die Suche oder Umzug erschweren?
+    (Nur ja/nein, keine Diagnose.)
+  why_needed_de: Persönliche Verhältnisse (lit. c).
+- id: economic_difficulty
+  group: hardship
+  label_de: Wirtschaftliche Lage erschwert die Suche
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_272_2
+  question_de: Erschweren Einkommen, Sozialhilfe oder Betreibungen die Wohnungssuche?
+  why_needed_de: Finanzielle Verhältnisse (lit. c).
+- id: local_market_note
+  group: hardship
+  label_de: Wohnungsmarkt der Gemeinde
+  data_type: string
+  priority: low
+  source_ids:
+  - CH_OR_272_2
+  question_de: Wie ist der Wohnungsmarkt in der Gemeinde (Leerwohnungsziffer)?
+  why_needed_de: Lage auf dem örtlichen Wohnungsmarkt (lit. e).
+- id: conclusion_circumstances
+  group: hardship
+  label_de: Besondere Umstände beim Vertragsabschluss
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_272_2
+  question_de: Gab es besondere Umstände beim Abschluss (z. B. Zusicherung langer Dauer, eigene Investitionen)?
+  why_needed_de: Lit. a der Interessenabwägung.
+- id: medical_evidence_current
+  group: hardship
+  label_de: Aktuelle Belege zu den Härtegründen
+  data_type: boolean
+  priority: low
+  source_ids:
+  - BGER_4A_673_2014
+  question_de: Gibt es aktuelle Arztzeugnisse oder andere Belege zu den Härtegründen?
+  why_needed_de: Massgebend sind die Verhältnisse im Entscheidzeitpunkt (BGer 4A_673/2014 E. 3.2). Das
+    Zeugnis geht an die Rechtsperson und wird nicht von der KI ausgewertet.
+- id: cohabitant_partner
+  group: hardship
+  label_de: Lebenspartner ohne Eintragung im Haushalt
+  data_type: boolean
+  priority: low
+  source_ids:
+  - BGE_105_II_197
+  - BGER_4A_673_2014
+  question_de: "Wohnt eine Lebenspartnerin oder ein Lebenspartner ohne Heirat oder Eintragung mit?"
+  why_needed_de: 'Nur Faktenerfassung (Teamentscheid): die rechtliche Bewertung (Mitmiete, Familienwohnung)
+    macht immer die Rechtsperson.'
+- id: replacement_offered
+  group: search
+  label_de: Ersatzwohnung angeboten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_272A_2
+  question_de: Hat die Vermieterschaft eine gleichwertige Ersatzwohnung angeboten?
+  why_needed_de: Erstreckung in der Regel ausgeschlossen (Art. 272a Abs. 2 OR).
+- id: settlement_with_waiver_offered
+  group: search
+  label_de: Vergleich mit Verzicht angeboten
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_272B_2
+  question_de: Hat die Vermieterschaft eine Erstreckungsvereinbarung (Vergleich) mit Verzicht auf eine
+    zweite Erstreckung vorgelegt?
+  why_needed_de: Mieterin kann auf die zweite Erstreckung verzichten (Art. 272b Abs. 2 OR); vor Unterschrift
+    Rechtsperson (G9).
+- id: search_efforts
+  group: search
+  label_de: Bisherige Wohnungssuche
+  data_type: enum
+  enum_values:
+  - keine
+  - laufend_nicht_dokumentiert
+  - laufend_dokumentiert
+  enum_labels_de:
+    keine: Noch keine Suche
+    laufend_nicht_dokumentiert: Sucht, aber nicht dokumentiert
+    laufend_dokumentiert: Sucht und dokumentiert (Bewerbungen, Absagen)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_72_2011
+  - BGE_151_III_481
+  - BGE_110_II_249
+  question_de: "Sucht die Klientin bereits eine neue Wohnung, und sind die Suchbemühungen dokumentiert?"
+  why_needed_de: Suchbemühungen sind schon für die erste Erstreckung wichtig (BGer 4A_72/2011 E. 3); zwingend
+    bei der Zweiterstreckung.
+- id: social_search_support
+  group: search
+  label_de: Unterstützung bei der Suche durch den Sozialdienst
+  data_type: boolean
+  priority: low
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Unterstützt der Sozialdienst bei der Suche (Mietzinsgarantie, Kautionsgutsprache)?
+  why_needed_de: Soziale Massnahme, stärkt die Suchbemühungen.
+- id: prior_payment_warning
+  group: search
+  label_de: Frühere Mahnung wegen Zahlungsverzug
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_117_II_415
+  question_de: Gab es vor der Kündigung eine schriftliche Zahlungsaufforderung mit Frist und Kündigungsandrohung,
+    die nicht erfüllt wurde?
+  why_needed_de: Ausschluss auch bei ordentlicher Kündigung, wenn die Mahnung gültig war (BGE 117 II 415
+    E. 4, E. 5a).
+- id: demolition_known_at_signing
+  group: search
+  label_de: Abbruch/Umbau bei Vertragsschluss bekannt
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_105_II_197
+  question_de: Wusste die Klientin schon bei Vertragsschluss von einem geplanten Abbruch oder Umbau?
+  why_needed_de: Härte wird dann kaum anerkannt (BGE 105 II 197 E. 3b); Abgrenzung zu Art. 272a Abs. 1
+    lit. d OR.
+escalation_rules:
+- id: EX_OUT_OF_SCOPE_OBJECT
+  description: 'Geschäftsraum/Ferienwohnung/Notunterkunft: ausserhalb des Moduls.'
+  when:
+    ref: fact.object_type
+    op: in
+    value:
+    - notwohnung_heim
+    - ferienwohnung_bis_3_monate
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Objekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls. Es werden keine
+    Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: EX_GRUNDREGEL
+  description: 'Erstreckung: die Abwägung liegt im Ermessen der Behörde - immer Rechtsperson (+ Sozialarbeiterin
+    für Suche/Belege).'
+  when: &id003
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: EXTENSION_ALWAYS_LEGAL_REVIEW
+  reason_de: Ob und wie lange erstreckt wird, entscheidet die Schlichtungsbehörde bzw. das Gericht im
+    Ermessen; das System macht keine Prognose zur Dauer. Eine Rechtsperson prüft; die Sozialarbeiterin
+    dokumentiert Härtegründe und Suchbemühungen.
+  professionals: &id001
+  - tenancy_law_counsel
+  - social_counselling
+- id: EX_ZAHLUNGSVERZUG
+  description: 'Kündigung wegen Zahlungsverzug: Erstreckung ausgeschlossen -> Issue 3.'
+  when:
+    ref: fact.ending_reason
+    op: equals
+    value: zahlungsverzug
+  urgency: HIGH
+  reason_code: EXTENSION_EXCLUDED_PAYMENT_DEFAULT
+  reason_de: Bei einer Kündigung wegen Zahlungsverzug ist eine Erstreckung ausgeschlossen. Es gelten die
+    Regeln von Issue 3; Aussagen zu einer möglichen Erstreckung werden unterdrückt. Sofortige juristische
+    und soziale Prüfung.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_PAYMENT_DEFAULT
+  suppress_standard_statements: true
+- id: EX_AUSSCHLUSS_ANDERE
+  description: 'Andere ausserordentliche Kündigung oder Befristung bis Baubeginn: möglicher Ausschluss.'
+  when:
+    any:
+    - ref: fact.ending_reason
+      op: equals
+      value: andere_ausserordentlich
+    - ref: fact.limited_to_demolition
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: EXTENSION_POSSIBLY_EXCLUDED
+  reason_de: Es liegt ein möglicher gesetzlicher Ausschlussgrund vor (z. B. schwere Pflichtverletzung,
+    Konkurs, Befristung bis Umbau/Abbruch). Rechtsperson sofort; keine Aussage zu einer möglichen Erstreckung.
+  professionals: &id002
+  - tenancy_law_counsel
+- id: EX_FRUEHERE_MAHNUNG
+  description: Frühere gültige Mahnung (Art. 257d) auch bei ordentlicher Kündigung.
+  when:
+    ref: fact.prior_payment_warning
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EXTENSION_PRIOR_PAYMENT_WARNING
+  reason_de: Vor der Kündigung gab es eine Zahlungsaufforderung mit Kündigungsandrohung. War sie gültig,
+    bleibt die Erstreckung auch bei ordentlicher Kündigung ausgeschlossen. Die Gültigkeit der Mahnung
+    (Issue 2) muss die Rechtsperson sofort prüfen; keine Aussage 'Erstreckung möglich'.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_PAYMENT_WARNING
+- id: EX_UNBEFRISTET_FRIST
+  description: 'Unbefristet: Empfang unbekannt oder 20+ Tage seit Empfang (Produktschwelle wie Issue 1).'
+  when:
+    all:
+    - ref: fact.contract_term_type
+      op: equals
+      value: unbefristet
+    - any:
+      - ref: fact.receipt_date
+        op: is_unknown
+      - ref: fact.delivery_method
+        op: is_unknown
+      - ref: fact.pickup_notice_date
+        op: is_unknown
+      - ref: derived.days_since_earliest_receipt
+        op: greater_than
+        value: 19
+  urgency: HIGH
+  reason_code: EXTENSION_30_DAY_DEADLINE_TIGHT
+  reason_de: Das Erstreckungsbegehren muss bei unbefristetem Vertrag innert 30 Tagen nach Empfang der
+    Kündigung eingehen. Der Empfang ist unbekannt oder liegt 20 oder mehr Tage zurück (Produktschwelle,
+    kein Fristende). Rechtsperson sofort.
+  professionals: *id002
+- id: EX_BEFRISTET_FRIST
+  description: 'Befristet: höchstens 75 Tage bis Vertragsende oder Ende unbekannt (Teamentscheid 7.11.2026).'
+  when:
+    all:
+    - ref: fact.contract_term_type
+      op: equals
+      value: befristet
+    - any:
+      - ref: derived.days_until_contract_end
+        op: less_than
+        value: 76
+      - ref: fact.contract_end_date
+        op: is_unknown
+  urgency: HIGH
+  reason_code: EXTENSION_FIXED_TERM_75_DAYS
+  reason_de: Der befristete Vertrag endet in 75 Tagen oder weniger (oder das Ende ist unbekannt). Das
+    Begehren muss spätestens 60 Tage vor Ablauf eingehen; die Rechtsperson braucht Puffer (Produktschwelle,
+    kein Fristende). Rechtsperson sofort.
+  professionals: *id002
+- id: EX_ZWEITERSTRECKUNG
+  description: 'Zweite Erstreckung: höchstens 75 Tage bis Ende der ersten.'
+  when:
+    all:
+    - ref: fact.previous_extension
+      op: equals
+      value: true
+    - ref: derived.days_until_first_extension_end
+      op: less_than
+      value: 76
+  urgency: HIGH
+  reason_code: EXTENSION_SECOND_75_DAYS
+  reason_de: Eine zweite Erstreckung muss spätestens 60 Tage vor Ablauf der ersten beantragt werden. Das
+    Ende der ersten Erstreckung liegt in 75 Tagen oder weniger (Produktschwelle). Rechtsperson sofort;
+    Suchbemühungen sind zwingend zu dokumentieren.
+  professionals: *id002
+- id: EX_FRIST_VERPASST
+  description: 'Frist möglicherweise verpasst: Verwirkung.'
+  when:
+    ref: fact.deadline_possibly_missed
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EXTENSION_DEADLINE_POSSIBLY_MISSED
+  reason_de: Die Frist für das Erstreckungsbegehren ist möglicherweise verpasst (Verwirkungsfrist). Rechtsperson
+    sofort (andere Wege prüfen), Sozialarbeiterin plant den Auszug.
+  professionals: *id001
+- id: EX_ERSATZ_ODER_VERGLEICH
+  description: Ersatzwohnung angeboten oder Vergleich mit Verzicht vorgelegt.
+  when:
+    any:
+    - ref: fact.replacement_offered
+      op: equals
+      value: true
+    - ref: fact.settlement_with_waiver_offered
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: EXTENSION_REPLACEMENT_OR_WAIVER
+  reason_de: Die Vermieterschaft bietet eine Ersatzwohnung oder einen Vergleich an. Das kann die Erstreckung
+    ausschliessen oder auf die zweite Erstreckung verzichten lassen. Nichts unterschreiben oder ablehnen,
+    bevor die Rechtsperson geprüft hat. Rechtsperson sofort.
+  professionals: *id002
+- id: EX_HAERTEGRUENDE
+  description: 'Fristen gewahrt, Härtegründe vorhanden: bald, Recht + Soziales.'
+  when:
+    ref: fact.hardship_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: EXTENSION_HARDSHIP_PRESENT
+  reason_de: Es gibt Härtegründe. Die Behörde wägt die Interessen beider Seiten ab; die Sozialarbeiterin
+    dokumentiert Härtegründe und Suchbemühungen sauber (bald).
+  professionals: *id001
+- id: EX_KEINE_SUCHE
+  description: 'Keine Suchbemühungen bisher: Suche starten.'
+  when:
+    ref: fact.search_efforts
+    op: equals
+    value: keine
+  urgency: MEDIUM
+  reason_code: EXTENSION_NO_SEARCH_EFFORTS
+  reason_de: Bisher wurde nicht nach einer Wohnung gesucht. Die Suche sollte sofort beginnen und dokumentiert
+    werden; ohne Suchbemühungen wird höchstens eine kurze Erstreckung gewährt.
+  professionals:
+  - social_counselling
+- id: EX_SONDERFRAGEN
+  description: 'Konkubinat, Untermiete oder Familienwohnung: Sonderfragen.'
+  when:
+    any:
+    - ref: fact.tenant_role
+      op: equals
+      value: untermieterin
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.cohabitant_partner
+      op: equals
+      value: true
+  urgency: MEDIUM
+  reason_code: EXTENSION_SPECIAL_QUESTIONS
+  reason_de: Untermiete, Familienwohnung oder eine Lebenspartnerschaft ohne Eintragung werfen Sonderfragen
+    auf (z. B. Mitbenutzung, Dauer des Hauptmietverhältnisses). Das System erfasst nur die Fakten; die
+    Rechtsperson bewertet.
+  professionals: *id002
+- id: EX_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id001
+- id: EX_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht.
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id002
+legal_rules:
+- id: EX_HINT_ANSPRUCH
+  description: Erstreckung bei Härte.
+  kind: HINT
+  when: *id003
+  result_code: HINT_EXTENSION_HARDSHIP
+  result_de: Wenn der Auszug für die Klientin oder ihre Familie eine besondere Härte bedeutet, kann sie
+    eine Erstreckung des Mietverhältnisses verlangen.
+  legal_source_ids:
+  - CH_OR_272_1
+- id: EX_HINT_FRIST
+  description: Fristen und Verwirkung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_EXTENSION_DEADLINES
+  result_de: Bei einem unbefristeten Vertrag muss das Begehren innert 30 Tagen nach Empfang der Kündigung
+    bei der Schlichtungsbehörde eingehen, bei einem befristeten spätestens 60 Tage vor Ablauf. Wer die
+    Frist verpasst, verliert den Anspruch.
+  legal_source_ids:
+  - CH_OR_273_2
+  - BGE_139_III_7
+- id: EX_HINT_ABWAEGUNG
+  description: Interessenabwägung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_EXTENSION_BALANCING
+  result_de: Berücksichtigt werden unter anderem die Dauer des Mietverhältnisses, die persönlichen, familiären
+    und finanziellen Verhältnisse, ein allfälliger Eigenbedarf der Vermieterschaft und die Lage auf dem
+    Wohnungsmarkt. Die Behörde wägt die Interessen beider Seiten ab.
+  legal_source_ids:
+  - CH_OR_272_2
+  - BGE_142_III_336
+- id: EX_HINT_DAUER
+  description: Höchstdauer.
+  kind: HINT
+  when: *id003
+  result_code: HINT_EXTENSION_MAX_4Y
+  result_de: Bei Wohnungen kann um insgesamt höchstens vier Jahre erstreckt werden. Wie lange, entscheidet
+    die Behörde im Einzelfall; oft wird zuerst kürzer erstreckt.
+  legal_source_ids:
+  - CH_OR_272B_1
+  - BGE_142_III_336
+  - BGE_135_III_121
+- id: EX_HINT_SUCHE
+  description: Suche dokumentieren.
+  kind: HINT
+  when: *id003
+  result_code: HINT_DOCUMENT_SEARCH
+  result_de: Die Klientin sollte sofort mit der Wohnungssuche beginnen und alles dokumentieren (Bewerbungen,
+    Absagen). Das ist schon für die erste Erstreckung wichtig.
+  legal_source_ids:
+  - BGER_4A_72_2011
+  - BGE_151_III_481
+  - CH_OR_272_3
+- id: EX_HINT_UMZUGSMUEHE
+  description: Umzugsmühe allein reicht nicht.
+  kind: HINT
+  when: *id003
+  result_code: HINT_MOVING_EFFORT_NOT_ENOUGH
+  result_de: Die Umzugsmühe allein reicht nicht; entscheidend sind konkrete Umstände wie Kinder, Gesundheit,
+    Alter oder finanzielle Lage.
+  legal_source_ids:
+  - BGE_105_II_197
+  - BGER_4A_72_2011
+- id: EX_HINT_VERFAHREN
+  description: Während des Verfahrens nicht ausziehen.
+  kind: HINT
+  when: *id003
+  result_code: HINT_STAY_DURING_PROCEEDINGS
+  result_de: Während des Verfahrens muss die Klientin die Wohnung nicht verlassen.
+  legal_source_ids:
+  - LEHRBUCH_MIETE_31
+- id: EX_HINT_NEUE_WOHNUNG
+  description: Verkürzte Kündigung während der Erstreckung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_SHORT_NOTICE_DURING_EXTENSION
+  result_de: Findet die Klientin während der Erstreckung eine Wohnung, kann sie mit verkürzter Frist kündigen.
+  legal_source_ids:
+  - CH_OR_272D
+- id: EX_HINT_KOSTEN
+  description: Schlichtungsverfahren kostenlos.
+  kind: HINT
+  when: *id003
+  result_code: HINT_NO_COURT_COSTS
+  result_de: Das Verfahren vor der Schlichtungsbehörde kostet keine Gerichtskosten.
+  legal_source_ids:
+  - CH_ZPO_113_2_C
+- id: EX_REVIEW_VERGLEICH
+  description: 'Vor Unterschrift: Verzicht auf zweite Erstreckung möglich.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.settlement_with_waiver_offered
+    op: equals
+    value: true
+  result_code: REVIEW_WAIVER_RISK
+  result_de: 'Prüfhinweis: Vor der Unterschrift eines Vergleichs ist die Rechtsperson beizuziehen, weil
+    damit auf eine zweite Erstreckung verzichtet werden kann; bei einer Familienwohnung ist die Vereinbarung
+    nur mit beiden Ehegatten gültig.'
+  legal_source_ids:
+  - CH_OR_272B_2
+  - CH_OR_273A
+- id: EX_REVIEW_KONKUBINAT
+  description: 'Lebenspartner: nur Faktum.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.cohabitant_partner
+    op: equals
+    value: true
+  result_code: REVIEW_COHABITANT
+  result_de: 'Prüfhinweis: Ob eine Lebenspartnerschaft ohne Eintragung zur ''Familie'' zählt, ist umstritten
+    (ältere Praxis verneint). Das System erfasst nur die Fakten.'
+  legal_source_ids:
+  - BGE_105_II_197
+  - BGER_4A_673_2014
+- id: EX_REVIEW_UNTERMIETE
+  description: 'Untermiete: Dauer des Hauptmietverhältnisses.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.tenant_role
+    op: equals
+    value: untermieterin
+  result_code: REVIEW_SUBLEASE
+  result_de: 'Prüfhinweis: Bei Untermiete kann nur für die Dauer des Hauptmietverhältnisses erstreckt
+    werden.'
+  legal_source_ids:
+  - CH_OR_273B_1
+- id: EX_REVIEW_ABBRUCH_BEKANNT
+  description: Abbruch/Umbau bei Vertragsschluss bekannt.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.demolition_known_at_signing
+    op: equals
+    value: true
+  result_code: REVIEW_DEMOLITION_KNOWN
+  result_de: 'Prüfhinweis: War ein Abbruch oder Umbau bei Vertragsschluss bekannt, wird eine Härte kaum
+    anerkannt (altes Recht); Abgrenzung zum Ausschlussgrund nach Art. 272a Abs. 1 lit. d OR.'
+  legal_source_ids:
+  - BGE_105_II_197
+  - CH_OR_272A_1_A
+- id: EX_REVIEW_NUR_HAERTE
+  description: Härte macht Kündigung nicht anfechtbar.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.hardship_present
+    op: equals
+    value: true
+  result_code: REVIEW_HARDSHIP_NOT_CONTESTABLE
+  result_de: 'Prüfhinweis: Eine Härte macht die Kündigung nicht anfechtbar; sie ist nur für die Erstreckung
+    relevant.'
+  legal_source_ids:
+  - BGE_142_III_91
+legal_source_ids:
+- CH_OR_272_1
+- CH_OR_273_2
+- BGE_139_III_7
+- CH_OR_272_2
+- BGE_142_III_336
+- CH_OR_272B_1
+- BGE_135_III_121
+- BGER_4A_72_2011
+- BGE_151_III_481
+- CH_OR_272_3
+- BGE_105_II_197
+- LEHRBUCH_MIETE_31
+- CH_OR_272D
+- CH_ZPO_113_2_C
+- CH_OR_272B_2
+- CH_OR_273A
+- BGER_4A_673_2014
+- CH_OR_273B_1
+- CH_OR_272A_1_A
+- BGE_142_III_91
+default_professionals:
+- tenancy_law_counsel
+- social_counselling
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Erstreckung des Mietverhältnisses (Art. 272 ff. OR) – Kanton Zürich
+  groups:
+  - id: ending
+    title_de: Beendigung und Ausschlussgründe
+    fact_ids:
+    - ending_reason
+    - contract_term_type
+    - limited_to_demolition
+    - receipt_date
+    - pickup_notice_date
+    - delivery_method
+    - contract_end_date
+    - previous_extension
+    - previous_extension_end_date
+    - challenge_filed
+    - deadline_possibly_missed
+  - id: hardship
+    title_de: Härtegründe (Art. 272 Abs. 2 lit. a–e OR)
+    fact_ids:
+    - household_description
+    - children_in_household
+    - school_change_needed
+    - health_limitations
+    - economic_difficulty
+    - tenancy_start_date
+    - local_market_note
+    - conclusion_circumstances
+    - medical_evidence_current
+    - hardship_present
+    - cohabitant_partner
+    - family_home_with_spouse
+  - id: landlord
+    title_de: Interessen der Vermieterschaft
+    fact_ids:
+    - stated_reason
+    - replacement_offered
+    - settlement_with_waiver_offered
+    - prior_payment_warning
+    - demolition_known_at_signing
+  - id: search
+    title_de: Suchbemühungen und soziale Unterstützung
+    fact_ids:
+    - search_efforts
+    - social_search_support
+  - id: situation
+    title_de: Vorprüfung
+    fact_ids:
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+    - vulnerability_present
+    - client_requests_expert
+    - consent_briefing
+  review_points:
+  - text_de: 'Ausschlussgründe geprüft (Art. 272a OR): Zahlungsverzug, schwere Pflichtverletzung, Konkurs,
+      Befristung bis Umbau, Ersatzwohnung.'
+    source_ids:
+    - CH_OR_272A_1_A
+    - CH_OR_272A_2
+    - BGE_117_II_415
+  - text_de: 'Fristen sind Verwirkungsfristen: 30 Tage ab Empfang (unbefristet), spätestens 60 Tage vor
+      Ablauf (befristet), zweite Erstreckung spätestens 60 Tage vor Ablauf der ersten.'
+    source_ids:
+    - CH_OR_273_2
+    - CH_OR_273_3
+    - BGE_139_III_7
+    - BGE_114_II_165
+  - text_de: Härtegründe nach Art. 272 Abs. 2 lit. a–e OR mit aktuellen Belegen; Verhältnisse im Entscheidzeitpunkt
+      massgebend.
+    source_ids:
+    - CH_OR_272_2
+    - BGER_4A_673_2014
+  - text_de: Suchbemühungen früh dokumentieren (schon für die erste Erstreckung wichtig, zwingend für
+      die zweite).
+    source_ids:
+    - BGER_4A_72_2011
+    - CH_OR_272_3
+  - text_de: Eventualiter im Anfechtungsbegehren beantragen; die Behörde prüft die Erstreckung bei Abweisung
+      von Amtes wegen.
+    source_ids:
+    - CH_OR_273_5
+    - BGE_151_III_481
+  documents_to_request:
+  - Kündigung bzw. befristeter Vertrag
+  - Umschlag / Abholungseinladung
+  - Nachweise der Wohnungssuche (Bewerbungen, Absagen, Inserate)
+  - Arztzeugnisse oder Schulbestätigungen, falls relevant
+  - Allfällige frühere Erstreckungsentscheide
+  authority_ids:
+  - SCHLICHTUNGSBEHOERDE_MIETE_ZH
+  - MIETERVERBAND_ZH
+  - RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+  - SOZIALDIENST_WOHNGEMEINDE
+  - WOHNHILFE_ZH

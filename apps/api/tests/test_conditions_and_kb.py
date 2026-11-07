@@ -106,12 +106,18 @@ def test_invalid_conditions_fail_validation(bad):
 
 
 # ---- knowledge base loading ----------------------------------------------------------------
-def test_shipped_kb_is_valid_and_has_four_issues():
+def test_shipped_kb_is_valid_and_has_ten_issues():
     kb = load_knowledge_base(KB)
     assert kb.valid, kb.errors
     assert set(kb.issues) == {
         "CH_TENANCY_TERMINATION",
-        "tenancy_defects",
+        "CH_TENANCY_PAYMENT_WARNING",
+        "CH_TENANCY_PAYMENT_DEFAULT",
+        "CH_TENANCY_EXTENSION",
+        "CH_TENANCY_DEFECTS",
+        "CH_TENANCY_EVICTION",
+        "CH_TENANCY_RENT_INCREASE",
+        "tenancy_defects",  # Legacy-Demo (DEMO_SYNTHETIC), ersetzt durch CH_TENANCY_DEFECTS
         "employment_termination",
         "unpaid_salary",
     }

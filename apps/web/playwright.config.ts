@@ -32,6 +32,8 @@ export default defineConfig({
         GEMINI_API_KEY: "", // e2e must never use the real key from .env
         APP_TODAY: "2026-11-07", // reproducible "days since receipt"
         APP_ENV: "test",
+        // the QR link is built from this address (explicit, deterministic; real use: scripts/dev.ps1 -Lan sets it)
+        BRIDGE_PUBLIC_BASE_URL: `http://localhost:${WEB_PORT}`,
         DATABASE_URL: `sqlite:///${path.resolve(__dirname, "test-results", `e2e-${Date.now()}.db`).split(path.sep).join("/")}`,
       },
     },

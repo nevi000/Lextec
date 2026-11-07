@@ -39,6 +39,9 @@ schema_version: 1                   # aktuell immer 1
 id: tenancy_termination             # eindeutig, snake_case, = technischer Name
 version: "0.1-demo"                 # Ihre Versionsnummer (Text)
 content_status: DEMO_SYNTHETIC      # DEMO_SYNTHETIC | DRAFT | LEGALLY_REVIEWED
+                                    # DRAFT = classifiable, not yet legally released; LEGALLY_REVIEWED = released;
+                                    # DEMO_SYNTHETIC = placeholder content: loaded for old cases/tests, NEVER offered to the
+                                    # classifier for new cases (KnowledgeBase.catalog_issues()).
 jurisdiction: CH
 legal_area: tenancy
 issue: landlord_termination

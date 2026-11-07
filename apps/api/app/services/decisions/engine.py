@@ -15,6 +15,7 @@ from app.schemas.decision import (
     ApprovedStatement,
     DecisionResult,
     EvaluatedRule,
+    IntakeState,
     LegalFinding,
     NextQuestion,
     RelatedRoute,
@@ -46,16 +47,28 @@ def _outcome(value: bool | None) -> str:
 
 
 def _route(kb: KnowledgeBase, rule_id: str, issue_id: str) -> RelatedRoute:
+    """Hand-over to another issue.
+
+    ``available`` = the issue is loaded in the knowledge base (law-team dossier integrated). Its status
+    (DRAFT / LEGALLY_REVIEWED) is stated in the note: a DRAFT issue is applied additionally, but never
+    presented as legally released; a PLANNED/unknown issue is only a recommendation for human review.
+    """
     issue = kb.issues.get(issue_id)
     related = kb.related_issues.get(issue_id)
     title = issue.title_de if issue else (related.title_de if related else issue_id)
-    available = bool(issue and issue.content_status == "LEGALLY_REVIEWED")
-    note = (
-        f"«{title}» ist umgesetzt und juristisch freigegeben; seine Regeln werden zusätzlich angewendet."
-        if available
-        else f"«{title}» ist noch nicht juristisch freigegeben umgesetzt. Es werden keine Spezialregeln "
-        "angewendet; menschliche Prüfung empfohlen."
-    )
+    available = bool(issue and issue.content_status != "DEMO_SYNTHETIC")
+    if available and issue.content_status == "LEGALLY_REVIEWED":  # type: ignore[union-attr]
+        note = f"«{title}» ist umgesetzt und juristisch freigegeben; seine Regeln werden zusätzlich angewendet."
+    elif available:
+        note = (
+            f"«{title}» ist als Dossierstand des Law-Teams umgesetzt (noch nicht juristisch freigegeben); "
+            "seine Regeln werden zusätzlich angewendet, die Fachperson prüft."
+        )
+    else:
+        note = (
+            f"«{title}» ist noch nicht umgesetzt. Es werden keine Spezialregeln angewendet; "
+            "menschliche Prüfung empfohlen."
+        )
     return RelatedRoute(
         issue_id=issue_id, title_de=title, available=available, note_de=note, from_rule_id=rule_id
     )
@@ -275,6 +288,11 @@ def decide(
     next_question: NextQuestion | None = None
     max_urgency = triggered[0].urgency if triggered else None
     if triggered:
+        # After an escalation the intake continues for the expert's benefit: facts valuable for the handover
+        # come first (stable otherwise). Decision logic is not touched; this only orders the questions.
+        hp = lambda m: 0 if m.handover_priority == "high" else 1  # noqa: E731
+        missing = sorted(missing, key=hp)
+        analysis.optional_open = sorted(analysis.optional_open, key=hp)
         action = Action.ESCALATE
         if missing:
             reason_codes.append("MISSING_REQUIRED_FACTS")
@@ -321,7 +339,25 @@ def decide(
             "Dies ist keine verbindliche Rechtsauskunft."
         )
 
+    relevant = {f.id for i in active_ids for f in kb.issues[i].facts}
+    intake = IntakeState(
+        important_open=sum(1 for m in missing if not m.deferred),
+        optional_open=sum(1 for m in analysis.optional_open if not m.deferred),
+        deferred=sum(1 for m in [*missing, *analysis.optional_open] if m.deferred),
+        unknown=sum(
+            1
+            for fid, fs in snapshot.facts.items()
+            if fid in relevant and fs.status == FactStatus.UNKNOWN
+        ),
+        known=sum(
+            1
+            for fid, fs in snapshot.facts.items()
+            if fid in relevant and fs.status == FactStatus.KNOWN
+        ),
+        complete=not any(not m.deferred for m in missing),
+    )
     result = DecisionResult(
+        intake=intake,
         action=action,
         main_reason_code=main,
         reason_codes=reason_codes,

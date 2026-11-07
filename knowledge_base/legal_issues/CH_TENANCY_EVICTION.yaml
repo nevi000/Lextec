@@ -1,0 +1,928 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Ausweisung und Räumung (Issue 6)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_06.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_06.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_EVICTION
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: eviction
+title_de: Ausweisung und Räumung (Issue 6)
+description: 'Ausweisungsverfahren und Räumung nach Kündigung oder Vertragsende (u. a. Art. 257, 343 ZPO).
+  Dringendstes Issue: immer sofortige, parallele Eskalation; keine Rückfrage-Runden (bewusste Ausnahme
+  von G7); Fristen werden nur wörtlich zitiert.'
+provenance_de: 'Law-Dossier Issue 6 vom 7.11.2026; Teamentscheide: keine Rückfrage-Runden (Ausnahme zu
+  G7), Unterlagenliste für die Sozialarbeiterin.'
+classification:
+  description: 'Passt bei Ausweisungsgesuch, Vorladung des Gerichts, Entscheid, Schreiben des Gemeinde-/Stadtammannamts,
+    Räumungstermin, Schlossauswechslung oder Räumung durch die Vermieterschaft. Stichworte: Ausweisung,
+    Räumung, Stadtammann, Gemeindeammann, Einzelgericht, Audienz, klare Fälle, Schloss ausgewechselt,
+    ''morgen kommt das Stadtammannamt''. NICHT passend: blosse Kündigung ohne Verfahren (Issue 1/3).'
+  typical_situations:
+  - Morgen kommt das Stadtammannamt.
+  - Meine Klientin hat ein Ausweisungsgesuch des Gerichts bekommen.
+  - Der Vermieter hat das Schloss ausgewechselt.
+  - Das Gericht hat die Ausweisung angeordnet, der Räumungstermin steht.
+  related_issues: []
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: family_home_with_spouse
+  group: form
+  label_de: Familienwohnung (Ehe-/eingetragene Partnerperson)
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_273A_1
+  - BGE_139_III_7
+  extraction_hint_de: true nur bei Ehe oder eingetragener Partnerschaft; Konkubinat = false. 'keine Ehe-
+    oder eingetragene Partnerperson' = false.
+  question_de: Wohnt die Klientin dort mit einer Ehe- oder eingetragenen Partnerperson?
+  why_needed_de: Bei Familienwohnung ist die Kündigung auch der Partnerperson separat zuzustellen (Art.
+    266n OR; BGE 139 III 7). Konkubinat zählt nicht.
+- id: spouse_still_lives_there
+  group: form
+  label_de: Partnerperson wohnt noch dort
+  data_type: boolean
+  required_if:
+    ref: fact.family_home_with_spouse
+    op: equals
+    value: true
+  priority: medium
+  depends_on:
+  - family_home_with_spouse
+  source_ids:
+  - BGE_139_III_7
+  - BGE_140_III_491
+  question_de: Wohnt die Partnerperson noch dort (oder ist sie definitiv ausgezogen)?
+  why_needed_de: Bei definitivem Auszug entfällt der Familiencharakter (BGE 139 III 7; BGE 140 III 491).
+- id: separate_delivery_to_spouse
+  group: form
+  label_de: Separate Zustellung an die Partnerperson
+  data_type: boolean
+  required_if:
+    all:
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.spouse_still_lives_there
+      op: equals
+      value: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - family_home_with_spouse
+  - spouse_still_lives_there
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_266O
+  question_de: Hat die Partnerperson eine eigene Kündigung in einem separaten Umschlag erhalten?
+  why_needed_de: Fehlt die separate Zustellung, kann ein Formmangel vorliegen (Art. 266n, 266o OR); die
+    Fachperson beurteilt das.
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: challenge_filed
+  group: history
+  label_de: Kündigung bereits angefochten
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273_1
+  - BGE_141_III_262
+  question_de: "Hat die Klientin die Kündigung schon bei der Schlichtungsbehörde angefochten oder eine Erstreckung verlangt?"
+  why_needed_de: Laufendes Verfahren (Art. 273 OR); schützt aber nicht automatisch vor der Ausweisung
+    (BGE 141 III 262 E. 3.3).
+  required: true
+- id: housing_solution_available
+  group: social
+  label_de: Anschlusslösung vorhanden
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Gibt es eine Unterkunft nach dem Auszug (Anschlusslösung)?
+  why_needed_de: Ohne Anschlusslösung muss der Sozialdienst sofort eine Notunterkunft prüfen.
+  required: true
+- id: children_in_household
+  group: social
+  label_de: Kinder im Haushalt
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  extraction_hint_de: true bei Kindern im Haushalt; false bei ausdrücklich keine Kinder.
+  question_de: Leben Kinder in der Wohnung?
+  why_needed_de: Soziale Notfallplanung bzw. Härtegrund; verändert keine Rechtsfolge, wohl aber den Unterstützungsbedarf.
+- id: landlord_self_help
+  group: history
+  label_de: Selbsthilfe der Vermieterschaft
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_343_1_D
+  - LEHRBUCH_MIETE_31
+  question_de: Hat die Vermieterschaft ohne Gericht das Schloss gewechselt, Sachen entfernt oder Strom
+    und Wasser abgestellt?
+  why_needed_de: 'Unzulässige Selbsthilfe: eine Räumung braucht einen Gerichtsentscheid (Lehrbuch N 3025d;
+    Art. 343 ZPO).'
+  required: true
+- id: social_assistance_received
+  group: social
+  label_de: Bezug von Sozialhilfe
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_DSG_6_7
+  question_de: "Bezieht die Klientin Sozialhilfe?"
+  why_needed_de: Mietzinsgarantie, Übernahme eines Rückstands, Mietzinslimite. Daten über Sozialhilfe
+    sind besonders schützenswert (Art. 5 lit. c Ziff. 6 DSG).
+- id: third_party_payment
+  group: payment
+  label_de: Zahlung durch Dritte
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)?"
+  why_needed_de: Zahlung durch Dritte tilgt die Mietschuld (Art. 68 OR; BGer 4A_68/2014 E. 4.2).
+- id: payment_returned_by_landlord
+  group: payment
+  label_de: Zahlung von der Vermieterschaft zurückgeschickt
+  data_type: boolean
+  required_if:
+    ref: fact.third_party_payment
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - third_party_payment
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt?"
+  why_needed_de: Erst nach Fristende zurücküberwiesen = angenommen (BGer 4A_68/2014 E. 4.2).
+- id: household_description
+  group: hardship
+  label_de: Haushalt
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_272_2
+  question_de: Wer wohnt in der Wohnung (Kinder, Alter, Ehe-/Lebenspartner, Pflegebedürftige)?
+  why_needed_de: Familie im Sinn von Art. 272 Abs. 2 OR; Konkubinat umstritten (nur als Faktum erfasst,
+    Bewertung durch die Rechtsperson).
+- id: eviction_stage
+  group: stage
+  label_de: Stadium des Verfahrens
+  data_type: enum
+  enum_values:
+  - nur_kuendigung
+  - gesuch_oder_vorladung
+  - gerichtsentscheid
+  - ammannamt_raeumungstermin
+  - raeumung_heute_oder_schloss
+  enum_labels_de:
+    nur_kuendigung: Nur Kündigung oder Drohung
+    gesuch_oder_vorladung: Gesuch oder Vorladung des Gerichts
+    gerichtsentscheid: Entscheid des Gerichts
+    ammannamt_raeumungstermin: Schreiben des Gemeinde-/Stadtammannamts mit Räumungstermin
+    raeumung_heute_oder_schloss: Räumung findet heute statt oder das Schloss wurde gewechselt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_257
+  - CH_ZPO_343_1_D
+  extraction_hint_de: Nur setzen, wenn das Stadium aus dem Text klar hervorgeht (Gericht, Ammannamt, Räumungstermin).
+    Bei 'muss raus' ohne Dokument NICHT raten.
+  question_de: "Was liegt derzeit vor?"
+  why_needed_de: Bestimmt Frist und Dringlichkeit. Blockierend, aber die Eskalation wartet nicht auf die
+    Antwort.
+- id: eviction_document_available
+  group: stage
+  label_de: Schreiben hochgeladen
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - PRODUKTREGEL
+  question_de: "Liegt das Schreiben vollständig vor (alle Seiten, mit Umschlag)?"
+  why_needed_de: Frist, Gericht, Geschäftsnummer.
+- id: court_reference
+  group: stage
+  label_de: Gericht und Geschäftsnummer
+  data_type: string
+  priority: medium
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Welches Gericht bzw. Amt und welche Geschäftsnummer steht im Schreiben?
+  why_needed_de: Gehört ins Briefing der Rechtsperson.
+- id: document_receipt_date
+  group: stage
+  label_de: Zustelldatum des Schreibens
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_239_2
+  - CH_ZPO_314_1
+  question_de: "An welchem Datum wurde das Schreiben empfangen oder auf der Post abgeholt?"
+  why_needed_de: Fristbeginn; die Rechtsperson rechnet, das System rechnet nicht.
+- id: deadline_quoted_text
+  group: stage
+  label_de: Frist im Schreiben (wörtlich)
+  data_type: string
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_252_254
+  question_de: "Welche Frist (Stellungnahme, Auszug, Räumungstermin) steht im Schreiben? Bitte wörtlich wiedergeben, oder «keine Frist» angeben."
+  why_needed_de: Wird wörtlich ans Briefing übergeben, nicht berechnet.
+- id: eviction_termination_reason
+  group: history
+  label_de: Grund der Kündigung
+  data_type: enum
+  enum_values:
+  - zahlungsverzug
+  - ordentlich
+  - vertragsende
+  - andere
+  enum_labels_de:
+    zahlungsverzug: Zahlungsverzug
+    ordentlich: Ordentliche Kündigung
+    vertragsende: Vertragsende (befristet)
+    andere: Anderes
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_2
+  - CH_OR_272A_1_A
+  question_de: Zahlungsverzug, ordentliche Kündigung, Vertragsende oder anderes?
+  why_needed_de: Vorfrage; bei Zahlungsverzug keine Erstreckung.
+- id: arrears_paid_timing
+  group: history
+  label_de: Rückstand bezahlt
+  data_type: enum
+  enum_values:
+  - nicht_bezahlt
+  - vor_fristablauf
+  - nach_fristablauf
+  enum_labels_de:
+    nicht_bezahlt: Nicht bezahlt
+    vor_fristablauf: Vollständig vor Fristablauf bezahlt
+    nach_fristablauf: Erst nach Fristablauf bezahlt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - OGZH_LF260018
+  question_de: "Wurde der Mietzinsrückstand bezahlt? Wenn ja: vor oder nach Ablauf der Zahlungsfrist?"
+  why_needed_de: Nachzahlung nach Fristablauf heilt nicht (OG ZH LF260018 E. 4.2).
+- id: post_termination_agreement
+  group: history
+  label_de: Abmachung nach der Kündigung
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_337_338_341
+  question_de: "Gibt es eine Abmachung mit der Vermieterschaft (Stundung, Ratenzahlung, neuer Vertrag, Auszugstermin)?"
+  why_needed_de: Einwand gegen Ausweisung oder Vollstreckung (Art. 341 Abs. 3 ZPO); möglicher neuer Mietvertrag.
+- id: client_wants_to_sign_move_out
+  group: history
+  label_de: Klientin will Auszugstermin unterschreiben
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Will die Klientin «freiwillig» einen Auszugstermin oder eine Vereinbarung unterschreiben?
+  why_needed_de: 'Global G9: Unterschriften vor der Rechtsprüfung vermeiden.'
+- id: belongings_plan
+  group: social
+  label_de: Hab und Gut
+  data_type: string
+  priority: low
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Wo kommen Möbel und Sachen bei der Räumung hin (Einlagerung)?
+  why_needed_de: Soziale Notfallplanung.
+escalation_rules:
+- id: EV_OUT_OF_SCOPE_OBJECT
+  description: 'Geschäftsraum, Pacht, Zimmer in Heim oder Notwohnung: andere Regeln / ausserhalb des Moduls
+    (G5).'
+  when:
+    ref: fact.object_type
+    op: in
+    value:
+    - notwohnung_heim
+    - ferienwohnung_bis_3_monate
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Objekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls (z. B. Geschäftsraum,
+    Heim, Notwohnung). Es werden keine Standardaussagen gemacht; Rechtsperson und Sozialarbeiterin prüfen
+    sofort.
+  professionals: &id001
+  - tenancy_law_counsel
+  - social_counselling
+  suppress_standard_statements: true
+- id: EV_RAEUMUNG_STEHT
+  description: 'Räumungstermin steht oder Räumung findet statt: SOZIAL + RECHT.'
+  when:
+    ref: fact.eviction_stage
+    op: in
+    value:
+    - ammannamt_raeumungstermin
+    - raeumung_heute_oder_schloss
+  urgency: HIGH
+  reason_code: EVICTION_DATE_SET_OR_TODAY
+  reason_de: Ein Räumungstermin steht oder die Räumung findet statt. Sofort Unterkunft, Kinder und Hab
+    und Gut sichern (Sozialarbeiterin) und restliche Einwände prüfen (Rechtsperson). Das Datum steht im
+    Schreiben; das System rechnet nichts.
+  professionals:
+  - social_counselling
+  - tenancy_law_counsel
+- id: EV_GRUNDREGEL
+  description: 'Ausweisung/Räumung: IMMER sofort Rechtsperson + Sozialarbeiterin, keine Rückfrage-Runden,
+    kein KI_WEITER.'
+  when: &id003
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EVICTION_ALWAYS_IMMEDIATE
+  reason_de: 'Hinweis auf ein Ausweisungs- oder Räumungsverfahren: Der Wohnungsverlust ist konkret. Rechtsperson
+    und Sozialarbeiterin handeln sofort und parallel (Frist prüfen, Unterkunft sichern). Das System stellt
+    keine Rückfragen vor der Eskalation und macht keine Erfolgsprognose.'
+  professionals: *id001
+- id: EV_SELBSTHILFE
+  description: 'Vermieterschaft räumt ohne Gericht: unzulässige Selbsthilfe.'
+  when:
+    ref: fact.landlord_self_help
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: LANDLORD_SELF_HELP
+  reason_de: Die Vermieterschaft hat ohne Gericht das Schloss gewechselt, Sachen entfernt oder Leistungen
+    abgestellt. Das ist unzulässig und kann strafbar sein; das System bewertet das nicht. Rechtsperson
+    und Sozialarbeiterin sofort, nötigenfalls Polizei.
+  professionals: *id001
+- id: EV_STADIUM_UNKLAR
+  description: 'Stadium unklar: sofort, keine Rückfrage-Schleife.'
+  when:
+    ref: fact.eviction_stage
+    op: is_unknown
+  urgency: HIGH
+  reason_code: EVICTION_STAGE_UNCLEAR
+  reason_de: 'Das Stadium des Verfahrens ist unklar. Es wird so gehandelt, als laufe bereits eine Frist:
+    Rechtsperson und Sozialarbeiterin sofort.'
+  professionals: *id001
+- id: EV_NUR_KUENDIGUNG_ZAHLUNGSVERZUG
+  description: 'Nur Kündigung wegen Zahlungsverzug, noch kein Verfahren: Issue 3.'
+  when:
+    all:
+    - ref: fact.eviction_stage
+      op: equals
+      value: nur_kuendigung
+    - ref: fact.eviction_termination_reason
+      op: equals
+      value: zahlungsverzug
+  urgency: HIGH
+  reason_code: EVICTION_NOT_YET_STARTED_PAYMENT_DEFAULT
+  reason_de: Es liegt bisher nur eine Kündigung wegen Zahlungsverzug vor; ein Ausweisungsverfahren ist
+    noch nicht eingeleitet. Die Regeln von Issue 3 gelten; sofortige Prüfung bleibt.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_PAYMENT_DEFAULT
+- id: EV_NUR_KUENDIGUNG_ANDERE
+  description: 'Nur Kündigung (nicht Zahlungsverzug), noch kein Verfahren: Issue 1.'
+  when:
+    all:
+    - ref: fact.eviction_stage
+      op: equals
+      value: nur_kuendigung
+    - ref: fact.eviction_termination_reason
+      op: in
+      value:
+      - ordentlich
+      - vertragsende
+      - andere
+  urgency: HIGH
+  reason_code: EVICTION_NOT_YET_STARTED_TERMINATION
+  reason_de: Es liegt bisher nur eine Kündigung vor; ein Ausweisungsverfahren ist noch nicht eingeleitet.
+    Die Regeln von Issue 1 gelten; sofortige Prüfung bleibt.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_TERMINATION
+- id: EV_UNTERSCHRIFT_AUSZUG
+  description: Klientin will 'freiwillig' einen Auszugstermin unterschreiben (G9).
+  when:
+    ref: fact.client_wants_to_sign_move_out
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EVICTION_SIGNATURE_RISK
+  reason_de: 'Die Klientin möchte einen Auszugstermin oder eine Vereinbarung unterschreiben. Das kann
+    nicht rückgängig zu machende Folgen haben: nicht unterschreiben, bevor die Rechtsperson geprüft hat.'
+  professionals: &id002
+  - tenancy_law_counsel
+- id: EV_ANFECHTUNG_HAENGIG
+  description: 'Anfechtung der Kündigung läuft: schützt nicht automatisch vor Ausweisung.'
+  when:
+    ref: fact.challenge_filed
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EVICTION_CHALLENGE_PENDING
+  reason_de: Die Kündigung ist angefochten oder eine Erstreckung verlangt. Das schützt nicht automatisch
+    vor einer Ausweisung. Gericht und Geschäftsnummer der Anfechtung ins Briefing; auf jedes Schreiben
+    reagieren.
+  professionals: *id002
+- id: EV_NACHZAHLUNG
+  description: 'Rückstand nach Ablauf der Zahlungsfrist bezahlt: heilt die Kündigung nicht.'
+  when:
+    ref: fact.arrears_paid_timing
+    op: equals
+    value: nach_fristablauf
+  urgency: HIGH
+  reason_code: EVICTION_LATE_PAYMENT_NOT_HEALING
+  reason_de: Der Rückstand wurde erst nach Ablauf der Zahlungsfrist bezahlt. Das heilt die Kündigung nicht;
+    eine Einigung mit der Vermieterschaft kann aber möglich sein, das klärt die Rechtsperson.
+  professionals: *id002
+- id: EV_DRITTZAHLUNG
+  description: Sozialdienst oder Dritte haben während der Zahlungsfrist gezahlt (Art. 68 OR).
+  when:
+    any:
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+    - ref: fact.payment_returned_by_landlord
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: EVICTION_THIRD_PARTY_PAYMENT
+  reason_de: Dritte (z. B. der Sozialdienst) haben gezahlt oder die Vermieterschaft hat Geld zurückgeschickt.
+    Das kann den klaren Fall ausschliessen. Zahlungsbelege mit Datum und Zahlungszweck sofort beschaffen
+    und der Rechtsperson geben.
+  professionals: *id002
+- id: EV_ABMACHUNG
+  description: Abmachung/neuer Vertrag nach der Kündigung.
+  when:
+    ref: fact.post_termination_agreement
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: EVICTION_AGREEMENT_PRESENT
+  reason_de: Es gibt eine Abmachung mit der Vermieterschaft (Stundung, Ratenzahlung, neuer Vertrag, Auszugstermin).
+    Schriftliche Bestätigung sichern; Einwände im Vollstreckungsverfahren nur mit Urkunden. Rechtsperson
+    sofort.
+  professionals: *id002
+- id: EV_FAMILIENWOHNUNG
+  description: 'Familienwohnung, Partnerperson nicht separat bedient: starker Einwand.'
+  when:
+    all:
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.spouse_still_lives_there
+      op: equals
+      value: true
+    - ref: fact.separate_delivery_to_spouse
+      op: equals
+      value: false
+  urgency: HIGH
+  reason_code: EVICTION_FAMILY_HOME_NOT_SEPARATE
+  reason_de: Bei einer Familienwohnung wurde die Partnerperson laut Angabe nicht separat bedient (Mahnung/Kündigung).
+    Das kann ein starker Einwand sein. Rechtsperson sofort.
+  professionals: *id002
+- id: EV_KEINE_ANSCHLUSSLOESUNG
+  description: 'Keine Anschlusslösung nach dem Auszug: Notunterkunft.'
+  when:
+    any:
+    - ref: fact.housing_solution_available
+      op: equals
+      value: false
+    - ref: fact.housing_solution_available
+      op: is_unknown
+  urgency: HIGH
+  reason_code: NO_HOUSING_SOLUTION
+  reason_de: Es gibt keine Anschlusslösung (oder sie ist unbekannt). Die Sozialarbeiterin prüft sofort
+    Notunterkunft, Mietzinsgarantie und Einlagerung.
+  professionals:
+  - social_counselling
+- id: EV_GERICHTSENTSCHEID
+  description: 'Entscheid des Gerichts eröffnet: sehr kurze Rechtsmittelfristen.'
+  when:
+    ref: fact.eviction_stage
+    op: equals
+    value: gerichtsentscheid
+  urgency: HIGH
+  reason_code: EVICTION_COURT_DECISION
+  reason_de: 'Ein Gerichtsentscheid liegt vor. Rechtsmittelfristen sind sehr kurz (dem Schreiben zu entnehmen,
+    vom System nicht berechnet): das Schreiben heute noch einer Rechtsperson zeigen.'
+  professionals: *id002
+- id: EV_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id001
+- id: EV_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht.
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id002
+legal_rules:
+- id: EV_HINT_KEINE_SELBSTHILFE
+  description: Räumung nur durch Gerichtsentscheid.
+  kind: HINT
+  when: *id003
+  result_code: HINT_NO_SELF_EVICTION
+  result_de: Die Vermieterschaft darf die Wohnung nicht selbst räumen. Dafür braucht es einen Entscheid
+    eines Gerichts.
+  legal_source_ids:
+  - CH_ZPO_343_1_D
+  - LEHRBUCH_MIETE_31
+- id: EV_HINT_BEHOERDENFRIST
+  description: Kurze Behördenfristen.
+  kind: HINT
+  when: *id003
+  result_code: HINT_SHORT_AUTHORITY_DEADLINES
+  result_de: Schreiben von Gericht oder Ammannamt enthalten oft sehr kurze Fristen. Bitte heute noch einer
+    Rechtsfachperson zeigen.
+  legal_source_ids:
+  - CH_ZPO_239_2
+  - CH_ZPO_314_1
+  - CH_ZPO_321_2
+- id: EV_HINT_ANFECHTUNG
+  description: Anfechtung schützt nicht automatisch.
+  kind: HINT
+  when: *id003
+  result_code: HINT_CHALLENGE_NO_PROTECTION
+  result_de: Auch wenn die Kündigung angefochten ist, kann ein Ausweisungsverfahren laufen. Reagieren
+    Sie deshalb auf jedes Schreiben.
+  legal_source_ids:
+  - BGE_141_III_262
+- id: EV_HINT_NACHZAHLUNG
+  description: Nachzahlung nach Fristablauf.
+  kind: HINT
+  when:
+    ref: fact.arrears_paid_timing
+    op: equals
+    value: nach_fristablauf
+  result_code: HINT_LATE_PAYMENT_NOT_HEALING
+  result_de: Wer nach Ablauf der Zahlungsfrist bezahlt, macht die Kündigung dadurch nicht ungültig. Eine
+    Einigung mit der Vermieterschaft kann aber trotzdem möglich sein; das klärt eine Fachperson.
+  legal_source_ids:
+  - OGZH_LF260018
+- id: EV_HINT_UNTERKUNFT
+  description: Parallel Unterkunft suchen.
+  kind: HINT
+  when: *id003
+  result_code: HINT_SEARCH_ACCOMMODATION_NOW
+  result_de: Parallel zur rechtlichen Prüfung sollte jetzt eine Unterkunft gesucht werden.
+  legal_source_ids:
+  - PRODUKTREGEL
+- id: EV_HINT_UNTERLAGEN
+  description: Schreiben aufbewahren.
+  kind: HINT
+  when: *id003
+  result_code: HINT_KEEP_DOCUMENTS
+  result_de: Bewahren Sie alle Schreiben mit Umschlag und Abholungseinladung auf.
+  legal_source_ids:
+  - PRODUKTREGEL
+- id: EV_HINT_DRITTZAHLUNG
+  description: Zahlungen Dritter sichern.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+    - ref: fact.payment_returned_by_landlord
+      op: equals
+      value: true
+  result_code: HINT_THIRD_PARTY_PAYMENT_EVIDENCE
+  result_de: Hat der Sozialdienst oder eine andere Person während der Zahlungsfrist für die Klientin bezahlt,
+    kann das entscheidend sein. Bitte alle Zahlungsbelege mit Datum und Zahlungszweck sofort der Rechtsperson
+    geben.
+  legal_source_ids:
+  - BGER_4A_68_2014
+- id: EV_REVIEW_KLARER_FALL
+  description: Einwände verhindern den klaren Fall.
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_CLEAR_CASE_OBJECTIONS
+  result_de: 'Prüfhinweis: Im Verfahren für klare Fälle tritt das Gericht nicht ein, wenn Sachverhalt
+    oder Rechtslage nicht klar sind (Art. 257 Abs. 3 ZPO); substanziierte und schlüssige Einwände genügen.
+    Die Vermieterschaft kann dann den ordentlichen Weg gehen (kein endgültiger Sieg).'
+  legal_source_ids:
+  - CH_ZPO_257
+  - BGE_138_III_620
+  - BGE_138_III_123
+  - BGE_140_III_315
+- id: EV_REVIEW_STREITWERT
+  description: Berufung/Beschwerde, Aufschub.
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_APPEAL_SUSPENSIVE_EFFECT
+  result_de: 'Prüfhinweis: Berufung ab CHF 10 000 Streitwert hemmt die Vollstreckbarkeit; die Beschwerde
+    darunter nicht automatisch. Die Rechtsperson muss ggf. Aufschub beantragen.'
+  legal_source_ids:
+  - CH_ZPO_308_2
+  - CH_ZPO_315_1
+  - CH_ZPO_325
+- id: EV_REVIEW_KINDER
+  description: 'Kinder, Krankheit, Alter: kein Hindernis bei Zahlungsverzug.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.children_in_household
+    op: equals
+    value: true
+  result_code: REVIEW_CHILDREN_NO_BAR
+  result_de: 'Prüfhinweis: Kinder, Krankheit oder hohes Alter sind bei Zahlungsverzug kein rechtliches
+    Hindernis der Ausweisung; im Vordergrund steht die soziale Notfallplanung.'
+  legal_source_ids:
+  - CH_OR_272A_1_A
+  - BGER_4A_391_2013
+  - OGZH_LF260018
+legal_source_ids:
+- CH_ZPO_343_1_D
+- LEHRBUCH_MIETE_31
+- CH_ZPO_239_2
+- CH_ZPO_314_1
+- CH_ZPO_321_2
+- BGE_141_III_262
+- OGZH_LF260018
+- PRODUKTREGEL
+- BGER_4A_68_2014
+- CH_ZPO_257
+- BGE_138_III_620
+- BGE_138_III_123
+- BGE_140_III_315
+- CH_ZPO_308_2
+- CH_ZPO_315_1
+- CH_ZPO_325
+- CH_OR_272A_1_A
+- BGER_4A_391_2013
+default_professionals:
+- tenancy_law_counsel
+- social_counselling
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Ausweisung und Räumung – sofortige Weitergabe (Stadium und Dokument zuerst)
+  groups:
+  - id: stage
+    title_de: Stadium, Dokument, Geschäftsnummer, Frist (wörtlich)
+    fact_ids:
+    - eviction_stage
+    - eviction_document_available
+    - court_reference
+    - document_receipt_date
+    - deadline_quoted_text
+  - id: history
+    title_de: Kündigung, Zahlungen, Abmachungen
+    fact_ids:
+    - eviction_termination_reason
+    - family_home_with_spouse
+    - spouse_still_lives_there
+    - separate_delivery_to_spouse
+    - arrears_paid_timing
+    - third_party_payment
+    - payment_returned_by_landlord
+    - post_termination_agreement
+    - challenge_filed
+    - client_wants_to_sign_move_out
+    - landlord_self_help
+  - id: social
+    title_de: Haushalt, Kinder, Gesundheit, Anschlusslösung
+    fact_ids:
+    - household_description
+    - children_in_household
+    - housing_solution_available
+    - social_assistance_received
+    - belongings_plan
+  - id: situation
+    title_de: Vorprüfung
+    fact_ids:
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+    - vulnerability_present
+    - client_requests_expert
+    - consent_briefing
+  review_points:
+  - text_de: Stadium, Gericht/Amt, Geschäftsnummer und die wörtlich zitierte Frist aus dem Schreiben (nicht
+      berechnet).
+    source_ids:
+    - CH_ZPO_239_2
+    - CH_ZPO_314_1
+    - CH_ZPO_321_2
+  - text_de: Vorfrage Gültigkeit der Kündigung (Mahnung, Zahlung innert Frist, Form, Familienwohnung)
+      und mögliche Einwände gegen den klaren Fall.
+    source_ids:
+    - BGE_141_III_262
+    - BGE_138_III_620
+    - CH_ZPO_257
+  - text_de: Zahlungen Dritter (Sozialdienst) mit Datum und Zahlungszweck; Rücküberweisungen.
+    source_ids:
+    - BGER_4A_68_2014
+  - text_de: Vollstreckung durch das Gemeinde-/Stadtammannamt, Einwände nur nach Art. 341 Abs. 3 ZPO.
+    source_ids:
+    - CH_ZPO_343_1_D
+    - CH_ZPO_337_338_341
+    - ZH_GOG_147
+  documents_to_request:
+  - Mietvertrag
+  - Kündigung mit Couvert
+  - Mahnung
+  - Zahlungsbelege inkl. Zahlungen des Sozialdienstes
+  - Gesuch und Vorladung des Gerichts
+  - Schreiben des Gemeinde- oder Stadtammannamts
+  authority_ids:
+  - EINZELGERICHT_BEZIRKSGERICHT_ZH
+  - MIETGERICHT_ZH
+  - OBERGERICHT_ZH_ZIVILKAMMER
+  - STADTAMMANNAMT_ZH
+  - SOZIALDIENST_WOHNGEMEINDE
+  - NOTUNTERKUNFT_FAMILIEN_STADT_ZH
+  - NOTSCHLAFSTELLE_ZH
+  - MIETERVERBAND_ZH

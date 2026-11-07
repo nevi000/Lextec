@@ -128,7 +128,7 @@ export function DecisionPage() {
                 {(d.related_routes ?? []).map((r) => (
                   <div key={r.issue_id}>
                     <strong>{r.title_de}</strong>{" "}
-                    <Badge tone={r.available ? "proceed" : "incomplete"}>{r.available ? "verfügbar" : "noch nicht verfügbar"}</Badge>
+                    <Badge tone={r.available ? "proceed" : "incomplete"}>{r.available ? "Dossierstand, nicht freigegeben" : "noch nicht verfügbar"}</Badge>
                     <p className="mt-0.5 text-ink-muted">
                       {r.note_de} <span className="font-mono text-[11.5px]">({r.from_rule_id})</span>
                     </p>

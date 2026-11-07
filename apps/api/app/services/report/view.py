@@ -113,8 +113,24 @@ def traffic_light(b: CaseBriefing) -> dict[str, Any]:
 
 
 # ----------------------------------------------------------------------------------------- helpers
+HIDDEN_RELEVANCE = {"NOT_APPLICABLE", "OPTIONAL_UNANSWERED"}  # never shown as «Fehlt» in the report
+RELEVANCE_NOTE = {
+    "MISSING_REQUIRED": "wichtige Angabe offen",
+    "DEFERRED": "zurückgestellt",
+    "ASKED_UNKNOWN": "erfragt, derzeit unbekannt",
+    "UNCLEAR": "unklar",
+    "CONTRADICTORY": "widersprüchlich",
+}
+
+
 def _fact(
-    label: str, display: str | None, level: str, quote: str | None = None, key: bool = False
+    label: str,
+    display: str | None,
+    level: str,
+    quote: str | None = None,
+    key: bool = False,
+    detail: str | None = None,
+    note: str | None = None,
 ) -> dict:
     if level in NOTE_OF_LEVEL or display in (None, "", "–"):
         return {
@@ -123,7 +139,8 @@ def _fact(
             "src": None,
             "evidence": None,
             "key": key,
-            "note": NOTE_OF_LEVEL.get(level, "nicht erfasst"),
+            "note": note or NOTE_OF_LEVEL.get(level, "nicht erfasst"),
+            "detail": None,
         }
     return {
         "label": label,
@@ -132,6 +149,7 @@ def _fact(
         "evidence": quote,
         "key": key,
         "note": None,
+        "detail": detail,
     }
 
 
@@ -211,7 +229,7 @@ def _source_view(s) -> dict[str, Any]:
 
 
 def _body_from_card(c) -> dict[str, Any]:
-    phones = [p.display for p in c.phones]
+    phones = [p.display + (f" ({p.note_de})" if p.note_de else "") for p in c.phones]
     address = c.address or ("Schutzadresse, nur telefonisch" if c.address_protected else None)
     return {
         "label": de(c.label),
@@ -225,6 +243,8 @@ def _body_from_card(c) -> dict[str, Any]:
         },
         "costs": de(c.costs),
         "web": c.web,
+        "scope": c.scope_de,
+        "local_note": c.local_note_de,
         "contact_primary": c.quality in ("OFFICIAL", "NATIONAL"),
         "quality": c.quality_label_de,
         "unverified": not c.verified or c.quality == "UNDOCUMENTED",
@@ -250,12 +270,21 @@ def build_view(
 
     # -- facts (issue-specific groups) ----------------------------------------------------------------
     fact_groups: list[dict] = []
+    shown_fact_ids: set[str] = set()
     row_by_id: dict[str, tuple[str, str, str | None]] = {}
     for ib in issues:
         for g in ib.groups:
             title = f"{ib.title_de}: {g.title_de}" if len(issues) > 1 else g.title_de
             facts = []
             for r in g.rows:
+                if r.fact_id in shown_fact_ids:  # shared fact of several issues: reported once
+                    continue
+                row_by_id.setdefault(
+                    r.fact_id, (r.value_display, r.evidence_level, r.evidence_quote, r.note_de)
+                )
+                if r.relevance in HIDDEN_RELEVANCE:  # not applicable / optional and unanswered
+                    continue
+                shown_fact_ids.add(r.fact_id)
                 facts.append(
                     _fact(
                         r.label_de,
@@ -263,15 +292,16 @@ def build_view(
                         r.evidence_level,
                         r.evidence_quote,
                         key=r.status == "KNOWN",
+                        detail=r.note_de,
+                        note=RELEVANCE_NOTE.get(r.relevance or ""),
                     )
                 )
-                row_by_id.setdefault(
-                    r.fact_id, (r.value_display, r.evidence_level, r.evidence_quote)
-                )
-            fact_groups.append({"title": title, "facts": facts})
+            if facts:  # no empty groups or headings
+                fact_groups.append({"title": title, "facts": facts})
         for d in ib.derived:
             row_by_id.setdefault(
-                d.id, (str(d.value) if d.value is not None else "", d.evidence_level, None)
+                d.id,
+                (str(d.value) if d.value is not None else "", d.evidence_level, None, None),
             )
     if not fact_groups and b.known_facts:  # unsupported / no issue profile: generic list
         fact_groups.append(
@@ -284,12 +314,16 @@ def build_view(
             }
         )
     for f in b.known_facts:
-        row_by_id.setdefault(f.fact_id, (f.value_display, f.evidence_level, f.evidence_quote))
+        row_by_id.setdefault(f.fact_id, (f.value_display, f.evidence_level, f.evidence_quote, None))
 
     # -- page-1 key data from the report profile (data-driven, per issue) -----------------------------------
+    # Personal data is not captured by LexTec Bridge (no fact in the knowledge base): one compact note instead of
+    # a list of «missing» fields. A person field with a fact_id would appear here as soon as it is captured.
     person = []
     for pf in profile.person_fields if profile else []:
-        person.append({"label": pf.label, "value": None, "note": CONTACT_NOT_CAPTURED})
+        fid = getattr(pf, "fact_id", None)
+        if fid and fid in row_by_id and row_by_id[fid][0]:
+            person.append({"label": pf.label, "value": row_by_id[fid][0]})
     sections: list[dict] = []
     for ib in issues:
         secs = (profile.issue_sections.get(ib.issue_id) if profile else None) or []
@@ -297,13 +331,12 @@ def build_view(
             rows = []
             for r in sec.rows:
                 if r.fact_id and r.fact_id in row_by_id:
-                    disp, lvl, quote = row_by_id[r.fact_id]
-                    rows.append(_fact(r.label, disp, lvl, quote))
-                elif r.fact_id:
-                    rows.append({**_fact(r.label, None, "NOT_ASKED"), "note": "nicht erfragt"})
-                else:
-                    rows.append({**_fact(r.label, None, "NOT_ASKED"), "note": CONTACT_NOT_CAPTURED})
-            sections.append({"title": sec.title, "rows": rows})
+                    disp, lvl, quote, detail = row_by_id[r.fact_id]
+                    if lvl == "NOT_ASKED" or disp in ("", "–", None):
+                        continue  # page 1 shows only what is known (or asked but unknown)
+                    rows.append(_fact(r.label, disp, lvl, quote, detail=detail))
+            if rows:
+                sections.append({"title": sec.title, "rows": rows})
         if not secs:  # no profile for this issue: the most important known facts, generic
             known = [f for g in ib.groups for f in g.rows if f.status == "KNOWN"][:8]
             if known:
@@ -322,6 +355,7 @@ def build_view(
         {"label": d.label_de, "value": d.value, "note": d.note_de}
         for ib in issues
         for d in ib.derived
+        if d.value is not None  # an unknown derived value is not a finding
     ]
     deadline_hints = [
         {"text": a.text_de, "sources": a.source_ids}
@@ -347,13 +381,17 @@ def build_view(
         "status": handover_status.get(h.status.value, h.status.value)
         if h
         else "Keine Übergabe empfohlen.",
+        "consent": _consent_block(b),
     }
 
     # -- referrals ----------------------------------------------------------------------------------------
     bodies: list[dict] = []
     bodies_note = ""
     if ex and ex.referrals and (ex.referrals.primary or ex.referrals.more):
-        bodies = [_body_from_card(c) for c in ex.referrals.primary + ex.referrals.more]
+        cards = ex.referrals.primary + ex.referrals.more
+        bodies = [
+            _body_from_card(c) for c in cards[:4]
+        ]  # the most relevant four; the rest stays in the app
         bodies_note = " ".join(ex.referrals.notes_de)
         if ex.referrals.location_de:
             bodies_note = f"Zuordnung nach: {ex.referrals.location_de}. {bodies_note}".strip()
@@ -403,8 +441,6 @@ def build_view(
         }
 
     # -- sources --------------------------------------------------------------------------------------------------
-    sources = [_source_view(s) for s in b.legal_sources]
-    src_title = {s["id"]: s["title"] for s in sources}
 
     # -- checks / hints -------------------------------------------------------------------------------------------
     legal_checks = []
@@ -422,6 +458,33 @@ def build_view(
                 }
             )
     general_hints = [{"text": a.text_de, "sources": a.source_ids} for a in b.approved_statements]
+
+    # Sources: wording only for sources behind a TRIGGERED finding; every other source the report actually cites
+    # (review points, released hints) is a compact reference; uncited sources are not listed at all.
+    triggered_src = {sid for c in legal_checks if c["state"] == "unklar" for sid in c["sources"]}
+    cited_src = triggered_src | {sid for c in legal_checks for sid in c["sources"]}
+    cited_src |= {sid for h in general_hints for sid in h["sources"]}
+    fired = set(b.decision.rules_triggered)
+    sources = []
+    for s in b.legal_sources:
+        cited = s.source.id in cited_src or bool(set(s.referenced_by) & fired)
+        if not cited:
+            continue
+        v = _source_view(s)
+        v["relevant"] = s.source.id in triggered_src
+        if not v["relevant"]:
+            v["text"] = ""
+            if v["kind"] == "case_law" and s.source.core_statement_de:
+                cs = s.source.core_statement_de
+                v["summary"] = cs if len(cs) <= 220 else cs[:220].rsplit(" ", 1)[0] + " …"
+        elif len(v["text"]) > 700:
+            v["text"] = v["text"][:700].rsplit(" ", 1)[0] + " …"
+            v["text_label"] += " (gekürzt)"
+        sources.append(v)
+    sources.sort(key=lambda x: not x["relevant"])
+    src_title = {s["id"]: s["title"] for s in sources}
+    for s in b.legal_sources:
+        src_title.setdefault(s.source.id, s.source.citation or s.source.title_de)
 
     contradictions = [
         f"{u.label_de}: " + (" / ".join(u.values) if u.values else "unklar")
@@ -507,11 +570,20 @@ def build_view(
         "fact_groups": fact_groups,
         "open_mandatory_questions": [q for ib in issues for q in ib.open_questions]
         or [m.question_de for m in b.missing_information],
-        "missing_all": [m.label_de for m in b.missing_information],
+        "missing_all": [m.label_de for m in b.missing_information if not m.deferred],
+        "open_points": [
+            {"label": m.label_de, "question": m.question_de, "deferred": m.deferred}
+            for m in b.missing_information
+        ],
+        "asked_unknown": list(dict.fromkeys(u for ib in issues for u in ib.unknown_facts)),
         "contradictions": contradictions,
         "unconfirmed_ai": unconfirmed_ai,
         "legal_checks": legal_checks,
-        "risks": [r.result_de for r in b.legal_risks],
+        "risks": [
+            r.result_de
+            for r in b.legal_risks
+            if r.result_de not in {c["text"] for c in legal_checks}
+        ],
         "general_hints": general_hints,
         "legal_areas": areas,
         "bodies": bodies,
@@ -528,4 +600,33 @@ def build_view(
         ),
         "extraction_model": (ex.extraction_model if ex and ex.extraction_model else "KI"),
         "has_extras": ex is not None,
+    }
+
+
+_ORIGIN_DE = {
+    "USER_ANSWER": "Sozialarbeiterin (Antwort)",
+    "USER_CORRECTION": "Sozialarbeiterin (Korrektur)",
+    "AI_EXTRACTED": "KI-Vorschlag, noch nicht bestätigt",
+}
+
+
+def _consent_block(b) -> dict:
+    """Einwilligung zur Weitergabe an eine externe Rechtsperson (consent_briefing): Status, Zeitpunkt, Erfasser, Geltungsbereich.
+
+    Der lokale Fallbericht (Erstellen/Herunterladen) ist KEINE externe Weitergabe und wird davon nicht blockiert.
+    """
+    scope = "Weitergabe dieses Fallberichts an eine Rechtsperson ausserhalb des Sozialdienstes (nicht: lokale Erstellung oder lokaler Download)."
+    f = next((x for x in b.known_facts if x.fact_id == "consent_briefing"), None)
+    if f is None:
+        status = "Noch nicht dokumentiert. Vor einer externen Weitergabe ausdrücklich einholen."
+    elif f.value is True:
+        status = "Ausdrückliche Einwilligung dokumentiert."
+    else:
+        status = "Keine Einwilligung: Weitergabe nur anonymisiert oder bei Gefahr für Leib und Leben; sonst nicht weitergeben."
+    return {
+        "status": status,
+        "recorded_at": fmt_dt(f.updated_at) if f is not None and f.updated_at else None,
+        "recorded_by": _ORIGIN_DE.get(f.origin.value, "—") if f is not None and f.origin else None,
+        "scope": scope,
+        "privacy_note": "Datenschutzrechtliche Einordnung (IDG ZH bzw. DSG) voraussichtlich, vor produktivem Einsatz fachlich zu bestätigen.",
     }

@@ -1,0 +1,338 @@
+{
+ "client_residence_municipality": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Wohnt die Klientin in einer anderen Gemeinde als der Wohnung? Falls ja: in welcher?",
+  "new": "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen.",
+  "kind": "T",
+  "note": "Textfrage statt versteckter Ja/Nein-Vorfrage"
+ },
+ "vulnerability_present": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Gibt es Gewalt, einen Trennungsstreit, eine Sprachbarriere oder eine akute Krise?",
+  "new": "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?",
+  "kind": "T",
+  "note": "klare Ja/Nein-Formulierung"
+ },
+ "defect_description": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Was genau ist kaputt oder stört? Seit wann?",
+  "new": "Was genau ist kaputt oder stört?",
+  "kind": "T",
+  "note": "«Seit wann?» → defect_since (Datum)"
+ },
+ "defect_at_move_in": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Bestand der Mangel schon beim Einzug? Gibt es ein Einzugsprotokoll?",
+  "new": "Bestand der Mangel schon beim Einzug?",
+  "kind": "T",
+  "note": "Einzugsprotokoll → evidence_available / Fallbericht; Law-Team prüfen"
+ },
+ "landlord_informed": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Weiss die Vermieterschaft oder Verwaltung davon? Wie, wann, schriftlich? Kopie hochladen.",
+  "new": "Weiss die Vermieterschaft oder Verwaltung von dem Mangel?",
+  "kind": "U",
+  "note": "«Wie/wann/schriftlich» → landlord_informed_in_writing, landlord_informed_date; Upload entfernt"
+ },
+ "landlord_informed_date": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Wann wurde der Mangel (schriftlich) gemeldet?",
+  "new": "An welchem Datum wurde der Mangel der Vermieterschaft gemeldet?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "rent_payment_status": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Bezahlt die Klientin die volle Miete? Hat sie gekürzt, verrechnet oder zurückbehalten?",
+  "new": "Wie wird die Miete derzeit bezahlt?",
+  "kind": "T",
+  "note": "Auswahlfrage statt Ja/Nein-Anmutung"
+ },
+ "rent_deposit_started": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Hat die Klientin schon Miete hinterlegt? Wann wurde der erste hinterlegte Mietzins fällig?",
+  "new": "Hat die Klientin schon Miete hinterlegt?",
+  "kind": "T",
+  "note": "Fälligkeit des ersten hinterlegten Mietzinses nicht separat erfasst; Law-Team prüfen"
+ },
+ "termination_after_report": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Hat die Vermieterschaft gekündigt oder gedroht, seit die Mängel gemeldet wurden? Läuft ein Schlichtungsverfahren?",
+  "new": "Hat die Vermieterschaft gekündigt oder damit gedroht, seit die Mängel gemeldet wurden?",
+  "kind": "T",
+  "note": "«Schlichtungsverfahren?» → authority_letter_received"
+ },
+ "reported_extent": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Wo und seit wann gibt es sichtbaren Schimmel oder Schimmelgeruch? Ungefähre Grösse? Foto hochladen.",
+  "new": "Wie zeigt sich der Schimmel: nur als Geruch, als kleine Stelle oder als grössere Fläche?",
+  "kind": "U",
+  "note": "Optionen passen jetzt zur Frage; Ort → affected_rooms, Beginn → defect_since; Foto-Upload entfernt"
+ },
+ "children_exposed": {
+  "issue_file": "CH_TENANCY_DEFECTS.yaml",
+  "old": "Leben Kinder in der Wohnung, und nutzen sie die betroffenen Räume?",
+  "new": "Nutzen die Kinder, die in der Wohnung leben, die betroffenen Räume?",
+  "kind": "T",
+  "note": "Kinder im Haushalt → children_in_household"
+ },
+ "challenge_filed": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Hat die Klientin die Kündigung schon bei der Schlichtungsbehörde angefochten oder eine Erstreckung verlangt? Wann, wo?",
+  "new": "Hat die Klientin die Kündigung schon bei der Schlichtungsbehörde angefochten oder eine Erstreckung verlangt?",
+  "kind": "T",
+  "note": "«Wann, wo?» nicht separat erfasst"
+ },
+ "social_assistance_received": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Bezieht die Klientin Sozialhilfe? Ist der Sozialdienst schon informiert?",
+  "new": "Bezieht die Klientin Sozialhilfe?",
+  "kind": "T",
+  "note": "«Sozialdienst informiert?» nicht separat erfasst; Law-Team prüfen"
+ },
+ "third_party_payment": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)? Wann, wie viel, mit welchem Zahlungszweck?",
+  "new": "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)?",
+  "kind": "T",
+  "note": "Zeitpunkt, Betrag, Zahlungszweck als Ergänzung im Freitext"
+ },
+ "payment_returned_by_landlord": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt? Wann genau (vor oder nach Fristende)?",
+  "new": "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt?",
+  "kind": "T",
+  "note": "Zeitpunkt (vor/nach Fristende) als Ergänzung im Freitext"
+ },
+ "eviction_stage": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Was liegt vor? (a) nur Kündigung oder Drohung, (b) Gesuch oder Vorladung des Gerichts, (c) Entscheid des Gerichts, (d) Schreiben des Gemeinde-/Stadtammanns mit Räumungstermin, (e) Räumung findet heute statt oder Schloss wurde gewechselt",
+  "new": "Was liegt derzeit vor?",
+  "kind": "T",
+  "note": "Buchstaben (a)–(e) im Text entfernt; Auswahloptionen zeigen die Stufen"
+ },
+ "eviction_document_available": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Bitte das Schreiben hochladen (alle Seiten, mit Umschlag). Ist es vorhanden?",
+  "new": "Liegt das Schreiben vollständig vor (alle Seiten, mit Umschlag)?",
+  "kind": "U",
+  "note": "Upload entfernt; Hinweis «für die Fachperson bereithalten» im Warum-Text"
+ },
+ "document_receipt_date": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Wann wurde das Schreiben empfangen oder auf der Post abgeholt? Abholungseinladung?",
+  "new": "An welchem Datum wurde das Schreiben empfangen oder auf der Post abgeholt?",
+  "kind": "T",
+  "note": "Datumstyp; Abholungseinladung → pickup-Fakten der Issues"
+ },
+ "deadline_quoted_text": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Steht im Schreiben eine Frist (Stellungnahme, Auszug, Räumungstermin)? Bitte wörtlich wiedergeben.",
+  "new": "Welche Frist (Stellungnahme, Auszug, Räumungstermin) steht im Schreiben? Bitte wörtlich wiedergeben, oder «keine Frist» angeben.",
+  "kind": "T",
+  "note": "Textfrage statt Ja/Nein-Anmutung"
+ },
+ "arrears_paid_timing": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Wurde der Rückstand bezahlt? Wann genau (vor oder nach Ablauf der Zahlungsfrist)? Belege?",
+  "new": "Wurde der Mietzinsrückstand bezahlt? Wenn ja: vor oder nach Ablauf der Zahlungsfrist?",
+  "kind": "U",
+  "note": "Auswahl deckt beide Teile ab; «Belege?» entfernt"
+ },
+ "post_termination_agreement": {
+  "issue_file": "CH_TENANCY_EVICTION.yaml",
+  "old": "Gibt es eine Abmachung mit der Vermieterschaft (Stundung, Ratenzahlung, neuer Vertrag, Auszugstermin)? Schriftlich?",
+  "new": "Gibt es eine Abmachung mit der Vermieterschaft (Stundung, Ratenzahlung, neuer Vertrag, Auszugstermin)?",
+  "kind": "T",
+  "note": "«Schriftlich?» nicht separat erfasst; Law-Team prüfen"
+ },
+ "pickup_notice_date": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Wann lag der gelbe Zettel (Abholungseinladung) im Briefkasten?",
+  "new": "An welchem Datum lag der gelbe Zettel (Abholungseinladung) im Briefkasten?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "receipt_date": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Wann hatte die Klientin die Kündigung tatsächlich in den Händen?",
+  "new": "An welchem Datum hatte die Klientin die Kündigung tatsächlich in den Händen?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "stated_reason": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Steht im Schreiben ein Kündigungsgrund (Eigenbedarf, Sanierung, Abbruch …)?",
+  "new": "Welcher Kündigungsgrund steht im Schreiben (Eigenbedarf, Sanierung, Abbruch, anderer Grund) oder steht keiner darin?",
+  "kind": "T",
+  "note": "Auswahlfrage"
+ },
+ "previous_extension": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Wurde schon einmal erstreckt (Entscheid oder Vereinbarung)? Bis wann? Wurde auf eine zweite Erstreckung verzichtet?",
+  "new": "Wurde das Mietverhältnis schon einmal erstreckt (Entscheid oder Vereinbarung)?",
+  "kind": "T",
+  "note": "«Bis wann?» → previous_extension_end_date; «Verzicht?» → settlement_with_waiver_offered"
+ },
+ "previous_extension_end_date": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Bis wann läuft die erste Erstreckung?",
+  "new": "Bis zu welchem Datum läuft die erste Erstreckung?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "tenancy_start_date": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Seit wann wohnt die Klientin dort?",
+  "new": "Ab welchem Datum wohnt die Klientin dort (Mietbeginn, ungefähr genügt)?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "school_change_needed": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Gibt es schulpflichtige Kinder? Wäre ein Schulwechsel nötig?",
+  "new": "Wäre für schulpflichtige Kinder ein Schulwechsel nötig?",
+  "kind": "T",
+  "note": "Kinder im Haushalt → children_in_household"
+ },
+ "cohabitant_partner": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Wohnt eine Lebenspartnerin / ein Lebenspartner ohne Eheschluss oder Eintragung mit? Seit wann, wer hat den Vertrag unterschrieben?",
+  "new": "Wohnt eine Lebenspartnerin oder ein Lebenspartner ohne Heirat oder Eintragung mit?",
+  "kind": "T",
+  "note": "«Seit wann / wer unterschrieb?» nicht separat erfasst; Law-Team prüfen"
+ },
+ "search_efforts": {
+  "issue_file": "CH_TENANCY_EXTENSION.yaml",
+  "old": "Sucht die Klientin bereits? Seit wann? Wie viele Bewerbungen, Absagen? Dokumentiert?",
+  "new": "Sucht die Klientin bereits eine neue Wohnung, und sind die Suchbemühungen dokumentiert?",
+  "kind": "T",
+  "note": "Auswahl deckt beide Teile ab"
+ },
+ "warning_written": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Liegt die Mahnung schriftlich vor (Foto)?",
+  "new": "Liegt die Mahnung schriftlich vor?",
+  "kind": "U",
+  "note": "«(Foto)» entfernt"
+ },
+ "warning_amount_clear": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Welcher Betrag für welche Monate wird verlangt? Ist er klar bezeichnet?",
+  "new": "Ist in der Mahnung klar bezeichnet, welcher Betrag für welche Monate verlangt wird?",
+  "kind": "T",
+  "note": "Ja/Nein statt Betragsfrage"
+ },
+ "warning_deadline_days": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Welche Frist steht im Schreiben (Anzahl Tage oder Datum)?",
+  "new": "Wie viele Tage Zahlungsfrist setzt das Schreiben (Anzahl Tage)?",
+  "kind": "T",
+  "note": "Zahlentyp; nur Datum angegeben → Differenz selbst bilden"
+ },
+ "warning_receipt_date": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Wann hat die Klientin das Schreiben in den Händen gehabt bzw. auf der Post abgeholt?",
+  "new": "An welchem Datum hat die Klientin das Schreiben erhalten oder auf der Post abgeholt?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "payment_path": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Liegt der Mahnung ein Einzahlungsschein bei? Über welchen Weg wird gezahlt?",
+  "new": "Über welchen Weg soll bezahlt werden (Einzahlungsschein, Überweisung, bar oder anderes)?",
+  "kind": "T",
+  "note": "Auswahlfrage; «Beiliegender Einzahlungsschein» ist eine Option"
+ },
+ "social_payment_failed": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Zahlt der Sozialdienst direkt, und ist die Zahlung ausgeblieben?",
+  "new": "Ist eine Mietzahlung des Sozialdienstes an die Vermieterschaft ausgeblieben?",
+  "kind": "T",
+  "note": "«Zahlt der Sozialdienst?» → rent_payer"
+ },
+ "paid_in_time": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Wurde der ganze Betrag innert der Zahlungsfrist bezahlt? Wann, wie, Belege?",
+  "new": "Wurde der ganze Betrag innert der Zahlungsfrist bezahlt?",
+  "kind": "T",
+  "note": "«Wann, wie, Belege?» entfernt"
+ },
+ "partial_payment_with_notice": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Wurde nur ein Teil bezahlt? Mit schriftlichem Hinweis an die Vermieterschaft?",
+  "new": "Wurde nur ein Teil bezahlt und die Vermieterschaft dabei schriftlich darauf hingewiesen?",
+  "kind": "T",
+  "note": "klare gemeinsame Tatsache"
+ },
+ "setoff_or_deposit_done": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Wurde verrechnet oder hinterlegt? Wann, gegenüber wem?",
+  "new": "Wurde verrechnet oder hinterlegt?",
+  "kind": "T",
+  "note": "«Wann, gegenüber wem?» als Ergänzung im Freitext"
+ },
+ "payment_after_deadline_accepted": {
+  "issue_file": "CH_TENANCY_PAYMENT_DEFAULT.yaml",
+  "old": "Wurde nach Fristablauf bezahlt? Hat die Vermieterschaft das Geld angenommen?",
+  "new": "Hat die Vermieterschaft eine Zahlung angenommen, die nach Fristablauf erfolgte?",
+  "kind": "T",
+  "note": "Eine Tatsache; «nein» gilt auch, wenn nicht nach Fristablauf gezahlt wurde"
+ },
+ "payment_status": {
+  "issue_file": "CH_TENANCY_PAYMENT_WARNING.yaml",
+  "old": "Wurde seit der Mahnung etwas bezahlt? Wann, wie viel, wie?",
+  "new": "Was wurde seit der Mahnung bezahlt: nichts, einen Teil oder alles?",
+  "kind": "T",
+  "note": "Auswahlfrage"
+ },
+ "increase_letter_available": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Bitte das Schreiben der Vermieterschaft vollständig hochladen (alle Seiten, Umschlag). Liegt es vor?",
+  "new": "Liegt das Schreiben der Vermieterschaft vollständig vor (alle Seiten, Umschlag)?",
+  "kind": "U",
+  "note": "Upload entfernt"
+ },
+ "increase_receipt_date": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Wann wurde das Schreiben empfangen oder auf der Post abgeholt?",
+  "new": "An welchem Datum wurde das Schreiben empfangen oder auf der Post abgeholt?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "form_official_used": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Ist es das amtliche Formular (Zürich: «Mitteilung von Mietzinserhöhungen und einseitigen Vertragsänderungen (Art. 269d OR)», drei Seiten) oder nur ein Brief bzw. eine E-Mail?",
+  "new": "Ist das Schreiben das amtliche Formular «Mitteilung von Mietzinserhöhungen und einseitigen Vertragsänderungen (Art. 269d OR)» (Zürich, drei Seiten) und nicht bloss ein Brief oder eine E-Mail?",
+  "kind": "T",
+  "note": "eindeutige Ja/Nein-Frage"
+ },
+ "effective_date_in_letter": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Ab wann soll die Änderung gelten?",
+  "new": "Ab welchem Datum soll die Änderung gelten?",
+  "kind": "T",
+  "note": "Datumstyp"
+ },
+ "increase_already_paying": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Zahlt die Klientin schon den neuen Betrag? Seit wann?",
+  "new": "Zahlt die Klientin schon den neuen Betrag?",
+  "kind": "T",
+  "note": "«Seit wann?» als Ergänzung im Freitext"
+ },
+ "rent_affordable": {
+  "issue_file": "CH_TENANCY_RENT_INCREASE.yaml",
+  "old": "Kann die Klientin die neue Miete bezahlen? Bezieht sie Sozialhilfe, liegt die neue Miete über der Mietzinslimite der Gemeinde?",
+  "new": "Kann die Klientin die neue Miete bezahlen?",
+  "kind": "T",
+  "note": "Sozialhilfe-Mietzinslimite bleibt im Erklärtext; Law-Team prüfen"
+ },
+ "form_photo_available": {
+  "issue_file": "CH_TENANCY_TERMINATION.yaml",
+  "old": "Gibt es ein Foto des Kündigungsformulars (beide Seiten)?",
+  "new": "Liegt das Kündigungsformular vollständig vor (beide Seiten)?",
+  "kind": "U",
+  "note": "Foto-/Upload-Anmutung entfernt"
+ }
+}

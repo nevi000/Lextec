@@ -21,7 +21,7 @@ export function mockApi(routes: Routes) {
     const url = new URL(String(input), "http://localhost");
     const method = (init?.method ?? "GET").toUpperCase();
     const path = url.pathname.replace(/^\/api/, "");
-    const body = init?.body ? JSON.parse(String(init.body)) : undefined;
+    const body = typeof init?.body === "string" ? JSON.parse(init.body) : init?.body ? "<binary>" : undefined;
     calls.push({ method, path, body });
     const handler = routes[`${method} ${path}`];
     if (handler === undefined) {

@@ -38,6 +38,12 @@ class AIInvalidResponseError(AIProviderError):
     code = "ai_invalid_response"
 
 
+class AIOutputTruncatedError(AIInvalidResponseError):
+    """The model stopped because it hit the output token limit: the JSON is incomplete and is never «repaired»."""
+
+    code = "ai_output_truncated"
+
+
 class AIBudgetExceededError(AIProviderError):
     """A local application limit (calls, tokens, budget) blocked the request BEFORE it was sent."""
 
@@ -68,6 +74,10 @@ class AIProvider(Protocol):
     def rephrase_question(
         self, question_de: str, context: str, ctx: CallContext | None = None
     ) -> str: ...
+
+    def translate(
+        self, texts: list[str], source: str, target: str, ctx: CallContext | None = None
+    ) -> list[str]: ...
 
 
 def build_provider(settings: Settings, gate: UsageGate | None = None) -> AIProvider:

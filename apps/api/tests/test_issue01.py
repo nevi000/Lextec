@@ -139,7 +139,11 @@ def test_demo_flow_steps_1_to_4_and_briefing(client):
     assert (
         "Produktentscheide" in ib["urgency_note_de"] and "kein Fristende" in ib["urgency_note_de"]
     )
-    assert [x["value"] for x in ib["derived"]] == [3, 85]
+    assert [x["value"] for x in ib["derived"]] == [
+        3,
+        85,
+        None,
+    ]  # + days_until_contract_end (unbefristet: unbekannt)
     assert all(x["evidence_level"] == "SYSTEM_DERIVED" for x in ib["derived"])
     assert ib["documents_to_request"] and len(ib["review_points"]) >= 5
     assert all(a["contact_verified"] is False for a in ib["authorities"])
@@ -307,6 +311,7 @@ def test_time_rules_use_internal_thresholds_only_and_unknown_dates_do_not_fire(k
     assert compute_derived(kb.issues[TT].derived, {}, date(2026, 11, 7)) == {
         "days_since_earliest_receipt": None,
         "days_until_termination_date": None,
+        "days_until_contract_end": None,
     }
     d = decide(kb, CaseSnapshot(True, [IssueState(IssueStatus.DETECTED, TT, 0.9)], {}, None))
     assert not {"TT_DAYS_GE_20", "TT_DAYS_GT_30", "TT_DAYS_LT_20_ALL_KNOWN"} & set(
@@ -321,21 +326,25 @@ def test_internal_thresholds_are_flagged_as_product_decisions(kb):
         assert "PRODUKTENTSCHEID" in rules[rid].description
 
 
-def test_available_related_issue_is_applied_only_if_legally_reviewed(kb, tmp_path):
+def test_loaded_related_issue_is_applied_additionally_but_never_called_released(kb, tmp_path):
+    """Geladenes Issue (Dossierstand DRAFT) wird zusätzlich angewendet; ein nicht geladenes nur empfohlen."""
+    d = decide(kb, snap({**BASE, "termination_kind": "zahlungsverzug"}))
+    route = next(r for r in d.related_routes if r.issue_id == "CH_TENANCY_PAYMENT_DEFAULT")
+    assert route.available and "CH_TENANCY_PAYMENT_DEFAULT" in d.active_issue_ids
+    assert "nicht juristisch freigegeben" in route.note_de and "umgesetzt" in route.note_de
+    # Issue-Datei entfernt, nur als PLANNED geführt -> nie als verfügbar behandelt, keine Spezialregeln
     dest = tmp_path / "kb"
     shutil.copytree(REPO_ROOT / "knowledge_base", dest)
-    (dest / "legal_issues" / "CH_TENANCY_PAYMENT_DEFAULT.yaml").write_text(
+    (dest / "legal_issues" / "CH_TENANCY_PAYMENT_DEFAULT.yaml").unlink()
+    (dest / "tests" / "scenarios_CH_TENANCY_PAYMENT_DEFAULT.yaml").unlink()
+    (dest / "routing" / "related_issues.yaml").write_text(
         yaml.safe_dump(
             dict(
                 schema_version=1,
-                id="CH_TENANCY_PAYMENT_DEFAULT",
-                version="1",
-                content_status="LEGALLY_REVIEWED",
-                legal_area="tenancy",
-                issue="payment_default",
-                title_de="Zahlungsverzug (Test)",
-                facts=[],
-                default_professionals=["tenancy_law_counsel"],
+                version="t",
+                related_issues=[
+                    dict(id="CH_TENANCY_PAYMENT_DEFAULT", title_de="Zahlungsverzug", issue_number=3)
+                ],
             ),
             allow_unicode=True,
         ),
@@ -343,15 +352,9 @@ def test_available_related_issue_is_applied_only_if_legally_reviewed(kb, tmp_pat
     )
     k2 = load_knowledge_base(dest)
     assert k2.valid, k2.errors
-    d = decide(k2, snap({**BASE, "termination_kind": "zahlungsverzug"}))
-    route = next(r for r in d.related_routes if r.issue_id == "CH_TENANCY_PAYMENT_DEFAULT")
-    assert route.available and "CH_TENANCY_PAYMENT_DEFAULT" in d.active_issue_ids
-    # not reviewed -> never treated as available (the shipped KB has no such issue at all)
-    d0 = decide(kb, snap({**BASE, "termination_kind": "zahlungsverzug"}))
-    assert (
-        not d0.related_routes[0].available
-        and "CH_TENANCY_PAYMENT_DEFAULT" not in d0.active_issue_ids
-    )
+    d0 = decide(k2, snap({**BASE, "termination_kind": "zahlungsverzug"}))
+    r0 = next(r for r in d0.related_routes if r.issue_id == "CH_TENANCY_PAYMENT_DEFAULT")
+    assert not r0.available and "CH_TENANCY_PAYMENT_DEFAULT" not in d0.active_issue_ids
 
 
 # ---- D. statement limits ----------------------------------------------------------------------------------
@@ -434,7 +437,7 @@ def test_ai_free_text_cannot_bypass_the_policy(client, ctx):
 # ---- E. sources ---------------------------------------------------------------------------------------------
 def test_source_statuses_are_separated_and_never_faked(kb):
     bge = [s for s in kb.sources.values() if s.citation and s.dossier_status == "DOSSIER_CHECKED"]
-    assert {s.citation for s in bge} == {
+    assert {s.citation for s in bge} >= {
         "BGE 140 III 244 (Volltext: Urteil 4A_120/2014)",
         "BGE 143 III 15",
         "BGE 139 III 7",
@@ -460,14 +463,15 @@ def test_source_statuses_are_separated_and_never_faked(kb):
 
 
 def test_authorities_are_unverified_and_contain_no_invented_phone_numbers(kb):
-    assert len(kb.authorities) == 7
+    assert len(kb.authorities) == 20  # 7 aus Issue 1 + 13 aus den Issues 2-7
     assert all(not a.contact_verified and a.verified_at is None for a in kb.authorities.values())
     blob = (REPO_ROOT / "knowledge_base" / "referrals" / "authorities.yaml").read_text(
         encoding="utf-8"
     )
-    assert not re.search(r"\b0\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b|\+41", blob), (
-        "no phone numbers invented"
-    )
+    # Telefonnummern stehen NUR dort, wo das Law-Dossier sie nennt (Issue 5/6); sonst nie erfunden.
+    found = set(re.findall(r"\b0\d{2}\s\d{3}\s\d{2}\s\d{2}\b", blob))
+    assert found <= {"043 257 41 64", "044 412 65 54", "044 415 77 14"}, found
+    assert "+41" not in blob
 
 
 # ---- UX redesign guard: pure reading/UI endpoints never reach the AI provider ------------------------------------

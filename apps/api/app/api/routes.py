@@ -3,12 +3,12 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Literal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, Response
 from pydantic import BaseModel, Field
 
 from app.api.deps import AppContext, get_ctx, get_service
-from app.core.errors import AppError, ErrorResponse
+from app.core.errors import AppError, ConflictError, ErrorResponse
 from app.schemas.api import (
     AIUsageReport,
     AIUsageRow,
@@ -96,6 +96,40 @@ def ai_usage(ctx: AppContext = Depends(get_ctx)) -> AIUsageReport:
             for r in rows
         ],
     )
+
+
+class PdfTextResult(BaseModel):
+    text: str
+    pages: int
+    truncated: bool
+
+
+@router.post("/intake/pdf-text", response_model=PdfTextResult, tags=["cases"])
+async def import_pdf_text(request: Request, ctx: AppContext = Depends(get_ctx)) -> PdfTextResult:
+    """Extract the text of a written case description (raw PDF bytes as request body).
+
+    Purely a text-entry helper: nothing is stored or analysed here, no AI call is made. The browser
+    puts the text into the normal description field; analysis then works exactly as for typed text."""
+    from app.services.intake.pdf_text import PdfImportError, extract_case_text
+
+    limit = ctx.settings.pdf_import_max_bytes
+    declared = request.headers.get("content-length")
+    if declared and declared.isdigit() and int(declared) > limit:
+        raise PdfImportError(
+            f"Die Datei ist zu gross (maximal {limit // (1024 * 1024)} MB).", code="pdf_too_large"
+        )
+    buf = bytearray()
+    async for chunk in request.stream():
+        buf += chunk
+        if len(buf) > limit:
+            raise PdfImportError(
+                f"Die Datei ist zu gross (maximal {limit // (1024 * 1024)} MB).",
+                code="pdf_too_large",
+            )
+    result = extract_case_text(
+        bytes(buf), max_bytes=limit, max_pages=ctx.settings.pdf_import_max_pages
+    )
+    return PdfTextResult(text=result.text, pages=result.pages, truncated=result.truncated)
 
 
 @router.get("/dashboard", response_model=DashboardData, tags=["system"])
@@ -473,7 +507,14 @@ def kb_issues(ctx: AppContext = Depends(get_ctx)) -> list[KbIssueOut]:
 @router.post("/knowledge-base/reload", response_model=KbStatus, tags=["knowledge-base"])
 def kb_reload(ctx: AppContext = Depends(get_ctx)) -> KbStatus:
     """Developer convenience: re-read the YAML files without restarting the server."""
-    ctx.kb = load_knowledge_base(ctx.settings.knowledge_base_dir)
+    new = load_knowledge_base(ctx.settings.knowledge_base_dir)
+    if not new.valid and ctx.kb.valid:
+        # never replace a working knowledge base by a broken one (would turn supported issues into «nicht abgedeckt»)
+        raise ConflictError(
+            f"Neue Wissensbasis ungültig ({len(new.errors)} Fehler); die bisherige bleibt aktiv. "
+            "Erster Fehler: " + (new.errors[0] if new.errors else "unbekannt")
+        )
+    ctx.kb = new
     return kb_status(ctx)
 
 

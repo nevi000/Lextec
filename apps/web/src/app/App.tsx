@@ -4,6 +4,9 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Route-level code splitting keeps the initial bundle small.
+const MobileBridgePage = lazy(() =>
+  import("@/features/bridge/MobileBridgePage").then((m) => ({ default: m.MobileBridgePage })),
+);
 const DevPage = lazy(() => import("@/features/dev/DevPage").then((m) => ({ default: m.DevPage })));
 const CasesPage = lazy(() => import("@/features/cases/CasesPage").then((m) => ({ default: m.CasesPage })));
 const WorkspacePage = lazy(() =>
@@ -28,6 +31,8 @@ export function App() {
   return (
     <Suspense fallback={<Skeleton className="m-8 h-64" />}>
       <Routes>
+        {/* the phone side lives outside the app shell: no navigation, no case data */}
+        <Route path="bridge" element={<MobileBridgePage />} />
         <Route element={<AppShell />}>
           <Route index element={<CasesPage />} />
           <Route path="cases" element={<Navigate to="/" replace />} />

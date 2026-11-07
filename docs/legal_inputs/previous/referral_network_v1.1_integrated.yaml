@@ -1113,7 +1113,7 @@ issue_rules:
         - {when: {signal: low_income}, add: [caritas, frauenzentrale_kantonal]}
     reason_for_referral: "Noch keine Kuendigung: Wohnung kann durch fristgerechte Zahlung gesichert werden. Finanzierung (Sozialdienst, Caritas) hat Vorrang."
 
-  - issue_id: CH_TENANCY_TERMINATION_ARREARS
+  - issue_id: CH_TENANCY_PAYMENT_DEFAULT  # INTEGRATION: früher CH_TENANCY_TERMINATION_ARREARS (Alias, gleiche Regel)
     label: "Kuendigung wegen Zahlungsverzug"
     legal_basis: ["Art. 257d Abs. 2 OR", "Art. 272a Abs. 1 lit. a OR (keine Erstreckung)", "Art. 273 OR"]
     documents_required: [kuendigungsformular, zahlungsaufforderung, mietvertrag]
@@ -1362,10 +1362,30 @@ briefing:
 #    loesen nichts aus (kein Raten). Vom Law-Team zu bestaetigen.
 # ---------------------------------------------------------------------------
 signal_bindings:
+  # INTEGRATION (Issues 1-7): Signale werden NUR aus Regel-IDs oder Sicherheitskategorien abgeleitet, nie geraten.
   legal_deadline_risk:
-    rules: [TT_UNKNOWN_DELIVERY_OR_RECEIPT, TT_DAYS_GE_20, TT_DAYS_GT_30]
+    rules: [TT_UNKNOWN_DELIVERY_OR_RECEIPT, TT_DAYS_GE_20, TT_DAYS_GT_30, TT_FIXED_TERM_LE_75,
+            PW_EMPFANG_ODER_FRIST_UNBEKANNT, PW_FRIST_UNTER_30, PW_FRIST_ABGELAUFEN,
+            PD_EMPFANG_UNBEKANNT_ODER_GE20,
+            EX_UNBEFRISTET_FRIST, EX_BEFRISTET_FRIST, EX_ZWEITERSTRECKUNG, EX_FRIST_VERPASST,
+            DF_HINTERLEGUNG_LAEUFT, DF_BEHOERDENBRIEF,
+            RI_FRIST_20_ODER_UNBEKANNT, EV_GRUNDREGEL]
   imminent_housing_loss:
-    rules: [TT_HARDSHIP, TT_MOVE_OUT_LT_60]
+    rules: [TT_HARDSHIP, TT_MOVE_OUT_LT_60, PD_GRUNDREGEL, PD_KEINE_ANSCHLUSSLOESUNG, EV_RAEUMUNG_STEHT,
+            EV_KEINE_ANSCHLUSSLOESUNG, DF_H4_KEINE_ZWISCHENUNTERKUNFT, DF_GESUNDHEIT_GEFAHR]
     safety_categories: [EXISTENTIAL_EMERGENCY]
   needs_shelter:
+    rules: [DF_H4_KEINE_ZWISCHENUNTERKUNFT, EV_RAEUMUNG_STEHT, EV_KEINE_ANSCHLUSSLOESUNG, PD_KEINE_ANSCHLUSSLOESUNG]
     safety_categories: [EXISTENTIAL_EMERGENCY]
+  amount_disputed:
+    rules: [PW_BETRAG_UNKLAR, PW_GEGENFORDERUNG]
+  children_in_household:
+    rules: [EX_HAERTEGRUENDE, TT_HARDSHIP]
+  health_risk:
+    rules: [DF_GESUNDHEIT_GEFAHR, DF_H1_BESCHWERDEN, DF_H2_GROSSER_BEFALL, DF_H3_NICHT_MEIDBAR, DF_H7_GESUNDHEIT_UNBEKANNT]
+  rent_deposit_started:
+    rules: [DF_HINTERLEGUNG_LAEUFT, DF_HINTERLEGUNG_GEPLANT]
+  rent_unaffordable:
+    rules: [RI_NICHT_FINANZIERBAR]
+  debt:
+    rules: [PW_ZAHLUNGSBEFEHL, PW_FRIST_LAEUFT_NICHT_BEZAHLT]

@@ -49,6 +49,7 @@ from app.schemas.briefing import BriefingView, CaseBriefing
 from app.schemas.decision import DecisionResult
 from app.services.ai.base import AIBudgetExceededError, AIProvider, AIProviderError, CallContext
 from app.services.ai.deterministic import parse_simple_answer
+from app.services.ai.issue_keywords import candidate_issue_ids
 from app.services.ai.schemas import (
     ExtractionInput,
     FactCatalogEntry,
@@ -71,6 +72,7 @@ log = logging.getLogger(__name__)
 
 DEFAULT_TITLE = "Neuer Fall"
 EARLIER_MESSAGE_LIMIT = 20
+REDACTED_EVIDENCE = "[Wortlaut aus Datenschutzgründen nicht gespeichert]"
 DUPLICATE_WINDOW_SECONDS = 10
 
 # One analysis per case at a time: a double click / parallel request must not trigger the same paid
@@ -463,7 +465,15 @@ class CaseService:
 
     # ------------------------------------------------------------------ messages ---------
     def add_message(
-        self, case_id: str, content: str, kind: MessageKind, answers_fact_id: str | None
+        self,
+        case_id: str,
+        content: str,
+        kind: MessageKind,
+        answers_fact_id: str | None,
+        *,
+        origin: str | None = None,
+        original_text: str | None = None,
+        original_language: str | None = None,
     ) -> CaseMessage:
         case = self.get_case(case_id)
         if case.status == CaseStatus.CLOSED.value:
@@ -489,6 +499,9 @@ class CaseService:
             content=text,
             answers_fact_id=answers_fact_id,
             analysis_status=AnalysisStatus.PENDING.value,
+            origin=origin,
+            original_text=original_text,
+            original_language=original_language,
         )
         self.s.add(msg)
         self._touch(case)
@@ -562,27 +575,25 @@ class CaseService:
             # 2) everything else goes to the AI extractor
             return self._analyze_with_ai(case, remaining)
 
-    def _analyze_with_ai(self, case: Case, pending: list[CaseMessage]) -> AnalysisState:
-        case_id = case.id
-        earlier = [m for m in self._messages(case_id) if m.analysis_status == AnalysisStatus.DONE][
-            -EARLIER_MESSAGE_LIMIT:
+    def _fact_scope(self, case_id: str, texts: list[str], available: set[str]) -> set[str] | None:
+        """Issue ids whose facts may be offered to the extractor (None = all)."""
+        active = [
+            i.issue_id
+            for i in self.snapshot(case_id).issues
+            if i.status == IssueStatus.DETECTED and i.issue_id in self.kb.issues
         ]
-        known_text: dict[str, str] = {}
-        for f in self._fact_rows(case_id):
-            if f.status == FactStatus.KNOWN.value:
-                known_text[f.fact_id] = str(f.value)
+        guess = candidate_issue_ids(texts, available)
+        base = list(dict.fromkeys([*active, *guess]))
+        if not base:
+            # Nothing plausible yet: classify only; offer just the most common issue's facts (cost control).
+            return {"CH_TENANCY_TERMINATION"} & available
+        return set(base[:3])  # at most three issues' facts per call
 
-        issue_catalog = [
-            IssueCatalogEntry(
-                id=d.id,
-                title_de=d.title_de,
-                description=d.classification.description or d.description,
-                typical_situations=d.classification.typical_situations,
-            )
-            for d in self.kb.issues.values()
-        ]
+    def _fact_catalog(self, scope: set[str] | None) -> list[FactCatalogEntry]:
         seen: dict[str, FactCatalogEntry] = {}
         for d in self.kb.issues.values():
+            if scope is not None and d.id not in scope:
+                continue
             for f in d.facts:
                 seen.setdefault(
                     f.id,
@@ -596,6 +607,89 @@ class CaseService:
                         question_de=f.question_de,
                     ),
                 )
+        return list(seen.values())
+
+    def _second_pass(
+        self,
+        case_id: str,
+        data: ExtractionInput,
+        scope: set[str] | None,
+        validated: ValidatedExtraction,
+        pending,
+    ) -> list[str]:
+        """Stage 2: the first call detected issues whose facts were not offered -> one more small call for exactly
+        those issues (same messages). Never loops; a failure keeps the stage-1 result."""
+        detected = [i.issue_id for i in validated.issues if i.issue_id in self.kb.issues]
+        missing = [i for i in dict.fromkeys(detected) if scope is not None and i not in scope][:3]
+        if not missing:
+            return []
+        data2 = data.model_copy(
+            update={
+                "issue_catalog": [c for c in data.issue_catalog if c.id in missing],
+                "fact_catalog": self._fact_catalog(set(missing)),
+            }
+        )
+        try:
+            raw2 = self.ai.extract(data2, CallContext(case_id, "extract_facts"))
+        except AIProviderError as exc:
+            log.warning("Second-stage fact extraction skipped: %s", exc.code)
+            return [
+                f"Zweite Faktenerkennung übersprungen ({exc.code}); offene Fragen werden gestellt."
+            ]
+        v2 = validate_extraction(raw2, self.kb, {m.id: m.content for m in pending})
+        have = {ef.fact_id for ef, _ in validated.facts}
+        validated.facts.extend(x for x in v2.facts if x[0].fact_id not in have)
+        for k, val in v2.contradictions.items():
+            validated.contradictions.setdefault(k, val)
+        validated.warnings.extend(v2.warnings)
+        return []
+
+    def _analyze_with_ai(self, case: Case, pending: list[CaseMessage]) -> AnalysisState:
+        case_id = case.id
+        earlier = [m for m in self._messages(case_id) if m.analysis_status == AnalysisStatus.DONE][
+            -EARLIER_MESSAGE_LIMIT:
+        ]
+        known_text: dict[str, str] = {}
+        for f in self._fact_rows(case_id):
+            if f.status == FactStatus.KNOWN.value:
+                known_text[f.fact_id] = str(f.value)
+
+        if not self.kb.valid:
+            # Never classify against a broken knowledge base: supported issues that failed to load would otherwise be
+            # reported as «nicht abgedeckt» and silently escalate.
+            msg = (
+                f"Die Wissensbasis ist fehlerhaft ({len(self.kb.errors)} Fehler). Es wird nicht analysiert, damit "
+                "unterstützte Rechtsprobleme nicht fälschlich als «nicht abgedeckt» gelten. Bitte die Wissensbasis "
+                "korrigieren und neu laden (POST /api/knowledge-base/reload) oder den Server neu starten."
+            )
+            for m in pending:
+                m.analysis_status = AnalysisStatus.FAILED.value
+                m.analysis_error = msg
+            self.s.commit()
+            log.error(
+                "AI analysis blocked: knowledge base invalid (%d errors)", len(self.kb.errors)
+            )
+            return AnalysisState(
+                status="FAILED",
+                pending_message_ids=[m.id for m in pending],
+                error_code="knowledge_base_invalid",
+                error_message=msg,
+            )
+        catalog_issues = self.kb.catalog_issues()
+        issue_catalog = [
+            IssueCatalogEntry(
+                id=d.id,
+                title_de=d.title_de,
+                description=d.classification.description or d.description,
+                typical_situations=d.classification.typical_situations,
+            )
+            for d in catalog_issues
+        ]
+        # Cost control: offer the fact catalog only for plausible issues (already detected or matched by the cheap
+        # keyword pre-filter; routed issues are asked via questions, not extracted from free text). Fallback: all issues.
+        texts = [m.content for m in pending] + [m.content for m in earlier]
+        scope = self._fact_scope(case_id, texts, {d.id for d in catalog_issues})
+        fact_catalog = self._fact_catalog(scope)
         data = ExtractionInput(
             new_messages=[
                 InputMessage(
@@ -607,7 +701,7 @@ class CaseService:
                 InputMessage(id=m.id, kind=m.kind, content=m.content) for m in earlier
             ],
             issue_catalog=issue_catalog,
-            fact_catalog=list(seen.values()),
+            fact_catalog=fact_catalog,
             known_facts=known_text,
             existing_summary=case.summary,
             today=(self.today or date.today()).isoformat(),
@@ -633,7 +727,13 @@ class CaseService:
                 error_message=exc.message,
             )
 
-        validated = validate_extraction(raw, self.kb, {m.id: m.content for m in pending})
+        validated = validate_extraction(
+            raw,
+            self.kb,
+            {m.id: m.content for m in pending},
+            {d.id for d in catalog_issues},
+        )
+        validated.warnings.extend(self._second_pass(case_id, data, scope, validated, pending))
         try:
             self._apply(case, pending, validated)
             for m in pending:
@@ -783,6 +883,9 @@ class CaseService:
     ) -> None:
         origin = FactOrigin.USER_ANSWER if is_answer else FactOrigin.AI_EXTRACTED
         by = "social_worker" if is_answer else "ai"
+        fd = self._fact_def(fact_id)
+        if fd is not None and not fd.store_evidence:
+            quote = REDACTED_EVIDENCE  # health details: store the yes/no value, never the wording
         row = rows.get(fact_id)
         if unknown:
             new_status = FactStatus.UNKNOWN
@@ -1177,6 +1280,9 @@ class CaseService:
             handover=self._handover(case_id),
             ai_external=ai_external,
             registry=self._source_registry(decision, rows),
+            bridge_message_ids=frozenset(
+                m.id for m in self._messages(case_id) if m.origin == "VOICE_BRIDGE"
+            ),
         )
         briefing.extras = build_extras(
             kb=self.kb,

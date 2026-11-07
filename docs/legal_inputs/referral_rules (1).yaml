@@ -3,6 +3,16 @@
 # Wird von der Regel-Engine gelesen; der Abschnitt "briefing" fliesst in die Zusammenfassung
 # fuer die Sachbearbeiterin / den Sachbearbeiter.
 #
+# Version 1.2 (07.11.2026): Kanton Zürich flächendeckend
+#   - Neu Abschnitt 1b "municipalities": alle 160 Gemeinden mit Bezirk und zuständigen Stellen
+#     (Schlichtungsbehörde, Rechtsauskunft, Sozialdienst, KESB, kjz, Opferberatung, Frauenhaus, Mieterverband, Ombudsstelle).
+#   - Neu: 12 Schlichtungsbehörden / Bezirksgerichte, 11 Rechtsauskünfte der Bezirksgerichte, 13 KESB, 14 kjz,
+#     regionale Rechtsauskünfte (Bülach, Dübendorf, Horgen, Zürcher Oberland), Soziale Dienste Winterthur,
+#     IKA Sozialdienst Bezirk Affoltern, Kantonales Sozialamt.
+#   - Alle ZH-Kontakte gegen die offiziellen Websites geprüft (contact_source: primary), wo die Seite lesbar war.
+#     Korrekturen gegenüber v1.1 sind im jeweiligen Eintrag kommentiert (z.B. Mieterverband neue Adressen,
+#     KESB Stadt Zürich Telefon, fiera statt Frauen-Nottelefon, Telefon Schlichtungsbehörde Zürich entfernt).
+#   - ZH-Einträge ab v1.2 mit UTF-8-Umlauten; übrige Abschnitte unverändert (ASCII).
 # Version 1.1 (07.11.2026): Kontaktangaben fuer den Kanton Zuerich ergaenzt
 #   (Adresse, Telefon, E-Mail, Web, Oeffnungszeiten, Kosten, Zugang, wo oeffentlich: zustaendige Person).
 #   Stellen ausserhalb ZH sind unveraendert und ohne Kontaktrecherche.
@@ -15,14 +25,15 @@
 #
 # Kontakt-Qualitaet (Feld contact_source):
 #   primary    = auf der offiziellen Website der Stelle geprueft (Datum in last_checked)
-#   secondary  = aus einem Fachverzeichnis (z.B. Heilsarmee Sozialberatung Zuerich, Stand 2026);
+#   secondary  = aus einem Fachverzeichnis (z.B. Heilsarmee Sozialberatung Zuerich, Stand 2026),
+#                weil die offizielle Seite nicht maschinell lesbar war;
 #                vor produktivem Einsatz auf der Website der Stelle bestaetigen
 #   none       = noch nicht recherchiert
 # verified: true  = Angebot und Zustaendigkeit belegt; false = vom Law-Team zu pruefen.
 # Personen werden nur genannt, wenn sie eine oeffentliche Funktion haben und auf der
 # offiziellen Website stehen. Fuer die Kontaktaufnahme gilt immer die Stelle, nicht die Person.
 
-version: "1.1"
+version: "1.2"
 last_reviewed: "2026-11-07"
 reviewed_by: null
 
@@ -36,7 +47,7 @@ reviewed_by: null
 role_resolution:
   schlichtungsbehoerde_miete:
     "ZH:Zürich": schlichtungsbehoerde_miete_bezirk_zuerich
-    ZH: schlichtungsbehoerde_miete_zh_verzeichnis      # je Bezirk am Ort der Mietsache
+    ZH: schlichtungsbehoerde_miete_zh_verzeichnis      # nur falls Gemeinde unbekannt; sonst municipalities
     default: schlichtungsbehoerde_miete
   mieterverband:
     "ZH:Winterthur": mieterverband_zh_winterthur
@@ -48,15 +59,21 @@ role_resolution:
     default: unentgeltliche_rechtsauskunft
   sozialdienst_gemeinde:
     "ZH:Zürich": sozialzentren_stadt_zuerich
+    "ZH:Winterthur": soziale_dienste_winterthur
+    ZH: sozialdienst_gemeinde_zh
     default: sozialdienst_gemeinde
   notunterkunft:
     "ZH:Zürich": wohnen_obdach_stadt_zuerich
     "ZH:Winterthur": durchgangsheim_anker_winterthur
+    ZH: sozialdienst_gemeinde_zh
     default: sozialdienst_gemeinde
   kesb:
     "ZH:Zürich": kesb_stadt_zuerich
     "ZH:Winterthur": kesb_winterthur_andelfingen
-    default: kesb
+    default: kesb                       # übrige ZH-Gemeinden: municipalities.*.kesb
+  kjz:                                  # Kinder- und Jugendhilfe (Familien mit Kindern)
+    "ZH:Zürich": sozialzentren_stadt_zuerich
+    default: null                       # ZH: municipalities.*.kjz; andere Kantone: nicht hinterlegt
   frauenzentrale_kantonal:
     AG: frauenzentrale_aargau
     BL: frauenplus_baselland
@@ -70,7 +87,7 @@ role_resolution:
     ZG: eff_zett
     default: null                       # kein Partner im Kanton -> Sozialdienst Gemeinde
   opferhilfe_kantonal:                  # Beratung zuerst; Entschaedigung ist eine eigene Stelle
-    "ZH:Winterthur": frauen_nottelefon_winterthur
+    "ZH:Winterthur": frauen_nottelefon_winterthur     # heute fiera Opferberatung Winterthur
     ZH: opferberatung_zuerich
     ZG: eff_zett
     default: opferhilfe_142             # nationale Nummer leitet an kantonale Stelle weiter
@@ -97,6 +114,7 @@ role_resolution:
     default: asylex
   ombudsstelle:                         # nur Konflikte mit Behoerden, nicht mit Privaten
     "ZH:Zürich": ombudsstelle_stadt_zuerich     # bei Stadtverwaltung; bei Kanton -> ombudsstelle_kanton_zuerich
+    "ZH:Winterthur": ombudsstelle_winterthur
     ZH: ombudsstelle_kanton_zuerich
     SH: ombudsstelle_schaffhausen
     default: null
@@ -106,6 +124,190 @@ role_resolution:
   behinderung:
     ZH: pro_infirmis_zuerich
     default: pro_infirmis
+
+
+# ---------------------------------------------------------------------------
+# 1b. GEMEINDEN DES KANTONS ZÜRICH (160 politische Gemeinden, Stand OGD 28.08.2025;
+#     laut Kanton seit der Fusion Andelfingen/Adlikon/Humlikon 2023 unverändert, Juli 2026)
+#     Je Gemeinde die zuständigen Stellen pro Rolle. Die Engine liest hier ZUERST:
+#       municipalities["ZH:<Gemeinde>"].<rolle>  ->  role_resolution "ZH:<Gemeinde>"  ->  "ZH"  ->  default
+#     Listenwerte (z.B. unentgeltliche_rechtsauskunft): alle anzeigen, erster Eintrag = Standard.
+#     Herkunft der Zuordnung:
+#       bezirk, region ............ Statistisches Amt ZH, Gemeindezuweisungen (amtlich)
+#       schlichtungsbehoerde_miete  Bezirksgericht des Bezirks (GOG § 63 f.)                 -> amtlich
+#       kesb ...................... kpv-zh.ch Standortseiten (13 KESB)                       -> geprüft
+#       kjz ....................... ABGELEITET aus Bezirk/KESB-Kreis (Kanton publiziert nur PLZ-Suche)
+#       sozialdienst_gemeinde ..... siehe sozialdienst_status:
+#                                   verified = Stelle und Kontakt geprüft
+#                                   traeger_verified_contact_open = Trägerschaft belegt, Kontakt offen
+#                                   to_verify = Platzhalter sozialdienst_gemeinde_zh; Gemeinde-Sozialdienst
+#                                               noch einzeln zu prüfen (Arbeitsliste: gemeinden_pruefliste.csv)
+#       mieterverband, opferhilfe_kantonal, frauenhaus: kantonsweite Stellen; Winterthur/Andelfingen
+#                                   der Nähe wegen den Winterthurer Stellen zugeordnet (Annahme)
+#     Ortsteile (z.B. Glattbrugg -> Opfikon, Effretikon -> Illnau-Effretikon) muss die Engine
+#     über die PLZ auf die politische Gemeinde abbilden.
+# ---------------------------------------------------------------------------
+municipalities:
+  "ZH:Aeugst am Albis": {bfs: 1, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Affoltern am Albis": {bfs: 2, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bonstetten": {bfs: 3, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hausen am Albis": {bfs: 4, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hedingen": {bfs: 5, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Kappel am Albis": {bfs: 6, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Knonau": {bfs: 7, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Maschwanden": {bfs: 8, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Mettmenstetten": {bfs: 9, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Obfelden": {bfs: 10, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Ottenbach": {bfs: 11, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: ika_sozialdienst_bezirk_affoltern, sozialdienst_status: traeger_verified_contact_open, notunterkunft: ika_sozialdienst_bezirk_affoltern, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rifferswil": {bfs: 12, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Stallikon": {bfs: 13, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wettswil am Albis": {bfs: 14, bezirk: "Affoltern", region: "Knonaueramt", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_affoltern, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_affoltern, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_affoltern, kjz: kjz_affoltern, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Benken (ZH)": {bfs: 22, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Berg am Irchel": {bfs: 23, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Buch am Irchel": {bfs: 24, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dachsen": {bfs: 25, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dorf": {bfs: 26, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Feuerthalen": {bfs: 27, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Flaach": {bfs: 28, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Flurlingen": {bfs: 29, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Henggart": {bfs: 31, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Kleinandelfingen": {bfs: 33, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Laufen-Uhwiesen": {bfs: 34, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Marthalen": {bfs: 35, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Ossingen": {bfs: 37, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rheinau": {bfs: 38, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Thalheim an der Thur": {bfs: 39, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Trüllikon": {bfs: 40, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Truttikon": {bfs: 41, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Volken": {bfs: 43, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bachenbülach": {bfs: 51, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bassersdorf": {bfs: 52, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bülach": {bfs: 53, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dietlikon": {bfs: 54, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Eglisau": {bfs: 55, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Embrach": {bfs: 56, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Freienstein-Teufen": {bfs: 57, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Glattfelden": {bfs: 58, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hochfelden": {bfs: 59, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Höri": {bfs: 60, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hüntwangen": {bfs: 61, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Kloten": {bfs: 62, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Lufingen": {bfs: 63, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Nürensdorf": {bfs: 64, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oberembrach": {bfs: 65, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Opfikon": {bfs: 66, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rafz": {bfs: 67, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rorbas": {bfs: 68, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wallisellen": {bfs: 69, bezirk: "Bülach", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_sued, kjz: kjz_kloten, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wasterkingen": {bfs: 70, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wil (ZH)": {bfs: 71, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Winkel": {bfs: 72, bezirk: "Bülach", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_buelach, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_buelach, rechtsauskunft_buelach_zav, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_buelach_nord, kjz: kjz_buelach, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bachs": {bfs: 81, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Boppelsen": {bfs: 82, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Buchs (ZH)": {bfs: 83, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dällikon": {bfs: 84, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dänikon": {bfs: 85, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dielsdorf": {bfs: 86, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hüttikon": {bfs: 87, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Neerach": {bfs: 88, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Niederglatt": {bfs: 89, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Niederhasli": {bfs: 90, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Niederweningen": {bfs: 91, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oberglatt": {bfs: 92, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oberweningen": {bfs: 93, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Otelfingen": {bfs: 94, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Regensberg": {bfs: 95, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Regensdorf": {bfs: 96, bezirk: "Dielsdorf", region: "Furttal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rümlang": {bfs: 97, bezirk: "Dielsdorf", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_regensdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Schleinikon": {bfs: 98, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Schöfflisdorf": {bfs: 99, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Stadel": {bfs: 100, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Steinmaur": {bfs: 101, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Weiach": {bfs: 102, bezirk: "Dielsdorf", region: "Zürcher Unterland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dielsdorf, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dielsdorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dielsdorf, kjz: kjz_dielsdorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bäretswil": {bfs: 111, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bubikon": {bfs: 112, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dürnten": {bfs: 113, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Fischenthal": {bfs: 114, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Gossau (ZH)": {bfs: 115, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Grüningen": {bfs: 116, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hinwil": {bfs: 117, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rüti (ZH)": {bfs: 118, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Seegräben": {bfs: 119, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wald (ZH)": {bfs: 120, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wetzikon (ZH)": {bfs: 121, bezirk: "Hinwil", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_hinwil, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_hinwil, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_hinwil, kjz: kjz_rueti, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Adliswil": {bfs: 131, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Kilchberg (ZH)": {bfs: 135, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Langnau am Albis": {bfs: 136, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oberrieden": {bfs: 137, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Richterswil": {bfs: 138, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rüschlikon": {bfs: 139, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Thalwil": {bfs: 141, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Erlenbach (ZH)": {bfs: 151, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Herrliberg": {bfs: 152, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hombrechtikon": {bfs: 153, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Küsnacht (ZH)": {bfs: 154, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Männedorf": {bfs: 155, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Meilen": {bfs: 156, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oetwil am See": {bfs: 157, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Stäfa": {bfs: 158, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Uetikon am See": {bfs: 159, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Zumikon": {bfs: 160, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Zollikon": {bfs: 161, bezirk: "Meilen", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_meilen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_meilen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_meilen, kjz: kjz_meilen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Fehraltorf": {bfs: 172, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hittnau": {bfs: 173, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Lindau": {bfs: 176, bezirk: "Pfäffikon", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Pfäffikon": {bfs: 177, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Russikon": {bfs: 178, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Weisslingen": {bfs: 180, bezirk: "Pfäffikon", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wila": {bfs: 181, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wildberg": {bfs: 182, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dübendorf": {bfs: 191, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, rechtsauskunft_duebendorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_duebendorf, kjz: kjz_duebendorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Egg": {bfs: 192, bezirk: "Uster", region: "Pfannenstiel", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Fällanden": {bfs: 193, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, rechtsauskunft_duebendorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_duebendorf, kjz: kjz_duebendorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Greifensee": {bfs: 194, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Maur": {bfs: 195, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_duebendorf, kjz: kjz_duebendorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Mönchaltorf": {bfs: 196, bezirk: "Uster", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Schwerzenbach": {bfs: 197, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, rechtsauskunft_duebendorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Uster": {bfs: 198, bezirk: "Uster", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Volketswil": {bfs: 199, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, rechtsauskunft_duebendorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_uster, kjz: kjz_uster, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wangen-Brüttisellen": {bfs: 200, bezirk: "Uster", region: "Glattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_uster, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_uster, rechtsauskunft_duebendorf, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_duebendorf, kjz: kjz_duebendorf, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Altikon": {bfs: 211, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Brütten": {bfs: 213, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dägerlen": {bfs: 214, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dättlikon": {bfs: 215, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dinhard": {bfs: 216, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Ellikon an der Thur": {bfs: 218, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Elsau": {bfs: 219, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hagenbuch": {bfs: 220, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Hettlingen": {bfs: 221, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Neftenbach": {bfs: 223, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Pfungen": {bfs: 224, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Rickenbach (ZH)": {bfs: 225, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Schlatt (ZH)": {bfs: 226, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Seuzach": {bfs: 227, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Turbenthal": {bfs: 228, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Winterthur": {bfs: 230, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: soziale_dienste_winterthur, sozialdienst_status: verified, notunterkunft: durchgangsheim_anker_winterthur, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_winterthur}
+  "ZH:Zell (ZH)": {bfs: 231, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Aesch (ZH)": {bfs: 241, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Birmensdorf (ZH)": {bfs: 242, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Dietikon": {bfs: 243, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Geroldswil": {bfs: 244, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oberengstringen": {bfs: 245, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Oetwil an der Limmat": {bfs: 246, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Schlieren": {bfs: 247, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Uitikon": {bfs: 248, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Unterengstringen": {bfs: 249, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Urdorf": {bfs: 250, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Weiningen (ZH)": {bfs: 251, bezirk: "Dietikon", region: "Limmattal", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_dietikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_dietikon, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_dietikon, kjz: kjz_dietikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Zürich": {bfs: 261, bezirk: "Zürich", region: "Stadt Zürich", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_bezirk_zuerich, unentgeltliche_rechtsauskunft: [rechtsauskunft_miete_bezirksgericht_zuerich, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialzentren_stadt_zuerich, sozialdienst_status: verified, notunterkunft: wohnen_obdach_stadt_zuerich, kesb: kesb_stadt_zuerich, kjz: sozialzentren_stadt_zuerich, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_stadt_zuerich}
+  "ZH:Andelfingen": {bfs: 291, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Stammheim": {bfs: 292, bezirk: "Andelfingen", region: "Weinland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_andelfingen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_andelfingen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: zentrum_breitenstein, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wädenswil": {bfs: 293, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Elgg": {bfs: 294, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Horgen": {bfs: 295, bezirk: "Horgen", region: "Zimmerberg", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_horgen, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_horgen, rechtsauskunft_horgen_gemeinde, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_horgen, kjz: kjz_horgen, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Illnau-Effretikon": {bfs: 296, bezirk: "Pfäffikon", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Bauma": {bfs: 297, bezirk: "Pfäffikon", region: "Zürcher Oberland", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_pfaeffikon, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_pfaeffikon, rechtsauskunft_zuercher_oberland, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_bezirk_pfaeffikon, kjz: kjz_pfaeffikon, mieterverband: mieterverband_zh, opferhilfe_kantonal: opferberatung_zuerich, frauenhaus: frauenhaus_violetta, frauenzentrale_kantonal: frauenzentrale_zuerich, ombudsstelle: ombudsstelle_kanton_zuerich}
+  "ZH:Wiesendangen": {bfs: 298, bezirk: "Winterthur", region: "Winterthur und Umgebung", schlichtungsbehoerde_miete: schlichtungsbehoerde_miete_winterthur, unentgeltliche_rechtsauskunft: [rechtsauskunft_bg_winterthur, unentgeltliche_rechtsauskunft_zav], sozialdienst_gemeinde: sozialdienst_gemeinde_zh, sozialdienst_status: to_verify, notunterkunft: sozialdienst_gemeinde_zh, kesb: kesb_winterthur_andelfingen, kjz: kjz_winterthur, mieterverband: mieterverband_zh_winterthur, opferhilfe_kantonal: frauen_nottelefon_winterthur, frauenhaus: frauenhaus_winterthur, frauenzentrale_kantonal: frauenzentrale_winterthur, ombudsstelle: ombudsstelle_kanton_zuerich}
 
 # ---------------------------------------------------------------------------
 # 2. ANLAUFSTELLEN
@@ -144,332 +346,711 @@ professionals:
     source_url: "https://www.gr.ch/DE/Medien/Mitteilungen/MMStaka/2026/Seiten/2026043002.aspx"
     verified: true
 
-  # ===================== KANTON ZUERICH: Mietrecht =====================
+  # ======================================================================
+  # KANTON ZÜRICH (ab v1.2 mit UTF-8-Umlauten; Stand der Prüfung: 07.11.2026)
+  # ======================================================================
+
+  # ===================== ZH: Schlichtungsbehörden in Miet- und Pachtsachen (je Bezirk) =====================
+  # Jedes der 12 Bezirksgerichte führt eine (paritätische) Schlichtungsbehörde; zuständig ist der
+  # Ort der Mietsache. Adresse = Bezirksgericht, sofern nicht anders angegeben.
+  # Die Gemeinde→Bezirk-Zuordnung steht im Abschnitt "municipalities".
+
+  - id: schlichtungsbehoerde_miete_affoltern
+    label: "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Affoltern"
+    type: authority
+    region: ["ZH:Bezirk Affoltern"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Im Grund 15, 8910 Affoltern am Albis"
+      phone: "044 763 17 00 (Telefonzentrale)"
+      email: null                       # "E-Mail-Adresse auf Anfrage"
+      hours: "Schalter Mo-Do 08.00-11.30 und 14.00-17.00; Fr 08.00-11.30 und 13.30-16.30"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-affoltern"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-affoltern"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_andelfingen
+    label: "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Andelfingen"
+    type: authority
+    region: ["ZH:Bezirk Andelfingen"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Thurtalstrasse 1, Postfach, 8450 Andelfingen"
+      phone: "052 304 20 10 (Telefonzentrale)"
+      hours: "Empfang Mo-Fr 08.00-12.00 und 13.15-17.00; Telefon Mo-Fr 08.00-11.45 und 13.15-16.45"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-andelfingen"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-andelfingen"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_buelach
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Bülach"
+    type: authority
+    region: ["ZH:Bezirk Bülach"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Spitalstrasse 13, 8180 Bülach (Post: Postfach, 8180 Bülach)"
+      phone: "044 863 44 33 (Telefonzentrale, Mo-Fr 08.00-11.30 und 13.30-17.00)"
+      hours: "Schalter Mo-Fr 07.45-11.45 und 13.15-17.00"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-buelach"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-buelach"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_dielsdorf
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Dielsdorf"
+    type: authority
+    region: ["ZH:Bezirk Dielsdorf"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Spitalstrasse 7, 8157 Dielsdorf"
+      phone: null                       # Zentrale auf der Website nicht lesbar; Rechtsauskunft 044 854 88 40
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dielsdorf"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dielsdorf"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_dietikon
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Dietikon"
+    type: authority
+    region: ["ZH:Bezirk Dietikon"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Bahnhofplatz 10, 8953 Dietikon (Post: Postfach, 8953 Dietikon)"
+      phone: null                       # auf der Website nicht lesbar -> vor Einsatz ergänzen
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dietikon"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dietikon"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_hinwil
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Hinwil"
+    type: authority
+    region: ["ZH:Bezirk Hinwil"]
+    specializations: [tenancy_disputes, tenancy_law_information]
+    contact:
+      address: "Gerichtshausstrasse 12, 8340 Hinwil"
+      phone: "044 938 81 11"
+      access: "Persönliche Auskunft in Mietsachen durch die Schlichtungsbehörde: Montag ab 16.30 (bis 17.00 im Gerichtsgebäude eintreffen)"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-hinwil"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-hinwil/rechtsauskunft"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_horgen
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Horgen"
+    type: authority
+    region: ["ZH:Bezirk Horgen"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: null                     # Kontaktblock der Gerichtsseite war nicht lesbar -> vor Einsatz ergänzen
+      phone: null
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-horgen"
+    note: "Zusammensetzung ab 1.7.2026 (Hauptverantwortliche Vorsitzende: lic. iur. Eveline Gucker Iseli) gemäss PDF des Bezirksgerichts."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/sites/default/files/Organisation/Bezirksgerichte/Horgen/Personalbestand/Schlichtungsbehoerde_Miete_Pacht_01072026.pdf"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_meilen
+    label: "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Meilen"
+    type: authority
+    region: ["ZH:Bezirk Meilen"]
+    specializations: [tenancy_disputes, tenancy_law_information]
+    contact:
+      address: "Untere Bruech 139/140, 8706 Meilen (Post: Postfach, 8706 Meilen)"
+      phone: "058 111 21 21"
+      access: "Telefonische Auskunft in Mietsachen durch die Schlichtungsbehörde: Fr 16.00-17.00"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-meilen"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-meilen/rechtsauskunft"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_pfaeffikon
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Pfäffikon"
+    type: authority
+    region: ["ZH:Bezirk Pfäffikon"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Bezirksgebäude, Hörnlistrasse 55, 8330 Pfäffikon ZH"
+      phone: null                       # auf der Website nicht lesbar -> vor Einsatz ergänzen
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-pfaeffikon"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-pfaeffikon"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_uster
+    label: "Schlichtungsbehörde Uster (Miet- und Pachtsachen), Bezirksgericht Uster"
+    type: authority
+    region: ["ZH:Bezirk Uster"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Gerichtsstrasse 17, 8610 Uster"
+      phone: "058 111 33 00 (Telefonzentrale, 07.45-11.30 und 13.30-16.30)"
+      hours: "Schalter 07.45-11.45 und 13.30-16.30"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-uster"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-uster"
+    verified: true
+
+  - id: schlichtungsbehoerde_miete_winterthur
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen, Bezirksgericht Winterthur"
+    type: authority
+    region: ["ZH:Bezirk Winterthur"]
+    specializations: [tenancy_disputes]
+    contact:
+      address: "Lindstrasse 10, 8400 Winterthur"
+      phone: null                       # auf der Website nicht lesbar -> vor Einsatz ergänzen
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-winterthur"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-winterthur"
+    verified: true
+
   - id: schlichtungsbehoerde_miete_bezirk_zuerich
-    label: "Paritaetische Schlichtungsbehoerde in Miet- und Pachtsachen des Bezirks Zuerich"
+    label: "Paritätische Schlichtungsbehörde in Miet- und Pachtsachen des Bezirks Zürich"
     type: authority
     region: ["ZH:Zürich"]
     specializations: [tenancy_disputes]
     contact:
-      address: "Bezirksgericht Zuerich, Wengistrasse 30, 8004 Zuerich"
-      phone: "058 111 70 30"
-      email: null                       # im Verzeichnis genannte Adresse betrifft die GlG-Schlichtung; nicht uebernommen
-      web: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
-      hours: "Mo-Fr 08.00-11.45 und 13.30-16.45"
+      address: "Bezirksgericht Zürich, Wengistrasse 30, 8004 Zürich"
+      phone: null                       # v1.1 hatte 058 111 70 30: gehört laut Gerichtsseite zur Schlichtungsbehörde nach Gleichstellungsgesetz -> entfernt
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-zuerich"
       costs: "Schlichtungsverfahren in Mietsachen ohne Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)"
-      access: "Schriftliches Schlichtungsgesuch; zustaendig ist der Ort der Mietsache"
-    contact_source: secondary
+      access: "Schriftliches Schlichtungsgesuch; zuständig ist der Ort der Mietsache. Auskunft: rechtsauskunft_miete_bezirksgericht_zuerich"
+    note: "Bezirksgericht Zürich: Badenerstrasse 90 (Hauptgebäude) sowie Wengistrasse 28 und 30. Standort der Rechtsauskunft Miete: Wengistrasse 30 (Merkblatt). Telefon der Schlichtungsbehörde vor Einsatz ergänzen."
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/01/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-zuerich/kontakt/ihr-weg-zu-uns"
     verified: true
 
   - id: schlichtungsbehoerde_miete_zh_verzeichnis
-    label: "Schlichtungsbehoerde in Miet- und Pachtsachen am Bezirksgericht des Bezirks der Mietsache (Kanton Zuerich)"
+    label: "Schlichtungsbehörde in Miet- und Pachtsachen am Bezirksgericht des Bezirks der Mietsache (Kanton Zürich)"
     type: authority
     region: [ZH]
     specializations: [tenancy_disputes]
     contact:
-      web: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
-      access: "Jedes Bezirksgericht hat eine eigene paritaetische Schlichtungsbehoerde. Bezirk ueber 'Gemeinden und Bezirke A-Z' auf gerichte-zh.ch bestimmen."
-    note: "Keine Friedensrichteraemter fuer Mietsachen. Vorsitz: Gerichtsschreiber/in, je eine Vertretung Mieter- und Vermieterseite."
+      web: "https://www.gerichte-zh.ch/de/themen/miete/hilfen/schlichtungsbehoerden"
+      access: "Fallback, wenn die Gemeinde unbekannt ist. Bezirk über die Gemeindesuche auf gerichte-zh.ch bestimmen."
+    note: "Keine Friedensrichterämter für Mietsachen. Vorsitz: Gerichtsschreiber/in, je eine Vertretung Mieter- und Vermieterseite (Art. 200 ZPO, § 64 GOG)."
     contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://www.gerichte-zh.ch/themen/miete/hilfen/schlichtungsbehoerden.html"
+    source_url: "https://www.gerichte-zh.ch/de/themen/miete/hilfen/schlichtungsbehoerden"
     verified: true
 
+  # ===================== ZH: Unentgeltliche Rechtsauskunft =====================
+  # Bezirksgerichte: kurze, unverbindliche Auskunft (max. ca. 15 Min.), nur ohne hängiges Verfahren.
+
+  - id: rechtsauskunft_bg_affoltern
+    label: "Unentgeltliche Rechtsauskunft, Bezirksgericht Affoltern"
+    type: authority
+    region: ["ZH:Bezirk Affoltern"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      phone: "044 763 17 00 (Mo 14.00-16.30, nur telefonisch)"
+      costs: "kostenlos"
+      access: "Wohnsitz im Bezirk (Arbeitsrecht: auch Arbeitsort). Nur Zivilrecht, max. 15 Min., unverbindlich."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-affoltern/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_buelach
+    label: "Unentgeltliche Rechtsauskunft, Bezirksgericht Bülach"
+    type: authority
+    region: ["ZH:Bezirk Bülach"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      address: "Spitalstrasse 13, 8180 Bülach"
+      hours: "Mo 14.00-17.30, Fr 14.00-16.30 (vor Ort)"
+      costs: "kostenlos"
+      access: "Wohnsitz im Bezirk (Arbeitsrecht: auch Arbeitsort). Nur Zivilrecht, max. 15 Min., Unterlagen mitbringen."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-buelach/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_dielsdorf
+    label: "Unentgeltliche telefonische Rechtsauskunft, Bezirksgericht Dielsdorf"
+    type: authority
+    region: ["ZH:Bezirk Dielsdorf"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      phone: "044 854 88 40 (Di und Fr 14.00-16.45)"
+      costs: "kostenlos"
+      access: "Wohnsitz im Bezirk. Arbeits-, Familien-, Miet- und Erbrecht sowie summarische Verfahren; ca. 15 Min."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dielsdorf/telefonische-rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_dietikon
+    label: "Unentgeltliche Rechtsauskunft, Bezirksgericht Dietikon"
+    type: authority
+    region: ["ZH:Bezirk Dietikon"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      address: "Bahnhofplatz 10, 8953 Dietikon"
+      hours: null                       # Zeiten auf der Website nicht lesbar
+      costs: "kostenlos"
+      languages: "nur Deutsch"
+      access: "Mietrecht: Mietobjekt im Bezirk. Nur allgemeine Rechts- und Verfahrensfragen, keine Fallbeurteilung; max. 15 Min.; nicht bei hängigem Verfahren."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-dietikon/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_hinwil
+    label: "Unentgeltliche Rechtsauskunft, Bezirksgericht Hinwil"
+    type: authority
+    region: ["ZH:Bezirk Hinwil"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      phone: "044 938 81 11 (Mo und Mi 14.00-15.30)"
+      hours: "Mietsachen persönlich: Mo ab 16.30 (Schlichtungsbehörde)"
+      costs: "kostenlos"
+      access: "Nur Wohnsitz im Bezirk Hinwil. Mietrecht formell und materiell; übrige Gebiete nur allgemein."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-hinwil/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_horgen
+    label: "Unentgeltliche telefonische Rechtsauskunft, Bezirksgericht Horgen"
+    type: authority
+    region: ["ZH:Bezirk Horgen"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      phone: null                       # Nummer auf der Website nicht lesbar
+      hours: "Di 14.30-16.30 und Fr 14.30-16.30 (Familien-, Miet-, Erbrecht); Do 14.00-16.30 (Arbeitsrecht); nur telefonisch"
+      costs: "kostenlos"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-horgen/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_meilen
+    label: "Unentgeltliche telefonische Rechtsauskunft, Bezirksgericht Meilen"
+    type: authority
+    region: ["ZH:Bezirk Meilen"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      phone: "058 111 21 21 (Mo und Mi 14.00-16.00; Mietfragen Fr 16.00-17.00)"
+      costs: "kostenlos"
+      access: "Allgemeine Rechts- und Verfahrensfragen; ca. 15 Min.; unverbindlich."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-meilen/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_pfaeffikon
+    label: "Unentgeltliche Rechtsauskunft, Bezirksgericht Pfäffikon"
+    type: authority
+    region: ["ZH:Bezirk Pfäffikon"]
+    specializations: [legal_counselling, tenancy_law_information]
+    contact:
+      address: "Bezirksgebäude, Hörnlistrasse 55, 8330 Pfäffikon ZH"
+      hours: "Mo 17.00-19.00 (ausser Feiertage), nur persönlich, ohne Anmeldung"
+      costs: "kostenlos"
+      access: "Keine telefonische oder schriftliche Auskunft; max. 15 Min."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-pfaeffikon/rechtsauskunft"
+    verified: true
+
+  - id: rechtsauskunft_bg_andelfingen
+    label: "Rechtsauskunft Bezirksgericht Andelfingen"
+    type: authority
+    region: ["ZH:Bezirk Andelfingen"]
+    specializations: [legal_counselling]
+    contact:
+      phone: "052 304 20 10 (Telefonzentrale)"
+    note: "Auf der Gerichtsseite kein Rechtsauskunft-Angebot gefunden; vor Zuweisung telefonisch klären."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-andelfingen"
+    verified: false
+
+  - id: rechtsauskunft_bg_uster
+    label: "Rechtsauskunft Bezirksgericht Uster"
+    type: authority
+    region: ["ZH:Bezirk Uster"]
+    specializations: [legal_counselling]
+    contact:
+      phone: "058 111 33 00 (Telefonzentrale)"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-uster/rechtsauskunft"
+    note: "Zeiten auf der Website nicht lesbar."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-uster"
+    verified: false
+
+  - id: rechtsauskunft_bg_winterthur
+    label: "Unentgeltliche telefonische Rechtsauskunft, Bezirksgericht Winterthur"
+    type: authority
+    region: ["ZH:Bezirk Winterthur"]
+    specializations: [legal_counselling]
+    contact:
+      phone: null                       # Nummer und Sprechstunden auf der Website nicht lesbar
+      access: "Nur telefonisch während der Sprechstundenzeiten"
+      web: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-winterthur/rechtsauskunft"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.gerichte-zh.ch/de/organisation/bezirksgerichte/bezirksgericht-winterthur"
+    verified: false
+
   - id: rechtsauskunft_miete_bezirksgericht_zuerich
-    label: "Unentgeltliche Rechtsauskunft in Miet- und Pachtsachen, Bezirksgericht Zuerich"
+    label: "Unentgeltliche Rechtsauskunft in Miet- und Pachtsachen, Bezirksgericht Zürich"
     type: authority
     region: ["ZH:Zürich"]
     specializations: [tenancy_law_information]
     contact:
-      address: "Wengistrasse 30, 8004 Zuerich (Anmeldung an der Loge)"
+      address: "Wengistrasse 30, 8004 Zürich (Anmeldung an der Empfangsloge)"
       phone: "058 111 74 74 (Mo 09.00-11.30 und 13.30-16.00, Mi 13.30-16.00)"
-      hours: "Vor Ort Mi 09.00-11.30, ohne Voranmeldung, lange Wartezeiten moeglich"
+      hours: "Vor Ort Mi 09.00-11.30, ohne Voranmeldung, lange Wartezeiten möglich"
       costs: "kostenlos"
       languages: "nur Deutsch (Dolmetscher selbst mitbringen)"
-      access: "Nur Mietobjekt in der Stadt Zuerich; nicht bei anwaltlicher Vertretung oder haengigem Verfahren. Max. ca. 15 Min., muendlich, neutral. Mietvertrag und Kuendigung mitbringen."
+      access: "Nur Mietobjekt in der Stadt Zürich; nicht bei anwaltlicher Vertretung oder hängigem Verfahren. Ca. 15 Min., mündlich, neutral. Mietvertrag und Kündigung mitbringen."
     contact_source: primary
     last_checked: "2026-11-07"
     source_url: "https://www.gerichte-zh.ch/fileadmin/user_upload/Dokumente/BG_Zuerich/Merkblaetter/Miete/Merkblatt_Rechtsauskunft_Miet-_und_Pachtsachen_ab_1._M%C3%A4rz_2026.pdf"
     verified: true
 
-  - id: mieterverband_zh
-    label: "Mieterinnen- und Mieterverband Zuerich"
-    type: ngo
-    region: [ZH]
-    specializations: [tenancy_law_counselling, defects, legal_representation]
-    contact:
-      address: "Tellstrasse 31, 8004 Zuerich"
-      phone: "044 296 90 20"
-      email: "info@mvzh.ch"
-      web: "https://www.mieterverband.ch/mv-zh/"
-      hours: "Mo-Fr 09.00-12.00 und 13.30-17.00"
-      costs: "Mitgliederbeitrag CHF 100/Jahr; Beratung fuer Mitglieder kostenlos, Nichtmitglieder CHF 70 pro Beratung"
-      access: "Terminpflicht; persoenlich, telefonisch oder schriftlich; auch Anwaltsvertretung und Maengelberatung"
-    contact_source: secondary
-    last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/01/9.3.-Rechtsberatung.pdf"
-    verified: true
-
-  - id: mieterverband_zh_winterthur
-    label: "Mieterinnen- und Mieterverband Zuerich, Geschaeftsstelle Winterthur"
-    type: ngo
-    region: ["ZH:Winterthur"]
-    specializations: [tenancy_law_counselling]
-    contact:
-      address: "Merkurstrasse 25, 8400 Winterthur"
-      postal_address: "Postfach 2080, 8401 Winterthur"
-      phone: "052 212 50 35"
-      email: "info@mvzh.ch"
-      web: "https://www.mieterverband.ch/zuerich"
-      hours: null
-      costs: "wie Mieterverband Zuerich"
-    contact_source: secondary
-    last_checked: "2026-11-07"
-    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
-    verified: true
-
   - id: unentgeltliche_rechtsauskunft_zav
-    label: "Unentgeltliche Rechtsauskunft des Zuercher Anwaltsverbands (ZAV)"
+    label: "Unentgeltliche Rechtsauskunft der Stadt Zürich und des Zürcher Anwaltsverbands (ZAV)"
     type: ngo
     region: [ZH]
     specializations: [legal_counselling]
     contact:
-      address: "Strassburgstrasse 9, 8004 Zuerich"
-      phone: null                        # keine telefonische Beratung
+      address: "AZL, Strassburgstrasse 9, 8004 Zürich (Werdplatz)"
+      phone: null                       # keine telefonische Beratung
       web: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
-      hours: "Walk-in Mo-Mi ab 16.30, Do ab 17.00; Beratung Mo-Mi 17.30-19.30, Do 18.00-20.00"
-      costs: "kostenlos"
-      access: "Kurze Orientierungshilfe (ca. 15 Min.) durch Anwaeltinnen/Anwaelte; Termin am selben Tag an der Loge"
-    contact_source: secondary
+      hours: "Beratung Mo-Mi 17.30-19.30, Do 18.00-20.00; Termine am selben Abend an der Loge ab Mo-Mi 16.30, Do 17.00"
+      costs: "kostenlos (ca. 15 Min. Orientierung)"
+      access: "Nicht reservierbar, beschränkte Anzahl; keine Haustiere"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
+    verified: true
+
+  - id: rechtsauskunft_buelach_zav
+    label: "Rechtsauskunft Bülach (Liste ZAV)"
+    type: ngo
+    region: ["ZH:Bezirk Bülach"]
+    specializations: [legal_counselling]
+    contact:
+      address: "Allmendstrasse 6, 8180 Bülach"
+      hours: "Jeden zweiten Donnerstag 17.00-19.00 gemäss Terminplan 2026; Tickets am Empfang ab 1 Std. vorher"
+      costs: null
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
+    verified: true
+
+  - id: rechtsauskunft_duebendorf
+    label: "Rechtsauskunft Dübendorf (Liste ZAV)"
+    type: ngo
+    region: ["ZH:Dübendorf", "ZH:Fällanden", "ZH:Schwerzenbach", "ZH:Volketswil", "ZH:Wangen-Brüttisellen"]
+    specializations: [legal_counselling]
+    contact:
+      address: "Stadthaus, 1. OG (Zimmer 134), Usterstrasse 2, 8600 Dübendorf"
+      hours: "meist dienstags 17.45-18.45 (gemäss Ausschreibung)"
+      costs: "unentgeltlich für Einwohnerinnen und Einwohner von Dübendorf, Fällanden, Schwerzenbach, Volketswil, Wangen-Brüttisellen"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
+    verified: true
+
+  - id: rechtsauskunft_horgen_gemeinde
+    label: "Rechtsauskunft Horgen (Gemeinde Horgen, Liste ZAV)"
+    type: ngo
+    region: ["ZH:Horgen"]
+    specializations: [legal_counselling]
+    contact:
+      address: "Baumgärtlihof, Baumgärtlistrasse 12, 8810 Horgen"
+      hours: null                       # gemäss Ausschreibung 2026 der Gemeinde Horgen
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.zav.ch/de/anwaltssuche/rechtsauskunftsstellen.html"
+    verified: true
+
+  - id: rechtsauskunft_zuercher_oberland
+    label: "RZO Rechtsauskunftsstelle Zürcher Oberland"
+    type: ngo
+    region: ["ZH:Bezirk Hinwil", "ZH:Bezirk Pfäffikon"]
+    specializations: [legal_counselling]
+    contact:
+      address: "8620 Wetzikon"           # Strasse auf der Website nicht angegeben
+      web: "https://www.rzo-wetzikon.ch"
+      costs: "Erstauskunft (30 Min.) unentgeltlich für Einwohner der beteiligten Gemeinden; weitere Hilfe kostenpflichtig"
+      access: "Durch Anwältinnen/Anwälte, telefonisch oder persönlich; keine Vertretung vor Gericht"
+    note: "Liste der beteiligten Gemeinden auf der Website prüfen."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.rzo-wetzikon.ch"
     verified: true
 
   - id: rechtsauskunft_anwaltskollektiv
-    label: "Rechtsauskunft Anwaltskollektiv Zuerich"
+    label: "Verein Rechtsauskunft Anwaltskollektiv Zürich"
     type: ngo
     region: [ZH]
     specializations: [legal_counselling, migration_law]
     contact:
-      address: "Kernstrasse 8, 8004 Zuerich"
+      address: "Kernstrasse 8, 1. Stock, 8004 Zürich"
       phone: "044 241 24 33 (Mo-Fr 13.00-15.00 und 15.30-18.00)"
       email: "auskunft@anwaltskollektiv.ch (keine Rechtsauskunft per E-Mail)"
       web: "https://www.anwaltskollektiv.ch/"
-      hours: "Beratung Mo-Fr 12.30-18.30, Terminpflicht"
-      costs: "CHF 70 pro 30 Min."
-      languages: "12 Sprachen; Mi Asyl- und Auslaenderrecht"
-    contact_source: secondary
+      hours: "Büro- und Beratungszeiten Mo-Fr 12.30-18.30"
+      costs: "CHF 70 pro Beratung (max. 30 Min.), bar oder Twint"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.anwaltskollektiv.ch/"
     verified: true
 
-  # ===================== KANTON ZUERICH: Frauen- und Rechtsberatung =====================
+  # ===================== ZH: Mieterverband =====================
+  - id: mieterverband_zh
+    label: "Mieterinnen- und Mieterverband Zürich, Geschäftsstelle Zürich"
+    type: ngo
+    region: [ZH]
+    specializations: [tenancy_law_counselling, defects, legal_representation]
+    contact:
+      address: "Baumackerstrasse 24, 8050 Zürich"    # v1.1: Tellstrasse 31 (veraltet)
+      phone: "044 296 90 20 (Mo-Fr 09.00-12.00 und 13.30-17.00)"
+      email: null                       # auf der Website nicht angegeben
+      web: "https://www.mieterverband.ch/mv-zh/kontakt/"
+      costs: null                       # Mitgliederbeitrag/Beratungstarif auf der Website prüfen (v1.1-Angaben aus Sekundärquelle entfernt)
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.mieterverband.ch/mv-zh/"
+    verified: true
+
+  - id: mieterverband_zh_winterthur
+    label: "Mieterinnen- und Mieterverband Zürich, Geschäftsstelle Winterthur"
+    type: ngo
+    region: ["ZH:Bezirk Winterthur", "ZH:Bezirk Andelfingen"]
+    specializations: [tenancy_law_counselling]
+    contact:
+      address: "Lagerplatz 27, 8400 Winterthur"      # v1.1: Merkurstrasse 25 (veraltet)
+      phone: "044 296 90 20 (Mo-Fr 09.00-12.00 und 13.30-17.00)"
+      web: "https://www.mieterverband.ch/mv-zh/kontakt/"
+    note: "Zuweisung der Bezirke Winterthur/Andelfingen an diese Geschäftsstelle ist eine Annahme (Nähe); der Verband bedient den ganzen Kanton."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.mieterverband.ch/mv-zh/"
+    verified: true
+
+  # ===================== ZH: Frauen- und Rechtsberatung =====================
   - id: frauenzentrale_zuerich
-    label: "Zuercher Frauenzentrale, Beratung"
+    label: "Zürcher Frauenzentrale, Rechts- und Budgetberatung"
     type: ngo
     region: [ZH]
     specializations: [legal_counselling, budget_counselling, family_law, employment_law]
     contact:
-      address: "Am Schanzengraben 29, 8002 Zuerich"
-      phone: "044 206 30 20"
-      email: "beratungen@frauenzentrale-zh.ch"
+      address: "Am Schanzengraben 29, 8002 Zürich"
+      phone: "044 206 30 20 (Mo-Do 08.30-11.30)"
+      email: null                       # auf der Website nur verschlüsselt
       web: "https://frauenzentrale-zh.ch/beratungen-rechtsberatung-budgetberatung/"
-      hours: "Mo-Do 08.30-11.30"
-      costs: "Rechtsberatung ab CHF 60, Budgetberatung ab CHF 50"
-      access: "Termin online buchbar"
-    contact_source: secondary
+      costs: "Rechtsberatung ab CHF 60; Budgetberatung ab CHF 50"
+      access: "Rechtsberatung online buchbar"
+    availability: "Budgetberatung erst ab 2027 wieder (Stand 07.11.2026)"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/6.3.-Frauen-Schwangerschaft.pdf"
+    source_url: "https://frauenzentrale-zh.ch/beratungen-rechtsberatung-budgetberatung/"
     verified: true
 
   - id: frauenzentrale_winterthur
     label: "Frauenzentrale Winterthur, Beratungspunkt Budget und Recht"
     type: ngo
-    region: ["ZH:Winterthur"]
+    region: ["ZH:Bezirk Winterthur"]
     specializations: [legal_counselling, budget_counselling]
     contact:
       address: "Metzggasse 2, 8400 Winterthur"
       phone: "052 212 15 20"
       email: "beratungspunkt@frauenzentrale-fzw.ch"
       web: "https://www.beratungspunkt-winterthur.ch"
-      hours: null
-      costs: null
-      access: "Nach Terminabsprache vor Ort oder telefonisch; Budgetberatung auch online"
+    note: "Website sperrt automatisierte Abrufe; Angaben aus Adressverzeichnis Stadt Winterthur (Nov. 2025)."
     contact_source: secondary
     last_checked: "2026-11-07"
     source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
     verified: true
 
   - id: evangelischer_frauenbund_zuerich
-    label: "Evangelischer Frauenbund Zuerich, Rechts- und Sozialberatung"
+    label: "Evangelischer Frauenbund Zürich, Rechtsberatung"
     type: ngo
     region: [ZH]
-    specializations: [legal_counselling, social_counselling, tenancy_law, family_law]
+    specializations: [legal_counselling, tenancy_law, family_law]
     contact:
-      address: "Brahmsstrasse 32, 8003 Zuerich"
-      phone: "044 405 73 35 (Mo, Mi, Fr 08.30-12.00)"
-      email: "sozialberatung@vefz.ch"
+      address: "Brahmsstrasse 32, 8003 Zürich"
+      phone: "044 405 73 30 (Mo-Do 08.30-12.00)"    # v1.1: 044 405 73 35
+      email: "rechtsberatung@vefz.ch"
       web: "https://www.vefz.ch/rechtsberatung"
-      costs: "Sozialberatung kostenlos; Rechtsberatung CHF 70/Std."
-      access: "Frauen bis 60 Jahre mit Wohnsitz im Kanton Zuerich; Terminpflicht; einmalige Beratung, keine Mandate"
-    contact_source: secondary
+      costs: "CHF 50 pro Beratung (45 Min.); Trennungs-/Scheidungsvereinbarungen einkommensabhängig"
+      access: "Für alle Frauen; nur Beratung, keine Mandate; Absage < 24 h kostenpflichtig"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.vefz.ch/rechtsberatung"
     verified: true
 
-  # ===================== KANTON ZUERICH: Opferhilfe und Gewaltschutz =====================
+  # ===================== ZH: Opferhilfe und Gewaltschutz =====================
   - id: opferberatung_zuerich
-    label: "Opferberatung Zuerich (OBZ)"
+    label: "Opferberatung Zürich (OBZ)"
     type: ngo_cantonal_mandate
     region: [ZH]
     specializations: [victim_support, domestic_violence, sexual_violence, legal_aid_victims]
     referral_conditions: [domestic_violence, sexual_violence, acute_violence]
     contact:
-      address: "Gartenhofstrasse 17, 8004 Zuerich"
-      phone: "044 299 40 50"
-      phone_24h: "044 455 21 42 (oder national 142)"
-      email: "opferberatung@obzh.ch"
+      address: "Gartenhofstrasse 17, 8004 Zürich"
+      phone: "044 299 40 50 (Mo-Fr 09.00-12.00 und 13.30-17.00)"
+      phone_24h: "142 (Opferhilfe-Nummer, 24/7)"     # v1.1: 044 455 21 42 -> nicht mehr ausgewiesen
       web: "https://www.obzh.ch/"
-      hours: "Telefon Mo-Fr 09.00-12.00 und 13.30-17.00; Chat Mo-Fr 08.00-18.00"
-      costs: "kostenlos; anonyme Beratung moeglich; unentgeltliche Rechtsberatung bei erfuellten Voraussetzungen"
-    contact_source: secondary
+      online: "Onlineberatung 24/7 (online.obzh.ch); Chat Mo-Fr 08.00-18.00"
+      costs: "kostenlos, vertraulich, auf Wunsch anonym"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.obzh.ch/"
     verified: true
 
   - id: opferhilfe_zuerich
-    label: "Kantonale Opferhilfestelle Zuerich (Entschaedigung, Genugtuung, Aufsicht Beratungsstellen)"
+    label: "Kantonale Opferhilfestelle Zürich (Entschädigung, Genugtuung, Aufsicht Beratungsstellen)"
     type: authority
     region: [ZH]
     specializations: [financial_aid_victims, compensation, supervision_victim_counselling]
     referral_conditions: [victim_compensation]
     contact:
-      address: "Neumuehlequai 10, Postfach, 8090 Zuerich"
+      address: "Neumühlequai 10, Postfach, 8090 Zürich"
       phone: "043 259 25 41"
       email: "kantonale.opferhilfestelle@ji.zh.ch"
       web: "https://www.zh.ch/de/direktion-der-justiz-und-des-innern/kantonale-opferhilfestelle.html"
       hours: "Mo-Do 08.30-11.30 und 14.00-16.30; Fr 08.30-11.30 und 14.00-16.00"
-      person: "Leitung: Sandra Mueller Gmuender"
-      access: "Schriftliches Gesuchsverfahren fuer finanzielle Leistungen; Erstberatung laeuft ueber die Opferberatungsstellen"
-    note: "Nicht die erste Anlaufstelle fuer Beratung -> opferberatung_zuerich."
+      person: "Leitung: Sandra Müller Gmünder"
+      access: "Schriftliches Gesuchsverfahren für finanzielle Leistungen; Erstberatung über die Opferberatungsstellen"
+    note: "Nicht die erste Anlaufstelle für Beratung -> opferberatung_zuerich."
     contact_source: primary
     last_checked: "2026-11-07"
     source_url: "https://www.zh.ch/de/direktion-der-justiz-und-des-innern/kantonale-opferhilfestelle.html"
     verified: true
 
   - id: bif_frauenberatung
-    label: "BIF Beratungsstelle fuer Frauen gegen Gewalt in Ehe und Partnerschaft"
+    label: "BIF Beratungsstelle für Frauen gegen Gewalt in Ehe und Partnerschaft"
     type: ngo_cantonal_mandate
     region: [ZH]
     specializations: [domestic_violence]
     contact:
-      address: "Quellenstrasse 31, 8005 Zuerich"
+      address: "Postfach, 8031 Zürich"   # keine Strassenadresse publiziert (v1.1: Quellenstrasse 31 entfernt)
       phone: "044 278 99 99"
       email: "info@bif.ch"
       web: "https://www.bif-frauenberatung.ch/"
-      hours: "Mo-Fr 09.00-11.00 und 14.00-16.00; Di 08.30-11.00 und 16.00-18.00"
-      costs: "kostenlos"
-    contact_source: secondary
+      costs: "kostenlos, vertraulich"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.bif-frauenberatung.ch/"
     verified: true
 
   - id: frauenberatung_sexuelle_gewalt
-    label: "Frauenberatung sexuelle Gewalt Zuerich"
+    label: "Frauenberatung sexuelle Gewalt Zürich"
     type: ngo_cantonal_mandate
     region: [ZH]
     specializations: [sexual_violence, domestic_violence]
     contact:
-      address: "Letzigraben 89, 8003 Zuerich"
-      phone: "044 291 46 46"
+      address: "Letzigraben 89, 8003 Zürich"
+      phone: "044 291 46 46 (Mo, Di, Do, Fr 09.00-12.00 und 13.00-16.00; Mi 13.00-16.00)"
       email: "info@frauenberatung.ch"
       web: "https://www.frauenberatung.ch/"
-      hours: "Telefon Mo-Fr 09.00-12.00 und 13.00-16.00, Mi 13.00-16.00"
-      costs: "kostenlos"
-    contact_source: secondary
+      costs: "kostenlos, vertraulich, auf Wunsch anonym"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.frauenberatung.ch/"
     verified: true
 
-  - id: frauen_nottelefon_winterthur
-    label: "Frauen-Nottelefon Winterthur"
+  - id: frauen_nottelefon_winterthur          # ID beibehalten; Stelle heisst heute "fiera"
+    label: "fiera Opferberatung Winterthur (ehem. Frauen-Nottelefon Winterthur)"
     type: ngo_cantonal_mandate
-    region: ["ZH:Winterthur"]
+    region: ["ZH:Bezirk Winterthur", "ZH:Bezirk Andelfingen"]
     specializations: [domestic_violence, sexual_violence, victim_support]
     contact:
-      address: "Technikumstrasse 38, 8401 Winterthur"
+      address: "General-Guisan-Strasse 47, 8400 Winterthur"   # v1.1: Technikumstrasse 38 (veraltet)
       phone: "052 213 61 61"
-      email: "info@frauennottelefon.ch"
-      web: "https://www.frauennottelefon.ch/"
+      email: "info@fiera-opferberatung.ch"
+      web: "https://fiera-opferberatung.ch/"
       hours: "Mo, Di, Do, Fr 10.00-17.00; Mi 13.00-17.00"
-      costs: "kostenlos"
-    contact_source: secondary
+      costs: "kostenlos, vertraulich, auf Wunsch anonym"
+    note: "frauennottelefon.ch leitet auf fiera-opferberatung.ch weiter. Einzugsgebiet nicht publiziert; Zuweisung Winterthur/Andelfingen ist eine Annahme."
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://fiera-opferberatung.ch/"
     verified: true
 
   - id: frauenhaus_violetta
-    label: "Frauenhaus Violetta Zuerich"
+    label: "Frauenhaus Zürich Violetta"
     type: shelter
     region: [ZH]
     specializations: [domestic_violence, shelter]
     contact:
       address: null                     # Schutzadresse, wird nicht publiziert
-      phone_24h: "044 350 04 04"
+      phone_24h: "044 350 04 04 (Helpline, 24 h, 365 Tage)"
       email: "kontakt@frauenhaus-zhv.ch"
       web: "https://www.frauenhaus-zhv.ch/"
-      costs: "Kostengutsprache der kantonalen Opferhilfe"
-    contact_source: secondary
+      access: "24 Plätze für gewaltbetroffene Frauen mit oder ohne Kinder; Eintritt rund um die Uhr nach telefonischer Abklärung"
+      costs: null                       # siehe "Was kostet das Frauenhaus?" auf der Website
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.frauenhaus-zhv.ch/"
     verified: true
 
   - id: frauenhaus_winterthur
     label: "Frauenhaus Winterthur"
     type: shelter
-    region: ["ZH:Winterthur"]
+    region: ["ZH:Bezirk Winterthur", "ZH:Bezirk Andelfingen"]
     specializations: [domestic_violence, shelter]
     contact:
       address: null                     # Schutzadresse
       phone_24h: "052 213 08 78"
       email: "info@frauenhaus-winterthur.ch"
       web: "https://www.frauenhaus-winterthur.ch/"
-      costs: "einkommensabhaengig oder Kostengutsprache Opferhilfe/Gemeinde"
+    note: "Website sperrt automatisierte Abrufe; nicht neu geprüft."
     contact_source: secondary
     last_checked: "2026-11-07"
     source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
     verified: true
 
   - id: forensic_nurses_zh
-    label: "Forensic Nurses Kanton Zuerich (Spurensicherung nach haeuslicher/sexueller Gewalt)"
+    label: "Forensic Nurses Kanton Zürich (Spurensicherung nach häuslicher/sexueller Gewalt)"
     type: authority
     region: [ZH]
     specializations: [evidence_collection, medical_care]
     contact:
-      phone_24h: "0800 09 09 09"
+      phone_24h: "0800 09 09 09 (24/7, gratis)"
       web: "https://www.zh.ch/de/gesundheit/strategien-programme/forensic-nurses.html"
-      access: "Betreuung in der naechsten Spital-Notfallstation; keine Anzeige noetig, Polizei wird nicht beigezogen"
-    contact_source: secondary
+      access: "Über jede Spital-Notfallstation im Kanton oder direkt; keine Anzeige nötig, Polizei nicht anwesend; Spuren werden 15 Jahre aufbewahrt"
+      costs: "Spurensicherung kostenlos; Spitalbehandlung wird verrechnet (Opferhilfe kann übernehmen)"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.zh.ch/de/gesundheit/strategien-programme/forensic-nurses.html"
     verified: true
 
   - id: kokon_zuerich
-    label: "Kokon, Beratung fuer Kinder, Jugendliche und junge Erwachsene"
+    label: "Kokon, Beratung für Kinder, Jugendliche und junge Erwachsene"
     type: ngo_cantonal_mandate
     region: [ZH]
     specializations: [children, youth, violence]
     contact:
-      address: "Aemtlerstrasse 17, 8003 Zuerich"
-      phone_24h: "044 545 45 40"
+      address: "Aemtlerstrasse 17, 8003 Zürich"
+      phone_24h: "044 545 45 40 (24 Stunden)"
       email: "beratung@kokon-zh.ch"
       web: "https://kokon-zh.ch/"
-      costs: "kostenlos, vertraulich, auch anonym"
-    contact_source: secondary
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://kokon-zh.ch/"
     verified: true
 
   - id: fiz_zuerich
@@ -479,78 +1060,125 @@ professionals:
     specializations: [human_trafficking, migrant_women, exploitation]
     referral_conditions: [exploitation]
     contact:
-      address: "Hohlstrasse 511, 8048 Zuerich"
+      address: "Hohlstrasse 511, 8048 Zürich"
       phone: "044 436 90 00"
+      whatsapp: "+41 76 596 15 63"
       email: "contact@fiz-info.ch"
       web: "https://www.fiz-info.ch/"
-      hours: "Telefon Mo-Fr 09.00-12.00 und 13.30-17.00"
-      access: "Opferschutzprogramm Menschenhandel: Zuweisung durch Fachstelle, Kostengutsprache"
-    contact_source: secondary
+      access: "Opferschutz Menschenhandel; Beratung für Migrantinnen"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.4.-Opferberatung-sexuelle-haeusliche-Gewalt.pdf"
+    source_url: "https://www.fiz-info.ch/"
     verified: true
 
-  # ===================== KANTON ZUERICH: Sozialhilfe, Wohnen, Schulden =====================
+  # ===================== ZH: Sozialhilfe, Wohnen, Schulden =====================
   - id: sozialzentren_stadt_zuerich
-    label: "Soziale Dienste Stadt Zuerich, Sozialzentren (Intake)"
+    label: "Soziale Dienste Stadt Zürich, Sozialzentren"
     type: authority
     region: ["ZH:Zürich"]
     specializations: [social_assistance, rent_arrears, crisis_counselling, family_counselling]
     contact:
       locations:
-        - {name: "Sozialzentrum Albisriederhaus", address: "Albisriederstrasse 330, 8047 Zuerich", phone: "044 412 77 77"}
-        - {name: "Sozialzentrum Dorflinde", address: "Schwamendingerstrasse 41, 8050 Zuerich", phone: "044 412 82 50"}
-        - {name: "Sozialzentrum Helvetiaplatz", address: "Molkenstrasse 5, 8004 Zuerich", phone: "044 412 85 00"}
-        - {name: "Sozialzentrum Selnau", address: "Selnaustrasse 17, 8001 Zuerich", phone: "044 412 66 77"}
-        - {name: "Sozialzentrum Wipkingerplatz", address: "Roeschibachstrasse 26, 8037 Zuerich", phone: "044 412 73 00"}
-      hours: "Mo-Fr 09.00-12.00 und 13.30-16.30"
+        - {name: "Sozialzentrum Selnau", address: "Selnaustrasse 17, 8001 Zürich", phone: "044 412 66 77", kreise: "1, 2, 3 (ohne Sihlfeld), 7, 8"}
+        - {name: "Sozialzentrum Helvetiaplatz", address: "Molkenstrasse 5/9, 8004 Zürich", phone: "044 412 85 00", kreise: "3 (Sihlfeld), 4, 5"}
+        - {name: "Sozialzentrum Albisriederhaus", address: "Albisriederstrasse 330, 8047 Zürich", phone: "044 412 77 77", kreise: "9"}
+        - {name: "Sozialzentrum Dorflinde", address: "Schwamendingenstrasse 41, 8050 Zürich", phone: "044 412 82 50", kreise: "11 (ohne Affoltern), 12"}
+        - {name: "Sozialzentrum Wipkingerplatz", address: "Röschibachstrasse 26, 8037 Zürich", phone: "044 412 73 00", kreise: "6, 10, 11 (Affoltern)"}
+        - {name: "ZAV Zentrale Abklärungs- und Vermittlungsstelle", address: "Röschibachstrasse 26, 8037 Zürich", phone: "044 412 64 21", kreise: "Personen ohne festen Wohnsitz"}
+      hours: null                       # Öffnungszeiten auf stadt-zuerich.ch/sozialzentren prüfen
       costs: "kostenlos"
-      access: "Ohne Termin; Zuteilung nach Wohnadresse"
-    note: "Engine waehlt den Standort nach Postleitzahl/Quartier; Zuteilungstabelle beim Sozialdepartement einholen."
-    contact_source: secondary
+    note: "Engine wählt den Standort nach Stadtkreis (Feld kreise). Kinder- und Jugendhilfe der Stadt läuft ebenfalls über die Sozialzentren (kein kjz)."
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.7.-Sozialhilfe-1.pdf"
+    source_url: "https://www.stadt-zuerich.ch/content/dam/web/de/lebenslagen/unterstuetzung-und-beratung/dokumente/sozialzentren/flyer-beratung-fuer-alle.pdf"
+    verified: true
+
+  - id: soziale_dienste_winterthur
+    label: "Soziale Dienste Stadt Winterthur"
+    type: authority
+    region: ["ZH:Winterthur"]
+    specializations: [social_assistance, rent_arrears, crisis_counselling]
+    contact:
+      address: "Pionierstrasse 5, 8403 Winterthur"
+      phone: "052 267 56 34"
+      email: "sozialedienste@win.ch"
+      hours: "Mo-Mi 08.30-12.00 und 13.00-17.00; Do 08.30-12.00 und 13.00-18.30; Fr 08.30-12.00 und 13.00-16.00"
+      web: "https://stadt.winterthur.ch/gemeinde/verwaltung/soziales/soziale-dienste"
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://stadt.winterthur.ch/gemeinde/verwaltung/soziales/soziale-dienste"
+    verified: true
+
+  - id: ika_sozialdienst_bezirk_affoltern
+    label: "IKA Sozialdienst Bezirk Affoltern (interkommunale Anstalt)"
+    type: authority
+    region: ["ZH:Aeugst am Albis", "ZH:Hausen am Albis", "ZH:Hedingen", "ZH:Knonau", "ZH:Maschwanden", "ZH:Mettmenstetten", "ZH:Obfelden", "ZH:Ottenbach"]
+    specializations: [social_assistance]
+    contact:
+      address: null                     # Sitz Affoltern am Albis; Strassenadresse nicht geprüft
+      phone: null
+    note: "Trägergemeinden laut Anstaltsvertrag (Beschluss 12.02.2017): Aeugst a.A., Hausen a.A., Hedingen, Knonau, Maschwanden, Mettmenstetten, Obfelden, Ottenbach. Erste Anlaufstelle bleibt die Wohngemeinde."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.maschwanden.ch/wAssets/docs/Rechtssammlung/8-Soziales-Gesundheit-Arbeit/Anstaltsvertrag-IKA-Sozialdienst-Bezirk-Affoltern.pdf"
+    verified: true
+
+  - id: sozialdienst_gemeinde_zh
+    label: "Sozialdienst der Wohngemeinde (Kanton Zürich)"
+    type: authority
+    region: [ZH]
+    specializations: [social_assistance, rent_arrears, emergency_housing]
+    contact:
+      access: "Gesuch um Sozialhilfe bei den Sozialen Diensten der Wohngemeinde. Kontakt über die Gemeindeverwaltung (Feld web im Abschnitt municipalities, sobald geprüft)."
+    note: "Platzhalter für Gemeinden, deren Sozialdienst noch nicht einzeln geprüft ist (siehe municipalities.*.sozialdienst_status)."
+    related:
+      - {name: "Kantonales Sozialamt, Abteilung Öffentliche Sozialhilfe", address: "Röntgenstrasse 16/22, 8090 Zürich", phone: "043 259 24 68 / 043 259 51 58", email: "sozialhilfe@sa.zh.ch", hours: "Mo-Fr 08.00-11.30 und 13.30-16.30", access: "Bei Zuständigkeitsfragen und für Personen ohne Wohnsitz im Kanton; nicht für Einzelfallberatung"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://www.zh.ch/de/soziales/sozialhilfe.html"
     verified: true
 
   - id: ufs_sozialhilferecht
-    label: "Unabhaengige Fachstelle fuer Sozialhilferecht (UFS)"
+    label: "Unabhängige Fachstelle für Sozialhilferecht (UFS)"
     type: ngo
     region: [ZH]
     specializations: [social_assistance_law, legal_representation]
     referral_conditions: [conflict_with_public_body]
     contact:
-      address: "Sihlquai 67, 8005 Zuerich"
+      address: "Sihlquai 67, 8005 Zürich"
       phone: "043 540 50 41 (Mo 11.00-14.00, Mi 09.00-12.00)"
       email: "info@sozialhilfeberatung.ch"
       web: "https://www.sozialhilfeberatung.ch/"
       costs: "kostenlos"
-      access: "Fuer Sozialhilfebeziehende im Kanton Zuerich; Erstkontakt telefonisch"
-    contact_source: secondary
+      access: "Sozialhilfebeziehende in ZH (und AG, TG, SG, GL, GR, AR, AI, SH); Erstkontakt ausschliesslich telefonisch"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/04/9.7.-Sozialhilfe-1.pdf"
+    source_url: "https://www.sozialhilfeberatung.ch/"
     verified: true
 
   - id: wohnen_obdach_stadt_zuerich
-    label: "Stadt Zuerich, Sekretariat Wohnen & Obdach (Notunterkuenfte)"
+    label: "Stadt Zürich, Wohnen & Obdach (Notunterkünfte)"
     type: authority
     region: ["ZH:Zürich"]
     specializations: [emergency_housing, homelessness]
     contact:
-      address: "Strassburgstrasse 5, 8004 Zuerich"
+      address: "Strassburgstrasse 5, 8004 Zürich"
       phone: "044 412 65 54"
       hours: "Mo-Fr 09.00-11.30 und 13.30-16.30; Do 09.00-17.00"
+      web: "https://www.stadt-zuerich.ch/wohnen-obdach"
       costs: "kostenlos"
-      access: "Persoenlich mit Unterlagen; Zuweisung ca. 3 Wochen. Familien ohne Obdach: Notunterkunft fuer Familien ueber dieselbe Nummer (bis 6 Monate, Kostengutsprache)."
+      access: "Persönlich mit Unterlagen. Betreute Unterkünfte für Einzelpersonen, junge Erwachsene, Paare, Familien; keine Wohnungsvermittlung."
     related:
-      - {name: "Notschlafstelle Rosengartenstrasse", address: "Rosengartenstrasse 30, 8037 Zuerich", phone: "044 415 77 14", hours: "365 Tage; Okt-Mrz 20.30-10.00, Apr-Sep 21.00-10.00, letzter Einlass 00.30", access: "ab 18 J., Wohnsitz Zuerich, Ausweis"}
-      - {name: "Pfuusbus (Sozialwerk Pfarrer Sieber)", address: "Uetlibergerstrasse 311a, 8045 Zuerich", phone: "044 537 58 90", hours: "15.11.-15.4., 19.00-09.00"}
+      - {name: "Notschlafstelle Rosengartenstrasse", address: "Rosengartenstrasse 30, 8037 Zürich", phone: "044 415 77 14", hours: "365 Tage; Okt-Mrz 20.30-10.00, Apr-Sep 21.00-10.00", access: "ab 18 J., Wohnsitz Zürich, Ausweis"}
+      - {name: "Pfuusbus (Sozialwerk Pfarrer Sieber)", address: "Uetlibergerstrasse 311a, 8045 Zürich", phone: "044 537 58 90", hours: "15.11.-15.4., 19.00-09.00"}
+    note: "Angebot auf stadt-zuerich.ch bestätigt ('jederzeit ein Bett frei'); Adresse/Telefon/Zeiten dort nicht lesbar -> aus Sekundärquelle."
     contact_source: secondary
     last_checked: "2026-11-07"
     source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/2.1.-Wohnen-bei-drohender-Obdachlosigkeit-Notunterkuenfte.pdf"
     verified: true
 
   - id: durchgangsheim_anker_winterthur
-    label: "Durchgangsheim Anker, Heilsarmee Winterthur"
+    label: "Durchgangsheim der Heilsarmee Winterthur (Anker)"
     type: shelter
     region: ["ZH:Winterthur"]
     specializations: [emergency_housing]
@@ -558,121 +1186,122 @@ professionals:
       address: "Habsburgstrasse 29, 8400 Winterthur"
       phone: "052 226 01 61"
       email: "dhw@heilsarmee.ch"
-      hours: "taeglich 19.00-09.00, Einlass bis 23.00"
-      costs: "Kostengutsprache noetig"
-    contact_source: secondary
+      hours: "19.00-09.00"
+      costs: "Kostengutsprache nötig"
+    related:
+      - {name: "Verein Noah, Notzimmer Unterschlupf", address: "Heinrich-Bosshard-Strasse 2, 8405 Winterthur", phone: "076 736 12 25 / 052 233 30 30", email: "unterschlupf@verein-noah.ch", hours: "Mo-Fr zu Bürozeiten"}
+      - {name: "Kriseninterventionszentrum Winterthur (ipw)", address: "Bleichestrasse 9, 8400 Winterthur", phone: "052 264 37 00", email: "kiz@ipw.zh.ch"}
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/2.1.-Wohnen-bei-drohender-Obdachlosigkeit-Notunterkuenfte.pdf"
+    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/anlauf-und-beratungsstellen/wohnhilfe-wohnprobleme/oe/erreichbarkeit-und-notfalladressen/download"
     verified: true
 
   - id: schuldenberatung_kanton_zuerich
-    label: "Schuldenberatung Kanton Zuerich (Fachstelle fuer Schuldenfragen)"
+    label: "Schuldenberatung Kanton Zürich"
     type: ngo_cantonal_mandate
     region: [ZH]
     specializations: [debt_counselling, rent_arrears]
     referral_conditions: [debt, rent_arrears]
     contact:
-      address: "Schaffhauserstrasse 550, 8052 Zuerich"
+      address: "Schaffhauserstrasse 550, 8052 Zürich"
       phone: "043 333 36 86 (Mo-Do 10.00-13.00)"
-      hotline: "0800 708 708"
-      email: "info@schulden-zh.ch"
+      hotline: "0800 708 708 (kostenlose Schuldenhotline)"
+      email: null                       # "Wir vereinbaren keine Termine per Mail"
       web: "https://www.schulden-zh.ch"
-      costs: "kostenlos"
-      access: "Ueberschuldete oder unmittelbar gefaehrdete Haushalte"
-    contact_source: secondary
+      access: "Termine nur telefonisch"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://www.spielsucht-radix.ch/media/q4rftiat/organisation-der-schuldenberatung-im-kanton-zuerich.pdf"
+    source_url: "https://www.schulden-zh.ch"
     verified: true
 
   - id: caritas_zuerich
-    label: "Caritas Zuerich, Sozial- und Schuldenberatung"
+    label: "Caritas Zürich, Sozial- und Schuldenberatung"
     type: ngo
     region: [ZH]
     specializations: [social_counselling, debt_counselling]
     referral_conditions: [rent_arrears, debt, existential_emergency]
     contact:
-      address: "Beckenhofstrasse 16, 8006 Zuerich"
-      phone: "044 366 68 28"
-      email: "sozialberatung@caritas-zuerich.ch"
-      hours: "Mo, Di, Do 13.30-17.00; Fr 08.30-12.00"
-      access: "Wohnsitz Kanton Zuerich; vertraulich; keine Schuldenuebernahme, keine Darlehen"
-    contact_source: secondary
+      address: "Beckenhofstrasse 16, 8006 Zürich"
+      phone: "044 366 68 68 (Zentrale)"           # v1.1: 044 366 68 28 (Sozialberatung, Sekundärquelle)
+      web: "https://caritas-regio.ch/angebote/soziale-rechtliche-unterstuetzung/sozialberatung"
+      hotline: "0800 708 708 (Schuldenberatung, Mo-Do 10.00-13.00)"
+      costs: "Schuldenberatung kostenfrei"
+    note: "caritas-zuerich.ch leitet auf caritas-regio.ch weiter. Durchwahl/Zeiten der Sozialberatung dort nicht lesbar."
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://www.spielsucht-radix.ch/media/q4rftiat/organisation-der-schuldenberatung-im-kanton-zuerich.pdf"
+    source_url: "https://caritas-regio.ch/ueber-caritas/zuerich"
     verified: true
 
-  # ===================== KANTON ZUERICH: Migration und Asyl =====================
+  # ===================== ZH: Migration und Asyl =====================
   - id: zba_heks_caritas_zuerich
-    label: "Zuercher Beratungsstelle fuer Asylsuchende (ZBA), HEKS und Caritas Zuerich"
+    label: "Zürcher Beratungsstelle für Asylsuchende (ZBA), HEKS"
     type: ngo
     region: [ZH]
     specializations: [asylum_law, migration_law, legal_representation]
     referral_conditions: [migration_status]
     contact:
-      address: "Flurstrasse 50, 8048 Zuerich"
+      address: "Flurstrasse 50, 8048 Zürich"
       phone: "044 454 60 30 (Mo-Fr 09.30-11.30)"
       email: "zba@heks.ch"
       web: "https://www.heks.ch/was-wir-tun/heks-rechtsberatungsstelle-fuer-asylsuchende-zuerich"
-      hours: "Offene Beratung ohne Anmeldung Mi 13.30-17.00"
-      costs: "grundsaetzlich kostenlos; einzelne Verfahren kostenpflichtig, fuer Sozialhilfebeziehende alles kostenlos"
-      languages: "Deutsch, Englisch, Franzoesisch"
-    contact_source: secondary
+      hours: "Offene Beratung jeden zweiten Mittwoch 13.30-17.00 ohne Voranmeldung (z.B. 18.11., 02.12., 16.12.2026)"
+      costs: "kostenlos; Familiennachzug, Härtefall (F->B) und Kantonswechsel i.d.R. kostenpflichtig; für Sozialhilfebeziehende alles kostenlos"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.heks.ch/was-wir-tun/heks-rechtsberatungsstelle-fuer-asylsuchende-zuerich"
     verified: true
 
   - id: freiplatzaktion_zuerich
-    label: "Freiplatzaktion Zuerich"
+    label: "Freiplatzaktion Zürich"
     type: ngo
     region: [ZH]
     specializations: [asylum_law, migration_law, legal_representation]
     referral_conditions: [migration_status]
     contact:
-      address: "Dienerstrasse 59, 8004 Zuerich"
-      phone: "044 241 54 11"
+      address: "Dienerstrasse 59, 8004 Zürich"
+      phone: "044 241 54 11 (allgemein, nicht für Beratungsanmeldung)"
       email: "info@freiplatzaktion.ch"
       web: "https://freiplatzaktion.ch/"
-      hours: "Mo-Fr 09.00-12.00 und 14.00-17.00; 1. Montag im Monat keine Beratung; Anmeldung vor Ort nur Mo 08.30"
+      hours: "Beratung jeden zweiten Montag ab 08.30 (nächste: 09.11.2026); Anmeldung nur vor Ort"
       costs: "kostenlos"
-      access: "Gefluechtete und Migrantinnen/Migranten mit Wohnsitz im Kanton Zuerich; Unterlagen mitbringen"
-    contact_source: secondary
+      access: "Asyl- und Migrationsrecht; Briefe und Entscheide mitbringen"
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://freiplatzaktion.ch/"
     verified: true
 
   - id: rechtsschutz_baz_zuerich
-    label: "Rechtsschutz im beschleunigten Asylverfahren, Asylregion Zuerich (Berner Rechtsberatungsstelle, im BAZ)"
+    label: "Rechtsschutz im Bundesasylzentrum Zürich (Berner Rechtsberatungsstelle für Menschen in Not, RBS)"
     type: ngo_federal_mandate
     region: [ZH]
     specializations: [asylum_procedure]
     contact:
-      address: "Foerrlibuckstrasse 110, 8005 Zuerich (Bundesasylzentrum)"
+      address: "Förrlibuckstrasse 110, 8005 Zürich (Bundesasylzentrum)"
       phone: "031 370 35 40"
       email: "info.zh@rbsbern.ch"
-      web: "https://rechtsberatungsstelle.ch/"
-      costs: "kostenlos"
-      access: "Nur fuer Asylsuchende in einem BAZ der Asylregion Zuerich"
+      web: "https://rechtsberatungsstelle.ch/rechtsschutz-baz"
+      access: "Nur für Asylsuchende in einem BAZ der Asylregion Zürich"
+    note: "RBS bestätigt Tätigkeit im BAZ Zürich (rechtsberatungsstelle.ch); Adresse/Telefon/E-Mail dort nicht lesbar -> Sekundärquelle."
     contact_source: secondary
     last_checked: "2026-11-07"
     source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
     verified: true
 
   - id: pikett_administrativhaft
-    label: "Pikett Administrativhaft Zuerich"
+    label: "Verein Pikett Administrativhaft Zürich"
     type: ngo
     region: [ZH]
     specializations: [detention_pending_deportation]
     contact:
-      address: "Kernstrasse 8, 8004 Zuerich"
-      phone: "044 521 47 48"
-      phone_24h: "Pikett 044 521 47 47"
+      address: "Kernstrasse 8, 8004 Zürich"
+      phone: "044 521 47 48 (Geschäftsstelle)"
+      pikett: "044 521 47 47 (Pikett-Nummer; 24 h nicht ausgewiesen)"
       email: "info@pa-z.ch"
       web: "https://www.pikett-administrativhaft.ch/"
-      hours: "Mo-Fr 08.00-17.30"
       costs: "oft Anspruch auf unentgeltliche Vertretung"
-    contact_source: secondary
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://www.pikett-administrativhaft.ch/"
     verified: true
 
   - id: asylex
@@ -682,106 +1311,240 @@ professionals:
     specializations: [asylum_law, family_reunification, dublin, detention_pending_deportation, trafficking, un_complaints]
     referral_conditions: [migration_status, exploitation]
     contact:
-      address: "Gotthardstrasse 52, 8002 Zuerich"
-      email: "operations@asylex.ch"
-      web: "https://www.asylex.ch"
-      access: "Vorwiegend digitale Beratung; Anfrage ueber die Website"
+      email: "info@asylex.ch"                      # v1.1: operations@asylex.ch
+      web: "https://asylex.org/contact/"
+      access: "Anfrage über das Kontaktformular ('I need help'); vorwiegend digitale Beratung"
       costs: "kostenlos"
-    note: "Kostenlose, vorwiegend digitale Rechtsberatung fuer Gefluechtete; auch Verfahren vor UN-Gremien."
-    contact_source: secondary
+    note: "asylex.ch leitet auf asylex.org weiter; Adresse/Telefon dort nicht publiziert."
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://cms.kantonsrat.zh.ch/uploads/documents/Projektplakat-AsyLex.pdf"
+    source_url: "https://asylex.org/"
     verified: true
 
-  # ===================== KANTON ZUERICH: Behinderung, Kindes- und Erwachsenenschutz =====================
+  # ===================== ZH: Behinderung =====================
   - id: pro_infirmis_zuerich
-    label: "Pro Infirmis Zuerich, Beratungsstelle"
+    label: "Pro Infirmis Zürich, Beratungsstelle"
     type: ngo
     region: [ZH]
     specializations: [disability, social_counselling, financial_aid]
     referral_conditions: [disability]
     contact:
-      address: "Hohlstrasse 560, 8048 Zuerich"
+      address: "Hohlstrasse 560, 8048 Zürich"
       phone: "058 775 25 25"
       email: "zuerich@proinfirmis.ch"
       web: "https://www.proinfirmis.ch/angebot/zuerich.html"
       hours: "Mo-Do 08.30-11.30 und 13.30-16.30; Fr 08.30-11.30"
       costs: "kostenlos, vertraulich"
-      access: "Termin fuer persoenliches Gespraech; auch Chat; Aussenstelle Winterthur vorhanden"
+      access: "Termin für persönliches Gespräch; auch Chat; Aussenstelle Winterthur vorhanden"
     contact_source: primary
     last_checked: "2026-11-07"
     source_url: "https://www.proinfirmis.ch/angebot/zuerich.html"
     verified: true
 
-  - id: kesb_stadt_zuerich
-    label: "KESB Stadt Zuerich"
+  # ===================== ZH: KESB (13 Behörden, Zuständigkeit gemäss KPV) =====================
+  # Behörden, keine Beratungsstellen. Neutrale Beratung zu KES-Massnahmen: KESCHA 044 273 96 96 (nicht neu geprüft).
+  - id: kesb_bezirk_affoltern
+    label: "KESB Bezirk Affoltern"
     type: authority
-    region: ["ZH:Zürich"]
+    region: ["ZH:Bezirk Affoltern"]
     specializations: [child_protection, adult_protection]
-    contact:
-      address: "Stauffacherstrasse 45, 8004 Zuerich"
-      phone: "044 412 11 11"
-      phone_legal_info: "044 412 20 70 (Do 16.00-18.00)"
-      web: "https://kesb-zh.ch/organisation/"
-    note: "Behoerde, keine Beratungsstelle. Neutrale Beratung zu KES-Massnahmen: KESCHA 044 273 96 96."
-    contact_source: secondary
+    contact: {address: "Sagistrasse 8A, 8910 Affoltern am Albis", phone: "044 541 01 41", email: "kanzlei@kesbaffoltern.ch", web: "https://www.kesbaffoltern.ch"}
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
+    source_url: "https://kpv-zh.ch/standorte/affoltern-a-a/"
     verified: true
-
+  - id: kesb_buelach_nord
+    label: "KESB Bülach Nord"
+    type: authority
+    region: ["ZH:Bülach Nord"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Grenzstrasse 10, 8180 Bülach", phone: "044 863 15 10", email: "kesb-nord@buelach.ch", web: "https://www.buelach.ch"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/buelach-nord/"
+    verified: true
+  - id: kesb_buelach_sued
+    label: "KESB Kreis Bülach Süd"
+    type: authority
+    region: ["ZH:Bülach Süd"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Schaffhauserstrasse 104, Postfach 215, 8152 Glattbrugg", phone: "044 829 68 00", email: "kesb@kesb-kbs.ch", web: "https://www.opfikon.ch/unterstuetzung/22445"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-kreis-buelach-sued/"
+    verified: true
+  - id: kesb_bezirk_dielsdorf
+    label: "KESB Bezirk Dielsdorf"
+    type: authority
+    region: ["ZH:Bezirk Dielsdorf"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Honeywell-Platz 1, Postfach 9, 8157 Dielsdorf", phone: "044 855 22 33", email: "info@kesb-dielsdorf.ch", web: "https://www.kesb-dielsdorf.ch"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-kreis-dielsdorf/"
+    verified: true
+  - id: kesb_bezirk_dietikon
+    label: "KESB Bezirk Dietikon"
+    type: authority
+    region: ["ZH:Bezirk Dietikon"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Neumattstrasse 7, 8953 Dietikon", phone: "044 744 14 00", email: "kesb@dietikon.ch", web: "https://www.dietikon.ch/aemterbereiche/11641"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-kreis-dietikon/"
+    verified: true
+  - id: kesb_duebendorf
+    label: "KESB Dübendorf"
+    type: authority
+    region: ["ZH:Dübendorf", "ZH:Fällanden", "ZH:Maur", "ZH:Wangen-Brüttisellen"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Bettlistrasse 22, Postfach 234, 8600 Dübendorf", phone: "044 801 60 80", email: "kesb@duebendorf.ch", web: "https://www.kesb-duebendorf.ch"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-kreis-duebendorf/"
+    verified: true
+  - id: kesb_bezirk_hinwil
+    label: "KESB Bezirk Hinwil"
+    type: authority
+    region: ["ZH:Bezirk Hinwil"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Joweid Zentrum 1, 8630 Rüti", phone: "055 536 15 00", email: "sekretariat@kesb-hinwil.ch", web: "http://kesb-hinwil.ch/"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-kreis-hinwil/"
+    verified: true
+  - id: kesb_bezirk_horgen
+    label: "KESB Bezirk Horgen"
+    type: authority
+    region: ["ZH:Bezirk Horgen"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Dammstrasse 12, Postfach 155, 8810 Horgen", address_from_2026_12_01: "Bachtobelstrasse 4, 8810 Horgen", phone: "044 718 40 40", email: "contact@kesb-horgen.ch", web: "https://www.kesb-horgen.ch"}
+    note: "Umzug per 1. Dezember 2026 an die Bachtobelstrasse 4."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-bezirk-horgen/"
+    verified: true
+  - id: kesb_bezirk_meilen
+    label: "KESB Bezirk Meilen"
+    type: authority
+    region: ["ZH:Bezirk Meilen"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Obere Wiltisgasse 48, 8700 Küsnacht", phone: "044 913 39 99", email: null, web: "https://www.kesbmeilen.ch"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-bezirk-meilen/"
+    verified: true
+  - id: kesb_bezirk_pfaeffikon
+    label: "KESB Bezirk Pfäffikon ZH"
+    type: authority
+    region: ["ZH:Bezirk Pfäffikon"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Schmittestrasse 10, 8308 Illnau", phone: "052 355 27 77", email: "info@kesb-bp.ch", web: "https://kesb-bp.ch"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-bezirk-pfaeffikon-zh/"
+    verified: true
+  - id: kesb_uster
+    label: "KESB Uster"
+    type: authority
+    region: ["ZH:Uster", "ZH:Egg", "ZH:Greifensee", "ZH:Mönchaltorf", "ZH:Schwerzenbach", "ZH:Volketswil"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Zürichstrasse 7, Postfach 1442, 8610 Uster", phone: "044 944 75 20", email: "kesb@uster.ch", web: "https://www.uster.ch/kesb"}
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-bezirk-uster/"
+    verified: true
   - id: kesb_winterthur_andelfingen
     label: "KESB Winterthur-Andelfingen"
     type: authority
-    region: ["ZH:Winterthur"]
+    region: ["ZH:Bezirk Winterthur", "ZH:Bezirk Andelfingen"]
     specializations: [child_protection, adult_protection]
-    contact:
-      address: "Bahnhofplatz 17, 8403 Winterthur"
-      phone: "052 267 56 42"
-      email: "kesb@win.ch"
-      web: "https://www.kesb-wa.ch"
-    contact_source: secondary
+    contact: {address: "Bahnhofplatz 17 (Stellwerk, 5. OG), 8403 Winterthur", phone: "052 267 56 42", email: "kesb@win.ch", web: "https://www.kesb-wa.ch"}
+    contact_source: primary
     last_checked: "2026-11-07"
-    source_url: "https://stadt.winterthur.ch/themen/leben-in-winterthur/alter-gesundheit-und-soziales/alter-und-pensionierung/ftw-simplelayout-filelistingblock/adressverzeichnis-stand-november-2025"
+    source_url: "https://www.kesb-wa.ch"
+    verified: true
+  - id: kesb_stadt_zuerich
+    label: "KESB Stadt Zürich"
+    type: authority
+    region: ["ZH:Zürich"]
+    specializations: [child_protection, adult_protection]
+    contact: {address: "Stauffacherstrasse 45, 8004 Zürich (Post: Postfach 8225, 8036 Zürich)", phone: "044 412 21 21", email: "kesbkontakt@zuerich.ch", web: "https://www.stadt-zuerich.ch/kesb"}
+    note: "v1.1 hatte 044 412 11 11 (falsch) -> korrigiert."
+    contact_source: primary
+    last_checked: "2026-11-07"
+    source_url: "https://kpv-zh.ch/standorte/kesb-zuerich/"
     verified: true
 
-  # ===================== KANTON ZUERICH: Ombudsstellen =====================
+  # ===================== ZH: Kinder- und Jugendhilfezentren (kjz, AJB) =====================
+  # Einzugsgebiete werden vom Kanton nur über eine PLZ-Suche publiziert. Die Zuordnung im Abschnitt
+  # municipalities ist abgeleitet (kjz_mapping: derived) und vor produktivem Einsatz zu bestätigen.
+  - {id: kjz_affoltern,  label: "kjz Affoltern",  type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Im Winkel 2, 8910 Affoltern am Albis", phone: "043 259 93 33", email: "kjz.affoltern@ajb.zh.ch", hours: "Mo-Do 09.00-11.30 und 13.30-17.00; Fr 09.00-11.30 und 13.30-16.00", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-affoltern.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-affoltern.html", verified: true}
+  - {id: kjz_buelach,    label: "kjz Bülach",     type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Schaffhauserstrasse 53, 8180 Bülach", phone: "043 259 95 00", email: "kjz.buelach@ajb.zh.ch", hours: "Mo-Do 08.30-11.30 und 14.00-17.00; Fr 08.30-11.30", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-buelach.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-buelach.html", verified: true}
+  - {id: kjz_dielsdorf,  label: "kjz Dielsdorf",  type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Spitalstrasse 11, 8157 Dielsdorf", phone: "043 259 81 50", email: "kjz.dielsdorf@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-dielsdorf.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_dietikon,   label: "kjz Dietikon",   type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Badenerstrasse 5 + 9, 8953 Dietikon", phone: "043 259 93 00", email: "kjz.dietikon@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-dietikon.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_duebendorf, label: "kjz Dübendorf",  type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Wallisellenstrasse 5, 8600 Dübendorf", phone: "043 259 76 77", email: "kjz.duebendorf@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-duebendorf.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_horgen,     label: "kjz Horgen",     type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Bahnhofstrasse 6, 8810 Horgen", phone: "043 259 92 00", email: "kjz.horgen@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-horgen.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_kloten,     label: "kjz Kloten",     type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Ifangstrasse 10b, 8302 Kloten", phone: "043 259 98 30", email: "kjz.kloten@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-kloten.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_meilen,     label: "kjz Meilen",     type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "General-Wille-Strasse 59, Eingang B, 8706 Feldmeilen", phone: "043 258 47 00", email: "kjz.meilen@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-meilen.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_pfaeffikon, label: "kjz Pfäffikon",  type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Pilatusstrasse 12, 8330 Pfäffikon", phone: "043 258 47 70", email: "kjz.pfaeffikon@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-pfaeffikon.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_regensdorf, label: "kjz Regensdorf", type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Eichwatt 5, 8105 Regensdorf", phone: "043 259 98 00", email: "kjz.regensdorf@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-regensdorf.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_rueti,      label: "kjz Rüti",       type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Joweid Zentrum 1, 8630 Rüti", phone: "043 259 76 00", email: "kjz.rueti@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-rueti.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_uster,      label: "kjz Uster",      type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Schulweg 4, 8610 Uster", phone: "043 258 48 00", email: "kjz.uster@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-uster.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: kjz_winterthur, label: "kjz Winterthur", type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "St. Gallerstrasse 42, 8400 Winterthur", phone: "043 259 94 90", email: "kjz.winterthur@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kjz-winterthur.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+  - {id: zentrum_breitenstein, label: "Zentrum Breitenstein (AJB), Andelfingen", type: authority, region: [ZH], specializations: [family_support, child_youth_support], contact: {address: "Landstrasse 36, 8450 Andelfingen", phone: "043 258 46 11", email: "zentrum-breitenstein@ajb.zh.ch", web: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/zentrum-breitenstein.html"}, contact_source: primary, last_checked: "2026-11-07", source_url: "https://www.zh.ch/de/bildungsdirektion/amt-fuer-jugend-und-berufsberatung/kinder-und-jugendhilfezentren-kjz.html", verified: true}
+
+  # ===================== ZH: Ombudsstellen =====================
   - id: ombudsstelle_kanton_zuerich
-    label: "Ombudsstelle des Kantons Zuerich"
+    label: "Ombudsstelle des Kantons Zürich"
     type: authority
     region: [ZH]
     specializations: [conflict_with_authorities]
     referral_conditions: [conflict_with_public_body]
     contact:
-      address: "Forchstrasse 59, 8032 Zuerich"
+      address: "Forchstrasse 59, 8032 Zürich"
       phone: "044 269 40 70"
       web: "https://ombudsstelle.zh.ch/"
-      hours: "Mo, Di, Do, Fr 08.00-11.30 und 13.30-16.00; Gespraeche nach Vereinbarung"
-      person: "Ombudsmann Juerg Trachsel"
+      hours: "Mo, Di, Do, Fr 08.00-11.30 und 13.30-16.00; Gespräche nach Vereinbarung"
+      person: "Ombudsmann Jürg Trachsel"
       costs: "kostenlos"
-      access: "Konflikte mit kantonalen und Bezirksbehoerden; Gemeinden nur, wenn die Gemeindeordnung es vorsieht"
+      access: "Kantonale und Bezirksbehörden; Gemeinden nur, wenn die Gemeindeordnung es vorsieht"
     contact_source: primary
     last_checked: "2026-11-07"
     source_url: "https://ombudsstelle.zh.ch/"
     verified: true
 
   - id: ombudsstelle_stadt_zuerich
-    label: "Ombudsstelle der Stadt Zuerich"
+    label: "Ombudsstelle der Stadt Zürich"
     type: authority
     region: ["ZH:Zürich"]
     specializations: [conflict_with_authorities]
     referral_conditions: [conflict_with_public_body]
     contact:
-      address: "Oberdorfstrasse 8, 8001 Zuerich"
+      address: "Oberdorfstrasse 8, 8001 Zürich"
       phone: "044 412 00 30"
       web: "https://www.stadt-zuerich.ch/ombudsstelle"
       hours: "Mo, Di, Mi, Fr 09.00-12.00 und 13.30-16.30; Do 13.30-16.30"
-      person: null                       # aktuelle Ombudsperson auf der Website pruefen
       costs: "kostenlos"
-      access: "Probleme mit der Stadtverwaltung Zuerich (z.B. Sozialzentren, staedtische Wohnungen, Notunterkuenfte)"
+      access: "Probleme mit der Stadtverwaltung Zürich (z.B. Sozialzentren, städtische Wohnungen, Notunterkünfte)"
+    note: "Offizielle Seite war nicht abrufbar; nicht neu geprüft."
     contact_source: secondary
     last_checked: "2026-11-07"
     source_url: "https://sozialberatung-zuerich.heilsarmee.ch/wp-content/uploads/sites/151/2026/07/9.3.-Rechtsberatung.pdf"
     verified: true
+
+  - id: ombudsstelle_winterthur
+    label: "Ombudsstelle der Stadt Winterthur"
+    type: authority
+    region: ["ZH:Winterthur"]
+    specializations: [conflict_with_authorities]
+    referral_conditions: [conflict_with_public_body]
+    contact:
+      web: "https://stadt.winterthur.ch/gemeinde/behoerden-und-recht/ombudsstelle"
+    note: "Existenz belegt (Jahresberichte); Kontaktangaben noch nicht recherchiert."
+    contact_source: none
+    verified: false
+
 
   # ===================== Menschenrechte (national, fuer liability_flags.yaml) =====================
   - id: amnesty_lawyers_group

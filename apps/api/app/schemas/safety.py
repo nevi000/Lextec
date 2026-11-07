@@ -15,6 +15,7 @@ class ContactPhone(BaseModel):
     label_de: str  # "Telefon", "Telefon (24 h)", ...
     display: str  # as written in the knowledge base
     tel: str | None = None  # digits only, for tel: links (None = not safely linkable)
+    note_de: str | None = None  # e.g. «Telefonzentrale» (taken out of the number, not lost)
 
 
 class ReferralCard(BaseModel):
@@ -43,6 +44,9 @@ class ReferralCard(BaseModel):
     not_emergency_number: bool = False  # e.g. 142: counselling only, never for acute danger
     for_audience_de: str | None = None  # e.g. 147: "für Kinder und Jugendliche"
     reason_de: str | None = None  # why this organisation was suggested (rule / signal)
+    scope_de: str | None = None  # jurisdiction, e.g. «Gemeinde Bülach, Bezirk Bülach»
+    local_note_de: str | None = None  # honest note when the local contact is not (fully) verified
+    option_of_role: str | None = None  # role this card resolves (several cards may share a role)
     rule_ref: str | None = None  # audit: issue rule or safety category that led here
 
 

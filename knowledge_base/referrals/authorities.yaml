@@ -54,3 +54,88 @@ authorities:
     purpose_de: "Wohnungssuche, Notunterkunft, Finanzierung."
     cost_de: "–"
     source_note_de: "Gemeinde der Klientin."
+
+  # --- Issues 2-7 (scripts/kb/kb_common.py AUTHORITIES_NEW; nur Dossier-Angaben, contact_verified bleibt false) ---
+  - id: SCHULDENBERATUNG_ZH
+    name_de: Schuldenberatung Kanton Zürich
+    purpose_de: Mietrückstände, Betreibungen, Zahlungsplan als Verhandlungsbasis.
+    cost_de: Kontakt und Kosten prüfen (laut Dossier noch zu ergänzen).
+    source_note_de: 'Dossier Issue 2/3: Kontakt nachzutragen (offiziell prüfen).'
+
+  - id: WOHNHILFE_ZH
+    name_de: Fachstellen für Wohnungssuche / kommunale Wohnhilfe (Kanton Zürich)
+    purpose_de: Unterstützung bei der Wohnungssuche.
+    cost_de: Unterschiedlich.
+    source_note_de: 'Dossier Issue 4: Zürcher Wohnhilfe- bzw. Wohnungssuche-Stellen noch zu ergänzen.'
+
+  - id: EINZELGERICHT_BEZIRKSGERICHT_ZH
+    name_de: 'Einzelgericht des Bezirksgerichts (in Zürich: «Einzelgericht Audienz»)'
+    purpose_de: Entscheidet über das Ausweisungsgesuch im Verfahren für klare Fälle und über die Vollstreckung.
+    source_note_de: § 24 lit. c, e GOG ZH; OG ZH LF260018.
+
+  - id: MIETGERICHT_ZH
+    name_de: Mietgericht des Bezirks
+    purpose_de: Klage nach Klagebewilligung oder Ablehnung eines Entscheidvorschlags; Ausweisung auf dem
+      ordentlichen Weg.
+    cost_de: Kosten möglich; deshalb immer Rechtsperson.
+    source_note_de: §§ 21, 26 GOG ZH; Obergericht ZH, Seite «Hinterlegung».
+
+  - id: OBERGERICHT_ZH_ZIVILKAMMER
+    name_de: Obergericht des Kantons Zürich, II. Zivilkammer
+    purpose_de: Berufung und Beschwerde gegen Ausweisungsentscheide.
+    source_note_de: OG ZH LF260018.
+
+  - id: STADTAMMANNAMT_ZH
+    name_de: Gemeinde- bzw. Stadtammannamt
+    purpose_de: Vollzug der Räumung, Räumungstermin, nötigenfalls mit Polizei.
+    source_note_de: § 147 GOG ZH; Checkliste Obergericht ZH.
+
+  - id: KASSE_BEZIRKSGERICHT_ZH
+    name_de: Kasse des Bezirksgerichts
+    purpose_de: Einzahlung der hinterlegten Mietzinse nach Depositionsanweisung der Schlichtungsbehörde.
+    source_note_de: Obergericht ZH, Seite «Hinterlegung»; § 66 Abs. 2 GOG ZH.
+
+  - id: AWEL_SCHIMMEL
+    name_de: AWEL, Abteilung Luft, Klima und Strahlung, Sektion Emissionskontrolle (Baudirektion Kanton
+      Zürich)
+    purpose_de: Allgemeine Auskunft zu Schimmel, Gesundheitsrisiken, Vorgehen und Zuständigkeiten; keine
+      Durchsetzung gegenüber der Vermieterschaft.
+    scope_de: 'Telefon laut Dossier: 043 257 41 64. Rechtsberatung: Verweis auf Mieterverband.'
+    source_note_de: Kanton Zürich, Umweltpraxis (ZUP) Nr. 113, März 2026, S. 33 f. Eine kommunale Behörde,
+      die bei Schimmel in Mietwohnungen eingreift, ist nicht genannt (offen).
+
+  - id: NOTUNTERKUNFT_FAMILIEN_STADT_ZH
+    name_de: Notunterkunft für Familien, Stadt Zürich (Soziale Einrichtungen und Betriebe)
+    purpose_de: 'Obdachlose Familien mit Wohnsitz in der Stadt Zürich, höchstens 6 Monate. Keine Selbstanmeldung:
+      Zuweisung über die Sozialen Dienste bzw. das Sozialzentrum im Quartier, in dringenden Fällen direkt.'
+    cost_de: Kostengutsprache nötig.
+    scope_de: 'Soziale Dienste: 044 412 65 54 (laut Dossier). Prozessdauer 4–6 Wochen (am Original bestätigt,
+      7.11.2026).'
+    source_note_de: Stadt Zürich, Seite «Notunterkunft für Familien»; Heilsarmee-Übersicht, Stand 30.6.2026,
+      S. 4.
+
+  - id: NOTSCHLAFSTELLE_ZH
+    name_de: Notschlafstelle Rosengartenstrasse 30, 8037 Zürich (Stadt Zürich)
+    purpose_de: Sofortige Übernachtung ohne Anmeldung, ab 18 Jahren, Wohnsitz Stadt Zürich (sonst Entscheid
+      des Teams), keine Tiere; für Familien mit Kindern nicht geeignet.
+    cost_de: Kostenlos.
+    scope_de: 'Telefon laut Dossier: 044 415 77 14.'
+    source_note_de: Heilsarmee-Übersicht, Stand 30.6.2026, S. 3.
+
+  - id: SEKRETARIAT_WOHNEN_OBDACH_ZH
+    name_de: Sekretariat Wohnen und Obdach, Strassburgstrasse 5, 8004 Zürich
+    purpose_de: Anmeldung für alle städtischen Wohnangebote (Übergangswohnen, Wohnintegration).
+    cost_de: Kostengutsprache nötig; Selbstzahlende im Einzelfall.
+    scope_de: 'Telefon laut Dossier: 044 412 65 54.'
+    source_note_de: Heilsarmee-Übersicht, Stand 30.6.2026, S. 1.
+
+  - id: BWO_REFERENZZINSSATZ
+    name_de: Bundesamt für Wohnungswesen (BWO)
+    purpose_de: Veröffentlicht den hypothekarischen Referenzzinssatz. Das System nennt keinen aktuellen
+      Wert, weil er sich ändert.
+    source_note_de: Dossier Issue 7; nur Information.
+
+  - id: KONTROLLBEHOERDE_SUBVENTIONIERT
+    name_de: Kontrollierende Behörde bei subventionierten Wohnungen
+    purpose_de: Mietzinskontrolle statt Anfechtung nach Art. 270 ff. OR.
+    source_note_de: Art. 253b Abs. 3 OR; Stelle je nach Wohnung, noch zu klären.

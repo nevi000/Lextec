@@ -41,6 +41,13 @@ class FactDef(Strict):
     source_ids: list[str] = []  # legal sources behind the relevance of this fact
     depends_on: list[str] = []  # informational: facts this one depends on (see also required_if)
     escalation_relevant: bool = False  # informational: some escalation rule reads this fact
+    # shown next to a «ja» answer that leaves the details open (e.g. «reagiert: ja» but not how)
+    true_value_note_de: str = ""
+    # value for the expert (not legal necessity); only orders questions AFTER an escalation
+    handover_priority: Literal["high", "normal"] = "normal"
+    store_evidence: bool = (
+        True  # false: the verbatim quote is NOT persisted (e.g. health details; no diagnoses)
+    )
 
     @field_validator("id")
     @classmethod

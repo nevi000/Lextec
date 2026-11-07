@@ -1,0 +1,356 @@
+# GENERIERT aus scripts/kb/specs/issue_04.py - SYNTHETIC_TECHNICAL, keine echten Fälle.
+schema_version: 1
+version: 1.0-issues
+scenarios:
+- id: SC_EX_01_GRUNDREGEL
+  title_de: 'Erstreckung: immer Rechtsperson, bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - EX_GRUNDREGEL
+- id: SC_EX_02_ZAHLUNGSVERZUG
+  title_de: 'Zahlungsverzug: Erstreckung ausgeschlossen -> Issue 3'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: zahlungsverzug
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_ZAHLUNGSVERZUG
+  expected_route_issue_ids:
+  - CH_TENANCY_PAYMENT_DEFAULT
+- id: SC_EX_03_UNBEFRISTET_21_TAGE
+  title_de: Unbefristet, 21 Tage seit Empfang
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-10-17'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_UNBEFRISTET_FRIST
+- id: SC_EX_04_UNBEFRISTET_UNBEKANNT
+  title_de: Empfang unbekannt
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  unknown_facts:
+  - receipt_date
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_UNBEFRISTET_FRIST
+- id: SC_EX_05_BEFRISTET_74
+  title_de: Befristet, 74 Tage bis Vertragsende
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: befristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ablauf_befristet
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+    contract_end_date: '2027-01-20'
+    limited_to_demolition: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_BEFRISTET_FRIST
+- id: SC_EX_06_BEFRISTET_FERN
+  title_de: 'Befristet, 120 Tage bis Vertragsende: Schwelle nicht erreicht'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: befristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ablauf_befristet
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+    contract_end_date: '2027-03-07'
+    limited_to_demolition: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_not_rule_ids:
+  - EX_BEFRISTET_FRIST
+- id: SC_EX_07_ZWEITERSTRECKUNG
+  title_de: Zweiterstreckung, erste endet in 60 Tagen
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: true
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+    previous_extension_end_date: '2027-01-06'
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_ZWEITERSTRECKUNG
+- id: SC_EX_08_ERSATZWOHNUNG
+  title_de: Ersatzwohnung angeboten
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: true
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_ERSATZ_ODER_VERGLEICH
+- id: SC_EX_09_FRUEHERE_MAHNUNG
+  title_de: Frühere Mahnung -> Gültigkeit prüfen
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: true
+    challenge_filed: false
+    family_home_with_spouse: false
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_FRUEHERE_MAHNUNG
+  expected_route_issue_ids:
+  - CH_TENANCY_PAYMENT_WARNING
+- id: SC_EX_10_KEINE_SUCHE
+  title_de: Keine Suchbemühungen
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: keine
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - EX_KEINE_SUCHE
+- id: SC_EX_11_FRIST_VERPASST
+  title_de: Frist möglicherweise verpasst
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+    deadline_possibly_missed: true
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - EX_FRIST_VERPASST
+- id: SC_EX_12_KONKUBINAT
+  title_de: 'Konkubinat: nur Faktum'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_EXTENSION
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    delivery_method: persoenlich
+    receipt_date: '2026-11-01'
+    ending_reason: ordentliche_kuendigung
+    previous_extension: false
+    household_description: Mutter mit zwei Kindern
+    tenancy_start_date: '2014-04-01'
+    replacement_offered: false
+    search_efforts: laufend_dokumentiert
+    prior_payment_warning: false
+    challenge_filed: false
+    family_home_with_spouse: false
+    cohabitant_partner: true
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - EX_SONDERFRAGEN

@@ -112,7 +112,7 @@ describe("case list", () => {
     expect(await screen.findByText("Noch keine Fälle erfasst")).toBeInTheDocument();
     await userEvent.click(screen.getAllByRole("button", { name: /Neuen Fall erfassen/ })[0]!);
     expect(await screen.findByLabelText("Was ist passiert?")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Situation analysieren/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Fall analysieren/ })).toBeDisabled();
     expect(calls.some((c) => c.method === "POST" && c.path === "/cases")).toBe(true);
   });
 });

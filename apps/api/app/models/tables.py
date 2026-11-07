@@ -55,6 +55,10 @@ class CaseMessage(Base):
     analysis_status: Mapped[str] = mapped_column(String(20), default="PENDING")
     analysis_error: Mapped[str | None] = mapped_column(Text, nullable=True)
     analysis_attempts: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    # provenance of answers entered through the Sprachbrücke (None = typed by the social worker)
+    origin: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    original_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    original_language: Mapped[str | None] = mapped_column(String(5), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
@@ -264,3 +268,50 @@ class SafetyEvent(Base):
     detected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     acknowledged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     acknowledged_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class VoiceBridgeSession(Base):
+    """One temporary phone connection per case (Sprachbrücke). The token is stored only as a hash; ``join_token`` is
+    kept just until the phone has connected so a reloaded desktop can draw the QR code again."""
+
+    __tablename__ = "bridge_sessions"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id", ondelete="CASCADE"), index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    join_token: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    status: Mapped[str] = mapped_column(String(30), default="WAITING_FOR_CONNECTION")
+    paused: Mapped[bool] = mapped_column(Boolean, default=False)
+    language: Mapped[str | None] = mapped_column(String(5), nullable=True)
+    rev: Mapped[int] = mapped_column(Integer, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    connected_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # the concrete question instance currently shown on the phone (derived from the question selection engine)
+    question_instance_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    question_fact_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    question_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    translation_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    translation_status: Mapped[str] = mapped_column(String(10), default="NONE")
+    translation_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # the proposal from the phone; applied to the case only after the social worker accepts it
+    answer_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    answer_request_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    answer_submitted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+
+class TranslationCache(Base):
+    """Machine translations of fixed question texts (never of case content)."""
+
+    __tablename__ = "translation_cache"
+
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    source_lang: Mapped[str] = mapped_column(String(5))
+    target_lang: Mapped[str] = mapped_column(String(5))
+    source_text: Mapped[str] = mapped_column(Text)
+    translated: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

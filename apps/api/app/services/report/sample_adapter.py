@@ -92,6 +92,7 @@ def view_from_bridge_sample(b: dict[str, Any], network: Any = None) -> dict[str,
             "text": s.get("text", ""),
             "text_label": "Wortlaut laut Referenzdatei",
             "links": [],
+            "relevant": True,  # the reference sample shows every source in full
             "referenced_by": s.get("referenced_by", []),
         }
         for s in b["sources"]

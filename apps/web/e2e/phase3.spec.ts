@@ -15,7 +15,7 @@ async function start(page: Page, text: string, expectPhase3 = true) {
   await expect(page.getByLabel("Was ist passiert?")).toBeVisible();
   await expect(page.getByText("Weitere Angaben nötig")).toHaveCount(0);
   await page.getByLabel("Was ist passiert?").fill(text);
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
   if (expectPhase3) await expect(page.getByRole("region", { name: "Einschätzung" })).toBeVisible();
   else await expect(page.getByText("Erfasst und analysiert").first()).toBeVisible();
 }

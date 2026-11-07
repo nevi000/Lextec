@@ -69,6 +69,31 @@ class KnowledgeBase:
             return source_id
         return self.source_aliases.get(source_id)
 
+    def catalog_issues(self) -> list[IssueDefinition]:
+        """Issues offered to the classifier = everything that is NOT a synthetic demo issue.
+
+        * DRAFT (law-team dossier, not yet legally released) and LEGALLY_REVIEWED are classifiable: «not released» is a
+          legal-review state, not «not covered».
+        * DEMO_SYNTHETIC issues stay loaded (old cases keep working, engine tests use them) but are NEVER offered for
+          new cases; a text about such an area is reported as «nicht abgedeckt». There is no switch to change that."""
+        return [d for d in self.issues.values() if d.content_status != "DEMO_SYNTHETIC"]
+
+    def related_issue_ids(self, issue_ids: list[str]) -> list[str]:
+        """Issues reachable via ``routes_to_issue`` from the given issues (one hop, loaded issues only)."""
+        out: list[str] = []
+        for iid in issue_ids:
+            d = self.issues.get(iid)
+            if d is None:
+                continue
+            for r in d.escalation_rules:
+                if (
+                    r.routes_to_issue
+                    and r.routes_to_issue in self.issues
+                    and r.routes_to_issue not in out
+                ):
+                    out.append(r.routes_to_issue)
+        return out
+
     @property
     def errors(self) -> list[str]:
         out = [f"{f.path}: {e}" for f in self.files for e in f.errors]
@@ -331,6 +356,99 @@ def _cross_validate(kb: KnowledgeBase) -> None:
                 )
 
 
+ZH_MUNICIPALITIES = 160  # politische Gemeinden des Kantons Zürich (Stand v1.2)
+
+
+def _validate_municipalities(kb: KnowledgeBase, net, orgs: set[str], roles: set[str]) -> None:
+    """Technical validity of the municipality table (v1.2). «to_verify» etc. are NOT errors (factual state)."""
+    from app.services.referrals.network import MUNICIPAL_ROLE_FIELDS, SOCIAL_STATUS
+
+    err = kb.cross_errors.append
+    zh = {k: v for k, v in net.municipalities.items() if k.startswith("ZH:")}
+    if zh and len(zh) != ZH_MUNICIPALITIES:
+        err(
+            f"referral_network.municipalities: {len(zh)} Zürcher Gemeinden statt {ZH_MUNICIPALITIES}."
+        )
+    seen_bfs: dict[int, str] = {}
+    shelters = {
+        o.id
+        for o in net.professionals
+        if o.address_protected
+        or (o.type == "shelter" and "emergency_housing" not in o.specializations)
+    }
+    for key, e in net.municipalities.items():
+        if ":" not in key:
+            err(f"referral_network.municipalities.{key}: Schlüssel muss «KANTON:Gemeinde» sein.")
+            continue
+        if e.bfs in seen_bfs:
+            err(
+                f"referral_network.municipalities.{key}: BFS-Nummer {e.bfs} doppelt ({seen_bfs[e.bfs]})."
+            )
+        seen_bfs[e.bfs] = key
+        if not (e.bezirk or "").strip():
+            err(f"referral_network.municipalities.{key}: Bezirk fehlt.")
+        if e.sozialdienst_status is not None and e.sozialdienst_status not in SOCIAL_STATUS:
+            err(
+                f"referral_network.municipalities.{key}: ungültiger sozialdienst_status '{e.sozialdienst_status}'."
+            )
+        extra = e.model_extra or {}
+        for role in MUNICIPAL_ROLE_FIELDS:
+            if role not in extra:
+                err(f"referral_network.municipalities.{key}: Rolle '{role}' fehlt.")
+        for role, val in extra.items():
+            if role not in MUNICIPAL_ROLE_FIELDS:
+                err(f"referral_network.municipalities.{key}: unbekannte Rolle '{role}'.")
+                continue
+            if val is not None and not isinstance(val, (str, list)):
+                err(
+                    f"referral_network.municipalities.{key}.{role}: Stelle oder Liste von Stellen erwartet."
+                )
+                continue
+            for oid in [val] if isinstance(val, str) else list(val or []):
+                if not isinstance(oid, str) or oid not in orgs:
+                    err(f"referral_network.municipalities.{key}.{role}: unbekannte Stelle '{oid}'.")
+                elif oid in shelters and role not in ("frauenhaus", "notunterkunft"):
+                    err(
+                        f"referral_network.municipalities.{key}.{role}: Schutzunterkunft '{oid}' in falscher Rolle."
+                    )
+    for alias, a in net.municipality_aliases.items():
+        if a.municipality not in net.municipalities:
+            err(
+                f"referral_network.municipality_aliases.{alias}: unbekannte Gemeinde '{a.municipality}'."
+            )
+    seen_norm: dict[tuple[str, str], str] = {}
+    from app.services.referrals.network import _norm
+
+    for key in net.municipalities:
+        if ":" in key:
+            k2 = (key.split(":", 1)[0], _norm(key.split(":", 1)[1]))
+            if k2 in seen_norm:
+                err(
+                    f"referral_network.municipalities: '{key}' und '{seen_norm[k2]}' sind nach der Normalisierung gleich."
+                )
+            seen_norm[k2] = key
+    for alias in net.municipality_aliases:
+        for cant in {k.split(":", 1)[0] for k in net.municipalities if ":" in k}:
+            if (cant, _norm(alias)) in seen_norm:
+                err(
+                    f"referral_network.municipality_aliases.{alias}: Alias ist zugleich eine Gemeinde (mehrdeutig)."
+                )
+    for role in net.role_location_basis:
+        if role not in roles and role not in MUNICIPAL_ROLE_FIELDS:
+            err(f"referral_network.role_location_basis: unbekannte Rolle '{role}'.")
+    for o in net.professionals:
+        c = o.contact or {}
+        protected = o.address_protected or (
+            o.type == "shelter" and "emergency_housing" not in o.specializations
+        )
+        if protected and (c.get("address") or c.get("postal_address")):
+            err(f"referral_network.professionals.{o.id}: Schutzadresse darf nicht hinterlegt sein.")
+        if o.verified and o.contact_source == "none" and o.type not in ("emergency", "hotline"):
+            pass  # factual state (verified type, contact not checked): shown as «Kontakt nicht geprüft», not an error
+        if o.contact_source not in (None, "primary", "secondary", "none"):
+            err(f"referral_network.professionals.{o.id}: ungültige contact_source.")
+
+
 def _validate_safety_and_referrals(kb: KnowledgeBase) -> None:
     """Safety patterns must compile; every organisation / category reference must exist (no dangling contacts)."""
     cfg, net = kb.safety_config, kb.referral_network
@@ -365,10 +483,18 @@ def _validate_safety_and_referrals(kb: KnowledgeBase) -> None:
 
     for role, table in net.role_resolution.items():
         for key, org_id in table.items():
-            if org_id is not None and org_id not in orgs:
+            if isinstance(org_id, str) and org_id not in orgs:
                 kb.cross_errors.append(
                     f"referral_network.role_resolution.{role}.{key}: unbekannte Stelle '{org_id}'."
                 )
+    for role, table in net.role_resolution.items():
+        for key, val in table.items():
+            for org_id in val if isinstance(val, list) else []:
+                if org_id not in orgs:
+                    kb.cross_errors.append(
+                        f"referral_network.role_resolution.{role}.{key}: unbekannte Stelle '{org_id}'."
+                    )
+    _validate_municipalities(kb, net, orgs, roles)
     for r in net.safety_routing:
         for ref in [*r.show_to_user, *r.referrals, *r.follow_up_referrals]:
             need(ref, f"safety_routing.{r.category}")
@@ -457,7 +583,13 @@ def load_knowledge_base(root: Path) -> KnowledgeBase:
         return [p for p in yaml_paths if p.relative_to(root).parts[0] == sub]
 
     for p in under("referrals"):
-        if p.name == "referral_network.yaml":
+        if p.name in ("referral_rules.yaml", "referral_network.yaml"):
+            if kb.referral_network is not None:
+                kb.cross_errors.append(
+                    f"referrals/{p.name}: zweite Referral-Datei neben der bereits geladenen; "
+                    "es darf nur referrals/referral_rules.yaml (Version 1.2 oder neuer) geben."
+                )
+                continue
             obj = _parse(kb, p, "referral_network", ReferralNetwork)
             if obj:
                 kb.referral_network = obj

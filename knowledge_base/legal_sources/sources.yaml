@@ -1,9 +1,10 @@
 # yaml-language-server: $schema=../../schemas/sources.schema.json
-# Quellen für Issue 1 (Kündigung durch die Vermieterschaft) aus dem Law-Dossier vom 7.11.2026.
+# Quellenkatalog (Fedlex-Gesetze, BGE/BGer, kantonale Quellen, Lehrbuch, Produktregeln).
+# Issue 1: von Hand; Issues 2-7: aus den Tabellen der Dossiers importiert (scripts/kb/build_issue_kb.py).
 # dossier_status = Prüfstand laut Law-Dossier (NICHT automatisch verifiziert).
-# verification_status = Live-Verifikation durch dieses System (Fedlex ist NICHT angebunden -> UNVERIFIED).
+# verification_status = Live-Verifikation durch dieses System (Fedlex-Sync).
 schema_version: 1
-version: 0.2-issue01
+version: 0.3-issues-1-7
 content_status: DRAFT
 sources:
 - id: CH_OR_259A
@@ -62,9 +63,10 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1–2
-  text_de: «1 Die Parteien können das unbefristete Mietverhältnis unter Einhaltung der gesetzlichen Fristen und
-    Termine kündigen, sofern sie keine längere Frist oder keinen anderen Termin vereinbart haben. 2 Halten die Parteien
-    die Frist oder den Termin nicht ein, so gilt die Kündigung für den nächstmöglichen Termin.»
+  text_de: «1 Die Parteien können das unbefristete Mietverhältnis unter Einhaltung der gesetzlichen Fristen
+    und Termine kündigen, sofern sie keine längere Frist oder keinen anderen Termin vereinbart haben.
+    2 Halten die Parteien die Frist oder den Termin nicht ein, so gilt die Kündigung für den nächstmöglichen
+    Termin.»
   legal_question_de: Falscher Termin = keine Unwirksamkeit, sondern Verschiebung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 74
@@ -78,8 +80,9 @@ sources:
   title_de: Obligationenrecht (OR), Art. 266c
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
-  text_de: «Bei der Miete von Wohnungen können die Parteien mit einer Frist von drei Monaten auf einen ortsüblichen
-    Termin oder, wenn es keinen Ortsgebrauch gibt, auf Ende einer dreimonatigen Mietdauer kündigen.»
+  text_de: «Bei der Miete von Wohnungen können die Parteien mit einer Frist von drei Monaten auf einen
+    ortsüblichen Termin oder, wenn es keinen Ortsgebrauch gibt, auf Ende einer dreimonatigen Mietdauer
+    kündigen.»
   legal_question_de: Kündigungsfrist Wohnung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 75
@@ -93,8 +96,8 @@ sources:
   title_de: Obligationenrecht (OR), Art. 266e
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
-  text_de: «… möblierten Zimmern … mit einer Frist von zwei Wochen auf Ende einer einmonatigen Mietdauer kündigen.»
-    (Auslassungen wie im Dossier)
+  text_de: «… möblierten Zimmern … mit einer Frist von zwei Wochen auf Ende einer einmonatigen Mietdauer
+    kündigen.» (Auslassungen wie im Dossier)
   legal_question_de: Sonderfall möbliertes Zimmer (häufig im Sozialbereich)
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 75
@@ -109,9 +112,9 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1–2
-  text_de: «1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter muss
-    mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen hat, wenn
-    er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.»
+  text_de: «1 Vermieter und Mieter von Wohn- und Geschäftsräumen müssen schriftlich kündigen. 2 Der Vermieter
+    muss mit einem Formular kündigen, das vom Kanton genehmigt ist und das angibt, wie der Mieter vorzugehen
+    hat, wenn er die Kündigung anfechten oder eine Erstreckung des Mietverhältnisses verlangen will.»
   legal_question_de: Formprüfung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 76
@@ -125,9 +128,9 @@ sources:
   title_de: Obligationenrecht (OR), Art. 266n
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
-  text_de: «Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung (Art.
-    257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen Partner
-    separat zuzustellen.»
+  text_de: «Die Kündigung durch den Vermieter sowie die Ansetzung einer Zahlungsfrist mit Kündigungsandrohung
+    (Art. 257d) sind dem Mieter und seinem Ehegatten, seiner eingetragenen Partnerin oder seinem eingetragenen
+    Partner separat zuzustellen.»
   legal_question_de: Familienwohnung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 76
@@ -156,8 +159,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1–2
-  text_de: «1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst. 2 Die Kündigung
-    muss auf Verlangen begründet werden.»
+  text_de: «1 Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst.
+    2 Die Kündigung muss auf Verlangen begründet werden.»
   legal_question_de: Anfechtungsgrund (Generalklausel), Recht auf Begründung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 81
@@ -172,11 +175,12 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1
-  text_de: 'Anfechtbar u. a., wenn ausgesprochen «a. weil der Mieter nach Treu und Glauben Ansprüche aus dem Mietverhältnis
-    geltend macht; … d. während eines mit dem Mietverhältnis zusammenhängenden Schlichtungs- oder Gerichtsverfahrens
-    …; e. vor Ablauf von drei Jahren nach Abschluss eines mit dem Mietverhältnis zusammenhängenden Schlichtungs-
-    oder Gerichtsverfahrens …; f. wegen Änderungen in der familiären Situation des Mieters, aus denen dem Vermieter
-    keine wesentlichen Nachteile entstehen.» (lit. b und c: Vertragsänderung durchsetzen, Kauf erzwingen)'
+  text_de: 'Anfechtbar u. a., wenn ausgesprochen «a. weil der Mieter nach Treu und Glauben Ansprüche aus
+    dem Mietverhältnis geltend macht; … d. während eines mit dem Mietverhältnis zusammenhängenden Schlichtungs-
+    oder Gerichtsverfahrens …; e. vor Ablauf von drei Jahren nach Abschluss eines mit dem Mietverhältnis
+    zusammenhängenden Schlichtungs- oder Gerichtsverfahrens …; f. wegen Änderungen in der familiären Situation
+    des Mieters, aus denen dem Vermieter keine wesentlichen Nachteile entstehen.» (lit. b und c: Vertragsänderung
+    durchsetzen, Kauf erzwingen)'
   legal_question_de: Typische Anfechtungsgründe
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 81
@@ -191,9 +195,9 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 3
-  text_de: Abs. 1 lit. d und e nicht anwendbar bei Kündigungen u. a. «a. wegen dringenden Eigenbedarfs …; b. wegen
-    Zahlungsrückstand des Mieters (Art. 257d)» sowie lit. c–f (Pflichtverletzung, Veräusserung, wichtige Gründe,
-    Konkurs)
+  text_de: Abs. 1 lit. d und e nicht anwendbar bei Kündigungen u. a. «a. wegen dringenden Eigenbedarfs
+    …; b. wegen Zahlungsrückstand des Mieters (Art. 257d)» sowie lit. c–f (Pflichtverletzung, Veräusserung,
+    wichtige Gründe, Konkurs)
   legal_question_de: Ausnahmen von der Sperrfrist
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 81–82
@@ -208,8 +212,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1
-  text_de: «Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang der
-    Kündigung der Schlichtungsbehörde einreichen.»
+  text_de: «Will eine Partei die Kündigung anfechten, so muss sie das Begehren innert 30 Tagen nach Empfang
+    der Kündigung der Schlichtungsbehörde einreichen.»
   legal_question_de: Zentrale Frist
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 83
@@ -224,8 +228,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 2
-  text_de: Erstreckungsbegehren «a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang der Kündigung;
-    b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.»
+  text_de: Erstreckungsbegehren «a. bei einem unbefristeten Mietverhältnis innert 30 Tagen nach Empfang
+    der Kündigung; b. bei einem befristeten Mietverhältnis spätestens 60 Tage vor Ablauf der Vertragsdauer.»
   legal_question_de: Verbindung zu Issue 4 (Erstreckung)
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 83
@@ -240,9 +244,9 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 4–5
-  text_de: «4 Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO. 5 Weist die zuständige Behörde
-    ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen, ob das Mietverhältnis
-    erstreckt werden kann.»
+  text_de: «4 Das Verfahren vor der Schlichtungsbehörde richtet sich nach der ZPO. 5 Weist die zuständige
+    Behörde ein Begehren des Mieters betreffend Anfechtung der Kündigung ab, so prüft sie von Amtes wegen,
+    ob das Mietverhältnis erstreckt werden kann.»
   legal_question_de: Verfahren; Erstreckung von Amtes wegen
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 84
@@ -257,9 +261,9 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1
-  text_de: «Dient die gemietete Sache als Wohnung der Familie, so kann auch der Ehegatte des Mieters die Kündigung
-    anfechten, die Erstreckung des Mietverhältnisses verlangen oder die übrigen Rechte ausüben, die dem Mieter bei
-    Kündigung zustehen.»
+  text_de: «Dient die gemietete Sache als Wohnung der Familie, so kann auch der Ehegatte des Mieters die
+    Kündigung anfechten, die Erstreckung des Mietverhältnisses verlangen oder die übrigen Rechte ausüben,
+    die dem Mieter bei Kündigung zustehen.»
   legal_question_de: Familienwohnung
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 84
@@ -274,8 +278,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1
-  text_de: «Dieser Abschnitt gilt für die Untermiete, solange das Hauptmietverhältnis nicht aufgelöst ist. Die Untermiete
-    kann nur für die Dauer des Hauptmietverhältnisses erstreckt werden.»
+  text_de: «Dieser Abschnitt gilt für die Untermiete, solange das Hauptmietverhältnis nicht aufgelöst
+    ist. Die Untermiete kann nur für die Dauer des Hauptmietverhältnisses erstreckt werden.»
   legal_question_de: 'Grenze: Untermiete'
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 84
@@ -290,8 +294,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1–2
-  text_de: «1 Der Mieter kann auf Rechte, die ihm nach diesem Abschnitt zustehen, nur verzichten, wenn dies ausdrücklich
-    vorgesehen ist. 2 Abweichende Vereinbarungen sind nichtig.»
+  text_de: «1 Der Mieter kann auf Rechte, die ihm nach diesem Abschnitt zustehen, nur verzichten, wenn
+    dies ausdrücklich vorgesehen ist. 2 Abweichende Vereinbarungen sind nichtig.»
   legal_question_de: Zwingender Kündigungsschutz
   valid_as_of: '2026-10-01'
   origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), PDF-S. 84
@@ -379,7 +383,8 @@ sources:
   title_de: Zivilprozessordnung (ZPO), Art. 33
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
-  text_de: «Für Klagen aus Miete und Pacht unbeweglicher Sachen ist das Gericht am Ort der gelegenen Sache zuständig.»
+  text_de: «Für Klagen aus Miete und Pacht unbeweglicher Sachen ist das Gericht am Ort der gelegenen Sache
+    zuständig.»
   legal_question_de: Zuständige Schlichtungsbehörde
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 9
@@ -394,8 +399,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1 lit. b
-  text_de: Auf diesen Gerichtsstand kann «die Partei, die Wohn- oder Geschäftsräume gemietet oder gepachtet hat»,
-    nicht zum Voraus oder durch Einlassung verzichten.
+  text_de: Auf diesen Gerichtsstand kann «die Partei, die Wohn- oder Geschäftsräume gemietet oder gepachtet
+    hat», nicht zum Voraus oder durch Einlassung verzichten.
   legal_question_de: Gerichtsstandsklausel im Vertrag unbeachtlich
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 10
@@ -410,8 +415,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1–2 lit. c
-  text_de: Im Schlichtungsverfahren werden keine Gerichtskosten gesprochen in Streitigkeiten «aus Miete und Pacht
-    von Wohn- und Geschäftsräumen»; nach Abs. 1 auch keine Parteientschädigungen.
+  text_de: Im Schlichtungsverfahren werden keine Gerichtskosten gesprochen in Streitigkeiten «aus Miete
+    und Pacht von Wohn- und Geschäftsräumen»; nach Abs. 1 auch keine Parteientschädigungen.
   legal_question_de: Kostenlose Schlichtung
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 28–29
@@ -442,7 +447,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 4
-  text_de: «In Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen … beträgt die Klagefrist 30 Tage.»
+  text_de: «In Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen … beträgt die Klagefrist
+    30 Tage.»
   legal_question_de: Frist nach Klagebewilligung
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 57
@@ -474,8 +480,8 @@ sources:
   verification_status: UNVERIFIED
   paragraph: Abs. 1–3
   text_de: Entscheidvorschlag gilt als angenommen, «wenn ihn keine Partei innert 20 Tagen seit der schriftlichen
-    Eröffnung ablehnt»; in Mietsachen erhält die ablehnende Partei die Klagebewilligung; klagt sie nicht rechtzeitig,
-    gilt der Vorschlag als anerkannt.
+    Eröffnung ablehnt»; in Mietsachen erhält die ablehnende Partei die Klagebewilligung; klagt sie nicht
+    rechtzeitig, gilt der Vorschlag als anerkannt.
   legal_question_de: 'Warnung: Wer ablehnt, muss klagen'
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 57
@@ -490,8 +496,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 2 lit. c
-  text_de: Vereinfachtes Verfahren unabhängig vom Streitwert, wenn u. a. «der Kündigungsschutz oder die Erstreckung»
-    betroffen ist.
+  text_de: Vereinfachtes Verfahren unabhängig vom Streitwert, wenn u. a. «der Kündigungsschutz oder die
+    Erstreckung» betroffen ist.
   legal_question_de: Verfahrensart vor Mietgericht
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 65–66
@@ -506,8 +512,8 @@ sources:
   dossier_status: DOSSIER_CHECKED
   verification_status: UNVERIFIED
   paragraph: Abs. 1
-  text_de: Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort beweisbar ist;
-    und b. die Rechtslage klar ist.»
+  text_de: Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort beweisbar
+    ist; und b. die Rechtslage klar ist.»
   legal_question_de: Verbindung zu Issue 6 (Ausweisung)
   valid_as_of: '2026-07-01'
   origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), PDF-S. 73
@@ -525,11 +531,11 @@ sources:
   - E. 4.1, Seite 4
   - E. 4.2 ff.
   - E. 5.1–5.2, Seite 5–6
-  core_statement_de: Fehlt das genehmigte Formular, ist die Kündigung nichtig; die Nichtigkeit kann jederzeit geltend
-    gemacht werden und ist von Amtes wegen zu beachten. Ein veraltetes Formular führt nicht zur Nichtigkeit, wenn
-    es dieselben Informationen enthält. Die 30-Tage-Frist von Art. 273 Abs. 1 OR ist materiellrechtlich; es gilt
-    die absolute Empfangstheorie. Die relative Theorie gilt im Mietrecht nur für Mietzinserhöhungen (Art. 269d OR)
-    und Zahlungsaufforderungen (Art. 257d Abs. 1 OR).
+  core_statement_de: Fehlt das genehmigte Formular, ist die Kündigung nichtig; die Nichtigkeit kann jederzeit
+    geltend gemacht werden und ist von Amtes wegen zu beachten. Ein veraltetes Formular führt nicht zur
+    Nichtigkeit, wenn es dieselben Informationen enthält. Die 30-Tage-Frist von Art. 273 Abs. 1 OR ist
+    materiellrechtlich; es gilt die absolute Empfangstheorie. Die relative Theorie gilt im Mietrecht nur
+    für Mietzinserhöhungen (Art. 269d OR) und Zahlungsaufforderungen (Art. 257d Abs. 1 OR).
   scope_de: Formular und Fristbeginn bei Kündigung durch die Vermieterschaft
   limits_de: Veraltetes Formular mit gleicher Information genügt.
   relevant_fact_ids:
@@ -552,11 +558,12 @@ sources:
   - E. 4.1, S. 18–19
   - E. 4.2, S. 19
   - E. 4.3, S. 19
-  core_statement_de: 'Bei Abholungseinladung gilt die Kündigung am Tag des Einwurfs als empfangen, wenn sofortiges
-    Abholen zumutbar ist, sonst in der Regel am Folgetag; die 7-Tage-Abholfiktion der ZPO gilt nicht. Ferien oder
-    Abwesenheit trägt die Empfängerin; sie muss sich auch nach Ablauf der Abholfrist bei der Post nach dem Absender
-    erkundigen; späte Kenntnis verkürzt die verbleibende Frist. Im Fall: Einwurf 2.12., Empfang 3.12.2013, Klage
-    vom 7.2.2014 verspätet. Ob Krankheit anders zu behandeln wäre, blieb offen.'
+  core_statement_de: 'Bei Abholungseinladung gilt die Kündigung am Tag des Einwurfs als empfangen, wenn
+    sofortiges Abholen zumutbar ist, sonst in der Regel am Folgetag; die 7-Tage-Abholfiktion der ZPO gilt
+    nicht. Ferien oder Abwesenheit trägt die Empfängerin; sie muss sich auch nach Ablauf der Abholfrist
+    bei der Post nach dem Absender erkundigen; späte Kenntnis verkürzt die verbleibende Frist. Im Fall:
+    Einwurf 2.12., Empfang 3.12.2013, Klage vom 7.2.2014 verspätet. Ob Krankheit anders zu behandeln wäre,
+    blieb offen.'
   scope_de: Fristbeginn bei eingeschriebener Kündigung mit Abholungseinladung
   limits_de: 'Krankheit beim Empfang: vom Bundesgericht offen gelassen.'
   relevant_fact_ids:
@@ -580,10 +587,10 @@ sources:
   - E. 2.3.1, S. 11–12
   - E. 2.3.2, S. 12–13
   - E. 2.4, S. 13
-  core_statement_de: Die Mieterschaft muss beweisen, dass im Kündigungszeitpunkt eine Familienwohnung vorlag. Geschützt
-    sind nur Ehegatten und eingetragene Partner; der Familiencharakter entfällt u. a., wenn der geschützte Ehegatte
-    definitiv auszieht. Berufung auf fehlende Zustellung an den ausgezogenen, desinteressierten Ehegatten ist rechtsmissbräuchlich.
-    Erstreckungsbegehren nach 30 Tagen verwirkt.
+  core_statement_de: Die Mieterschaft muss beweisen, dass im Kündigungszeitpunkt eine Familienwohnung
+    vorlag. Geschützt sind nur Ehegatten und eingetragene Partner; der Familiencharakter entfällt u. a.,
+    wenn der geschützte Ehegatte definitiv auszieht. Berufung auf fehlende Zustellung an den ausgezogenen,
+    desinteressierten Ehegatten ist rechtsmissbräuchlich. Erstreckungsbegehren nach 30 Tagen verwirkt.
   scope_de: Familienwohnung und separate Zustellung
   limits_de: Nur Ehegatten / eingetragene Partner; kein Konkubinat.
   relevant_fact_ids:
@@ -605,8 +612,8 @@ sources:
   - E. 4.1, S. 492–493
   - E. 4.2.1, S. 493
   - E. 4.2.4, S. 495
-  core_statement_de: Nach definitivem Auszug der Ehefrau keine Familienwohnung mehr; Art. 266n OR entfällt. Bei
-    Mitmiete muss gegenüber allen Mietern gekündigt werden, sonst nichtig. Berufung darauf ist rechtsmissbräuchlich,
+  core_statement_de: Nach definitivem Auszug der Ehefrau keine Familienwohnung mehr; Art. 266n OR entfällt.
+    Bei Mitmiete muss gegenüber allen Mietern gekündigt werden, sonst nichtig. Berufung darauf ist rechtsmissbräuchlich,
     wenn der ausgezogene Mitmieter kein Interesse am Mietvertrag hat.
   scope_de: Mitmiete und Familienwohnung
   relevant_fact_ids:
@@ -628,11 +635,11 @@ sources:
   - E. 3.1, S. 146–147
   - E. 3.1, S. 147
   - E. 3.2, S. 147
-  core_statement_de: Ordentliche Kündigung braucht keinen besonderen Grund; treuwidrig, wenn ohne objektives, ernsthaftes,
-    schützenswertes Interesse oder bei vorgeschobenem Grund, dessen wahrer Grund nicht feststellbar ist. Beweislast
-    bei der Mieterschaft; die Vermieterschaft muss auf Verlangen begründen und Unterlagen vorlegen. Massgeblich
-    ist der Kündigungszeitpunkt; fällt der Grund später weg, wird die Kündigung nicht nachträglich treuwidrig. Eine
-    Entschädigung ist gesetzlich nicht vorgesehen.
+  core_statement_de: Ordentliche Kündigung braucht keinen besonderen Grund; treuwidrig, wenn ohne objektives,
+    ernsthaftes, schützenswertes Interesse oder bei vorgeschobenem Grund, dessen wahrer Grund nicht feststellbar
+    ist. Beweislast bei der Mieterschaft; die Vermieterschaft muss auf Verlangen begründen und Unterlagen
+    vorlegen. Massgeblich ist der Kündigungszeitpunkt; fällt der Grund später weg, wird die Kündigung
+    nicht nachträglich treuwidrig. Eine Entschädigung ist gesetzlich nicht vorgesehen.
   scope_de: Treu und Glauben; Eigenbedarf (Fall aus dem Bezirk Zürich)
   relevant_fact_ids:
   - stated_reason
@@ -653,8 +660,8 @@ sources:
   - E. 3.2.2, S. 94
   core_statement_de: Treuwidrig ist eine Kündigung aus reiner Schikane oder bei krassem Interessenmissverhältnis.
     Eine Härte für die Mieterschaft genügt nicht; sie ist nur für die Erstreckung relevant. Sanierungskündigung
-    ist zulässig, wenn die Arbeiten die Weiterbenutzung erheblich einschränken, setzt aber ein genügend ausgereiftes
-    Projekt im Kündigungszeitpunkt voraus. Spätere Projektunterlagen zählen nicht.
+    ist zulässig, wenn die Arbeiten die Weiterbenutzung erheblich einschränken, setzt aber ein genügend
+    ausgereiftes Projekt im Kündigungszeitpunkt voraus. Spätere Projektunterlagen zählen nicht.
   scope_de: Sanierungskündigung; Härte vs. Anfechtung
   relevant_fact_ids:
   - stated_reason
@@ -674,9 +681,9 @@ sources:
   - E. 5.3.1, S. 345
   - E. 5.3.3, S. 346–347
   - E. 5.3.4, S. 347–348
-  core_statement_de: Die Begründung ist keine Gültigkeitsvoraussetzung, auch nicht bei Sanierung; BGE 142 III 91
-    und 140 III 496 waren insoweit missverständlich. Fehlende, fehlerhafte, pauschale oder später ausgewechselte
-    Gründe können aber ein Indiz gegen ein schützenswertes Interesse sein.
+  core_statement_de: Die Begründung ist keine Gültigkeitsvoraussetzung, auch nicht bei Sanierung; BGE
+    142 III 91 und 140 III 496 waren insoweit missverständlich. Fehlende, fehlerhafte, pauschale oder
+    später ausgewechselte Gründe können aber ein Indiz gegen ein schützenswertes Interesse sein.
   scope_de: Begründung der Kündigung
   relevant_fact_ids:
   - stated_reason
@@ -699,10 +706,10 @@ sources:
   - E. 3.6.4, S. 488–489
   - E. 5.1, S. 489
   core_statement_de: 'Beweislast bei der Mieterschaft, Mitwirkungspflicht der Vermieterschaft. Sanierungskündigung
-    wird nicht nachträglich missbräuchlich, wenn die Bewilligung später verweigert wird. Abbruchkündigung: Entscheid
-    liegt allein bei der Vermieterschaft, auch zur Ertragserhöhung; kein ausgereiftes Projekt nötig; missbräuchlich
-    nur bei offensichtlicher Unmöglichkeit (z. B. Denkmalschutz) oder vorgeschobenem Grund. Bei Ungültigkeit ist
-    die eventualiter verlangte Erstreckung zu prüfen, inkl. Suchbemühungen.'
+    wird nicht nachträglich missbräuchlich, wenn die Bewilligung später verweigert wird. Abbruchkündigung:
+    Entscheid liegt allein bei der Vermieterschaft, auch zur Ertragserhöhung; kein ausgereiftes Projekt
+    nötig; missbräuchlich nur bei offensichtlicher Unmöglichkeit (z. B. Denkmalschutz) oder vorgeschobenem
+    Grund. Bei Ungültigkeit ist die eventualiter verlangte Erstreckung zu prüfen, inkl. Suchbemühungen.'
   scope_de: Abbruchkündigung vs. Sanierungskündigung
   relevant_fact_ids:
   - stated_reason
@@ -715,8 +722,8 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: Grundlage der absoluten Empfangstheorie im Mietrecht (zitiert in BGE 143 III 15 E. 4.1, S.
-    17). Volltext nicht geprüft.
+  core_statement_de: Grundlage der absoluten Empfangstheorie im Mietrecht (zitiert in BGE 143 III 15 E.
+    4.1, S. 17). Volltext nicht geprüft.
 - id: BGE_148_III_215
   provider: bger
   type: case_law
@@ -725,8 +732,8 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: Grundlegend zur Sanierungskündigung (zitiert in BGE 151 III 481 E. 3.5, S. 486). Volltext nicht
-    geprüft.
+  core_statement_de: Grundlegend zur Sanierungskündigung (zitiert in BGE 151 III 481 E. 3.5, S. 486).
+    Volltext nicht geprüft.
 - id: BGE_136_III_257
   provider: bger
   type: case_law
@@ -735,7 +742,8 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: Familienwohnung bei Trennung (zitiert in BGE 139 III 7 E. 2.3, S. 11). Volltext nicht geprüft.
+  core_statement_de: Familienwohnung bei Trennung (zitiert in BGE 139 III 7 E. 2.3, S. 11). Volltext nicht
+    geprüft.
 - id: BGE_145_III_281
   provider: bger
   type: case_law
@@ -744,8 +752,8 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: 'Laut Obergericht Zürich: Bei Anfechtung durch einen Ehegatten ist der andere mit einzubeziehen.
-    Volltext nicht geprüft.'
+  core_statement_de: 'Laut Obergericht Zürich: Bei Anfechtung durch einen Ehegatten ist der andere mit
+    einzubeziehen. Volltext nicht geprüft.'
 - id: BGE_138_III_59
   provider: bger
   type: case_law
@@ -754,8 +762,8 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: Vorgeschobener Grund; Schutz nach Art. 271a Abs. 1 lit. a OR bei Untermiete nur bei zulässiger
-    Untermiete. Im Dossier nicht als im Volltext geprüft ausgewiesen.
+  core_statement_de: Vorgeschobener Grund; Schutz nach Art. 271a Abs. 1 lit. a OR bei Untermiete nur bei
+    zulässiger Untermiete. Im Dossier nicht als im Volltext geprüft ausgewiesen.
 - id: BGE_135_III_112
   provider: bger
   type: case_law
@@ -764,4 +772,2178 @@ sources:
   language: de
   dossier_status: DOSSIER_PENDING
   verification_status: UNVERIFIED
-  core_statement_de: Umfassende Sanierung rechtfertigt die Kündigung. Im Dossier nicht als im Volltext geprüft ausgewiesen.
+  core_statement_de: Umfassende Sanierung rechtfertigt die Kündigung. Im Dossier nicht als im Volltext
+    geprüft ausgewiesen.
+- id: CH_ZPO_113_2_C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 113 Abs. 2 lit. c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '113'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 28–29
+  paragraph: Abs. 2 lit. c
+  text_de: Im Schlichtungsverfahren werden keine Gerichtskosten gesprochen in Streitigkeiten «aus Miete
+    und Pacht von Wohn- und Geschäftsräumen»; nach Abs. 1 auch keine Parteientschädigungen.
+  legal_question_de: Kostenlose Schlichtung
+- id: CH_ZPO_211_1_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 211 Abs. 1–3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '211'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 57
+  paragraph: Abs. 1–3
+  text_de: Entscheidvorschlag gilt als angenommen, «wenn ihn keine Partei innert 20 Tagen seit der schriftlichen
+    Eröffnung ablehnt»; in Mietsachen erhält die ablehnende Partei die Klagebewilligung; klagt sie nicht
+    rechtzeitig, gilt der Vorschlag als anerkannt.
+  legal_question_de: 'Warnung: Wer ablehnt, muss klagen'
+- id: CH_OR_257D_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257d Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 68
+  paragraph: Abs. 1
+  text_de: «Ist der Mieter nach der Übernahme der Sache mit der Zahlung fälliger Mietzinse oder Nebenkosten
+    im Rückstand, so kann ihm der Vermieter schriftlich eine Zahlungsfrist setzen und ihm androhen, dass
+    bei unbenütztem Ablauf der Frist das Mietverhältnis gekündigt werde. Diese Frist beträgt mindestens
+    zehn Tage, bei Wohn- und Geschäftsräumen mindestens 30 Tage.»
+  legal_question_de: 'Kernnorm: Voraussetzungen der Mahnung'
+- id: CH_OR_257D_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257d Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 68
+  paragraph: Abs. 2
+  text_de: «Bezahlt der Mieter innert der gesetzten Frist nicht, so kann der Vermieter fristlos, bei Wohn-
+    und Geschäftsräumen mit einer Frist von mindestens 30 Tagen auf Ende eines Monats kündigen.»
+  legal_question_de: Folge bei Nichtzahlung → Issue 3
+- id: CH_OR_257
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '257'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 67
+  text_de: «Der Mietzins ist das Entgelt, das der Mieter dem Vermieter für die Überlassung der Sache schuldet.»
+  legal_question_de: Was zählt als Mietzins
+- id: CH_OR_257A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 67
+  text_de: «1 Die Nebenkosten sind das Entgelt für die Leistungen des Vermieters oder eines Dritten, die
+    mit dem Gebrauch der Sache zusammenhängen. 2 Der Mieter muss die Nebenkosten nur bezahlen, wenn er
+    dies mit dem Vermieter besonders vereinbart hat.»
+  legal_question_de: Nebenkosten nur bei Vereinbarung
+- id: CH_OR_257C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257c
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 68
+  text_de: «Der Mieter muss den Mietzins und allenfalls die Nebenkosten am Ende jedes Monats, spätestens
+    aber am Ende der Mietzeit bezahlen, wenn kein anderer Zeitpunkt vereinbart oder ortsüblich ist.»
+  legal_question_de: Fälligkeit (meist vertraglich im Voraus)
+- id: CH_OR_259G
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259g
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259g
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 71
+  text_de: «1 Verlangt der Mieter einer unbeweglichen Sache vom Vermieter die Beseitigung eines Mangels,
+    so muss er ihm dazu schriftlich eine angemessene Frist setzen und kann ihm androhen, dass er bei unbenütztem
+    Ablauf der Frist Mietzinse, die künftig fällig werden, bei einer vom Kanton bezeichneten Stelle hinterlegen
+    wird. Er muss die Hinterlegung dem Vermieter schriftlich ankündigen. 2 Mit der Hinterlegung gelten
+    die Mietzinse als bezahlt.»
+  legal_question_de: 'Schutzregel: nur Hinterlegung, kein Zurückbehalten'
+- id: CH_OR_265
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 265
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '265'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 74
+  text_de: «Der Vermieter und der Mieter können nicht im Voraus auf das Recht verzichten, Forderungen
+    und Schulden aus dem Mietverhältnis zu verrechnen.»
+  legal_question_de: Verrechnung möglich
+- id: CH_OR_120_1_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 120 Abs. 1–2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '120'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 32
+  paragraph: Abs. 1–2
+  text_de: «1 Wenn zwei Personen einander Geldsummen … schulden, so kann jede ihre Schuld, insofern beide
+    Forderungen fällig sind, mit ihrer Forderung verrechnen. 2 Der Schuldner kann die Verrechnung geltend
+    machen, auch wenn seine Gegenforderung bestritten wird.»
+  legal_question_de: Voraussetzungen der Verrechnung
+- id: CH_OR_74_2_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 74 Abs. 2 Ziff. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '74'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 21
+  paragraph: Abs. 2 Ziff. 1
+  text_de: «Geldschulden sind an dem Orte zu zahlen, wo der Gläubiger zur Zeit der Erfüllung seinen Wohnsitz
+    hat»
+  legal_question_de: Rechtzeitigkeit der Zahlung (Bringschuld)
+- id: CH_OR_271A_3_B
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 271a Abs. 3 lit. b
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 271a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 81
+  paragraph: Abs. 3 lit. b
+  text_de: Sperrfristen nach Abs. 1 lit. d und e gelten nicht bei Kündigungen «wegen Zahlungsrückstand
+    des Mieters (Art. 257d)»
+  legal_question_de: Kein Schutz durch Sperrfrist
+- id: CH_OR_272A_1_A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272a Abs. 1 lit. a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 82
+  paragraph: Abs. 1 lit. a
+  text_de: '«Die Erstreckung ist ausgeschlossen bei Kündigungen: a. wegen Zahlungsrückstand des Mieters
+    (Art. 257d)»'
+  legal_question_de: Warum Zahlung so wichtig ist
+- id: CH_SCHKG_69_2_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Schuldbetreibungs- und Konkursgesetz (SchKG), Art. 69 Abs. 2 Ziff. 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '69'
+  sr_number: '281.1'
+  statute: SchKG
+  valid_as_of: '2026-01-01'
+  origin_ref: SCHKG.pdf (SR 281.1, Stand 1.1.2026), SchKG 28
+  paragraph: Abs. 2 Ziff. 3
+  text_de: Der Zahlungsbefehl enthält «die Mitteilung, dass der Schuldner, welcher die Forderung … bestreiten
+    will, innerhalb zehn Tagen nach Zustellung des Zahlungsbefehls dem Betreibungsamte dies zu erklären
+    (Rechtsvorschlag zu erheben) hat»
+  legal_question_de: Erkennen eines Zahlungsbefehls
+- id: CH_SCHKG_74_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Schuldbetreibungs- und Konkursgesetz (SchKG), Art. 74 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '74'
+  sr_number: '281.1'
+  statute: SchKG
+  valid_as_of: '2026-01-01'
+  origin_ref: SCHKG.pdf (SR 281.1, Stand 1.1.2026), SchKG 29
+  paragraph: Abs. 1
+  text_de: «Will der Betriebene Rechtsvorschlag erheben, so hat er dies sofort dem Überbringer des Zahlungsbefehls
+    oder innert zehn Tagen nach der Zustellung dem Betreibungsamt mündlich oder schriftlich zu erklären.»
+  legal_question_de: 10-Tage-Frist
+- id: CH_SCHKG_74_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Schuldbetreibungs- und Konkursgesetz (SchKG), Art. 74 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '74'
+  sr_number: '281.1'
+  statute: SchKG
+  valid_as_of: '2026-01-01'
+  origin_ref: SCHKG.pdf (SR 281.1, Stand 1.1.2026), SchKG 29
+  paragraph: Abs. 2
+  text_de: «Bestreitet der Betriebene die Forderung nur teilweise, so hat er den bestrittenen Betrag genau
+    anzugeben; unterlässt er dies, so gilt die ganze Forderung als bestritten.»
+  legal_question_de: Teilbestreitung
+- id: BGE_119_II_147
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 119 II 147
+  citation: BGE 119 II 147
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: Die 30-Tage-Frist läuft ab dem Tag, an dem die Mieterin die Zahlungsaufforderung
+    tatsächlich in Empfang nimmt; holt sie das Einschreiben nicht ab, gilt der letzte Tag der 7-tägigen
+    Abholfrist (E. 2, S. 149–150). Die Vermieterschaft muss den Fristablauf abwarten; eine Kündigung während
+    laufender Frist ist nicht nichtig, aber innert 30 Tagen anfechtbar (E. 3–4, S. 151–155).
+  scope_de: BGE 119 II 147 (6.4.1993)
+  legal_question_de: Fristbeginn anders als bei Issue 1
+- id: BGE_124_III_145
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 124 III 145
+  citation: BGE 124 III 145
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: 'Liegt der Mahnung ein Einzahlungsschein bei, ist die Bareinzahlung am Postschalter
+    innert Frist rechtzeitig; Verbuchungsverzögerungen trägt die Vermieterschaft; Kündigung ungültig (E.
+    2a–2b, S. 147–149). Grundregel nach BGE 119 II 232 (15.6.1993): Geldschulden sind Bringschulden; zahlt
+    die Mieterin über Post oder Bank, muss der Auftrag so früh erteilt werden, dass das Geld bei Fristablauf
+    im Verfügungsbereich der Vermieterschaft ist; bis dahin trägt sie das Verzögerungsrisiko. Eine am
+    Abend des letzten Tages erteilte Postanweisung ist zu spät (E. 2, S. 234–235). Wer verspätete Zahlungen
+    annimmt und trotzdem kündigt, handelt nicht rechtsmissbräuchlich (E. 3, S. 235).'
+  scope_de: BGE 124 III 145 (20.3.1998)
+  legal_question_de: Faktum «Zahlungsweg»; Einzahlungsschein verwenden
+- id: BGE_140_III_591
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 140 III 591
+  citation: BGE 140 III 591
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: Eine korrekte Zahlungsverzugskündigung ist nur «très exceptionnel» treuwidrig, z.
+    B. wenn ein deutlich zu hoher Betrag verlangt wurde, obwohl der geschuldete unsicher war; wenn der
+    Ausstand unbedeutend ist oder sehr kurz nach Fristablauf bezahlt wurde und bisher immer pünktlich
+    gezahlt wurde; oder wenn erst lange nach Fristablauf gekündigt wird. Beweislast bei der Mieterschaft
+    (E. 1, S. 594). CHF 164.65 sind nicht unbedeutend; massgebend ist der Betrag an sich, nicht im Verhältnis
+    zur Miete oder zu den Finanzen der Parteien (E. 2, S. 594–595). Art. 257d verlangt nur eine fällige,
+    nicht eine unbestrittene Forderung; wer bestreitet und nicht zahlt, trägt das Risiko (E. 3.2, S. 595–596).
+    Eine zweite Mahnung oder Erinnerung ist nicht nötig (E. 5, S. 597).
+  scope_de: BGE 140 III 591 (4A_271/2014, 19.11.2014)
+  legal_question_de: Verbote «bestrittener Betrag muss nicht bezahlt werden» und «kleiner Betrag ist egal»;
+    Fall betraf Nebenkostensaldo
+- id: BGE_120_II_31
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 120 II 31
+  citation: BGE 120 II 31
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: 'Art. 271 OR gilt auch für Kündigungen wegen Zahlungsverzug, aber nur bei besonderen
+    Umständen; kein offenbarer Rechtsmissbrauch nötig (E. 4a, S. 32–33). CHF 286 sind nicht unbedeutend.
+    Treuwidrig handelt, wer mit Kündigung droht, bevor er Gewissheit über den geschuldeten Betrag hat:
+    Hier wurden irrtümlich über CHF 1000 statt CHF 436 verlangt und zur Prüfung aufgefordert; Kündigung
+    aufgehoben (E. 4b, S. 33–34).'
+  scope_de: BGE 120 II 31 (20.1.1994)
+  legal_question_de: Prüfhinweis bei falschem Betrag
+- id: BGE_147_III_218
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 147 III 218
+  citation: BGE 147 III 218
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: 'Hinterlegung wirkt als Zahlung nur, wenn alle Voraussetzungen von Art. 259g OR erfüllt
+    sind, u. a. schriftliche Frist an die Vermieterschaft, Androhung, kantonale Stelle und nur künftig
+    fällige Mietzinse (E. 3.3.1, S. 220). Die Hinterlegung bereits fälliger Mietzinse tilgt die Schuld
+    nicht (E. 3.3.2.6, S. 223–224); die Schuld ist dann erst getilgt, wenn der Betrag der Vermieterschaft
+    ausgehändigt oder gutgeschrieben wurde (E. 3.3.4, S. 224). Im Fall: keine Zahlung innert 30 Tagen,
+    Kündigung gültig (E. 3.3.5, S. 224–225).'
+  scope_de: BGE 147 III 218 (4A_571/2020, 23.3.2021)
+  legal_question_de: 'Schutzregel: nach der Mahnung nicht hinterlegen, sondern zahlen'
+- id: CH_OR_266A_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 266a Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 266a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 74
+  paragraph: Abs. 2
+  text_de: «Halten die Parteien die Frist oder den Termin nicht ein, so gilt die Kündigung für den nächstmöglichen
+    Termin.»
+  legal_question_de: Falscher Termin = Verschiebung (analog, Lehrbuch N 2968j)
+- id: CH_OR_271_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 271 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '271'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 81
+  paragraph: Abs. 1
+  text_de: «Die Kündigung ist anfechtbar, wenn sie gegen den Grundsatz von Treu und Glauben verstösst.»
+  legal_question_de: Nur sehr ausnahmsweise (BGE 140 III 591)
+- id: CH_OR_267_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 267 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '267'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 76
+  paragraph: Abs. 1
+  text_de: «Der Mieter muss die Sache in dem Zustand zurückgeben, der sich aus dem vertragsgemässen Gebrauch
+    ergibt.»
+  legal_question_de: Rückgabepflicht nach Ende
+- id: CH_ZPO_257
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 257
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '257'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), ZPO 73
+  text_de: 'Rechtsschutz im summarischen Verfahren, wenn «a. der Sachverhalt unbestritten oder sofort
+    beweisbar ist; und b. die Rechtslage klar ist.» Abs. 3: sonst Nichteintreten'
+  legal_question_de: Schnelle Ausweisung → Issue 6
+- id: CH_ZPO_248_B
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 248 lit. b
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '248'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), ZPO 67
+  paragraph: lit. b
+  text_de: Summarisches Verfahren «für den Rechtsschutz in klaren Fällen»
+  legal_question_de: Verfahrensart
+- id: CH_ZPO_198_A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 198 lit. a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '198'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), ZPO 52
+  paragraph: lit. a
+  text_de: Das Schlichtungsverfahren entfällt «im summarischen Verfahren»
+  legal_question_de: Ausweisungsgesuch geht direkt ans Gericht
+- id: CH_ZPO_343_1_D
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 343 Abs. 1 lit. d
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '343'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), ZPO 99
+  paragraph: Abs. 1 lit. d
+  text_de: Vollstreckung durch «eine Zwangsmassnahme wie … Räumung eines Grundstückes»
+  legal_question_de: Zwangsräumung → Issue 6
+- id: BGE_119_II_232
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 119 II 232
+  citation: BGE 119 II 232
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: Bei Überweisung zählt, dass das Geld bei Fristablauf bei der Vermieterschaft verfügbar
+    ist; Postanweisung am Abend des letzten Tages zu spät (E. 2, S. 234–235). Wer verspätete Zahlungen
+    annimmt und trotzdem kündigt, handelt nicht rechtsmissbräuchlich (E. 3, S. 235).
+  scope_de: BGE 119 II 232
+  legal_question_de: Verbot «Annahme der Zahlung heilt die Kündigung»
+- id: BGER_4A_332_2025
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4A_332/2025
+  citation: BGer 4A_332/2025
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  core_statement_de: Unklar bezeichneter Rückstand in der Mahnung macht die darauf gestützte Kündigung
+    unwirksam, wenn die Mieterin den nach ihrem Wissen geschuldeten Betrag zahlte (E. 3.1, 3.5.2, 3.6).
+  scope_de: BGer 4A_332/2025
+  legal_question_de: 'Prüffrage 1: Mahnung gültig?'
+- id: CH_OR_272_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '272'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 82
+  paragraph: Abs. 1
+  text_de: «Der Mieter kann die Erstreckung eines befristeten oder unbefristeten Mietverhältnisses verlangen,
+    wenn die Beendigung der Miete für ihn oder seine Familie eine Härte zur Folge hätte, die durch die
+    Interessen des Vermieters nicht zu rechtfertigen wäre.»
+  legal_question_de: Grundtatbestand
+- id: CH_OR_272_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '272'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 82
+  paragraph: Abs. 2
+  text_de: 'Interessenabwägung «insbesondere: a. die Umstände des Vertragsabschlusses und den Inhalt des
+    Vertrags; b. die Dauer des Mietverhältnisses; c. die persönlichen, familiären und wirtschaftlichen
+    Verhältnisse der Parteien und deren Verhalten; d. einen allfälligen Eigenbedarf des Vermieters … sowie
+    die Dringlichkeit dieses Bedarfs; e. die Verhältnisse auf dem örtlichen Markt für Wohn- und Geschäftsräume.»'
+  legal_question_de: Fakten für das Briefing
+- id: CH_OR_272_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272 Abs. 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '272'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 82
+  paragraph: Abs. 3
+  text_de: «Verlangt der Mieter eine zweite Erstreckung, so berücksichtigt die zuständige Behörde auch,
+    ob er zur Abwendung der Härte alles unternommen hat, was ihm zuzumuten war.»
+  legal_question_de: Suchbemühungen
+- id: CH_OR_272A_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272a Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 82
+  paragraph: Abs. 2
+  text_de: «Die Erstreckung ist in der Regel ausgeschlossen, wenn der Vermieter dem Mieter einen gleichwertigen
+    Ersatz für die Wohn- oder Geschäftsräume anbietet.»
+  legal_question_de: Ersatzangebot
+- id: CH_OR_272B_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272b Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 83
+  paragraph: Abs. 1
+  text_de: «Das Mietverhältnis kann für Wohnräume um höchstens vier … Jahre erstreckt werden. Im Rahmen
+    der Höchstdauer können eine oder zwei Erstreckungen gewährt werden.»
+  legal_question_de: Höchstdauer
+- id: CH_OR_272B_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272b Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 83
+  paragraph: Abs. 2
+  text_de: «Vereinbaren die Parteien eine Erstreckung des Mietverhältnisses, so sind sie an keine Höchstdauer
+    gebunden, und der Mieter kann auf eine zweite Erstreckung verzichten.»
+  legal_question_de: Vereinbarung (Vorsicht)
+- id: CH_OR_272C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272c
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 83
+  text_de: Vertrag kann im Erstreckungsentscheid veränderten Verhältnissen angepasst werden; sonst gilt
+    er unverändert weiter
+  legal_question_de: Mietzins während Erstreckung
+- id: CH_OR_272D
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 272d
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 272d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 83
+  text_de: 'Kündigung durch Mieter während Erstreckung: «a. bei Erstreckung bis zu einem Jahr mit einer
+    einmonatigen Frist auf Ende eines Monats; b. bei Erstreckung von mehr als einem Jahr mit einer dreimonatigen
+    Frist auf einen gesetzlichen Termin.»'
+  legal_question_de: Ausstieg bei neuer Wohnung
+- id: CH_OR_273_5
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 273 Abs. 5
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '273'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 84
+  paragraph: Abs. 5
+  text_de: Bei Abweisung der Anfechtung prüft die Behörde «von Amtes wegen, ob das Mietverhältnis erstreckt
+    werden kann.»
+  legal_question_de: Anfechtung schliesst Erstreckung ein
+- id: CH_OR_273A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 273a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 273a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), OR 84
+  text_de: 'Familienwohnung: auch der Ehegatte kann Erstreckung verlangen; «Vereinbarungen über die Erstreckung
+    sind nur gültig, wenn sie mit beiden Ehegatten abgeschlossen werden.»'
+  legal_question_de: Familienwohnung
+- id: CH_ZPO_210_1_B_211
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 210 Abs. 1 lit. b, 211
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '210'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), ZPO 29, 57
+  paragraph: Abs. 1 lit. b, 211
+  text_de: Keine Gerichtskosten im Schlichtungsverfahren; Entscheidvorschlag möglich bei «Erstreckung»;
+    Ablehnung innert 20 Tagen
+  legal_question_de: Verfahren (wie Issue 1)
+- id: BGE_135_III_441
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 135 III 441
+  citation: BGE 135 III 441
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Art. 266a Abs. 2 OR korrigiert nur Terminfehler (E. 3.3, S. 445).
+  scope_de: BGE 135 III 441
+  legal_question_de: Abgrenzung
+- id: BGE_142_III_336
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 142 III 336
+  citation: BGE 142 III 336
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Auch bei gültiger Kündigung entscheidet die Behörde von Amtes wegen über die Erstreckung
+    (E. 5.3, S. 344; Art. 273 Abs. 5 OR). Zweck: Zeit für eine Ersatzlösung oder Milderung der Folgen;
+    Abwägung der Interessen beider Seiten; die Aufzählung in Art. 272 Abs. 2 OR ist nicht abschliessend;
+    keine Erstreckung bis zu einem unbestimmten Datum; nicht ohne Weiteres die Maximaldauer, sondern allenfalls
+    zuerst eine kürzere und später eine zweite (E. 5.3.1, S. 344 f.). Freies Ermessen (Art. 4 ZGB), das
+    Bundesgericht greift nur zurückhaltend ein (E. 5.3.2, S. 345).'
+  scope_de: BGE 142 III 336 (Geschäftsräume, Kündigung nach Art. 261 OR)
+  legal_question_de: Grundsatz der Abwägung; Begründung für das Verbot jeder Prognose zur Dauer
+- id: BGE_135_III_121
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 135 III 121
+  citation: BGE 135 III 121
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Ermessensentscheid unter Berücksichtigung aller Umstände (E. 2, S. 123 f.). Keine
+    Erstreckung, deren Ende an ein ungewisses Ereignis geknüpft ist (E. 4, S. 125). Erste Erstreckung
+    unter dem Maximum mit Möglichkeit einer zweiten ist zulässig (E. 5, S. 125 f.).
+  scope_de: BGE 135 III 121 (Geschäftsräume)
+  legal_question_de: Keine Aussage zur Dauer; Hinweis auf zweite Erstreckung
+- id: BGE_117_II_415
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 117 II 415
+  citation: BGE 117 II 415
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Der Ausschluss nach Art. 272a Abs. 1 lit. a OR setzt eine gültige Zahlungsaufforderung
+    nach Art. 257d OR voraus (schriftlich, mind. 30 Tage, Androhung; bei Familienwohnung separat an beide
+    Ehegatten); ein blosser Zahlungsrückstand genügt nicht (E. 3, S. 416; E. 5a, S. 418 f.). Der Ausschluss
+    greift aber auch, wenn die Vermieterschaft nach erfolgloser Mahnung nur ordentlich kündigt (E. 4,
+    S. 417). Die Ausschlussgründe sind abschliessend; frühere Ausschlussgründe des alten Rechts fliessen
+    nur noch in die Interessenabwägung ein (E. 5b, S. 419).
+  scope_de: BGE 117 II 415
+  legal_question_de: Neues Faktum «frühere erfolglose Mahnung»; Ausschluss nur bei gültiger Mahnung
+- id: BGE_105_II_197
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 105 II 197
+  citation: BGE 105 II 197
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Die Folgen eines Umzugs an sich sind keine Härte; erstreckt wird nur, wenn die Erstreckung
+    diese Folgen mildern kann (E. 3a, S. 197 f.). Wer bei Vertragsschluss von einem geplanten Abbruch
+    wusste, kann sich kaum auf Härte berufen; von ihm wird erwartet, schon vorher zu suchen (E. 3b, S.
+    198 f.). Konkubinatspartner sind keine «Familie» (E. 3c, S. 199).
+  scope_de: BGE 105 II 197 (altes Recht, Art. 267a aOR)
+  legal_question_de: Grenzfälle «Umzug an sich», «Abbruch bekannt», Konkubinat
+- id: BGER_4A_72_2011
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4A_72/2011
+  citation: BGer 4A_72/2011
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Unannehmlichkeiten eines Umzugs sind keine Härte. Suchbemühungen sind schon für die
+    erste Erstreckung nötig (mit Hinweis auf BGE 110 II 249 E. 4; 116 II 446 E. 3a); fehlen sie, kommt
+    höchstens eine einmalige kurze Erstreckung in Frage. Ein Mangel an Ersatzobjekten ist nicht notorisch,
+    sondern muss festgestellt werden (E. 3–4).
+  scope_de: BGer 4A_72/2011 (Geschäftsräume Genf)
+  legal_question_de: Suche ab Kündigung dokumentieren; Marktlage belegen
+- id: BGER_4A_673_2014
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4A_673/2014
+  citation: BGer 4A_673/2014
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Massgebend sind die Verhältnisse im Zeitpunkt des Erstreckungsentscheids; aktuelle
+    Arztzeugnisse sind zu berücksichtigen. Bedürfnisse der Lebenspartnerin zählen als eigenes Interesse,
+    wenn man zusammenlebt; im Fall ging es um den Eigenbedarf der Vermieterseite. Erstreckung abgelehnt
+    (E. 3.2).
+  scope_de: BGer 4A_673/2014 (Glarus)
+  legal_question_de: Härtegründe aktuell halten; Konkubinat nur als Analogie
+- id: BGE_128_III_82
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 128 III 82
+  citation: BGE 128 III 82
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Ausschlussgründe von Art. 272a OR abschliessend; Härte dann unbeachtlich
+  scope_de: BGE 128 III 82 E. 2d bb
+- id: BGE_114_II_165
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 114 II 165
+  citation: BGE 114 II 165
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Fristen von Art. 273 OR sind Verwirkungsfristen
+  scope_de: BGE 114 II 165 E. 2a
+- id: BGE_110_II_249
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 110 II 249
+  citation: BGE 110 II 249
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Suchbemühungen schon für die erste Erstreckung
+  scope_de: BGE 110 II 249 E. 4; 116 II 446 E. 3a
+- id: CH_OR_256_1_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 256 Abs. 1 und 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '256'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 67
+  paragraph: Abs. 1 und 2
+  text_de: «Der Vermieter ist verpflichtet, die Sache zum vereinbarten Zeitpunkt in einem zum vorausgesetzten
+    Gebrauch tauglichen Zustand zu übergeben und in demselben zu erhalten.» Abweichungen zum Nachteil
+    des Mieters in Mietverträgen über Wohnräume sind nichtig.
+  legal_question_de: Grundpflicht; Vertragsklauseln wie «Mieter übernimmt alle Reparaturen» sind unwirksam
+- id: CH_OR_257G
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257g
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257g
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 69
+  text_de: Der Mieter muss Mängel, die er nicht selber zu beseitigen hat, dem Vermieter melden; sonst
+    haftet er für den Schaden.
+  legal_question_de: Pflicht zur Meldung; Grundlage für den Rat «sofort schriftlich melden»
+- id: CH_OR_257H
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257h
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257h
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 69
+  text_de: Der Mieter muss Arbeiten zur Beseitigung von Mängeln dulden; der Vermieter muss sie rechtzeitig
+    anzeigen; Herabsetzung und Schadenersatz bleiben vorbehalten (Abs. 3).
+  legal_question_de: Zutritt für Handwerker; Bauarbeiten als Mangel
+- id: CH_OR_258
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 258
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '258'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 69–70
+  text_de: 'Schwere Mängel bei Übergabe: Vorgehen nach Art. 107–109 OR; übernimmt der Mieter die Sache
+    trotzdem, gelten die Rechte nach Art. 259a–259i (Abs. 2); bei leichteren Mängeln ebenso (Abs. 3).'
+  legal_question_de: Mängel bei Einzug
+- id: CH_OR_259
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '259'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 70
+  text_de: «Der Mieter muss Mängel, die durch kleine, für den gewöhnlichen Unterhalt erforderliche Reinigungen
+    oder Ausbesserungen behoben werden können, nach Ortsgebrauch auf eigene Kosten beseitigen.»
+  legal_question_de: 'Ausschluss: kleiner Unterhalt'
+- id: CH_OR_259B
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259b
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 70
+  text_de: 'Beseitigt der Vermieter einen bekannten Mangel nicht innert angemessener Frist: fristlose
+    Kündigung bei schwerem Mangel (lit. a) oder Ersatzvornahme bei mittlerem Mangel (lit. b).'
+  legal_question_de: 'Fristlose Kündigung, Ersatzvornahme: immer Rechtsperson'
+- id: CH_OR_259C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259c
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 71
+  text_de: Kein Anspruch auf Beseitigung, wenn der Vermieter innert angemessener Frist vollwertigen Ersatz
+    leistet.
+  legal_question_de: Ersatzwohnung
+- id: CH_OR_259D
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259d
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 71
+  text_de: Herabsetzung des Mietzinses «vom Zeitpunkt, in dem er vom Mangel erfahren hat, bis zur Behebung
+    des Mangels».
+  legal_question_de: Herabsetzung; Beginn erst ab Kenntnis der Vermieterschaft
+- id: CH_OR_259E
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259e
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259e
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 71
+  text_de: Schadenersatz, wenn der Vermieter nicht beweist, dass ihn kein Verschulden trifft.
+  legal_question_de: Schäden an Möbeln, Hotelkosten
+- id: CH_OR_259F
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259f
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259f
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 71
+  text_de: Übernahme des Rechtsstreits mit einem Dritten.
+  legal_question_de: Selten; immer Rechtsperson
+- id: CH_OR_259H
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259h
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259h
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 71
+  text_de: Hinterlegte Mietzinse fallen dem Vermieter zu, wenn der Mieter nicht innert 30 Tagen seit Fälligkeit
+    des ersten hinterlegten Mietzinses die Schlichtungsbehörde anruft (Abs. 1).
+  legal_question_de: Harte Frist
+- id: CH_OR_259I
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 259i
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 259i
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 72
+  text_de: Das Verfahren richtet sich nach der ZPO.
+  legal_question_de: Verweis
+- id: CH_OR_260
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 260
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '260'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 72
+  text_de: Erneuerungen und Änderungen durch den Vermieter nur, wenn zumutbar und nicht gekündigt; Herabsetzung
+    und Schadenersatz bleiben vorbehalten (Abs. 2).
+  legal_question_de: Renovation während der Miete
+- id: CH_OR_271A_1_A_D_E
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 271a Abs. 1 lit. a, d, e
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 271a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 81
+  paragraph: Abs. 1 lit. a, d, e
+  text_de: Kündigung anfechtbar, wenn sie erfolgt, weil der Mieter nach Treu und Glauben Ansprüche geltend
+    macht, während eines Schlichtungs- oder Gerichtsverfahrens oder innert drei Jahren danach.
+  legal_question_de: Schutz vor Rachekündigung (→ Issue 1)
+- id: CH_ZPO_243_1_2_C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 243 Abs. 1 und 2 lit. c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '243'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 65–66
+  paragraph: Abs. 1 und 2 lit. c
+  text_de: Vereinfachtes Verfahren bis CHF 30 000 sowie unabhängig vom Streitwert bei Hinterlegung.
+  legal_question_de: Verfahren vor Mietgericht
+- id: BGE_135_III_345
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 135 III 345
+  citation: BGE 135 III 345
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Mangel = Vergleich des tatsächlichen mit dem vereinbarten Zustand; Verschulden der
+    Vermieterschaft und Behebbarkeit sind nicht nötig; für eine Herabsetzung muss der Gebrauch um mindestens
+    5 % eingeschränkt sein, bei dauernder Beeinträchtigung genügen 2 % (E. 3.2, S. 347). Nicht jede Komforteinbusse
+    ist ein Mangel: vorhersehbare Veränderungen der Umgebung (Neubau nebenan, Nachbarn ziehen ein, mehr
+    Verkehr) sind ohne besondere Zusicherung kein Mangel (E. 3.3, S. 347–349).'
+  scope_de: BGE 135 III 345 (Wohnung, VD)
+  legal_question_de: Mangelbegriff; Grenzfall «Umgebung verändert sich»
+- id: BGER_4C_97_2003
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4C.97/2003
+  citation: BGer 4C.97/2003
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Leichte Mängel trägt die Mieterin (Art. 259 OR); Rechte nach Art. 259a OR erst ab
+    mittelschwerem Mangel; die Rechte stehen nebeneinander, ohne Rangfolge (E. 3.2). Mittelschwer ist
+    ein Mangel bei rund 5 % Einschränkung oder wenn ein leichter Mangel lange besteht, obwohl die informierte
+    Vermieterschaft nichts tut (E. 3.3). Abgenutzter Teppich im Eingang während 5½ Jahren: 2 % (E. 3.4,
+    3.6). Beispiele aus der Praxis 5–15 % (E. 3.5).'
+  scope_de: BGer 4C.97/2003 (Wohnung, GE)
+  legal_question_de: Dauer und Untätigkeit dokumentieren; Prozentzahlen nur für die Fachperson
+- id: BGE_142_III_557
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 142 III 557
+  citation: BGE 142 III 557
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Herabsetzung ab Kenntnis der Vermieterschaft bis zur Behebung oder zum Vertragsende;
+    die Erklärung an die Vermieterschaft muss Mass und Zeitraum nennen und sich auf konkrete Mängel beziehen
+    (E. 8.3.1, S. 561 f.). Rückwirkend kann nur herabgesetzt werden, wenn die Mieterin während des Mangels
+    gezeigt hat, dass sie sich stört (Herabsetzung oder Behebung verlangt); sonst darf die Vermieterschaft
+    auf die vorbehaltlos bezahlten Mieten vertrauen (E. 8.3.4, S. 566 f.). Keine feste Frist für die Erklärung,
+    auch nach Mietende möglich (E. 8.3.5–8.4, S. 567 f.).
+  scope_de: BGE 142 III 557
+  legal_question_de: Kernregel «sofort schriftlich melden und Behebung verlangen»
+- id: BGE_130_III_504
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 130 III 504
+  citation: BGE 130 III 504
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Wusste die Vermieterschaft schon vor der Herabsetzungserklärung vom Mangel, kann
+    die Mieterin auch zu viel bezahlte Miete zurückverlangen (E. 3, S. 506 f.). Relative Methode; bei
+    mittelschweren Mängeln Schätzung nach Billigkeit, das Bundesgericht greift nur bei Ermessensmissbrauch
+    ein (E. 4.1, S. 507 f.). Rückforderung ist vertraglich (E. 6, S. 510–513); Verjährung 5 Jahre (Art.
+    128 Ziff. 1 OR), gerechnet ab der Herabsetzungserklärung zurück (E. 8.2, S. 514).
+  scope_de: BGE 130 III 504 (Geschäftsräume, Klimaanlage)
+  legal_question_de: Keine Prozentangabe durch das System; Rückforderung höchstens 5 Jahre zurück
+- id: BGER_4A_140_2014
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4A_140/2014
+  citation: BGer 4A_140/2014
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Die Mieterin darf Miete wegen Mängeln nicht zurückbehalten; Art. 82 OR gilt nicht,
+    Art. 259g OR (Hinterlegung) geht vor. Verrechnung mit einer bestrittenen Gegenforderung erfolgt auf
+    eigenes Risiko; die Forderung muss sofort beweisbar sein. Nach Erhalt der Zahlungsaufforderung kann
+    die Mieterin die Kündigung noch durch Zahlung oder Hinterlegung abwenden (E. 5.2). Eigenmächtige Kürzung
+    kommt höchstens bei nicht behebbaren Mängeln in Frage; bei behebbaren Mängeln Behebung verlangen und
+    hinterlegen (E. 5.4). Folge im Fall: Kündigungen gültig, keine Erstreckung (E. 5.5).'
+  scope_de: BGer 4A_140/2014 und 4A_250/2014 (Geschäftsräume, GE)
+  legal_question_de: Verbot «Miete kürzen oder zurückbehalten»; Verknüpfung mit Issue 2
+- id: BGE_125_III_120
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 125 III 120
+  citation: BGE 125 III 120
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Wurden die Formvorschriften eingehalten und ging die Mieterin gutgläubig von einem
+    Mangel aus, gelten die hinterlegten Mieten als bezahlt; eine Kündigung wegen Zahlungsverzug ist dann
+    ungültig, auch wenn sich später kein Mangel ergibt. Nur bei bösem Glauben trägt die Mieterin das Risiko
+    (E. 2b, S. 121 f.; E. 3, S. 122 f.).
+  scope_de: BGE 125 III 120 (Wohnung, AG)
+  legal_question_de: Guter Glaube schützt nur bei korrekter Form
+- id: BGE_124_III_201
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 124 III 201
+  citation: BGE 124 III 201
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Die Hinterlegung ist Druckmittel zur Behebung; hinterlegt werden kann der ganze Mietzins
+    inkl. periodisch geschuldeter Nebenkosten, unabhängig von der Schwere des Mangels (E. 2d, S. 203 f.).
+    Die Kündigung wegen Zahlungsverzug war deshalb ungültig (E. 2e, S. 204).
+  scope_de: BGE 124 III 201
+  legal_question_de: Hinterlegung nur zur Behebung; Bruttomiete
+- id: BGER_4C_264_2003
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4C.264/2003
+  citation: BGer 4C.264/2003
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Formelle Voraussetzungen der Hinterlegung: schriftliche Frist zur Behebung und schriftliche
+    Androhung; die Ankündigung ist nur Ordnungsvorschrift. Auf Frist und Androhung darf nur verzichtet
+    werden, wenn klar ist, dass sie nutzlos wären; die Beweislast trägt die Mieterin (E. 3.1, 3.2.1).
+    Fünf Monate für eine Parkettreparatur galten als angemessen (E. 3.2.2). Fehlt die Form, hilft der
+    gute Glaube nicht: Die Mieterin ist in Verzug, die Kündigung nach Art. 257d OR gültig, eine Erstreckung
+    ausgeschlossen (E. 3.3–3.4).'
+  scope_de: BGer 4C.264/2003 (Wohnung, VD)
+  legal_question_de: Formfehler = Zahlungsverzug (→ Issue 2); Hinterlegung immer über Rechtsperson
+- id: CH_ZPO_252_254
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 252–254
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '252'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 72–73
+  paragraph: –254
+  text_de: Gesuch; Gelegenheit zur Stellungnahme, wenn das Gesuch nicht offensichtlich unzulässig oder
+    unbegründet ist; Beweis grundsätzlich durch Urkunden.
+  legal_question_de: Stellungnahme mit Belegen ist die einzige Chance
+- id: CH_ZPO_256_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 256 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '256'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 73
+  paragraph: Abs. 1
+  text_de: Das Gericht kann ohne Verhandlung aufgrund der Akten entscheiden.
+  legal_question_de: Keine mündliche Anhörung garantiert
+- id: CH_ZPO_236_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 236 Abs. 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '236'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 64
+  paragraph: Abs. 3
+  text_de: Auf Antrag der obsiegenden Partei ordnet das Gericht Vollstreckungsmassnahmen an.
+  legal_question_de: Direkte Vollstreckung
+- id: CH_ZPO_239_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 239 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '239'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 64
+  paragraph: Abs. 2
+  text_de: Begründung innert 10 Tagen verlangen; sonst gilt dies als Verzicht auf Berufung oder Beschwerde.
+  legal_question_de: Erste harte Frist nach dem Entscheid
+- id: CH_ZPO_308_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 308 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '308'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 89
+  paragraph: Abs. 2
+  text_de: Berufung in vermögensrechtlichen Sachen nur ab Streitwert CHF 10 000.
+  legal_question_de: Berufung oder Beschwerde
+- id: CH_ZPO_314_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 314 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '314'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 91
+  paragraph: Abs. 1
+  text_de: Berufungsfrist im summarischen Verfahren zehn Tage.
+  legal_question_de: Harte Frist
+- id: CH_ZPO_315_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 315 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '315'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 91
+  paragraph: Abs. 1
+  text_de: Die Berufung hemmt Rechtskraft und Vollstreckbarkeit im Umfang der Anträge.
+  legal_question_de: Aufschub durch Berufung
+- id: CH_ZPO_321_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 321 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '321'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 93
+  paragraph: Abs. 2
+  text_de: Beschwerdefrist im summarischen Verfahren zehn Tage.
+  legal_question_de: Harte Frist
+- id: CH_ZPO_325
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 325
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '325'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 94
+  text_de: Die Beschwerde hemmt die Vollstreckbarkeit nicht; Aufschub nur auf Gesuch bei nicht leicht
+    wiedergutzumachendem Nachteil.
+  legal_question_de: Unter CHF 10 000 kein automatischer Aufschub
+- id: CH_ZPO_336
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 336
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '336'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 97
+  text_de: Vollstreckbar ist ein Entscheid, wenn er rechtskräftig ist und die Vollstreckbarkeit nicht
+    aufgeschoben wurde.
+  legal_question_de: Wann geräumt werden kann
+- id: CH_ZPO_337_338_341
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 337, 338, 341
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '337'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 98
+  paragraph: 338, 341
+  text_de: Direkte Vollstreckung oder Vollstreckungsgesuch; Vollstreckungsgericht prüft von Amtes wegen
+    und setzt eine kurze Frist zur Stellungnahme; Einwand z. B. Stundung, mit Urkunden zu beweisen.
+  legal_question_de: Letzte Verteidigung
+- id: CH_ZPO_343_1_D_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 343 Abs. 1 lit. d und Abs. 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '343'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 99
+  paragraph: Abs. 1 lit. d und Abs. 3
+  text_de: Zwangsmassnahme wie Räumung eines Grundstücks; Hilfe der zuständigen Behörde (Polizei).
+  legal_question_de: Zwangsräumung
+- id: CH_OR_257D_266L_266O_271_273
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 257d, 266l–266o, 271–273
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 257d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 68, 76, 81–84
+  paragraph: 266l–266o, 271–273
+  text_de: Zahlungsverzug, Form der Kündigung, Nichtigkeit, Anfechtung, Erstreckung.
+  legal_question_de: Vorfragen (→ Issues 1–4)
+- id: ZH_GOG_24_C_E
+  provider: other
+  type: statute
+  language: de
+  title_de: § 24 lit. c und e GOG ZH
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '24'
+  jurisdiction: ZH
+  statute: GOG ZH
+  fedlex_sync: false
+  paragraph: lit. c und e
+  text_de: Das Einzelgericht entscheidet erstinstanzlich im summarischen Verfahren und über die Vollstreckung.
+  legal_question_de: Zuständiges Gericht
+  origin_ref: ', 6'
+- id: ZH_GOG_147
+  provider: other
+  type: statute
+  language: de
+  title_de: § 147 GOG ZH
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '147'
+  jurisdiction: ZH
+  statute: GOG ZH
+  fedlex_sync: false
+  text_de: Der Gemeindeammann kann vom Gericht mit der Vollstreckung nach Art. 343 Abs. 1 lit. d und e
+    ZPO beauftragt werden; er kann einen Kostenvorschuss verlangen und die Hilfe der Polizei beanspruchen.
+  legal_question_de: Wer räumt
+  origin_ref: ', 32'
+- id: BGE_141_III_262
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 141 III 262
+  citation: BGE 141 III 262
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Ein Ausweisungsbegehren im Verfahren für klare Fälle ist auch zulässig, wenn die
+    Mieterin die Kündigung angefochten hat und dieses Verfahren hängig ist (E. 3.3, S. 265). Der Gesetzgeber
+    wollte rasche Ausweisung; im Ausweisungsverfahren wird die Gültigkeit der Kündigung als Vorfrage beurteilt,
+    und auch dafür müssen Sachverhalt und Rechtslage klar sein, sonst Nichteintreten (E. 3.2, S. 263–265).
+  scope_de: BGE 141 III 262 (Geschäftsräume, Handelsgericht ZH)
+  legal_question_de: Verbot «Solange die Anfechtung läuft, kann man Sie nicht ausweisen»; Verteidigung
+    über die Vorfrage
+- id: OGZH_LF260018
+  provider: other
+  type: case_law
+  language: de
+  title_de: Obergericht ZH, LF260018 vom 16.3.2026
+  citation: Obergericht ZH, LF260018 vom 16.3.2026
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Vorinstanz war das Einzelgericht Audienz am Bezirksgericht Zürich. Eine Zahlung nach
+    Ablauf der Zahlungsfrist ändert an der Gültigkeit der Kündigung nichts; Erstreckung nach Art. 272a
+    Abs. 1 lit. a OR ausgeschlossen; Vollstreckungsaufschub (Schonfrist) abgelehnt, weil er die Aussicht
+    auf eine Wohnung nicht merklich erhöht hätte (E. 4.2, S. 5). Die Berufung muss sich konkret mit dem
+    Entscheid auseinandersetzen, auch bei Laien zumindest rudimentär (E. 3.1, S. 3 f.); neue Behauptungen
+    sind im Rechtsmittel kaum noch zulässig (E. 3.2, S. 4; E. 4.4, S. 6). Nichteintreten.
+  scope_de: Obergericht ZH, LF260018 vom 16.3.2026 (Wohnung, Stadt Zürich)
+  jurisdiction: ZH
+  legal_question_de: Zeigt den typischen Zürcher Ablauf; Rechtsmittel ohne Rechtsperson praktisch aussichtslos
+- id: BGE_138_III_620
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 138 III 620
+  citation: BGE 138 III 620
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Sofort beweisbar = ohne Verzögerung und besonderen Aufwand, in der Regel durch Urkunden;
+    die gesuchstellende Partei muss den vollen Beweis erbringen. Offensichtlich haltlose Bestreitungen
+    genügen nicht. Es genügt aber, dass die Gegenpartei substanziiert und schlüssig Einwendungen vorträgt,
+    die nicht sofort widerlegt werden können und die Überzeugung des Gerichts erschüttern; glaubhaft machen
+    muss sie sie nicht (E. 5.1.1, S. 621–623). Grund: Ein Entscheid im klaren Fall ist endgültig, die
+    Einwände wären sonst für immer abgeschnitten (E. 5.1.1, S. 623 f.; E. 6.2, S. 624 f.).'
+  scope_de: BGE 138 III 620 (Gebrauchsleihe, kein Mietfall)
+  legal_question_de: 'Kern der Verteidigung: konkrete, schlüssige Einwände in der Stellungnahme'
+- id: BGE_138_III_123
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 138 III 123
+  citation: BGE 138 III 123
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Klare Rechtslage nur, wenn sich die Rechtsfolge ohne Weiteres ergibt; nicht klar,
+    wenn das Gericht Ermessen ausüben oder Treu und Glauben wertend beurteilen muss (E. 2.1.2, S. 126).
+    Im Fall: Rechtsmissbrauch erforderte eine Gesamtwürdigung, daher kein klarer Fall (E. 2.5, S. 129).'
+  scope_de: BGE 138 III 123 (Geschäftsräume, Restaurant)
+  legal_question_de: Einwände wie mündliche Abmachung, widersprüchliches Verhalten der Vermieterschaft
+    erfassen
+- id: BGE_142_III_515
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 142 III 515
+  citation: BGE 142 III 515
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Ist die Kündigung angefochten, beziehen sich die Voraussetzungen von Art. 257 ZPO
+    auch auf ihre Gültigkeit; der Rechtsschutz in klaren Fällen ist nur zu gewähren, wenn keine Zweifel
+    an der Vollständigkeit der Sachverhaltsdarstellung bestehen und die Kündigung klar berechtigt erscheint,
+    damit der mietrechtliche Kündigungsschutz nicht unterlaufen wird (E. 2.2.4, S. 517 f.).
+  scope_de: BGE 142 III 515 (Geschäftsräume, Restaurant)
+  legal_question_de: Stützt die Verteidigung bei hängiger Anfechtung
+- id: BGE_140_III_315
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 140 III 315
+  citation: BGE 140 III 315
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Sachverhalt: Der Sozialdienst zahlte während der Zahlungsfrist insgesamt mehr als
+    den Rückstand, teils ausdrücklich für die Partnerin des Mieters; die Vermieter wiesen diesen Teil
+    zurück und kündigten wegen eines angeblichen Restbetrags von CHF 750; die Ausweisung im klaren Fall
+    scheiterte (S. 316 f.). Gründe laut vollständigem Urteil BGer 4A_68/2014: Zahlt ein Dritter (hier
+    der Sozialdienst) eine Geldschuld, tilgt das die Schuld der Mieterin (Art. 68 OR); die Vermieter hatten
+    innert der Zahlungsfrist den ganzen Rückstand erhalten, und eine Zahlung, die sie erst nach Fristablauf
+    zurücküberwiesen, gilt als angenommen (E. 4.2); die Anrechnung richtet sich nach Art. 86–87 OR (E.
+    4.3); die Schuld war klar getilgt (E. 4.4). Das Verfahren nach Art. 257 ZPO endet bei fehlendem Anspruch
+    nicht mit materieller Abweisung, sondern mit Nichteintreten; die Vermieterschaft kann dann den ordentlichen
+    Weg gehen (E. 5.2.3–5.3, S. 320).'
+  scope_de: BGE 140 III 315 (Wohnung, VD; Sozialdienst zahlte)
+  legal_question_de: Zahlungen Dritter (Sozialdienst) genau dokumentieren; Ergebnis Nichteintreten ≠ endgültiger
+    Sieg
+- id: BGE_139_III_38
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 139 III 38
+  citation: BGE 139 III 38
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Eine Ausweisung im summarischen Verfahren gibt es nur als klaren Fall nach Art. 248
+    lit. b, 257 ZPO; das Parlament hob aArt. 274g OR auf, weil es diesen Weg für rasche Ausweisungen als
+    ausreichend ansah (E. 2.5.3, S. 42 f.; E. 3, S. 43).
+  scope_de: BGE 139 III 38 (Wohnung, SZ)
+  legal_question_de: Hintergrund
+- id: BGE_142_III_690
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 142 III 690
+  citation: BGE 142 III 690
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: '«Kündigungsschutz» im Sinne von Art. 210 Abs. 1 lit. b und 243 Abs. 2 lit. c ZPO
+    ist weit zu verstehen: Er liegt vor, sobald über das Ende der Miete zu entscheiden ist, auch bei Ausweisungsbegehren
+    der Vermieterschaft; dann gilt das vereinfachte Verfahren mit sozialer Untersuchungsmaxime (E. 3.1,
+    S. 693 f.).'
+  scope_de: BGE 142 III 690 (Wohnung, befristet)
+  legal_question_de: Ordentlicher Weg schützt die Mieterin stärker
+- id: BGER_4A_391_2013
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGer 4A_391/2013
+  citation: BGer 4A_391/2013
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Das Gericht kann eine Frist für den freiwilligen Auszug setzen, muss aber nicht;
+    das Bundesgericht greift nur bei Ermessensmissbrauch ein (E. 7). Streitwert im Ausweisungsverfahren:
+    Mietzins für die voraussichtliche Dauer des Ausweisungsverfahrens (E. 5).'
+  scope_de: BGer 4A_391/2013 (Geschäftsräume, Untermiete, GE)
+  legal_question_de: Verbot «Sie bekommen sicher noch Zeit»; Streitwert
+- id: BGE_141_III_23
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 141 III 23
+  citation: BGE 141 III 23
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Zusammenfassung der Voraussetzungen von Art. 257 ZPO (E. 3.2, S. 25 f.); das Gesuch
+    muss vollumfänglich gutgeheissen werden können, sonst Nichteintreten (E. 3.3, S. 26 f.).
+  scope_de: BGE 141 III 23 (Arbeitsrecht)
+  legal_question_de: Nur Hintergrund, kein Mietfall
+- id: CH_OR_253B_2_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 253b Abs. 2 und 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 253b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 66
+  paragraph: Abs. 2 und 3
+  text_de: Missbrauchsschutz gilt nicht für luxuriöse Wohnungen und Einfamilienhäuser mit sechs oder mehr
+    Wohnräumen; die Anfechtung missbräuchlicher Mietzinse gilt nicht für Wohnräume, «deren Bereitstellung
+    von der öffentlichen Hand gefördert wurde und deren Mietzinse durch eine Behörde kontrolliert werden».
+  legal_question_de: Vorprüfung Wohnform
+- id: CH_OR_269
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '269'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 78
+  text_de: Mietzinse sind missbräuchlich, «wenn damit ein übersetzter Ertrag aus der Mietsache erzielt
+    wird oder wenn sie auf einem offensichtlich übersetzten Kaufpreis beruhen».
+  legal_question_de: Massstab (nur Rechtsperson)
+- id: CH_OR_269A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 78
+  text_de: In der Regel nicht missbräuchlich u. a. bei orts- oder quartierüblichen Mietzinsen (lit. a),
+    Kostensteigerungen oder Mehrleistungen (lit. b), Ausgleich der Teuerung auf dem risikotragenden Kapital
+    (lit. e).
+  legal_question_de: Typische Erhöhungsgründe erkennen
+- id: CH_OR_269B_269C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269b, 269c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 78–79
+  paragraph: 269c
+  text_de: Indexmiete nur gültig bei Vertrag von mindestens fünf Jahren und Landesindex; Staffelmiete
+    nur bei mindestens drei Jahren, höchstens einmal jährlich, Betrag in Franken.
+  legal_question_de: Sonderfälle
+- id: CH_OR_269D_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269d Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 79
+  paragraph: Abs. 1
+  text_de: Erhöhung jederzeit auf den nächstmöglichen Kündigungstermin; Mitteilung «mindestens zehn Tage
+    vor Beginn der Kündigungsfrist auf einem vom Kanton genehmigten Formular» und begründet.
+  legal_question_de: Frist und Formular
+- id: CH_OR_269D_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269d Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 79
+  paragraph: Abs. 2
+  text_de: Nichtig, wenn nicht mit dem Formular mitgeteilt (lit. a), nicht begründet (lit. b) oder mit
+    Kündigung oder Kündigungsandrohung verbunden (lit. c).
+  legal_question_de: 'Kernnorm: Formfehler erkennen'
+- id: CH_OR_269D_3
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269d Abs. 3
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 79
+  paragraph: Abs. 3
+  text_de: Gilt auch für andere einseitige Vertragsänderungen zu Lasten der Mieterin, namentlich verminderte
+    Leistungen oder neue Nebenkosten.
+  legal_question_de: Erweiterung des Issues
+- id: CH_OR_269D_4
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 269d Abs. 4
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 269d
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 79
+  paragraph: Abs. 4
+  text_de: Für die Mitteilung genügt «eine auf mechanischem Weg nachgebildete Unterschrift auf dem vorgeschriebenen
+    Formular».
+  legal_question_de: Faksimile-Unterschrift ist kein Formfehler mehr
+- id: CH_OR_270
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 270
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '270'
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 79
+  text_de: Anfechtung des Anfangsmietzinses innert 30 Tagen nach Übernahme der Sache, bei Notlage, Marktverhältnissen
+    oder erheblicher Erhöhung gegenüber dem Vormieter; Kantone können bei Wohnungsmangel das Formular
+    auch für neue Verträge vorschreiben (Abs. 2).
+  legal_question_de: Abgrenzung
+- id: CH_OR_270A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 270a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 270a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 80
+  text_de: 'Herabsetzungsbegehren während der Mietdauer: zuerst schriftlich bei der Vermieterschaft, diese
+    hat 30 Tage; dann 30 Tage für die Schlichtungsbehörde; nicht nötig bei gleichzeitiger Anfechtung einer
+    Erhöhung (Abs. 3).'
+  legal_question_de: Gegenantrag bei Anfechtung
+- id: CH_OR_270B
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 270b
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 270b
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 80
+  text_de: «Der Mieter kann eine Mietzinserhöhung innert 30 Tagen, nachdem sie ihm mitgeteilt worden ist,
+    bei der Schlichtungsbehörde als missbräuchlich […] anfechten.» Gilt auch für andere einseitige Änderungen
+    (Abs. 2).
+  legal_question_de: Harte Frist
+- id: CH_OR_270C_270D
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 270c, 270d
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 270c
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 80
+  paragraph: 270d
+  text_de: 'Indexmiete: nur Einwand, die Indexänderung rechtfertige die Erhöhung nicht; Staffelmiete:
+    keine Anfechtung (ausser Anfangsmietzins).'
+  legal_question_de: Sonderfälle
+- id: CH_OR_270E
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 270e
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 270e
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 80
+  text_de: Der bestehende Vertrag gilt während Schlichtungs- und Gerichtsverfahren unverändert weiter.
+  legal_question_de: Bisherige Miete weiter zahlen
+- id: CH_OR_271A_1_B_D_E
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Obligationenrecht (OR), Art. 271a Abs. 1 lit. b, d, e
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 271a
+  sr_number: '220'
+  statute: OR
+  valid_as_of: '2026-10-01'
+  origin_ref: OR_admin.pdf (SR 220, Stand 1.10.2026), 81
+  paragraph: Abs. 1 lit. b, d, e
+  text_de: Kündigung anfechtbar, wenn sie eine Mietzinsanpassung durchsetzen soll, während eines Verfahrens
+    oder innert drei Jahren danach.
+  legal_question_de: Schutz vor Rachekündigung (→ Issue 1)
+- id: CH_ZPO_209_1_A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Zivilprozessordnung (ZPO), Art. 209 Abs. 1 lit. a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '209'
+  sr_number: '272'
+  statute: ZPO
+  valid_as_of: '2026-07-01'
+  origin_ref: ZPO.pdf (SR 272, Stand 1.7.2026), 56
+  paragraph: Abs. 1 lit. a
+  text_de: Kommt keine Einigung zustande, erhält bei der Anfechtung von Mietzinserhöhungen die Vermieterschaft
+    die Klagebewilligung.
+  legal_question_de: Die Mieterin muss nach dem Schlichtungsverfahren nicht selbst klagen
+- id: CH_VMWG_2_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 2 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '2'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 1
+  paragraph: Abs. 2
+  text_de: Für Wohnungen, deren Bereitstellung die öffentliche Hand gefördert hat und deren Mietzinse
+    eine Behörde kontrolliert, gelten nur Art. 253–268b, 269, 269d Abs. 3, 270e und 271–273c OR sowie
+    Art. 3–10 und 20–23 VMWG.
+  legal_question_de: 'Subventionierte Wohnung: weder Formularpflicht nach Art. 269d Abs. 1–2 noch Anfechtung
+    nach Art. 270b OR; zuständig ist die kontrollierende Behörde'
+- id: CH_VMWG_12A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 12a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: 12a
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 5
+  text_de: 'Referenzzinssatz für Hypotheken: volumengewichteter Durchschnittszinssatz, auf Viertelprozente
+    gerundet; das WBF gibt ihn vierteljährlich bekannt.'
+  legal_question_de: Hintergrund; System nennt keinen aktuellen Wert
+- id: CH_VMWG_13_1_C_4
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 13 Abs. 1 lit.
+    c und Abs. 4
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '13'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 6
+  paragraph: Abs. 1 lit. c und Abs. 4
+  text_de: Eine Hypothekarzinserhöhung um ein Viertelprozent berechtigt in der Regel zu höchstens 3 %
+    Mietzinserhöhung bei Hypothekarzinssätzen unter 5 %; frühere Anpassungen sind zu berücksichtigen.
+  legal_question_de: Nur Rechtsperson
+- id: CH_VMWG_14_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 14 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '14'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 6
+  paragraph: Abs. 1
+  text_de: 'Mehrleistungen: wertvermehrende Investitionen; Kosten umfassender Überholungen in der Regel
+    zu 50–70 % wertvermehrend.'
+  legal_question_de: Erhöhung nach Renovation
+- id: CH_VMWG_18
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 18
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '18'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 8
+  text_de: Macht die Vermieterschaft eine Anpassung nicht voll geltend, muss sie den Vorbehalt in Franken
+    oder Prozenten festlegen.
+  legal_question_de: Faktum «Vorbehalt»
+- id: CH_VMWG_19_1_A
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 19 Abs. 1 lit.
+    a
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '19'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 8
+  paragraph: Abs. 1 lit. a
+  text_de: 'Formular muss enthalten: bisherigen und neuen Mietzins samt Nebenkosten, Zeitpunkt, klare
+    Begründung (mehrere Gründe je in Einzelbeträgen), bei Mehrleistungen Angabe zu Förderbeiträgen.'
+  legal_question_de: Checkliste Formularprüfung
+- id: CH_VMWG_19_1_B_C
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 19 Abs. 1 lit.
+    b und c
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '19'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 8
+  paragraph: Abs. 1 lit. b und c
+  text_de: 'Bei anderen einseitigen Änderungen: Umschreibung, Zeitpunkt, klare Begründung; in beiden Fällen
+    gesetzliche Voraussetzungen der Anfechtung und Verzeichnis der Schlichtungsbehörden.'
+  legal_question_de: Checkliste
+- id: CH_VMWG_19_1BIS
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 19 Abs. 1bis
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '19'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 8
+  paragraph: Abs. 1bis
+  text_de: Begründung im Begleitschreiben ist zulässig, wenn das Formular ausdrücklich darauf hinweist.
+  legal_question_de: Begleitschreiben prüfen
+- id: CH_VMWG_20_1
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 20 Abs. 1
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '20'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 9
+  paragraph: Abs. 1
+  text_de: Bei Kostensteigerungen oder wertvermehrenden Verbesserungen kann die Mieterin den zahlenmässigen
+    Nachweis verlangen; die 30-Tage-Frist wird dadurch nicht berührt.
+  legal_question_de: 'Warnung: Nachfragen stoppt die Frist nicht'
+- id: CH_VMWG_20_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 20 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '20'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 9
+  paragraph: Abs. 2
+  text_de: Im Schlichtungsverfahren kann die Mieterin Belege für alle Erhöhungsgründe verlangen.
+  legal_question_de: Information
+- id: CH_VMWG_21_2
+  provider: fedlex
+  type: statute
+  language: de
+  title_de: Verordnung über die Miete und Pacht von Wohn- und Geschäftsräumen (VMWG), Art. 21 Abs. 2
+  dossier_status: DOSSIER_CHECKED
+  verification_status: UNVERIFIED
+  article: '21'
+  sr_number: 221.213.11
+  statute: VMWG
+  valid_as_of: '2025-10-01'
+  origin_ref: VMWG (SR 221.213.11, Stand 1.10.2025), 9
+  paragraph: Abs. 2
+  text_de: Die Schlichtungsbehörden müssen Mieter und Vermieter auch ausserhalb eines Verfahrens beraten
+    und ihnen helfen, sich ein Urteil über die Missbräuchlichkeit zu bilden.
+  legal_question_de: Kostenlose Beratungsstelle
+- id: BGE_142_III_375
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 142 III 375
+  citation: BGE 142 III 375
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Nichtig ist eine Erhöhung auch dann, wenn das Formular verwendet wird, die Begründung
+    aber nicht genügend klar ist; massgebend ist, ob die Mieterin als vernünftige Vertragspartnerin erkennen
+    kann, auf welchen Grund sich die Vermieterschaft beruft (Vertrauensprinzip) (E. 3.3, S. 377 f.). Bei
+    wertvermehrenden Investitionen muss der zahlenmässige Nachweis nicht im Formular stehen; die Mieterin
+    kann ihn nach Art. 20 Abs. 1 VMWG verlangen, ohne dass die 30-Tage-Frist berührt wird (E. 3.3.2.1,
+    S. 379). Mehrere Erhöhungsgründe sind je in Einzelbeträgen auszuweisen (E. 3.3.1, S. 378).
+  scope_de: BGE 142 III 375 (Mietgericht Sense- und Seebezirk FR, Totalsanierung)
+  legal_question_de: Formfehler prüfen lassen; Zahlen verlangen ist möglich, Frist läuft trotzdem
+- id: BGE_121_III_214
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 121 III 214
+  citation: BGE 121 III 214
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Strenge Formularpflicht: Nur ein amtliches oder vom Kanton genehmigtes Formular
+    genügt; ein Brief mit beigeheftetem leeren Formular ist nichtig (E. 3b–3c, S. 217 f.). Die damalige
+    Regel, eine Begründung im Begleitschreiben mache die Erhöhung nichtig (E. 3a, S. 216 f.), ist überholt:
+    Seit 1996 ist ein Begleitschreiben zulässig, wenn das Formular ausdrücklich darauf verweist (Art.
+    19 Abs. 1bis VMWG).'
+  scope_de: BGE 121 III 214 (Wohnung ZG)
+  legal_question_de: Brief ohne amtliches Formular = mögliche Nichtigkeit
+- id: BGE_137_III_362
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 137 III 362
+  citation: BGE 137 III 362
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Will die Vermieterschaft Nebenkosten neu separat verrechnen, gilt Art. 269d OR; die
+    Begründung muss angeben, welche bisher im Mietzins enthaltenen Kosten nun separat verrechnet werden
+    und wie sich das auf den Mietzins auswirkt; sonst ungenügend und nichtig (E. 3.2.1, S. 364 f.; E.
+    3.3, S. 366 f.). Andere Unterlagen dürfen die Begründung im Formular nur auslegen, nicht ersetzen
+    (E. 3.2.1, S. 365).
+  scope_de: BGE 137 III 362 (Geschäftsräume GE, Nebenkosten)
+  legal_question_de: 'Neue Nebenkosten: genau prüfen lassen'
+- id: BGE_118_II_130
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 118 II 130
+  citation: BGE 118 II 130
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Die Vermieterschaft ist an die im Formular angegebenen Gründe gebunden; ein Nachschieben
+    weiterer Gründe im Anfechtungsverfahren ist ausgeschlossen (E. 2a, S. 132).
+  scope_de: BGE 118 II 130 (Wohnung Zürich)
+  legal_question_de: Nur die Gründe im Formular zählen
+- id: BGE_131_III_566
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 131 III 566
+  citation: BGE 131 III 566
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: Die 30-Tage-Frist von Art. 270b OR ist eine Verwirkungsfrist, die das Gericht von
+    Amtes wegen prüft; eine Anfechtung nach 49 Tagen war verspätet (E. 3.2, S. 570, Praxisänderung). Zu
+    spät mitgeteilte Erhöhung wirkt erst auf den nächsten Termin (E. 3.3, S. 571).
+  scope_de: BGE 131 III 566 (Wohnung GE)
+  legal_question_de: Frist ist hart; Fristfehler = Verschiebung
+- id: BGE_124_III_67
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 124 III 67
+  citation: BGE 124 III 67
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Eine unangefochtene Mietzinserhöhung führt kraft Gesetzes zur Verwirkung (Art. 270b
+    Abs. 1 OR) (E. 3, S. 68 f.; E. 3b, S. 70). Hauptthema: Stillschweigen auf eine angebotene Teilreduktion
+    ist kein Verzicht auf eine weitergehende Herabsetzung (E. 3a, S. 69 f.).'
+  scope_de: BGE 124 III 67 (Herabsetzung)
+  legal_question_de: Frist ist hart
+- id: BGE_121_III_163
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 121 III 163
+  citation: BGE 121 III 163
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Bei Erhöhungen schützt die relative Methode das Vertrauen der Mieterin: Ohne Vorbehalt
+    (Art. 18 VMWG) sind Erhöhungen nur soweit zulässig, als sich die Verhältnisse seit der letzten Festsetzung
+    verändert haben; eine relativ zulässige Erhöhung ist aber auf das absolut Zulässige begrenzt (E. 2c,
+    S. 164 f.).'
+  scope_de: BGE 121 III 163 (Herabsetzung)
+  legal_question_de: Fakten «letzte Anpassung» und «Vorbehalt» erheben
+- id: BGE_147_III_14
+  provider: bger
+  type: case_law
+  language: de
+  title_de: BGE 147 III 14
+  citation: BGE 147 III 14
+  dossier_status: DOSSIER_PENDING
+  verification_status: UNVERIFIED
+  core_statement_de: 'Praxisänderung: Zulässig ist eine Nettorendite von 2 % über dem Referenzzinssatz,
+    solange dieser 2 % oder weniger beträgt (bisher 0,5 %); Eigenkapital ist zu 100 % der Teuerung anzupassen
+    (E. 8.4, S. 29 f.). Das Lehrbuch (N 3017c, gestützt auf BGE 142 III 568) ist insoweit überholt.'
+  scope_de: BGE 147 III 14 (Anfangsmietzins VD)
+  legal_question_de: Nur Hintergrund; das System rechnet keine Rendite
+- id: BGER_4A_68_2014
+  provider: bger
+  type: case_law
+  title_de: BGer 4A_68/2014 vom 16.6.2014 (vollständiges Urteil zu BGE 140 III 315)
+  citation: BGer 4A_68/2014
+  case_number: 4A_68/2014
+  decision_date: '2014-06-16'
+  dossier_status: DOSSIER_CHECKED
+  considerations:
+  - E. 4.2
+  - E. 4.3
+  - E. 4.4
+  - E. 5.3
+  core_statement_de: Eine Geldschuld muss nicht persönlich erfüllt werden; zahlt ein Dritter (z. B. der
+    Sozialdienst) innert der Mahnfrist, tilgt das die Schuld der Mieterin (Art. 68 OR). Erst nach Fristende
+    zurücküberwiesene Zahlungen gelten als angenommen.
+  scope_de: Zahlung durch Dritte innert Zahlungsfrist (Art. 257d OR)
+  relevant_fact_ids:
+  - third_party_payment
+  - payment_returned_by_landlord
+  language: de
+  verification_status: UNVERIFIED
+- id: BGER_4A_366_2008
+  provider: bger
+  type: case_law
+  title_de: BGer 4A_366/2008
+  citation: BGer 4A_366/2008
+  case_number: 4A_366/2008
+  dossier_status: DOSSIER_CHECKED
+  considerations:
+  - E. 4
+  core_statement_de: Das Konto der Vermieterschaft muss bis zum letzten Tag der Frist gutgeschrieben sein;
+    knapp drei Wochen zwischen Fristablauf und Kündigung sind «wohl an der Grenze» des Zulässigen, längeres
+    Zuwarten kann als Verzicht verstanden werden.
+  scope_de: Rechtzeitigkeit der Zahlung; Wartezeit bis zur Kündigung
+  language: de
+  verification_status: UNVERIFIED
+- id: BGER_4A_585_2010
+  provider: bger
+  type: case_law
+  title_de: BGer 4A_585/2010
+  citation: BGer 4A_585/2010
+  case_number: 4A_585/2010
+  dossier_status: DOSSIER_CHECKED
+  considerations:
+  - E. 3.1
+  - E. 3.5
+  core_statement_de: 'Neuere Praxis: Eine Kündigung vor Ablauf der Zahlungsfrist ist unwirksam; Ausnahme,
+    wenn am letzten Tag verfasst und erst nach Fristablauf zugestellt.'
+  limits_de: Betraf eher Geschäftsräume; Übernahme für Wohnungen als Teamentscheid (7.11.2026).
+  language: de
+  verification_status: UNVERIFIED
+- id: OGZH_LF250009
+  provider: other
+  type: case_law
+  jurisdiction: ZH
+  title_de: Obergericht ZH, LF250009 vom 14.4.2025
+  citation: Obergericht ZH, LF250009 vom 14.4.2025
+  decision_date: '2025-04-14'
+  dossier_status: DOSSIER_CHECKED
+  considerations:
+  - E. 3.1
+  - E. 3.4
+  core_statement_de: Verrechnungserklärung innert der 30-Tage-Frist und gegenüber der Vermieterschaft;
+    die Vollstreckungsbehörde prüft fürsorgerische Massnahmen.
+  language: de
+  verification_status: UNVERIFIED
+- id: MGZH_ZMP_2018_1
+  provider: other
+  type: case_law
+  jurisdiction: ZH
+  title_de: Mietgericht Zürich, ZMP 2018 Nr. 1
+  citation: ZMP 2018 Nr. 1
+  dossier_status: DOSSIER_PENDING
+  core_statement_de: «kann gekündigt werden» genügt als Androhung; Kündigung kurz vor einem vereinbarten
+    Gespräch über Gegenforderungen war treuwidrig.
+  language: de
+  verification_status: UNVERIFIED
+- id: LEHRBUCH_MIETE_31
+  provider: other
+  type: other
+  title_de: Lehrbuch «§ 31 Miete (Art. 253–273c OR) und Pacht» (Auszug des Law-Teams)
+  dossier_status: DOSSIER_PENDING
+  legal_question_de: Bibliografische Angabe (Autor:in, Titel, Auflage) steht laut Dossier noch aus.
+  core_statement_de: Sekundärquelle; Randziffern (N) und Buchseiten (S.) werden in den Dossiers zitiert.
+  language: de
+  verification_status: UNVERIFIED
+- id: PRODUKTREGEL
+  provider: other
+  type: other
+  title_de: Produktregel / Teamentscheid (7.11.2026)
+  dossier_status: DOSSIER_CHECKED
+  core_statement_de: Interne Produktschwelle oder -regel des Teams. Keine Gesetzes- oder Gerichtsaussage.
+  language: de
+  verification_status: UNVERIFIED
+- id: CH_BV_12
+  provider: fedlex
+  type: statute
+  sr_number: '101'
+  statute: BV
+  article: '12'
+  title_de: Bundesverfassung (BV), Art. 12
+  dossier_status: DOSSIER_CHECKED
+  text_de: Wer in Not gerät und nicht in der Lage ist, für sich zu sorgen, hat Anspruch auf Hilfe und
+    Betreuung und auf die Mittel, die für ein menschenwürdiges Dasein unerlässlich sind.
+  legal_question_de: Anspruch richtet sich gegen das Gemeinwesen, nicht gegen die Vermieterschaft (Route
+    SOZIAL).
+  origin_ref: BV (SR 101, Stand 3.3.2024), PDF-S. 4
+  language: de
+  verification_status: UNVERIFIED
+- id: BAG_SCHIMMEL_2021
+  provider: other
+  type: other
+  title_de: BAG «Schimmel in Wohnräumen» (2021)
+  dossier_status: DOSSIER_CHECKED
+  core_statement_de: Gesundheitliche Einschätzung (Kategorien nach Fläche); keine rechtliche Einordnung
+    des Mangels. Betroffene Personen mit Beschwerden sollen ärztlich abklären lassen; stark befallene
+    Räume nach Möglichkeit nicht nutzen.
+  limits_de: Das System nutzt die BAG-Einteilung nur für die Dringlichkeit, nicht für Aussagen zu Rechten.
+  language: de
+  verification_status: UNVERIFIED
+- id: IDG_ZH_17
+  provider: other
+  type: statute
+  jurisdiction: ZH
+  statute: IDG ZH
+  article: '17'
+  fedlex_sync: false
+  title_de: IDG ZH (LS 170.4), § 17 Abs. 1
+  dossier_status: DOSSIER_PENDING
+  text_de: Weitergabe besonderer Personendaten nur mit formellgesetzlicher Grundlage, ausdrücklicher Einwilligung
+    im Einzelfall oder zur Abwendung einer Gefahr für Leib und Leben.
+  legal_question_de: Grundlage für consent_briefing; Anwendbarkeit des IDG auf das Start-up ist «voraussichtlich»
+    (Teamentscheid), nicht endgültig geklärt.
+  language: de
+  verification_status: UNVERIFIED
+- id: CH_DSG_6_7
+  provider: fedlex
+  type: statute
+  sr_number: '235.1'
+  statute: DSG
+  article: '6'
+  paragraph: Abs. 7 lit. a
+  title_de: Datenschutzgesetz (DSG), Art. 6 Abs. 7 lit. a
+  dossier_status: DOSSIER_PENDING
+  text_de: Einwilligung muss bei besonders schützenswerten Personendaten ausdrücklich erfolgen.
+  legal_question_de: Grundlage für consent_briefing (falls DSG statt IDG gilt).
+  language: de
+  verification_status: UNVERIFIED

@@ -72,6 +72,43 @@ class SafetyRoute(BaseModel):
     briefing_flag: str | None = None
 
 
+SOCIAL_STATUS = ("verified", "traeger_verified_contact_open", "to_verify")
+MUNICIPAL_ROLE_FIELDS = (
+    "schlichtungsbehoerde_miete",
+    "unentgeltliche_rechtsauskunft",
+    "sozialdienst_gemeinde",
+    "notunterkunft",
+    "kesb",
+    "kjz",
+    "mieterverband",
+    "opferhilfe_kantonal",
+    "frauenhaus",
+    "frauenzentrale_kantonal",
+    "ombudsstelle",
+)
+
+
+class MunicipalityEntry(BaseModel):
+    """One Zürich municipality (v1.2 «municipalities»): district plus the responsible body per role.
+
+    A role value is one organisation id or a LIST of ids (first = default, the others are further options).
+    """
+
+    model_config = ConfigDict(extra="allow")
+    bfs: int
+    bezirk: str
+    region: str | None = None
+    sozialdienst_status: (
+        Literal["verified", "traeger_verified_contact_open", "to_verify"] | None
+    ) = None
+
+
+class AliasEntry(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    municipality: str  # "ZH:Opfikon"
+    status: Literal["law_team", "quartier"] = "quartier"
+
+
 class SignalBinding(BaseModel):
     model_config = ConfigDict(extra="forbid")
     rules: list[str] = []
@@ -84,7 +121,10 @@ class ReferralNetwork(BaseModel):
     version: str
     last_reviewed: str | None = None
     reviewed_by: str | None = None
-    role_resolution: dict[str, dict[str, str | None]] = {}
+    role_resolution: dict[str, dict[str, str | list[str] | None]] = {}
+    municipalities: dict[str, MunicipalityEntry] = {}
+    municipality_aliases: dict[str, AliasEntry] = {}
+    role_location_basis: dict[str, Literal["property", "residence"]] = {}
     professionals: list[Org]
     issue_rules: list[IssueRule] = []
     safety_routing: list[SafetyRoute] = []
@@ -95,6 +135,28 @@ class ReferralNetwork(BaseModel):
     # -- lookups -----------------------------------------------------------------------------
     def org_map(self) -> dict[str, Org]:
         return {o.id: o for o in self.professionals}
+
+    def municipality_roles(self) -> set[str]:
+        """Roles that have a per-municipality entry (so a missing municipality means «not locally determinable»)."""
+        return {k for e in self.municipalities.values() for k in (e.model_extra or {})} | set(
+            MUNICIPAL_ROLE_FIELDS
+        )
+
+    def municipality_index(self) -> dict[tuple[str, str], str]:
+        """(canton, normalised name) -> municipality key; also without a «(ZH)» suffix; aliases only if unambiguous."""
+        idx = self.__dict__.get("_muni_idx")
+        if idx is None:
+            idx = {}
+            for key in self.municipalities:
+                canton, name = key.split(":", 1)
+                idx[(canton.upper(), _norm(name))] = key
+                bare = re.sub(r"\s*\(.*?\)\s*$", "", name)
+                idx.setdefault((canton.upper(), _norm(bare)), key)
+            for alias, a in self.municipality_aliases.items():
+                canton = a.municipality.split(":", 1)[0].upper()
+                idx.setdefault((canton, _norm(alias)), a.municipality)
+            self.__dict__["_muni_idx"] = idx
+        return idx
 
 
 # ----------------------------------------------------------------------------------- location
@@ -113,7 +175,11 @@ def _norm(s: str) -> str:
 
 class Location(BaseModel):
     canton: str | None = None
-    municipality: str | None = None
+    municipality: str | None = None  # municipality of the rented property (as stated or canonical)
+    residence_municipality: str | None = (
+        None  # only if the client lives elsewhere (explicitly stated)
+    )
+    alias_note: str | None = None  # e.g. «Glattbrugg gehört zu Opfikon»
 
     def describe(self) -> str | None:
         if self.canton and self.municipality:
@@ -123,6 +189,21 @@ class Location(BaseModel):
         if self.municipality:
             return f"Gemeinde {self.municipality} (Kanton nicht bestätigt)"
         return None
+
+
+def find_municipality(
+    net: ReferralNetwork, name: str | None, canton: str | None
+) -> tuple[str | None, str | None]:
+    """-> (municipality key «ZH:Opfikon» | None, how: exact | alias | None). Deterministic table lookup only."""
+    if not name or not canton:
+        return None, None
+    idx = net.municipality_index()
+    key = idx.get((canton.upper(), _norm(name)))
+    if key is None:
+        return None, None
+    return key, (
+        "exact" if key.split(":", 1)[1] and _norm(key.split(":", 1)[1]) == _norm(name) else "alias"
+    )
 
 
 def infer_canton(net: ReferralNetwork, municipality: str | None) -> str | None:
@@ -135,30 +216,100 @@ def infer_canton(net: ReferralNetwork, municipality: str | None) -> str | None:
         for table in net.role_resolution.values()
         for key in table
         if ":" in key and _norm(key.split(":", 1)[1]) == m
-    }
+    } | {c for (c, n) in net.municipality_index() if n == m}
     return next(iter(cantons)) if len(cantons) == 1 else None
 
 
-def resolve_role(net: ReferralNetwork, role: str, loc: Location) -> tuple[str | None, str]:
-    """-> (organisation id | None, how it was resolved: municipality | canton | default | direct | none)."""
+class ResolvedOption(BaseModel):
+    org_id: str
+    how: str  # municipality_data | municipality | canton | default | direct
+    municipality_key: str | None = None
+    municipality_how: str | None = None  # exact | alias
+    social_status: str | None = None  # sozialdienst_status of that municipality (social roles only)
+    basis: str = "property"  # which location was used (property | residence)
+    basis_fallback: bool = False  # residence wanted, property municipality used
+
+
+def _as_list(v: Any) -> list[str]:
+    if v is None:
+        return []
+    if isinstance(v, str):
+        return [v]
+    return [x for x in v if isinstance(x, str)]
+
+
+def resolve_role_options(net: ReferralNetwork, role: str, loc: Location) -> list[ResolvedOption]:
+    """All organisations for a role, best first. Order (law team v1.2):
+    municipalities[<key>].<role> -> role_resolution["<CANTON>:<Gemeinde>"] -> role_resolution["<CANTON>"] -> default.
+    List values keep every option (first = standard). Never invents a local body: without a known municipality the
+    cantonal or national entry is returned (how = canton / default)."""
     table = net.role_resolution.get(role)
     if table is None:
-        return (role, "direct") if role in net.org_map() else (None, "none")
+        return [ResolvedOption(org_id=role, how="direct")] if role in net.org_map() else []
     canton = (loc.canton or "").upper() or None
-    if canton and loc.municipality:
-        want = _norm(loc.municipality)
-        for key, org_id in table.items():
-            if (
-                ":" in key
-                and key.split(":", 1)[0].upper() == canton
-                and _norm(key.split(":", 1)[1]) == want
-            ):
-                return org_id, "municipality"
+    basis = net.role_location_basis.get(role, "property")
+    name = loc.municipality
+    fallback = False
+    if basis == "residence":
+        if loc.residence_municipality:
+            name = loc.residence_municipality
+        else:
+            fallback = bool(name)
+    mkey, mhow = find_municipality(net, name, canton)
+    if mkey is not None:
+        entry = net.municipalities.get(mkey)
+        status = None
+        if entry is not None:
+            if role in ("sozialdienst_gemeinde", "notunterkunft"):
+                status = entry.sozialdienst_status
+            ids = _as_list((entry.model_extra or {}).get(role))
+            if ids:
+                return [
+                    ResolvedOption(
+                        org_id=i,
+                        how="municipality_data",
+                        municipality_key=mkey,
+                        municipality_how=mhow,
+                        social_status=status,
+                        basis=basis,
+                        basis_fallback=fallback,
+                    )
+                    for i in ids
+                ]
+        for k, v in table.items():
+            if k.upper() == mkey.upper() and _as_list(v):
+                return [
+                    ResolvedOption(
+                        org_id=i,
+                        how="municipality",
+                        municipality_key=mkey,
+                        municipality_how=mhow,
+                        social_status=status,
+                        basis=basis,
+                        basis_fallback=fallback,
+                    )
+                    for i in _as_list(v)
+                ]
     if canton:
-        for key, org_id in table.items():
-            if key.upper() == canton:
-                return org_id, "canton"
-    return table.get("default"), "default"
+        for k, v in table.items():
+            if k.upper() == canton and _as_list(v):
+                return [
+                    ResolvedOption(org_id=i, how="canton", basis=basis, basis_fallback=fallback)
+                    for i in _as_list(v)
+                ]
+    return [
+        ResolvedOption(org_id=i, how="default", basis=basis, basis_fallback=fallback)
+        for i in _as_list(table.get("default"))
+    ]
+
+
+def resolve_role(net: ReferralNetwork, role: str, loc: Location) -> tuple[str | None, str]:
+    """First option only -> (organisation id | None, how). Kept for callers that need one organisation."""
+    opts = resolve_role_options(net, role, loc)
+    if not opts:
+        return None, "none"
+    how = opts[0].how
+    return opts[0].org_id, "municipality" if how == "municipality_data" else how
 
 
 # ----------------------------------------------------------------------------------- cards
@@ -180,6 +331,28 @@ PHONE_KEYS = [
     ("phone_legal_info", "Telefon Rechtsauskunft"),
     ("hotline", "Hotline"),
 ]
+
+
+_PHONE_NOTE = re.compile(r"\(([^)]*)\)")
+
+
+def split_phones(raw: str) -> list[tuple[str, str | None]]:
+    """«044 763 17 00 (Telefonzentrale) / 044 763 17 01» -> [("044 763 17 00","Telefonzentrale"), ("044 763 17 01",None)].
+
+    Technical remarks are moved out of the number (not lost); text that is not a number stays untouched as display."""
+    out: list[tuple[str, str | None]] = []
+    for part in re.split(r"\s*(?:/|;|\boder\b)\s*", raw.strip()):
+        part = part.strip()
+        if not part:
+            continue
+        notes = [n.strip() for n in _PHONE_NOTE.findall(part) if n.strip()]
+        bare = _PHONE_NOTE.sub("", part).strip(" ,;")
+        if safe_tel(bare) is None and out:  # trailing words belong to the previous number
+            prev, pnote = out[-1]
+            out[-1] = (prev, "; ".join(x for x in [pnote, part] if x))
+            continue
+        out.append((bare or part, "; ".join(notes) or None))
+    return out
 
 
 def safe_tel(display: str) -> str | None:
@@ -205,6 +378,14 @@ def safe_mail(addr: Any) -> str | None:
     return addr.strip() if isinstance(addr, str) and _MAIL.match(addr.strip()) else None
 
 
+def _clean_access(v: str | None) -> str | None:
+    """Drops internal remarks about the data model («Feld web im Abschnitt municipalities, sobald geprüft»)."""
+    if not v:
+        return v
+    cleaned = re.sub(r"\s*\((?:[^()]*(?:Feld|Abschnitt|municipalities)[^()]*)\)", "", v).strip()
+    return cleaned or None
+
+
 def _text(v: Any) -> str | None:
     return v.strip() if isinstance(v, str) and v.strip() else None
 
@@ -228,15 +409,19 @@ def quality_of(o: Org) -> tuple[str, str]:
 
 def build_card(o: Org, *, reason: str | None = None, rule_ref: str | None = None) -> ReferralCard:
     c = o.contact or {}
-    protected = o.address_protected or o.type == "shelter"
+    # Protected: Frauenhäuser / domestic-violence shelters. A public emergency housing (Durchgangsheim) may show its address.
+    protected = o.address_protected or (
+        o.type == "shelter" and "emergency_housing" not in o.specializations
+    )
     phones = [
-        ContactPhone(label_de=label, display=str(c[key]).strip(), tel=safe_tel(str(c[key])))
+        ContactPhone(label_de=label, display=disp, tel=safe_tel(disp), note_de=pnote)
         for key, label in PHONE_KEYS
         if _text(str(c[key]) if c.get(key) is not None else None)
+        for disp, pnote in split_phones(str(c[key]))
     ]
     address = None if protected else _text(c.get("address")) or _text(c.get("postal_address"))
     quality, quality_label = quality_of(o)
-    note = _text(o.note)
+    note = _clean_access(_text(o.note))
     return ReferralCard(
         id=o.id,
         label=o.label,
@@ -250,7 +435,7 @@ def build_card(o: Org, *, reason: str | None = None, rule_ref: str | None = None
         address_protected=protected,
         hours=_text(c.get("hours")),
         costs=_text(c.get("costs")),
-        access=_text(c.get("access")),
+        access=_clean_access(_text(c.get("access"))),
         languages=_text(c.get("languages")),
         note=note,
         availability=_text(o.availability),

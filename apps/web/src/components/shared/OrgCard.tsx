@@ -17,12 +17,16 @@ export function ContactActions({ org, emergency = false }: { org: ReferralCard; 
     <div className="flex flex-wrap items-center gap-2">
       {org.phones.map((p) =>
         p.tel && TEL.test(p.tel) ? (
-          <a key={p.display} href={`tel:${p.tel}`} className={emergency ? btnEmergency : btn} aria-label={`${p.display.split(" (")[0]} anrufen, ${org.label}`}>
-            <Phone className="size-4" aria-hidden /> {p.display.split(" (")[0]} anrufen
-          </a>
+          <span key={p.display} className="inline-flex flex-wrap items-center gap-1.5">
+            <a href={`tel:${p.tel}`} className={emergency ? btnEmergency : btn} aria-label={`${p.display} anrufen, ${org.label}`}>
+              <Phone className="size-4" aria-hidden /> {p.display} anrufen
+            </a>
+            {p.note_de && <span className="text-[12px] text-ink-subtle">{p.note_de}</span>}
+          </span>
         ) : (
           <span key={p.display} className="text-[13px] text-ink-muted">
             {p.label_de}: {p.display}
+            {p.note_de ? ` (${p.note_de})` : ""}
           </span>
         ),
       )}
@@ -52,6 +56,12 @@ export function OrgCard({ org, compact = false }: { org: ReferralCard; compact?:
     <article className="rounded-md border border-line bg-surface p-4" aria-label={org.label} data-testid="org-card">
       <h3 className="text-[15px] font-semibold leading-snug">{org.label}</h3>
       {org.reason_de && !compact && <p className="mt-0.5 text-[12.5px] text-ink-subtle">{org.reason_de}</p>}
+      {org.scope_de && <p className="mt-0.5 text-[12.5px] text-ink-muted">{org.scope_de}</p>}
+      {org.local_note_de && (
+        <p className="mt-1.5 rounded-md border border-line bg-canvas px-2.5 py-1.5 text-[12.5px] text-ink-muted" data-testid="local-note">
+          {org.local_note_de}
+        </p>
+      )}
       {org.for_audience_de && <p className="mt-0.5 text-[12.5px] text-ink-muted">{org.for_audience_de}</p>}
       {org.not_emergency_number && (
         <p className="mt-1 inline-flex items-center gap-1 text-[12.5px] font-medium text-ask-fg">

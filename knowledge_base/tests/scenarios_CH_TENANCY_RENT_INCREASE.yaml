@@ -1,0 +1,417 @@
+# GENERIERT aus scripts/kb/specs/issue_07.py - SYNTHETIC_TECHNICAL, keine echten Fälle.
+schema_version: 1
+version: 1.0-issues
+scenarios:
+- id: SC_RI_T701
+  title_de: 'T7-01 Formular mit Begründung, vor 5 Tagen erhalten: Recht bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - RI_PRUEFUNG_GRUNDREGEL
+  expected_not_rule_ids:
+  - RI_FRIST_20_ODER_UNBEKANNT
+- id: SC_RI_T702
+  title_de: 'T7-02 wie T7-01, vor 25 Tagen erhalten: sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-10-13'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - RI_FRIST_20_ODER_UNBEKANNT
+- id: SC_RI_T703
+  title_de: 'T7-03 Erhöhung per E-Mail ohne Formular: mögliche Nichtigkeit (Hinweis), bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: email
+    increase_receipt_date: '2026-11-02'
+    form_official_used: false
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - RI_KEIN_FORMULAR
+- id: SC_RI_T704
+  title_de: 'T7-04 Formular mit Satz ''bei Nichtakzeptanz wird gekündigt'': sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: true
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - RI_KUENDIGUNGSDROHUNG
+- id: SC_RI_T705
+  title_de: 'T7-05 Gedruckte Unterschrift: kein Formfehler'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+    form_signed: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_not_rule_ids:
+  - RI_KEIN_FORMULAR
+- id: SC_RI_T706
+  title_de: 'T7-06 Staffelmiete laut Vertrag, formgerecht: KI_WEITER'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: staffelmiete
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: PROCEED
+- id: SC_RI_T707
+  title_de: 'T7-07 Subventionierte städtische Wohnung: Recht bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: subventioniert
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - RI_SUBVENTIONIERT_GENOSSENSCHAFT
+- id: SC_RI_T708
+  title_de: 'T7-08 Erhöhung CHF 200, Sozialhilfe, über Limite: SOZIAL + RECHT bald'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1700
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: false
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - RI_NICHT_FINANZIERBAR
+- id: SC_RI_T709
+  title_de: 'T7-09 Empfangsdatum unbekannt: sofort'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  unknown_facts:
+  - increase_receipt_date
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - RI_FRIST_20_ODER_UNBEKANNT
+- id: SC_RI_T710
+  title_de: 'T7-10 Neue Nebenkosten (Hauswartung): wie Erhöhung'
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: neue_nebenkosten
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: MEDIUM
+  expected_rule_ids:
+  - RI_PRUEFUNG_GRUNDREGEL
+- id: SC_RI_11_KUENDIGUNG
+  title_de: Schreiben enthält zugleich eine Kündigung -> Issue 1
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+    letter_contains_termination: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - RI_KUENDIGUNG_IM_SCHREIBEN
+  expected_route_issue_ids:
+  - CH_TENANCY_TERMINATION
+- id: SC_RI_12_UNTERSCHRIFT
+  title_de: Klientin soll unterschreiben (G9)
+  validation: SYNTHETIC_TECHNICAL
+  has_user_input: true
+  issues:
+  - id: CH_TENANCY_RENT_INCREASE
+    confidence: 0.9
+  facts:
+    tenant_role: hauptmieterin
+    object_type: wohnung
+    property_municipality: Zürich
+    property_in_canton_zh: true
+    contract_term_type: unbefristet
+    housing_arrangement: privat
+    increase_letter_available: true
+    increase_delivery_method: persoenlich
+    increase_receipt_date: '2026-11-02'
+    form_official_used: true
+    form_reason_present: true
+    termination_threat_in_letter: false
+    change_type: mietzinserhoehung
+    old_rent_chf: 1500
+    new_rent_chf: 1600
+    effective_date_in_letter: '2027-04-01'
+    rent_model: keine
+    luxury_or_large_house: false
+    increase_already_paying: false
+    increase_already_reacted: false
+    rent_affordable: true
+    asked_to_sign: true
+  today: '2026-11-07'
+  expected_action: ESCALATE
+  expected_urgency: HIGH
+  expected_rule_ids:
+  - RI_UNTERSCHRIFT

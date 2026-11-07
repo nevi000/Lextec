@@ -50,6 +50,7 @@ def _to_missing(
         question_de=fd.question_de,
         why_needed_de=fd.why_needed_de,
         deferred=deferred,
+        handover_priority=fd.handover_priority,
         data_type=fd.data_type,
         enum_values=list(fd.enum_values),
         enum_labels_de=dict(fd.enum_labels_de),

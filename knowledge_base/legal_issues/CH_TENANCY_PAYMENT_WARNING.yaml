@@ -1,0 +1,1200 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Zahlungsaufforderung mit Kündigungsandrohung (Issue 2)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_02.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_02.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_PAYMENT_WARNING
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: payment_warning
+title_de: Zahlungsaufforderung mit Kündigungsandrohung (Issue 2)
+description: Schriftliche Zahlungsfrist mit Kündigungsandrohung nach Art. 257d Abs. 1 OR (Wohnraum, Kanton
+  Zürich). Erste Massnahme ist sozial (Zahlung sichern), parallel läuft die rechtliche Prüfung.
+provenance_de: 'Law-Dossier Issue 2 vom 7.11.2026; Teamentscheide: Überweisung 3 Arbeitstage vor Fristende
+  empfohlen, Empfang unbekannt/Frist läuft möglicherweise noch = sofort.'
+classification:
+  description: 'Passt, wenn die Vermieterschaft schriftlich eine Zahlungsfrist gesetzt und die Kündigung
+    angedroht hat (Mahnung wegen Mietzinsrückstand, ''letzte Mahnung'', ''Zahlungsaufforderung mit Kündigungsandrohung'').
+    NICHT passend: eine bereits ausgesprochene Kündigung (Issue 3), blosse Zahlungserinnerung ohne Androhung
+    (trotzdem prüfen), Mängel ohne Zahlungsrückstand.'
+  typical_situations:
+  - Meine Klientin hat eine Mahnung vom Vermieter mit Kündigungsandrohung bekommen.
+  - Die Verwaltung setzt 30 Tage Frist für den Mietrückstand.
+  - Wir haben die Zahlungsaufforderung nach Art. 257d erhalten.
+  - Die Klientin hat Mietrückstand und der Vermieter droht mit der Kündigung.
+  related_issues: []
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: co_tenants_exist
+  group: prescreening
+  label_de: Mitmieter im Vertrag
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - BGE_140_III_491
+  extraction_hint_de: true, wenn eine weitere Person im Mietvertrag steht; false bei 'keine weiteren Mitmieter'
+    / 'alleinige Mieterin'.
+  question_de: Steht noch jemand anderes im Mietvertrag?
+  why_needed_de: Die Kündigung muss allen Mitmietern zugehen (BGE 140 III 491).
+- id: family_home_with_spouse
+  group: form
+  label_de: Familienwohnung (Ehe-/eingetragene Partnerperson)
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_273A_1
+  - BGE_139_III_7
+  extraction_hint_de: true nur bei Ehe oder eingetragener Partnerschaft; Konkubinat = false. 'keine Ehe-
+    oder eingetragene Partnerperson' = false.
+  question_de: Wohnt die Klientin dort mit einer Ehe- oder eingetragenen Partnerperson?
+  why_needed_de: Bei Familienwohnung ist die Kündigung auch der Partnerperson separat zuzustellen (Art.
+    266n OR; BGE 139 III 7). Konkubinat zählt nicht.
+- id: spouse_still_lives_there
+  group: form
+  label_de: Partnerperson wohnt noch dort
+  data_type: boolean
+  required_if:
+    ref: fact.family_home_with_spouse
+    op: equals
+    value: true
+  priority: medium
+  depends_on:
+  - family_home_with_spouse
+  source_ids:
+  - BGE_139_III_7
+  - BGE_140_III_491
+  question_de: Wohnt die Partnerperson noch dort (oder ist sie definitiv ausgezogen)?
+  why_needed_de: Bei definitivem Auszug entfällt der Familiencharakter (BGE 139 III 7; BGE 140 III 491).
+- id: rent_payer
+  group: social
+  label_de: Zahlende Stelle
+  data_type: enum
+  enum_values:
+  - klientin
+  - sozialdienst
+  - andere
+  enum_labels_de:
+    klientin: Klientin selbst
+    sozialdienst: Sozialdienst
+    andere: Andere Stelle
+  priority: low
+  question_de: 'Wer zahlt die Miete: die Klientin selbst oder der Sozialdienst?'
+  why_needed_de: Mögliche Interessenkonflikte; Wohnungssuche.
+- id: rent_amount_chf
+  group: social
+  label_de: Mietzins (CHF)
+  data_type: integer
+  priority: low
+  question_de: Wie hoch ist die Miete (CHF)?
+  why_needed_de: Relevant für die Wohnungssuche.
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: warning_written
+  group: warning
+  label_de: Mahnung schriftlich
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_257D_1
+  extraction_hint_de: true, wenn ein schriftliches Schreiben (Brief/Foto) mit Zahlungsfrist vorliegt.
+  question_de: "Liegt die Mahnung schriftlich vor?"
+  why_needed_de: Art. 257d Abs. 1 OR verlangt eine schriftliche Zahlungsfrist.
+- id: warning_threat_present
+  group: warning
+  label_de: Kündigungsandrohung enthalten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  - BGER_4A_332_2025
+  extraction_hint_de: true nur, wenn das Schreiben eine Kündigung für den Fall der Nichtzahlung androht
+    (auch 'kann gekündigt werden'). Nur Verweis auf Art. 257d ohne Androhung = false.
+  question_de: Steht in der Mahnung, dass bei Nichtzahlung gekündigt wird oder werden kann?
+  why_needed_de: Ohne Androhung keine Mahnung nach Art. 257d (ZMP 2018 Nr. 1; 4A_332/2025); «kann gekündigt
+    werden» genügt.
+- id: warning_amount_clear
+  group: warning
+  label_de: Betrag und Monate klar bezeichnet
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_332_2025
+  - CH_OR_257
+  question_de: "Ist in der Mahnung klar bezeichnet, welcher Betrag für welche Monate verlangt wird?"
+  why_needed_de: Der Rückstand muss beziffert oder einwandfrei bestimmbar sein (BGer 4A_332/2025 E. 3.1).
+- id: warning_claim_type
+  group: warning
+  label_de: Art der Forderung
+  data_type: enum
+  enum_values:
+  - nur_miete_nebenkosten
+  - enthaelt_anderes
+  - unklar
+  enum_labels_de:
+    nur_miete_nebenkosten: Nur Mietzins und Nebenkosten
+    enthaelt_anderes: Enthält auch anderes (Mahngebühren, Schadenersatz, Kaution)
+    unklar: Unklar
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257
+  - CH_OR_257A
+  question_de: Geht es nur um Miete und Nebenkosten oder auch um Mahngebühren, Schadenersatz, Kaution?
+  why_needed_de: Nur Mietzins und Nebenkosten fallen unter Art. 257d OR (Art. 257, 257a OR).
+- id: warning_deadline_days
+  group: warning
+  label_de: Angesetzte Zahlungsfrist (Tage)
+  data_type: integer
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  extraction_hint_de: Anzahl Tage der Zahlungsfrist laut Schreiben; nur wenn die Tage genannt oder eindeutig
+    bestimmbar sind.
+  question_de: "Wie viele Tage Zahlungsfrist setzt das Schreiben (Anzahl Tage)?"
+  why_needed_de: Bei Wohnungen mindestens 30 Tage (Art. 257d Abs. 1 OR). Das System berechnet kein Fristende.
+- id: warning_delivery_method
+  group: delivery
+  label_de: Zustellart der Mahnung
+  data_type: enum
+  enum_values:
+  - persoenlich
+  - eingeschrieben
+  - normale_post
+  enum_labels_de:
+    persoenlich: Persönlich übergeben
+    eingeschrieben: Eingeschrieben (Post)
+    normale_post: Normale Post
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_119_II_147
+  - BGE_140_III_244
+  question_de: 'Wie wurde die Mahnung zugestellt: eingeschrieben, normale Post oder persönlich?'
+  why_needed_de: 'Fristbeginn: tatsächlicher Empfang, spätestens 7. Tag der Abholfrist (BGE 119 II 147
+    E. 2); nicht die absolute Empfangstheorie wie bei der Kündigung.'
+- id: warning_receipt_date
+  group: delivery
+  label_de: Tatsächlicher Empfang der Mahnung
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_119_II_147
+  question_de: "An welchem Datum hat die Klientin das Schreiben erhalten oder auf der Post abgeholt?"
+  why_needed_de: Relative Empfangstheorie bei der Zahlungsaufforderung (BGE 119 II 147 E. 2; BGE 140 III
+    244 E. 5).
+- id: warning_pickup_notice_date
+  group: delivery
+  label_de: Abholungseinladung (Mahnung)
+  data_type: date
+  required_if:
+    ref: fact.warning_delivery_method
+    op: equals
+    value: eingeschrieben
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - warning_delivery_method
+  source_ids:
+  - BGE_119_II_147
+  question_de: 'Falls nicht abgeholt: Wann lag der gelbe Zettel im Briefkasten?'
+  why_needed_de: 'Nicht abgeholtes Einschreiben: Empfang spätestens am 7. Tag der Abholfrist (BGE 119
+    II 147 E. 2).'
+- id: warning_family_separate
+  group: delivery
+  label_de: Mahnung separat an Partnerperson zugestellt
+  data_type: boolean
+  required_if:
+    all:
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.spouse_still_lives_there
+      op: equals
+      value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - family_home_with_spouse
+  - spouse_still_lives_there
+  source_ids:
+  - CH_OR_266N
+  - BGE_140_III_491
+  question_de: Hat die Partnerperson eine eigene Mahnung erhalten?
+  why_needed_de: Bei Familienwohnung ist auch die Zahlungsfrist separat zuzustellen (Art. 266n OR; BGE
+    140 III 491 E. 4.1).
+- id: warning_cotenants_all_notified
+  group: delivery
+  label_de: Mahnung an alle Mitmieter
+  data_type: boolean
+  required_if:
+    ref: fact.co_tenants_exist
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - co_tenants_exist
+  source_ids:
+  - BGE_140_III_491
+  question_de: Haben alle Mitmieter die Mahnung erhalten?
+  why_needed_de: Bei Mitmiete müssen alle erfasst sein (BGE 140 III 491 E. 4.2.1).
+- id: payment_status
+  group: payment
+  label_de: Zahlungsstand seit der Mahnung
+  data_type: enum
+  enum_values:
+  - nicht_bezahlt
+  - teilweise
+  - vollstaendig
+  enum_labels_de:
+    nicht_bezahlt: Noch nichts bezahlt
+    teilweise: Teilweise bezahlt
+    vollstaendig: Vollständig bezahlt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_2
+  - BGE_140_III_591
+  extraction_hint_de: '''vollstaendig'' nur, wenn der ganze verlangte Betrag laut Angabe bezahlt wurde;
+    ''teilweise'' bei jeder Teilzahlung.'
+  question_de: "Was wurde seit der Mahnung bezahlt: nichts, einen Teil oder alles?"
+  why_needed_de: Nur die vollständige Zahlung innert Frist verhindert die Kündigung (Art. 257d Abs. 2
+    OR).
+- id: payment_path
+  group: payment
+  label_de: Zahlungsweg
+  data_type: enum
+  enum_values:
+  - einzahlungsschein
+  - ueberweisung
+  - bar_oder_andere
+  enum_labels_de:
+    einzahlungsschein: Einzahlungsschein der Vermieterschaft
+    ueberweisung: Überweisung / E-Banking
+    bar_oder_andere: Bar oder anderer Weg
+  priority: medium
+  source_ids:
+  - BGE_124_III_145
+  - BGE_119_II_232
+  - CH_OR_74_2_1
+  question_de: "Über welchen Weg soll bezahlt werden (Einzahlungsschein, Überweisung, bar oder anderes)?"
+  why_needed_de: Mit beigelegtem Einzahlungsschein zählt die Einzahlung (BGE 124 III 145 E. 2), sonst
+    der Eingang bei der Vermieterschaft (BGE 119 II 232 E. 2).
+- id: payment_financeable
+  group: payment
+  label_de: Betrag vor Fristablauf aufbringbar
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_257D_2
+  question_de: Kann der Betrag vor Fristablauf aufgebracht werden (eigene Mittel, Sozialhilfe, Stiftung)?
+  why_needed_de: 'Wichtigste soziale Massnahme: Zahlung sichern.'
+- id: third_party_payment
+  group: payment
+  label_de: Zahlung durch Dritte
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)?"
+  why_needed_de: Zahlung durch Dritte tilgt die Mietschuld (Art. 68 OR; BGer 4A_68/2014 E. 4.2).
+- id: payment_returned_by_landlord
+  group: payment
+  label_de: Zahlung von der Vermieterschaft zurückgeschickt
+  data_type: boolean
+  required_if:
+    ref: fact.third_party_payment
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - third_party_payment
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt?"
+  why_needed_de: Erst nach Fristende zurücküberwiesen = angenommen (BGer 4A_68/2014 E. 4.2).
+- id: social_payment_failed
+  group: payment
+  label_de: Zahlung des Sozialdienstes ausgeblieben
+  data_type: boolean
+  required_if:
+    ref: fact.rent_payer
+    op: equals
+    value: sozialdienst
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - rent_payer
+  source_ids:
+  - PRODUKTREGEL
+  question_de: "Ist eine Mietzahlung des Sozialdienstes an die Vermieterschaft ausgeblieben?"
+  why_needed_de: 'Der Sozialdienst ist selbst beteiligt (Interessenkonflikt): interne Klärung und unabhängige
+    Beratung.'
+- id: rent_withheld_for_defects
+  group: counterclaims
+  label_de: Miete wegen Mängeln zurückbehalten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259G
+  - BGE_147_III_218
+  question_de: Hat die Klientin wegen Mängeln bewusst nicht bezahlt?
+  why_needed_de: 'Schutzregel (Art. 259g OR; BGE 147 III 218): Zurückbehalten und Hinterlegung bereits
+    fälliger Mietzinse schützen nicht.'
+- id: counterclaim_present
+  group: counterclaims
+  label_de: Gegenforderung gegen die Vermieterschaft
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_120_1_2
+  - CH_OR_265
+  - OGZH_LF250009
+  question_de: Hat die Klientin Forderungen gegen die Vermieterschaft (z. B. Herabsetzung, Nebenkostenguthaben)?
+  why_needed_de: Verrechnung nur innert Frist, gegenüber der Vermieterschaft, beweisbar (Art. 120 OR;
+    OG ZH LF250009 E. 3.1).
+- id: amount_disputed
+  group: counterclaims
+  label_de: Betrag wird bestritten
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - BGE_140_III_591
+  - BGE_120_II_31
+  question_de: Bestreitet die Klientin den Betrag?
+  why_needed_de: Fälligkeit genügt; wer bestreitet und nicht zahlt, trägt das Risiko (BGE 140 III 591
+    E. 3.2).
+- id: payment_agreement_present
+  group: history
+  label_de: Ratenvereinbarung oder Gespräch vereinbart
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - MGZH_ZMP_2018_1
+  question_de: Gab es eine Ratenvereinbarung, Stundung oder ein vereinbartes Gespräch mit der Vermieterschaft?
+  why_needed_de: Kann eine spätere Kündigung treuwidrig machen (ZMP 2018 Nr. 1).
+- id: termination_already_received
+  group: history
+  label_de: Kündigung bereits eingetroffen
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_2
+  question_de: Ist schon eine Kündigung eingetroffen?
+  why_needed_de: Wechsel zu Issue 3 (andere Regeln).
+- id: deadline_possibly_expired
+  group: history
+  label_de: Frist möglicherweise abgelaufen
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_2
+  question_de: Ist die Zahlungsfrist möglicherweise schon abgelaufen, ohne dass vollständig bezahlt wurde?
+  why_needed_de: Dann ist mit der Kündigung zu rechnen (Issue 3). Das System berechnet kein Fristende;
+    die Angabe stützt sich auf die Einschätzung der Sozialarbeiterin.
+- id: days_since_deadline_end
+  group: history
+  label_de: Tage seit Ablauf der Zahlungsfrist (geschätzt)
+  data_type: integer
+  priority: low
+  source_ids:
+  - BGER_4A_366_2008
+  - LEHRBUCH_MIETE_31
+  question_de: 'Falls die Frist abgelaufen ist: Wie viele Tage ist das ungefähr her?'
+  why_needed_de: 'Teamentscheid 7.11.2026: 14 Tage nach Fristablauf ohne Kündigung gibt es einen Prüfhinweis
+    an die Rechtsperson (möglicher Verzicht; BGer 4A_366/2008 E. 4). Das System rechnet kein Fristende.'
+- id: debt_enforcement_order
+  group: history
+  label_de: Zahlungsbefehl erhalten
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_SCHKG_74_1
+  - CH_SCHKG_69_2_3
+  question_de: Gibt es einen Zahlungsbefehl für die Miete?
+  why_needed_de: Rechtsvorschlag innert 10 Tagen (Art. 74 Abs. 1 SchKG); er verhindert die Kündigung nicht.
+escalation_rules:
+- id: PW_OUT_OF_SCOPE_ROLE
+  description: 'Klientin nicht Hauptmieterin: ausserhalb des Moduls.'
+  when:
+    ref: fact.tenant_role
+    op: in
+    value:
+    - untermieterin
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_NOT_MAIN_TENANT
+  reason_de: Die Klientin ist nicht selbst Hauptmieterin (z. B. Untermiete). Dieses Modul gilt dafür nicht;
+    es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: PW_OUT_OF_SCOPE_OBJECT
+  description: 'Geschäftsraum, Ferienwohnung bis 3 Monate, Notunterkunft: ausserhalb des Moduls.'
+  when:
+    ref: fact.object_type
+    op: in
+    value:
+    - notwohnung_heim
+    - ferienwohnung_bis_3_monate
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Objekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls (z. B. Geschäftsraum,
+    Ferienwohnung, Notunterkunft). Es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson
+    muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: PW_NOT_ZH
+  description: 'Wohnung nicht im Kanton Zürich: Stellenangaben nicht anwendbar.'
+  when:
+    ref: fact.property_in_canton_zh
+    op: equals
+    value: false
+  urgency: MEDIUM
+  reason_code: AUTHORITY_NOT_DETERMINABLE
+  reason_de: Die Wohnung liegt nicht im Kanton Zürich. Die Zürcher Stellenangaben gelten nicht; die zuständigen
+    Stellen müssen separat bestimmt werden.
+  professionals: &id002
+  - tenancy_law_counsel
+- id: PW_FRIST_LAEUFT_NICHT_BEZAHLT
+  description: 'Frist läuft möglicherweise noch, nicht vollständig bezahlt: Zahlung sichern UND rechtliche
+    Prüfung parallel.'
+  when:
+    ref: fact.payment_status
+    op: in
+    value:
+    - nicht_bezahlt
+    - teilweise
+  urgency: HIGH
+  reason_code: PAYMENT_DEADLINE_MAY_BE_RUNNING
+  reason_de: Die Zahlungsfrist kann noch laufen und der Rückstand ist nicht vollständig bezahlt. Zahlung
+    innert Frist verhindert die Kündigung (sonst keine Erstreckung). Sozialarbeiterin (Zahlung sichern)
+    und Rechtsperson (Prüfung) handeln sofort und parallel.
+  professionals: &id001
+  - social_counselling
+  - tenancy_law_counsel
+- id: PW_EMPFANG_ODER_FRIST_UNBEKANNT
+  description: 'Empfangsdatum, Zustellart oder Frist unbekannt: so handeln, als liefe die Frist.'
+  when:
+    any:
+    - ref: fact.warning_receipt_date
+      op: is_unknown
+    - ref: fact.warning_deadline_days
+      op: is_unknown
+    - ref: fact.warning_delivery_method
+      op: is_unknown
+    - ref: fact.warning_pickup_notice_date
+      op: is_unknown
+  urgency: HIGH
+  reason_code: WARNING_RECEIPT_OR_DEADLINE_UNKNOWN
+  reason_de: 'Empfangsdatum, Zustellart oder angesetzte Frist sind unbekannt. Es wird so gehandelt, als
+    liefe die Frist: so früh wie möglich vollständig zahlen; eine Fachperson bestimmt das Datum.'
+  professionals: *id001
+- id: PW_FRIST_UNTER_30
+  description: 'Angesetzte Frist unter 30 Tagen: möglicher Mangel, keine Entwarnung.'
+  when:
+    ref: fact.warning_deadline_days
+    op: less_than
+    value: 30
+  urgency: HIGH
+  reason_code: WARNING_DEADLINE_UNDER_30_DAYS
+  reason_de: 'Die angesetzte Zahlungsfrist beträgt weniger als 30 Tage. Ein möglicher Mangel ist rechtlich
+    umstritten; es gibt keine Entwarnung: trotzdem so schnell wie möglich zahlen. Rechtsperson sofort.'
+  professionals: *id002
+- id: PW_ANDROHUNG_FEHLT_ODER_UNKLAR
+  description: 'Keine oder unklare Kündigungsandrohung: möglicher Mangel, keine Entwarnung.'
+  when:
+    any:
+    - ref: fact.warning_threat_present
+      op: equals
+      value: false
+    - ref: fact.warning_threat_present
+      op: is_unknown
+  urgency: HIGH
+  reason_code: WARNING_THREAT_MISSING_OR_UNCLEAR
+  reason_de: Die Kündigungsandrohung fehlt oder ist unklar. Das kann die spätere Kündigung ungültig machen,
+    ist aber keine Entwarnung. Rechtsperson sofort.
+  professionals: *id002
+- id: PW_BETRAG_UNKLAR
+  description: Betrag unklar oder enthält anderes als Mietzins/Nebenkosten.
+  when:
+    any:
+    - ref: fact.warning_amount_clear
+      op: equals
+      value: false
+    - ref: fact.warning_claim_type
+      op: in
+      value:
+      - enthaelt_anderes
+      - unklar
+  urgency: HIGH
+  reason_code: WARNING_AMOUNT_UNCLEAR
+  reason_de: Der verlangte Betrag ist unklar oder enthält Posten ausser Mietzins und Nebenkosten. Rechtsperson
+    sofort; den unbestrittenen Mietzins trotzdem zahlen.
+  professionals: *id002
+- id: PW_FAMILIENWOHNUNG_NICHT_SEPARAT
+  description: 'Familienwohnung: Mahnung nicht separat an die Partnerperson zugestellt (Art. 266n OR).'
+  when:
+    all:
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.spouse_still_lives_there
+      op: equals
+      value: true
+    - ref: fact.warning_family_separate
+      op: equals
+      value: false
+  urgency: HIGH
+  reason_code: WARNING_FAMILY_HOME_NOT_SEPARATE
+  reason_de: Bei einer Familienwohnung hat die Partnerperson laut Angabe keine separate Mahnung erhalten.
+    Möglicher Mangel; keine Entwarnung. Rechtsperson sofort.
+  professionals: *id002
+- id: PW_MITMIETER_NICHT_ALLE
+  description: Mitmieter haben die Mahnung nicht alle erhalten (BGE 140 III 491).
+  when:
+    ref: fact.warning_cotenants_all_notified
+    op: equals
+    value: false
+  urgency: HIGH
+  reason_code: WARNING_COTENANT_NOT_NOTIFIED
+  reason_de: Nicht alle Mitmieter haben die Mahnung erhalten. Möglicher Mangel; keine Entwarnung. Rechtsperson
+    sofort.
+  professionals: *id002
+- id: PW_MIETE_ZURUECKBEHALTEN
+  description: 'Miete wegen Mängeln zurückbehalten: Schutzregel, Bezug zu Issue 5.'
+  when:
+    ref: fact.rent_withheld_for_defects
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: RENT_WITHHELD_FOR_DEFECTS
+  reason_de: Die Miete wurde wegen Mängeln nicht (voll) bezahlt. Das schützt nicht vor der Kündigung.
+    Rechtsperson sofort; die Mängel werden in Issue 5 behandelt.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_DEFECTS
+- id: PW_GEGENFORDERUNG
+  description: 'Gegenforderung/Verrechnung gewünscht: nur innert Frist und beweisbar.'
+  when:
+    ref: fact.counterclaim_present
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: COUNTERCLAIM_NEEDS_LEGAL_REVIEW
+  reason_de: Es besteht eine Gegenforderung. Eine Verrechnung ist nur innert Frist, gegenüber der Vermieterschaft
+    und beweisbar möglich. Im Zweifel zahlen; Rechtsperson sofort.
+  professionals: *id002
+- id: PW_SOZIALDIENST_ZAHLUNG_AUSGEBLIEBEN
+  description: 'Sozialdienst zahlt direkt, Zahlung ausgeblieben: Interessenkonflikt.'
+  when:
+    all:
+    - ref: fact.rent_payer
+      op: equals
+      value: sozialdienst
+    - ref: fact.social_payment_failed
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: SOCIAL_SERVICE_PAYMENT_FAILED
+  reason_de: 'Der Sozialdienst zahlt die Miete direkt und die Zahlung ist ausgeblieben. Der Sozialdienst
+    ist selbst beteiligt: sofort intern klären und eine unabhängige Rechtsperson beiziehen.'
+  professionals:
+  - independent_legal_body
+  - social_counselling
+- id: PW_DRITTZAHLUNG_STREIT
+  description: Dritte (z. B. Sozialdienst) haben gezahlt; Vermieterschaft schickt Geld zurück.
+  when:
+    all:
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+    - ref: fact.payment_returned_by_landlord
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: THIRD_PARTY_PAYMENT_RETURNED
+  reason_de: Dritte haben gezahlt und die Vermieterschaft hat Geld zurückgeschickt oder die Zahlung bestritten.
+    Datum der Rücküberweisung festhalten; vor Fristende sofort neu zahlen. Sozialarbeiterin und Rechtsperson
+    sofort.
+  professionals: *id001
+- id: PW_FRIST_ABGELAUFEN
+  description: 'Frist möglicherweise abgelaufen, nicht bezahlt: Kündigung zu erwarten (Issue 3).'
+  when:
+    all:
+    - ref: fact.deadline_possibly_expired
+      op: equals
+      value: true
+    - ref: fact.payment_status
+      op: in
+      value:
+      - nicht_bezahlt
+      - teilweise
+  urgency: HIGH
+  reason_code: WARNING_DEADLINE_POSSIBLY_EXPIRED
+  reason_de: Die Frist ist möglicherweise abgelaufen und der Rückstand ist nicht vollständig bezahlt.
+    Eine Kündigung ist zu erwarten; die Anfechtungsfrist würde mit deren Empfang beginnen. Sozialarbeiterin
+    und Rechtsperson sofort.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_PAYMENT_DEFAULT
+- id: PW_KUENDIGUNG_ERHALTEN
+  description: 'Kündigung bereits erhalten: Wechsel zu Issue 3.'
+  when:
+    ref: fact.termination_already_received
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: TERMINATION_ALREADY_RECEIVED
+  reason_de: Es ist schon eine Kündigung eingetroffen. Dafür gelten andere Regeln (Issue 3); sofortige
+    rechtliche und soziale Prüfung.
+  professionals: *id001
+  routes_to_issue: CH_TENANCY_PAYMENT_DEFAULT
+- id: PW_ABSPRACHE
+  description: 'Ratenvereinbarung/Gespräch vereinbart: Treu und Glauben.'
+  when:
+    ref: fact.payment_agreement_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: PAYMENT_AGREEMENT_PRESENT
+  reason_de: Es gab eine Ratenvereinbarung, Stundung oder ein vereinbartes Gespräch. Das kann eine spätere
+    Kündigung treuwidrig machen; schriftlich festhalten, Rechtsperson bald.
+  professionals: *id002
+- id: PW_ZAHLUNGSBEFEHL
+  description: 'Zahlungsbefehl erhalten: Rechtsvorschlag innert 10 Tagen.'
+  when:
+    ref: fact.debt_enforcement_order
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEBT_ENFORCEMENT_ORDER_RECEIVED
+  reason_de: Es liegt ein Zahlungsbefehl vor. Der Rechtsvorschlag ist innert 10 Tagen nach Zustellung
+    nötig; er stoppt nur die Betreibung, nicht die Kündigung. Rechtsperson sofort.
+  professionals: *id002
+- id: PW_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id001
+- id: PW_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht (Autonomie).
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id002
+legal_rules:
+- id: PW_HINT_VOLLE_ZAHLUNG
+  description: Ganze Zahlung innert Frist.
+  kind: HINT
+  when: &id003
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  result_code: HINT_FULL_PAYMENT_IN_TIME
+  result_de: Wird der ganze ausstehende Betrag innerhalb der gesetzten Frist bezahlt, darf deswegen nicht
+    gekündigt werden.
+  legal_source_ids:
+  - CH_OR_257D_1
+  - CH_OR_257D_2
+- id: PW_HINT_30_TAGE
+  description: Mindestfrist Wohnung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_MIN_30_DAYS
+  result_de: Bei Wohnungen muss die Zahlungsfrist mindestens 30 Tage betragen.
+  legal_source_ids:
+  - CH_OR_257D_1
+- id: PW_HINT_FRISTBEGINN
+  description: Fristbeginn relative Empfangstheorie.
+  kind: HINT
+  when: *id003
+  result_code: HINT_DEADLINE_START
+  result_de: Die Frist beginnt, wenn die Mahnung tatsächlich in Empfang genommen wird; wird ein Einschreiben
+    nicht abgeholt, spätestens am letzten Tag der 7-tägigen Abholfrist. Bitte trotzdem so früh wie möglich
+    zahlen.
+  legal_source_ids:
+  - BGE_119_II_147
+- id: PW_HINT_ZAHLWEG
+  description: Einzahlungsschein / Überweisung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_PAYMENT_WAY
+  result_de: Am sichersten ist die Zahlung mit dem Einzahlungsschein, der der Mahnung beiliegt; Quittung
+    aufbewahren. Bei einer Überweisung muss das Geld spätestens am letzten Tag der Frist bei der Vermieterschaft
+    sein; den Auftrag deshalb mehrere Arbeitstage vorher erteilen.
+  legal_source_ids:
+  - BGE_124_III_145
+  - BGE_119_II_232
+- id: PW_HINT_UEBERWEISUNG_PUFFER
+  description: Produktempfehlung 3 Arbeitstage (Teamentscheid).
+  kind: HINT
+  when: *id003
+  result_code: HINT_TRANSFER_BUFFER_3_DAYS
+  result_de: 'Produktempfehlung: Eine Überweisung, auch durch den Sozialdienst, spätestens 3 Arbeitstage
+    vor Fristende auslösen. Das ist ein Puffer für Bankverarbeitung und Wochenende, keine gesetzliche
+    Frist.'
+  legal_source_ids:
+  - PRODUKTREGEL
+  - BGER_4A_366_2008
+- id: PW_HINT_RESTBETRAG
+  description: Auch kleine Restbeträge zählen.
+  kind: HINT
+  when:
+    ref: fact.payment_status
+    op: equals
+    value: teilweise
+  result_code: HINT_SMALL_REST_COUNTS
+  result_de: Auch kleine Restbeträge zählen. Bitte den ganzen Betrag zahlen.
+  legal_source_ids:
+  - BGE_140_III_591
+- id: PW_HINT_BESTRITTEN
+  description: Bestrittener Betrag.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.amount_disputed
+      op: equals
+      value: true
+    - ref: fact.warning_amount_clear
+      op: equals
+      value: false
+  result_code: HINT_DISPUTED_AMOUNT
+  result_de: Wer den Betrag für falsch hält, sollte den nach eigener Kenntnis geschuldeten Betrag fristgerecht
+    zahlen und die Vermieterschaft schriftlich auf den Fehler hinweisen. Nicht zu zahlen ist riskant.
+  legal_source_ids:
+  - BGE_140_III_591
+  - BGER_4A_332_2025
+- id: PW_HINT_FAMILIENWOHNUNG
+  description: Separate Zustellung bei Familienwohnung.
+  kind: HINT
+  when:
+    ref: fact.family_home_with_spouse
+    op: equals
+    value: true
+  result_code: HINT_FAMILY_HOME_SEPARATE
+  result_de: Bei einer Familienwohnung muss auch die Mahnung beiden Ehegatten separat zugestellt werden.
+    Ob das eingehalten wurde, prüft eine Fachperson.
+  legal_source_ids:
+  - CH_OR_266N
+- id: PW_HINT_FOLGE
+  description: Folge der Nichtzahlung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_CONSEQUENCE_NON_PAYMENT
+  result_de: Wird nicht rechtzeitig bezahlt, kann mit mindestens 30 Tagen auf Ende eines Monats gekündigt
+    werden, und eine Erstreckung ist dann ausgeschlossen. Eine zweite Mahnung ist nicht nötig.
+  legal_source_ids:
+  - CH_OR_257D_2
+  - CH_OR_272A_1_A
+  - BGE_140_III_591
+- id: PW_HINT_MAENGEL
+  description: Zurückbehalten/Hinterlegung.
+  kind: HINT
+  when:
+    ref: fact.rent_withheld_for_defects
+    op: equals
+    value: true
+  result_code: HINT_NO_WITHHOLDING
+  result_de: Den Mietzins wegen Mängeln zurückzubehalten oder bereits fällige Mietzinse zu hinterlegen
+    schützt nicht vor der Kündigung. Bitte vorher eine Fachperson fragen.
+  legal_source_ids:
+  - CH_OR_259G
+  - BGE_147_III_218
+- id: PW_HINT_DRITTZAHLUNG
+  description: Dritte können zahlen.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+    - ref: fact.rent_payer
+      op: in
+      value:
+      - sozialdienst
+      - andere
+  result_code: HINT_THIRD_PARTY_PAYMENT
+  result_de: 'Die Miete kann auch der Sozialdienst oder eine andere Person bezahlen; das zählt wie eine
+    Zahlung der Klientin. Wichtig: innert Frist, direkt an die Vermieterschaft und mit Angabe von Mieterin
+    und Monaten.'
+  legal_source_ids:
+  - BGER_4A_68_2014
+- id: PW_HINT_RUECKUEBERWEISUNG
+  description: Rücküberweisung melden.
+  kind: HINT
+  when:
+    ref: fact.payment_returned_by_landlord
+    op: equals
+    value: true
+  result_code: HINT_RETURNED_PAYMENT
+  result_de: Schickt die Vermieterschaft eine Zahlung zurück, bitte sofort melden und das Datum festhalten.
+  legal_source_ids:
+  - BGER_4A_68_2014
+- id: PW_REVIEW_FRIST_ZU_KURZ
+  description: Folgen einer zu kurzen Zahlungsfrist sind umstritten.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.warning_deadline_days
+    op: less_than
+    value: 30
+  result_code: REVIEW_SHORT_DEADLINE
+  result_de: 'Folgen einer zu kurzen Zahlungsfrist sind umstritten (herrschende Lehre: unwirksam/nichtig;
+    Minderheit: Umdeutung; Bundesgericht offen). Keine Entwarnung.'
+  legal_source_ids:
+  - CH_OR_257D_1
+  - LEHRBUCH_MIETE_31
+- id: PW_REVIEW_WARTEZEIT
+  description: 14 Tage nach Fristablauf noch keine Kündigung (Teamentscheid).
+  kind: REVIEW_POINT
+  when:
+    all:
+    - ref: fact.days_since_deadline_end
+      op: greater_than
+      value: 13
+    - ref: fact.termination_already_received
+      op: equals
+      value: false
+  result_code: REVIEW_WAITING_TIME_14_DAYS
+  result_de: 'Prüfhinweis an die Rechtsperson: 14 oder mehr Tage nach Fristablauf ist noch keine Kündigung
+    eingetroffen. Möglicher Verzicht der Vermieterschaft (knapp drei Wochen gelten als Grenze); keine
+    Entwarnung, trotzdem zahlen.'
+  legal_source_ids:
+  - BGER_4A_366_2008
+  - LEHRBUCH_MIETE_31
+- id: PW_REVIEW_NEBENKOSTEN
+  description: Nebenkosten nur bei Vereinbarung.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.warning_claim_type
+    op: equals
+    value: enthaelt_anderes
+  result_code: REVIEW_ANCILLARY_COSTS
+  result_de: 'Prüfhinweis: Nebenkosten sind nur geschuldet, wenn sie besonders vereinbart wurden (Art.
+    257a Abs. 2 OR); Mahngebühren, Schadenersatz und Kaution fallen nicht unter Art. 257d OR.'
+  legal_source_ids:
+  - CH_OR_257A
+  - CH_OR_257
+- id: PW_REVIEW_4A_332
+  description: Übertragbarkeit von 4A_332/2025 (Geschäftsraum) auf Wohnungen.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.warning_amount_clear
+    op: equals
+    value: false
+  result_code: REVIEW_4A_332_TRANSFER
+  result_de: 'Prüfhinweis: BGer 4A_332/2025 betraf einen Geschäftsraum; die Übertragbarkeit auf Wohnungen
+    ist naheliegend (gleicher Art. 257d), im Team festgehalten.'
+  legal_source_ids:
+  - BGER_4A_332_2025
+legal_source_ids:
+- CH_OR_257D_1
+- CH_OR_257D_2
+- BGE_119_II_147
+- BGE_124_III_145
+- BGE_119_II_232
+- PRODUKTREGEL
+- BGER_4A_366_2008
+- BGE_140_III_591
+- BGER_4A_332_2025
+- CH_OR_266N
+- CH_OR_272A_1_A
+- CH_OR_259G
+- BGE_147_III_218
+- BGER_4A_68_2014
+- LEHRBUCH_MIETE_31
+- CH_OR_257A
+- CH_OR_257
+default_professionals:
+- social_counselling
+- tenancy_law_counsel
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Zahlungsaufforderung mit Kündigungsandrohung (Art. 257d Abs. 1 OR) – Kanton Zürich
+  groups:
+  - id: warning
+    title_de: Mahnung (Datum, Betrag, Frist, Androhung)
+    fact_ids:
+    - warning_written
+    - warning_threat_present
+    - warning_amount_clear
+    - warning_claim_type
+    - warning_deadline_days
+  - id: delivery
+    title_de: Zustellung und Empfang
+    fact_ids:
+    - warning_delivery_method
+    - warning_receipt_date
+    - warning_pickup_notice_date
+    - family_home_with_spouse
+    - spouse_still_lives_there
+    - warning_family_separate
+    - co_tenants_exist
+    - warning_cotenants_all_notified
+  - id: payment
+    title_de: Zahlungsstand
+    fact_ids:
+    - payment_status
+    - payment_path
+    - rent_payer
+    - third_party_payment
+    - payment_returned_by_landlord
+    - social_payment_failed
+    - payment_financeable
+    - rent_amount_chf
+  - id: counterclaims
+    title_de: Gegenforderungen, Mängel, Absprachen
+    fact_ids:
+    - rent_withheld_for_defects
+    - counterclaim_present
+    - amount_disputed
+    - payment_agreement_present
+  - id: situation
+    title_de: Lage und Vorprüfung
+    fact_ids:
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+    - termination_already_received
+    - deadline_possibly_expired
+    - days_since_deadline_end
+    - debt_enforcement_order
+    - vulnerability_present
+    - client_requests_expert
+    - consent_briefing
+  review_points:
+  - text_de: 'Fristbeginn: relative Empfangstheorie (tatsächlicher Empfang, spätestens 7. Tag der Abholfrist)
+      – anders als bei Kündigungen (Issue 1).'
+    source_ids:
+    - BGE_119_II_147
+    - BGE_140_III_244
+  - text_de: 'Mahnung: schriftlich, Androhung, klar bezifferter Rückstand (nur Mietzins und Nebenkosten),
+      Frist mindestens 30 Tage.'
+    source_ids:
+    - CH_OR_257D_1
+    - BGER_4A_332_2025
+  - text_de: 'Rechtzeitigkeit der Zahlung: Einzahlungsschein bzw. Eingang bei der Vermieterschaft bis
+      Fristende.'
+    source_ids:
+    - BGE_124_III_145
+    - BGE_119_II_232
+  - text_de: Zahlungen Dritter (Sozialdienst) mit Datum und Zahlungszweck; Rücküberweisungen mit Datum.
+    source_ids:
+    - BGER_4A_68_2014
+  - text_de: Verrechnung nur innert Frist und gegenüber der Vermieterschaft; Hinterlegung bereits fälliger
+      Mietzinse tilgt nicht.
+    source_ids:
+    - CH_OR_120_1_2
+    - OGZH_LF250009
+    - BGE_147_III_218
+  documents_to_request:
+  - Mahnung (alle Seiten)
+  - Briefumschlag bzw. Abholungseinladung oder Sendungsverfolgung
+  - Mietvertrag (Fälligkeit, Zahlungsweg)
+  - Zahlungsbelege der letzten Monate
+  - Allfällige Korrespondenz über Mängel oder Abmachungen
+  authority_ids:
+  - SOZIALDIENST_WOHNGEMEINDE
+  - SCHULDENBERATUNG_ZH
+  - MIETERVERBAND_ZH
+  - RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+  - RECHTSAUSKUNFT_BEZIRKSGERICHTE_ZH

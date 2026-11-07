@@ -1,3 +1,4 @@
+import type { WorkerState } from "@/features/bridge/types";
 import type {
   AIUsageReport,
   BriefingListItem,
@@ -100,6 +101,25 @@ export const api = {
     },
   ) =>
     request<MessageResult>(`/cases/${id}/messages`, json("POST", body)),
+  /** Extract the text of a written case description from a PDF (nothing is stored server-side). */
+  importPdfText: (file: File) =>
+    request<{ text: string; pages: number; truncated: boolean }>("/intake/pdf-text", {
+      method: "POST",
+      headers: { "Content-Type": "application/pdf" },
+      body: file,
+    }),
+  bridge: {
+    get: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge`),
+    start: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge`, json("POST")),
+    pause: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/pause`, json("POST")),
+    resume: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/resume`, json("POST")),
+    end: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/end`, json("POST")),
+    accept: (id: string, body: { corrected_value?: string; corrected_text_de?: string }) =>
+      request<WorkerState>(`/cases/${id}/voice-bridge/answer/accept`, json("POST", body)),
+    reask: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/answer/reask`, json("POST")),
+    skip: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/skip`, json("POST")),
+    retryTranslation: (id: string) => request<WorkerState>(`/cases/${id}/voice-bridge/retry-translation`, json("POST")),
+  },
   analyze: (id: string) => request<CaseDetail>(`/cases/${id}/analyze`, json("POST")),
 
   listFacts: (id: string) => request<FactView[]>(`/cases/${id}/facts`),

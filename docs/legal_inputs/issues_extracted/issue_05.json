@@ -1,0 +1,1483 @@
+{
+ "file": "issue_05.docx",
+ "title": "Issue 5 – Mängel an der Mietsache (Art. 259a ff. OR)",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 5 – Mängel an der Mietsache (Art. 259a ff. OR)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 5 betrifft Klientinnen, deren Wohnung einen Mangel hat (z. B. Schimmel, Heizungsausfall, Wasserschaden, Ungeziefer, Lärm, defekte Geräte). Anders als bei den Issues 1–4 droht meist kein sofortiger Wohnungsverlust. Das System kann hier also mehr selbst erklären. Es gibt aber zwei Fallen, die zu einer Kündigung führen können:"
+    },
+    {
+     "type": "bullet",
+     "text": "Eigenmächtige Kürzung der Miete. Wer die Miete wegen eines Mangels selbst kürzt oder verrechnet, gerät in Zahlungsverzug und riskiert eine Kündigung nach Art. 257d OR (BGer 4A_140/2014 E. 5.2, 5.4; Lehrbuch N 2957c, S. 920). Das ist der Hauptgrund, warum Issue 5 eng mit den Issues 2 und 3 verknüpft ist."
+    },
+    {
+     "type": "bullet",
+     "text": "Fehlerhafte Hinterlegung. Die Hinterlegung der Miete hat strenge Formvorschriften. Fehlt eine formelle Voraussetzung, gilt die Miete als nicht bezahlt, auch bei gutem Glauben (BGer 4C.264/2003 E. 3.3). Wird die 30-Tage-Frist für die Schlichtungsbehörde verpasst, fällt das Geld an die Vermieterschaft (Art. 259h Abs. 1 OR)."
+    },
+    {
+     "type": "p",
+     "text": "Prüfschritte für das System (Lehrbuch N 2940–2945, S. 911–915):"
+    },
+    {
+     "type": "bullet",
+     "text": "Liegt ein Mangel vor? Vergleich Ist-Zustand mit dem vertraglich vorausgesetzten Zustand (N 2941, S. 911)."
+    },
+    {
+     "type": "bullet",
+     "text": "Wie schwer ist er? Leicht, mittelschwer oder schwer (N 2942, S. 912 f.). Die Schwere bestimmt, welche Rechte bestehen. Die Einordnung macht nicht das System, sondern eine Fachperson."
+    },
+    {
+     "type": "bullet",
+     "text": "Bestand er schon bei Übergabe (Art. 258 OR) oder entstand er während der Mietdauer (Art. 259a ff. OR)?"
+    },
+    {
+     "type": "bullet",
+     "text": "Muss die Klientin ihn selbst beheben (kleiner Unterhalt, Art. 259 OR) oder hat sie ihn selbst verursacht? Dann bestehen keine Mängelrechte (Art. 259a Abs. 1 OR)."
+    },
+    {
+     "type": "bullet",
+     "text": "Weiß die Vermieterschaft davon? Ohne Kenntnis keine Beseitigung und keine Herabsetzung (N 2947, S. 915; N 2954, S. 918)."
+    },
+    {
+     "type": "p",
+     "text": "Abgrenzung zu anderen Issues:"
+    },
+    {
+     "type": "bullet",
+     "text": "Issue 2 und 3: Hat die Klientin wegen des Mangels schon weniger bezahlt und kommt eine Zahlungsaufforderung, wechselt das System sofort zu Issue 2."
+    },
+    {
+     "type": "bullet",
+     "text": "Issue 1: Eine Kündigung, weil die Klientin Mängel geltend gemacht hat, kann als Rachekündigung anfechtbar sein (Art. 271a Abs. 1 lit. a OR). Während eines Schlichtungsverfahrens und bis drei Jahre danach gilt ein besonderer Schutz (lit. d und e)."
+    },
+    {
+     "type": "bullet",
+     "text": "Issue 7: Wird die Miete nach Renovationsarbeiten erhöht, gilt Issue 7. Bauarbeiten selbst können ein Mangel sein (Art. 257h Abs. 3, 260 Abs. 2 OR)."
+    },
+    {
+     "type": "bullet",
+     "text": "Ausserhalb des Moduls: Gesundheitsgefährdung (z. B. starker Schimmel bei Kleinkindern, Gas, Strom), Unbewohnbarkeit und Notunterkunft gehen über die Global-Regeln (G2, G11)."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: Gesetz aus OR_admin.pdf (Stand 1.10.2026) und ZPO.pdf (Stand 1.7.2026), mit PDF-Seite. Lehrbuch «§ 31 Miete», N 2939m–2967 (Buchseiten 911–925). Die acht Leitentscheide sind am Volltext geprüft; die ergänzende Praxis ist nur über das Lehrbuch zitiert. § 66 GOG ZH im Wortlaut aus eurer Datei."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut wörtlich aus OR_admin.pdf (SR 220, Stand 1.10.2026) und ZPO.pdf (SR 272, Stand 1.7.2026). Die Datenbank liest den Text dort; hier steht der Kern, damit ihr die Zuordnung prüfen könnt."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut (Kern)",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 256 Abs. 1 und 2 OR",
+       "«Der Vermieter ist verpflichtet, die Sache zum vereinbarten Zeitpunkt in einem zum vorausgesetzten Gebrauch tauglichen Zustand zu übergeben und in demselben zu erhalten.» Abweichungen zum Nachteil des Mieters in Mietverträgen über Wohnräume sind nichtig.",
+       "67",
+       "Grundpflicht; Vertragsklauseln wie «Mieter übernimmt alle Reparaturen» sind unwirksam"
+      ],
+      [
+       "Art. 257g OR",
+       "Der Mieter muss Mängel, die er nicht selber zu beseitigen hat, dem Vermieter melden; sonst haftet er für den Schaden.",
+       "69",
+       "Pflicht zur Meldung; Grundlage für den Rat «sofort schriftlich melden»"
+      ],
+      [
+       "Art. 257h OR",
+       "Der Mieter muss Arbeiten zur Beseitigung von Mängeln dulden; der Vermieter muss sie rechtzeitig anzeigen; Herabsetzung und Schadenersatz bleiben vorbehalten (Abs. 3).",
+       "69",
+       "Zutritt für Handwerker; Bauarbeiten als Mangel"
+      ],
+      [
+       "Art. 258 OR",
+       "Schwere Mängel bei Übergabe: Vorgehen nach Art. 107–109 OR; übernimmt der Mieter die Sache trotzdem, gelten die Rechte nach Art. 259a–259i (Abs. 2); bei leichteren Mängeln ebenso (Abs. 3).",
+       "69–70",
+       "Mängel bei Einzug"
+      ],
+      [
+       "Art. 259 OR",
+       "«Der Mieter muss Mängel, die durch kleine, für den gewöhnlichen Unterhalt erforderliche Reinigungen oder Ausbesserungen behoben werden können, nach Ortsgebrauch auf eigene Kosten beseitigen.»",
+       "70",
+       "Ausschluss: kleiner Unterhalt"
+      ],
+      [
+       "Art. 259a OR",
+       "Bei Mängeln, die der Mieter weder zu verantworten noch selbst zu beseitigen hat, kann er verlangen: Beseitigung, Herabsetzung, Schadenersatz, Übernahme des Rechtsstreits; bei Wohnungen zudem Hinterlegung (Abs. 2).",
+       "70",
+       "Katalog der Rechte"
+      ],
+      [
+       "Art. 259b OR",
+       "Beseitigt der Vermieter einen bekannten Mangel nicht innert angemessener Frist: fristlose Kündigung bei schwerem Mangel (lit. a) oder Ersatzvornahme bei mittlerem Mangel (lit. b).",
+       "70",
+       "Fristlose Kündigung, Ersatzvornahme: immer Rechtsperson"
+      ],
+      [
+       "Art. 259c OR",
+       "Kein Anspruch auf Beseitigung, wenn der Vermieter innert angemessener Frist vollwertigen Ersatz leistet.",
+       "71",
+       "Ersatzwohnung"
+      ],
+      [
+       "Art. 259d OR",
+       "Herabsetzung des Mietzinses «vom Zeitpunkt, in dem er vom Mangel erfahren hat, bis zur Behebung des Mangels».",
+       "71",
+       "Herabsetzung; Beginn erst ab Kenntnis der Vermieterschaft"
+      ],
+      [
+       "Art. 259e OR",
+       "Schadenersatz, wenn der Vermieter nicht beweist, dass ihn kein Verschulden trifft.",
+       "71",
+       "Schäden an Möbeln, Hotelkosten"
+      ],
+      [
+       "Art. 259f OR",
+       "Übernahme des Rechtsstreits mit einem Dritten.",
+       "71",
+       "Selten; immer Rechtsperson"
+      ],
+      [
+       "Art. 259g OR",
+       "Schriftliche angemessene Frist zur Beseitigung, Androhung der Hinterlegung künftiger Mietzinse, schriftliche Ankündigung; mit der Hinterlegung gelten die Mietzinse als bezahlt (Abs. 2).",
+       "71",
+       "Hinterlegung: Formvorschriften"
+      ],
+      [
+       "Art. 259h OR",
+       "Hinterlegte Mietzinse fallen dem Vermieter zu, wenn der Mieter nicht innert 30 Tagen seit Fälligkeit des ersten hinterlegten Mietzinses die Schlichtungsbehörde anruft (Abs. 1).",
+       "71",
+       "Harte Frist"
+      ],
+      [
+       "Art. 259i OR",
+       "Das Verfahren richtet sich nach der ZPO.",
+       "72",
+       "Verweis"
+      ],
+      [
+       "Art. 260 OR",
+       "Erneuerungen und Änderungen durch den Vermieter nur, wenn zumutbar und nicht gekündigt; Herabsetzung und Schadenersatz bleiben vorbehalten (Abs. 2).",
+       "72",
+       "Renovation während der Miete"
+      ],
+      [
+       "Art. 257d OR",
+       "Zahlungsverzug: Frist mindestens 30 Tage mit Kündigungsandrohung.",
+       "68",
+       "Risiko bei eigenmächtiger Kürzung (→ Issue 2)"
+      ],
+      [
+       "Art. 271a Abs. 1 lit. a, d, e OR",
+       "Kündigung anfechtbar, wenn sie erfolgt, weil der Mieter nach Treu und Glauben Ansprüche geltend macht, während eines Schlichtungs- oder Gerichtsverfahrens oder innert drei Jahren danach.",
+       "81",
+       "Schutz vor Rachekündigung (→ Issue 1)"
+      ],
+      [
+       "Art. 113 Abs. 2 lit. c ZPO",
+       "Keine Gerichtskosten im Schlichtungsverfahren bei Miete von Wohnräumen.",
+       "28–29",
+       "Kosteninfo"
+      ],
+      [
+       "Art. 200 Abs. 1 ZPO",
+       "Paritätische Schlichtungsbehörde bei Miete von Wohnräumen.",
+       "53",
+       "Zuständige Stelle"
+      ],
+      [
+       "Art. 210 Abs. 1 lit. b, 211 ZPO",
+       "Entscheidvorschlag u. a. bei Hinterlegung; gilt als angenommen, wenn ihn keine Partei innert 20 Tagen ablehnt.",
+       "57",
+       "Frist nach dem Schlichtungsverfahren"
+      ],
+      [
+       "Art. 243 Abs. 1 und 2 lit. c ZPO",
+       "Vereinfachtes Verfahren bis CHF 30 000 sowie unabhängig vom Streitwert bei Hinterlegung.",
+       "65–66",
+       "Verfahren vor Mietgericht"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Kantonal: § 66 GOG ZH (LS 211.1, Stand 1.7.2020, PDF-Seite 14): «1 Die Schlichtungsbehörde ist zuständig für Streitigkeiten aus Miete und Pacht von Wohn- und Geschäftsräumen. 2 Sie behandelt Gesuche um Hinterlegung von Miet- und Pachtzinsen gestützt auf Art. 259 g und 288 OR. Hinterlegungsstelle ist die Kasse des Bezirksgerichts.» Dazu § 63 GOG ZH: Jeder Bezirk hat eine paritätische Schlichtungsbehörde in Miet- und Pachtsachen (S. 13). Bitte prüfen, ob eure Fassung (Nachtrag 109) noch aktuell ist."
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide",
+   "items": [
+    {
+     "type": "p",
+     "text": "Alle Entscheide der Tabelle sind jetzt am Volltext geprüft (Erwägung und Seite in der amtlichen Sammlung; bei nicht publizierten BGer-Urteilen nur Erwägung). Eine Korrektur und eine Präzisierung gegenüber dem Lehrbuch: (1) BGer 4C.264/2006 betrifft einen Bankauftrag im Tessin und hat mit Mietrecht nichts zu tun; die Lehrbuch-Fussnoten 329 f. meinen offenbar 4C.264/2003 E. 3.3. (2) BGE 135 III 345 E. 3.2 formuliert die 5 % als Schwelle für die Herabsetzung (Ausnahme 2 % bei dauernder Beeinträchtigung); 4C.97/2003 E. 3.3 verbindet sie mit dem mittelschweren Mangel. In der Sache deckt sich das mit dem Lehrbuch."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "Entscheid",
+       "Kernaussage mit Fundstelle",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 135 III 345 (Wohnung, VD)",
+       "Mangel = Vergleich des tatsächlichen mit dem vereinbarten Zustand; Verschulden der Vermieterschaft und Behebbarkeit sind nicht nötig; für eine Herabsetzung muss der Gebrauch um mindestens 5 % eingeschränkt sein, bei dauernder Beeinträchtigung genügen 2 % (E. 3.2, S. 347). Nicht jede Komforteinbusse ist ein Mangel: vorhersehbare Veränderungen der Umgebung (Neubau nebenan, Nachbarn ziehen ein, mehr Verkehr) sind ohne besondere Zusicherung kein Mangel (E. 3.3, S. 347–349).",
+       "Mangelbegriff; Grenzfall «Umgebung verändert sich»"
+      ],
+      [
+       "2",
+       "BGer 4C.97/2003 (Wohnung, GE)",
+       "Leichte Mängel trägt die Mieterin (Art. 259 OR); Rechte nach Art. 259a OR erst ab mittelschwerem Mangel; die Rechte stehen nebeneinander, ohne Rangfolge (E. 3.2). Mittelschwer ist ein Mangel bei rund 5 % Einschränkung oder wenn ein leichter Mangel lange besteht, obwohl die informierte Vermieterschaft nichts tut (E. 3.3). Abgenutzter Teppich im Eingang während 5½ Jahren: 2 % (E. 3.4, 3.6). Beispiele aus der Praxis 5–15 % (E. 3.5).",
+       "Dauer und Untätigkeit dokumentieren; Prozentzahlen nur für die Fachperson"
+      ],
+      [
+       "3",
+       "BGE 142 III 557",
+       "Herabsetzung ab Kenntnis der Vermieterschaft bis zur Behebung oder zum Vertragsende; die Erklärung an die Vermieterschaft muss Mass und Zeitraum nennen und sich auf konkrete Mängel beziehen (E. 8.3.1, S. 561 f.). Rückwirkend kann nur herabgesetzt werden, wenn die Mieterin während des Mangels gezeigt hat, dass sie sich stört (Herabsetzung oder Behebung verlangt); sonst darf die Vermieterschaft auf die vorbehaltlos bezahlten Mieten vertrauen (E. 8.3.4, S. 566 f.). Keine feste Frist für die Erklärung, auch nach Mietende möglich (E. 8.3.5–8.4, S. 567 f.).",
+       "Kernregel «sofort schriftlich melden und Behebung verlangen»"
+      ],
+      [
+       "4",
+       "BGE 130 III 504 (Geschäftsräume, Klimaanlage)",
+       "Wusste die Vermieterschaft schon vor der Herabsetzungserklärung vom Mangel, kann die Mieterin auch zu viel bezahlte Miete zurückverlangen (E. 3, S. 506 f.). Relative Methode; bei mittelschweren Mängeln Schätzung nach Billigkeit, das Bundesgericht greift nur bei Ermessensmissbrauch ein (E. 4.1, S. 507 f.). Rückforderung ist vertraglich (E. 6, S. 510–513); Verjährung 5 Jahre (Art. 128 Ziff. 1 OR), gerechnet ab der Herabsetzungserklärung zurück (E. 8.2, S. 514).",
+       "Keine Prozentangabe durch das System; Rückforderung höchstens 5 Jahre zurück"
+      ],
+      [
+       "5",
+       "BGer 4A_140/2014 und 4A_250/2014 (Geschäftsräume, GE)",
+       "Die Mieterin darf Miete wegen Mängeln nicht zurückbehalten; Art. 82 OR gilt nicht, Art. 259g OR (Hinterlegung) geht vor. Verrechnung mit einer bestrittenen Gegenforderung erfolgt auf eigenes Risiko; die Forderung muss sofort beweisbar sein. Nach Erhalt der Zahlungsaufforderung kann die Mieterin die Kündigung noch durch Zahlung oder Hinterlegung abwenden (E. 5.2). Eigenmächtige Kürzung kommt höchstens bei nicht behebbaren Mängeln in Frage; bei behebbaren Mängeln Behebung verlangen und hinterlegen (E. 5.4). Folge im Fall: Kündigungen gültig, keine Erstreckung (E. 5.5).",
+       "Verbot «Miete kürzen oder zurückbehalten»; Verknüpfung mit Issue 2"
+      ],
+      [
+       "6",
+       "BGE 125 III 120 (Wohnung, AG)",
+       "Wurden die Formvorschriften eingehalten und ging die Mieterin gutgläubig von einem Mangel aus, gelten die hinterlegten Mieten als bezahlt; eine Kündigung wegen Zahlungsverzug ist dann ungültig, auch wenn sich später kein Mangel ergibt. Nur bei bösem Glauben trägt die Mieterin das Risiko (E. 2b, S. 121 f.; E. 3, S. 122 f.).",
+       "Guter Glaube schützt nur bei korrekter Form"
+      ],
+      [
+       "7",
+       "BGE 124 III 201",
+       "Die Hinterlegung ist Druckmittel zur Behebung; hinterlegt werden kann der ganze Mietzins inkl. periodisch geschuldeter Nebenkosten, unabhängig von der Schwere des Mangels (E. 2d, S. 203 f.). Die Kündigung wegen Zahlungsverzug war deshalb ungültig (E. 2e, S. 204).",
+       "Hinterlegung nur zur Behebung; Bruttomiete"
+      ],
+      [
+       "8",
+       "BGer 4C.264/2003 (Wohnung, VD)",
+       "Formelle Voraussetzungen der Hinterlegung: schriftliche Frist zur Behebung und schriftliche Androhung; die Ankündigung ist nur Ordnungsvorschrift. Auf Frist und Androhung darf nur verzichtet werden, wenn klar ist, dass sie nutzlos wären; die Beweislast trägt die Mieterin (E. 3.1, 3.2.1). Fünf Monate für eine Parkettreparatur galten als angemessen (E. 3.2.2). Fehlt die Form, hilft der gute Glaube nicht: Die Mieterin ist in Verzug, die Kündigung nach Art. 257d OR gültig, eine Erstreckung ausgeschlossen (E. 3.3–3.4).",
+       "Formfehler = Zahlungsverzug (→ Issue 2); Hinterlegung immer über Rechtsperson"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Ergänzende Praxis (nur Lehrbuch):"
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_11/2013 E. 3.1: Schwerer Mangel, wenn der Gebrauch objektiv nicht mehr zumutbar ist (N 2942, Fn. 224, S. 912)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_476/2015 E. 4.4.2; 4C.164/1999 E. 2d: Die Vermieterschaft muss ab Kenntnis von sich aus innert angemessener Frist beheben; je schwerer der Mangel, desto kürzer die Frist (N 2948, Fn. 246 f., S. 915)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_565/2009 E. 4.2–4.3: Eine für die Mieterin erkennbar zu kurze Frist macht die Hinterlegung ungültig (N 2961, Fn. 313 f., S. 922)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_368/2007 E. 2.4: Bereits fällige Mietzinse können nicht hinterlegt werden (N 2962, Fn. 324, S. 923)."
+    },
+    {
+     "type": "bullet",
+     "text": "BGer 4A_739/2011 E. 2.3: Keine Hinterlegung, um nur eine Herabsetzung (z. B. wegen Renovation) durchzusetzen (N 2960, Fn. 307, S. 922)."
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die Vorprüfung (Mieterin, Wohnung, Kanton Zürich) kommt aus den gemeinsamen Fakten. Für Issue 5 sind vor allem Beweise und der Zahlungsstatus wichtig; beides kann die Sozialarbeiterin gut erheben."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Art des Mangels",
+       "Was genau ist kaputt oder stört? Seit wann?",
+       "ja",
+       "Mangelbegriff (Art. 256, 259a OR)"
+      ],
+      [
+       "Auswirkung",
+       "Was kann die Klientin deswegen nicht oder nur eingeschränkt nutzen (Raum, Gerät, Heizung, Wasser)?",
+       "ja",
+       "Schwere (Lehrbuch N 2942); Grundlage für die Fachperson, nicht für das System"
+      ],
+      [
+       "Gesundheit und Sicherheit",
+       "Gibt es eine Gefahr für Gesundheit oder Sicherheit (Schimmel bei Kleinkindern, Gas, Strom, Einsturz, kein Wasser oder keine Heizung im Winter)?",
+       "ja",
+       "Eskalation SOFORT; evtl. Unbewohnbarkeit"
+      ],
+      [
+       "Zeitpunkt",
+       "Bestand der Mangel schon beim Einzug? Gibt es ein Einzugsprotokoll?",
+       "ja",
+       "Art. 258 vs. 259a OR"
+      ],
+      [
+       "Ursache",
+       "Könnte die Klientin oder jemand aus ihrem Haushalt den Mangel verursacht haben?",
+       "ja",
+       "Ausschluss (Art. 259a Abs. 1 OR)"
+      ],
+      [
+       "Kleiner Unterhalt",
+       "Liesse sich der Mangel mit einer kleinen Reparatur beheben (Glühbirne, Duschschlauch, verstopfter Abfluss)?",
+       "ja",
+       "Ausschluss (Art. 259 OR)"
+      ],
+      [
+       "Kenntnis der Vermieterschaft",
+       "Weiss die Vermieterschaft oder Verwaltung davon? Wie, wann, schriftlich? Kopie hochladen.",
+       "ja",
+       "Beginn Herabsetzung (Art. 259d OR); Beseitigungspflicht"
+      ],
+      [
+       "Reaktion",
+       "Hat die Vermieterschaft reagiert, etwas versprochen oder Handwerker geschickt?",
+       "ja",
+       "Angemessene Frist (Art. 259b OR)"
+      ],
+      [
+       "Belege",
+       "Gibt es Fotos (mit Datum), Briefe, E-Mails, Zeugen, Arztzeugnisse?",
+       "nein",
+       "Beweis"
+      ],
+      [
+       "Zahlungsstatus",
+       "Bezahlt die Klientin die volle Miete? Hat sie gekürzt, verrechnet oder zurückbehalten?",
+       "ja, blockierend",
+       "Risiko Art. 257d OR; Wechsel zu Issue 2"
+      ],
+      [
+       "Zahlungsaufforderung",
+       "Gibt es schon ein Schreiben mit Frist und Kündigungsandrohung?",
+       "ja",
+       "Wechsel zu Issue 2, SOFORT"
+      ],
+      [
+       "Bereits hinterlegt",
+       "Hat die Klientin schon Miete hinterlegt? Wann wurde der erste hinterlegte Mietzins fällig?",
+       "ja",
+       "30-Tage-Frist (Art. 259h OR)"
+      ],
+      [
+       "Fristansetzung",
+       "Hat die Klientin schriftlich eine Frist zur Behebung gesetzt und die Hinterlegung angedroht?",
+       "nein",
+       "Voraussetzungen Art. 259g OR"
+      ],
+      [
+       "Schaden",
+       "Ist etwas beschädigt worden (Möbel, Kleider) oder gab es Zusatzkosten (Hotel, Reinigung)?",
+       "nein",
+       "Schadenersatz (Art. 259e OR)"
+      ],
+      [
+       "Kündigung oder Streit",
+       "Hat die Vermieterschaft gekündigt oder gedroht, seit die Mängel gemeldet wurden? Läuft ein Schlichtungsverfahren?",
+       "ja",
+       "Rachekündigung (Art. 271a OR) → Issue 1"
+      ],
+      [
+       "Ersatzwohnung",
+       "Hat die Vermieterschaft eine andere Wohnung angeboten?",
+       "nein",
+       "Art. 259c OR"
+      ],
+      [
+       "Bauarbeiten",
+       "Gibt es Bau- oder Renovationsarbeiten im Haus oder in der Nachbarschaft?",
+       "nein",
+       "Mangel durch Dritte; Art. 257h, 260 OR"
+      ],
+      [
+       "Wunsch der Klientin",
+       "Was will die Klientin: Reparatur, weniger Miete, Schadenersatz oder ausziehen?",
+       "ja",
+       "Wählt den Rechtsbehelf; Auszug → fristlose Kündigung nur mit Rechtsperson"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Klientin hat die Miete selbst gekürzt oder verrechnet",
+       "Zahlungsverzug möglich; Kündigung nach Art. 257d OR droht. Kein Recht, Miete zurückzubehalten; Verrechnung mit bestrittener Forderung auf eigenes Risiko; eigenmächtige Kürzung höchstens bei nicht behebbaren Mängeln, bei behebbaren nur Behebung verlangen und hinterlegen (BGer 4A_140/2014 E. 5.2, 5.4). Achtung: Das Lehrbuch N 2956b, Fn. 285 (S. 919) gibt diesen Punkt umgekehrt wieder",
+       "Rechtsperson BALD; bei Zahlungsaufforderung SOFORT und Wechsel zu Issue 2"
+      ],
+      [
+       "Hinterlegung ohne korrekte Form",
+       "Ohne Aufforderung, schriftliche Frist und Androhung gilt die Miete als nicht bezahlt; guter Glaube hilft dann nicht; Kündigung gültig, Erstreckung ausgeschlossen (BGer 4C.264/2003 E. 3.3–3.4; Lehrbuch N 2963, S. 923 f.)",
+       "Rechtsperson SOFORT; Klientin nicht selbst hinterlegen lassen"
+      ],
+      [
+       "Hinterlegung läuft",
+       "30 Tage ab Fälligkeit des ersten hinterlegten Mietzinses zur Schlichtungsbehörde, sonst fällt das Geld an die Vermieterschaft (Art. 259h Abs. 1 OR)",
+       "Rechtsperson SOFORT; kein berechnetes Fristende"
+      ],
+      [
+       "Bereits fällige Miete",
+       "Kann nicht mehr hinterlegt werden, auch wenn sie während der Frist fällig wurde (Lehrbuch N 2962, S. 923)",
+       "Volle Miete weiter bezahlen, bis eine Fachperson prüft"
+      ],
+      [
+       "Gesundheitsgefahr oder Unbewohnbarkeit",
+       "Schwerer Mangel; evtl. fristlose Kündigung (Art. 259b lit. a OR); dazu sozialer Notfall",
+       "Rechtsperson und Sozialarbeiterin parallel, SOFORT; G2 prüfen"
+      ],
+      [
+       "Klientin will wegen des Mangels sofort ausziehen",
+       "Fristlose Kündigung nur bei schwerem Mangel und nach unbenützter angemessener Frist; sonst unwirksam (Lehrbuch N 2949a, S. 916)",
+       "Rechtsperson; nie «Sie können fristlos kündigen»"
+      ],
+      [
+       "Klientin will selbst reparieren lassen",
+       "Ersatzvornahme nur bei leichtem oder mittlerem Mangel nach Fristablauf; bei schwerem Mangel nur mit richterlicher Ermächtigung (Lehrbuch N 2950, S. 916 f.)",
+       "Rechtsperson vor Auftrag an Handwerker"
+      ],
+      [
+       "Mangel bei Einzug",
+       "Bei schwerem Mangel Rücktritt nur, wenn die Wohnung nicht übernommen wurde (Art. 258 Abs. 1 OR); sonst Rechte nach Art. 259a ff. OR (Abs. 2 und 3)",
+       "Nach Einzugsprotokoll fragen"
+      ],
+      [
+       "Kleiner Unterhalt",
+       "Muss die Mieterin selbst tragen (Art. 259 OR); Abgrenzung im Einzelfall",
+       "Information erlaubt; im Zweifel Rechtsperson"
+      ],
+      [
+       "Mangel selbst verursacht",
+       "Keine Mängelrechte (Art. 259a Abs. 1 OR); evtl. Haftung der Mieterin",
+       "Rechtsperson; keine Schuldzuweisung durch das System"
+      ],
+      [
+       "Vermieterschaft weiss nichts",
+       "Keine Herabsetzung für die Zeit davor (Art. 259d OR); Pflicht zur Meldung (Art. 257g OR)",
+       "Sofort schriftlich melden (Muster Obergericht ZH)"
+      ],
+      [
+       "Lärm oder Bauarbeiten in der Nachbarschaft",
+       "Kann ein Mangel sein, auch ohne Verschulden der Vermieterschaft (Lehrbuch N 2953, S. 917); Hinterlegung nicht, wenn nur Herabsetzung verlangt wird (BGer 4A_739/2011 laut Lehrbuch)",
+       "Rechtsperson NORMAL"
+      ],
+      [
+       "Kündigung nach Mängelmeldung",
+       "Evtl. anfechtbar als Rachekündigung (Art. 271a Abs. 1 lit. a OR); 30-Tage-Frist für die Anfechtung",
+       "Wechsel zu Issue 1, SOFORT"
+      ],
+      [
+       "Mitbewohnende oder Kinder geschädigt",
+       "Schadenersatz nach Art. 259e OR steht grundsätzlich nur der Vertragspartei zu; Schutz Dritter offen (Lehrbuch N 2957b, S. 920)",
+       "Rechtsperson"
+      ],
+      [
+       "Ersatzwohnung angeboten",
+       "Kein Anspruch auf Beseitigung bei vollwertigem Ersatz (Art. 259c OR)",
+       "Rechtsperson; nicht vorschnell ablehnen"
+      ],
+      [
+       "Untermiete, Zimmer in WG",
+       "Mängelrechte gegenüber der Hauptmieterin, nicht gegenüber der Eigentümerschaft",
+       "Vorprüfung; Rechtsperson"
+      ],
+      [
+       "Umgebung verändert sich (Neubau nebenan, neue Nachbarn, mehr Verkehr)",
+       "Ohne besondere Zusicherung kein Mangel, weil vorhersehbar (BGE 135 III 345 E. 3.3, S. 347–349). Abgrenzung: Baulärm während der Bauphase kann ein Mangel sein (Lehrbuch N 2953, S. 917).",
+       "Keine Erwartung wecken; Rechtsperson NORMAL"
+      ],
+      [
+       "Klientin will Schaden oder Herabsetzung mit der Miete verrechnen",
+       "Nur auf eigenes Risiko; die Gegenforderung muss sofort beweisbar sein, sonst Zahlungsverzug (BGer 4A_140/2014 E. 5.1–5.3)",
+       "Rechtsperson BALD; bis dahin volle Miete"
+      ],
+      [
+       "Mangel nur ästhetisch (Flecken, abgenutzter Teppich)",
+       "Kann ein Mangel sein, v. a. wenn er lange besteht und die informierte Vermieterschaft nichts tut (BGer 4C.97/2003 E. 3.3–3.4)",
+       "Dauer und Meldungen dokumentieren"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "3a) Gesundheit, Schutzbedarf und Wohnform",
+   "items": [
+    {
+     "type": "p",
+     "text": "Die bisherige Regel «Gesundheitsgefahr oder Unbewohnbarkeit → RECHT + SOZIAL, SOFORT» sagt nicht, woran das System die Gefahr erkennt. Dieser Abschnitt schliesst die Lücke. Grundsatz: Das System erkennt Schutzbedarf und leitet weiter. Es stellt keine Diagnose, keine Ursache («der Schimmel hat die Krankheit verursacht») und keine rechtliche Schwere des Mangels fest."
+    },
+    {
+     "type": "p",
+     "text": "Vier Perspektiven, sauber getrennt"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Perspektive",
+       "Frage",
+       "Wer beurteilt",
+       "Rechtsgrundlage bzw. Quelle"
+      ],
+      [
+       "Mietrecht",
+       "Liegt ein Mangel vor, wie schwer ist er, welche Rechte bestehen?",
+       "Rechtsperson",
+       "Art. 256, 258–259i OR; BGE 135 III 345; Lehrbuch N 2942 (schwer = Gebrauch objektiv unzumutbar, vitale Interessen)"
+      ],
+      [
+       "Gesundheit",
+       "Gibt es Beschwerden oder eine besondere Gefährdung?",
+       "Ärztin oder Arzt",
+       "BAG «Schimmel in Wohnräumen» (2021), S. 2, 5–6; BAG «Vorsicht Schimmel», S. 22; Kanton Zürich, ZUP Nr. 113 (März 2026), S. 33: «Besonders gefährdet sind Kinder, ältere Personen sowie Menschen mit vorbestehenden Erkrankungen oder geschwächtem Immunsystem. In diesen Fällen muss eine fachliche Beurteilung erstellt sowie zeitnah eine sachgerechte Sanierung durchgeführt werden.»"
+      ],
+      [
+       "Soziale Lage",
+       "Können die Räume gemieden werden, gibt es eine sichere Zwischenlösung?",
+       "Sozialarbeiterin",
+       "Art. 12 BV (Hilfe in Notlagen; richtet sich gegen den Staat, nicht gegen die Vermieterschaft)"
+      ],
+      [
+       "Wohnform",
+       "Privater Mietvertrag, Gemeindewohnung, subventionierte Wohnung oder zugewiesene Unterkunft?",
+       "Rechtsperson",
+       "Art. 253b Abs. 3 OR (S. 66); ausserhalb des Mietrechts: Zuweisungsgrundlage der Gemeinde"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Wichtig zur BAG-Einteilung: Die BAG-Kategorien (Kat. 0 bis 100 cm² an einer Stelle; darüber Kat. 1 und 2) sind eine gesundheitliche Einschätzung. Sie sind keine rechtliche Einordnung als leichter, mittelschwerer oder schwerer Mangel. Das System nutzt sie nur für die Dringlichkeit, nicht für Aussagen zu Rechten."
+    },
+    {
+     "type": "p",
+     "text": "Neue Fakten (Fragen an die Sozialarbeiterin; mögliche Werte JA, NEIN, UNBEKANNT; «nicht erhoben» löst eine Rückfrage aus)"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Feld",
+       "Frage an die Sozialarbeiterin",
+       "Werte",
+       "Funktion"
+      ],
+      [
+       "affected_rooms",
+       "Welche Räume sind betroffen? Werden sie zum Schlafen genutzt?",
+       "Liste; Schlafraum JA/NEIN/UNBEKANNT",
+       "BAG: besondere Vorsicht bei Schlaf- und Kinderzimmern (2021, S. 6)"
+      ],
+      [
+       "reported_extent",
+       "Wo und seit wann gibt es sichtbaren Schimmel oder Schimmelgeruch? Ungefähre Grösse? Foto hochladen.",
+       "KLEIN (eine Stelle bis ca. 10 × 10 cm), GROESSER (mehrere Stellen oder über ca. 70 × 70 cm), NUR_GERUCH, UNBEKANNT",
+       "Grobe Zuordnung zu den BAG-Kategorien; Dauer für die Herabsetzung (BGer 4C.97/2003 E. 3.3)"
+      ],
+      [
+       "health_symptoms_reported",
+       "Berichtet jemand über gesundheitliche Beschwerden?",
+       "JA/NEIN/UNBEKANNT",
+       "Ärztliche Abklärung empfehlen (BAG 2021, S. 6)"
+      ],
+      [
+       "medical_risk_reported",
+       "Ist eine besondere gesundheitliche Gefährdung bekannt oder ärztlich mitgeteilt worden? (Nur Ja/Nein, keine Diagnose erfassen)",
+       "JA/NEIN/UNBEKANNT",
+       "BAG: gefährdete Personen (z. B. schweres allergisches Asthma, Cystische Fibrose, geschwächtes Immunsystem) sollen rasch ärztlich abklären (2021, S. 2, 6)"
+      ],
+      [
+       "children_exposed",
+       "Leben Kinder in der Wohnung, und nutzen sie die betroffenen Räume?",
+       "JA/NEIN/UNBEKANNT",
+       "Schutzbedarf"
+      ],
+      [
+       "can_avoid_affected_rooms",
+       "Können die betroffenen Räume vorübergehend gemieden werden?",
+       "JA/NEIN/UNBEKANNT",
+       "BAG: stark befallene Räume geschlossen halten und nicht benutzen (2021, S. 6)"
+      ],
+      [
+       "safe_alternative_available",
+       "Gibt es bei Bedarf eine sichere vorübergehende Unterkunft?",
+       "JA/NEIN/UNBEKANNT",
+       "Zwischenlösung; Sozialdienst"
+      ],
+      [
+       "support_needed",
+       "Wird Unterstützung benötigt, um eine Abklärung oder Zwischenunterkunft zu organisieren?",
+       "JA/NEIN/UNBEKANNT",
+       "Route SOZIAL"
+      ],
+      [
+       "housing_arrangement",
+       "Privater Mietvertrag, Genossenschaft, Gemeindewohnung, subventionierte Wohnung oder zugewiesene Unterkunft?",
+       "Auswahl, UNBEKANNT",
+       "Vorprüfung; Art. 253b Abs. 3 OR; evtl. kein Mietvertrag"
+      ],
+      [
+       "municipality",
+       "In welcher Gemeinde liegt die Unterkunft?",
+       "Text",
+       "Zuständige Stellen (Sozialdienst, Gesundheits- oder Baubehörde)"
+      ],
+      [
+       "consent_briefing",
+       "Ist die Klientin ausdrücklich einverstanden, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe) an eine Rechtsperson ausserhalb des Sozialdienstes gehen?",
+       "JA/NEIN/UNBEKANNT",
+       "§ 17 Abs. 1 lit. b IDG bzw. Art. 6 Abs. 7 lit. a DSG; bei NEIN nur anonymisiertes Briefing oder Weitergabe nur bei Gefahr für Leib und Leben (§ 17 Abs. 1 lit. c IDG)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Regel für «unbekannt»: UNBEKANNT ist nie NEIN. Bei den Gesundheits- und Schutzfeldern wird UNBEKANNT einmal nachgefragt; bleibt es offen, behandelt das System den Fall so, als wäre die Antwort ungünstig (Eskalation BALD). Das folgt dem Grundsatz «im Zweifel höher eskalieren»."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln Gesundheit"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "ID",
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Ausgabe"
+      ],
+      [
+       "H1",
+       "health_symptoms_reported = JA oder medical_risk_reported = JA",
+       "RECHT + SOZIAL",
+       "BALD",
+       "Empfehlung ärztliche Abklärung; keine Ursachenaussage"
+      ],
+      [
+       "H2",
+       "reported_extent = GROESSER oder NUR_GERUCH, und (Schlafraum betroffen oder children_exposed = JA oder medical_risk_reported = JA)",
+       "RECHT + SOZIAL",
+       "SOFORT",
+       "BAG-Hinweis: Räume geschlossen halten und nicht nutzen, soweit möglich"
+      ],
+      [
+       "H3",
+       "Bedingungen von H1 oder H2 und can_avoid_affected_rooms = NEIN oder UNBEKANNT",
+       "SOZIAL + RECHT",
+       "SOFORT",
+       "Sozialarbeiterin prüft sichere Zwischenlösung; Global-Regel G2 prüfen"
+      ],
+      [
+       "H4",
+       "H3 und safe_alternative_available = NEIN oder UNBEKANNT",
+       "SOZIAL",
+       "SOFORT",
+       "Notunterkunft über Sozialdienst der Gemeinde (municipality); Stadt Zürich: sofort Notschlafstelle (ohne Anmeldung); Notunterkunft für Familien nur über die Sozialen Dienste, Ablauf 4–6 Wochen, in dringenden Fällen direkt (siehe Abschnitt 5)"
+      ],
+      [
+       "H5",
+       "housing_arrangement = GEMEINDEWOHNUNG oder ZUGEWIESENE_UNTERKUNFT",
+       "RECHT",
+       "BALD",
+       "Vertrags- oder Zuweisungsgrundlage prüfen; ist der Sozialdienst selbst Vermieter oder Zuweisungsstelle: G4 (unabhängige Beratung)"
+      ],
+      [
+       "H6",
+       "housing_arrangement = SUBVENTIONIERT",
+       "Hinweis an Issue 7",
+       "–",
+       "Anfechtung missbräuchlicher Mietzinse evtl. ausgeschlossen (Art. 253b Abs. 3 OR)"
+      ],
+      [
+       "H7",
+       "Gesundheitsfelder nach einer Rückfrage weiterhin UNBEKANNT",
+       "RECHT + SOZIAL",
+       "BALD",
+       "Im Zweifel höher eskalieren"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Wann eine medizinische Fachperson? Das System verweist nie direkt an eine Ärztin, sondern gibt der Sozialarbeiterin den Hinweis, eine ärztliche Abklärung anzuregen, sobald H1 oder H2 ausgelöst ist (BAG 2021, S. 6; «Vorsicht Schimmel», S. 22). Ein Arztzeugnis ist zugleich ein Beleg für die Rechtsperson (BGer 4A_673/2014 E. 3.2 zu Issue 4: massgebend sind aktuelle Verhältnisse)."
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (zusätzlich zu Abschnitt 6)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn jemand gesundheitliche Beschwerden hat, sollte das ärztlich abgeklärt werden. Besonders gefährdete Personen sollten das rasch tun.» (BAG 2021, S. 6)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Räume mit starkem Schimmelbefall nach Möglichkeit geschlossen halten und nicht benutzen, besonders Schlaf- und Kinderzimmer. Häufig lüften. Entfeuchtungsgeräte erst nach der Schimmelbeseitigung.» (BAG 2021, S. 6)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Abklärung und Sanierung sind Sache der Vermieterschaft. Eigene Gutachten oder Luftmessungen sind in der Regel nicht nötig.» (BAG 2021, S. 10; «Vorsicht Schimmel», S. 22)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "«Der Schimmel hat die Krankheit verursacht» oder jede andere Diagnose oder Ursachenaussage."
+    },
+    {
+     "type": "bullet",
+     "text": "«Das ist harmlos» oder «das ist gesundheitsgefährlich» als Einschätzung des Einzelfalls."
+    },
+    {
+     "type": "bullet",
+     "text": "«Wegen der Gesundheitsgefahr ist das ein schwerer Mangel, Sie können fristlos kündigen.» (Einordnung durch die Rechtsperson; Art. 259b lit. a OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie haben ein Recht auf eine Ersatzwohnung.» (Art. 41 Abs. 4 BV; kein automatischer Anspruch)"
+    },
+    {
+     "type": "p",
+     "text": "Grund- und Menschenrechte: wie sie in die Datenbank eingehen"
+    },
+    {
+     "type": "p",
+     "text": "Sie begründen den Prüf- und Schutzbedarf (deshalb die Regeln H1–H4), aber keine Aussagen über Ansprüche an die Klientin:"
+    },
+    {
+     "type": "bullet",
+     "text": "Art. 41 Abs. 1 lit. e BV: Bund und Kantone setzen sich dafür ein, dass «Wohnungssuchende für sich und ihre Familie eine angemessene Wohnung zu tragbaren Bedingungen finden können». Nach Abs. 4 können «aus den Sozialzielen […] keine unmittelbaren Ansprüche auf staatliche Leistungen abgeleitet werden» (BV, SR 101, Stand 3.3.2024, PDF-S. 9 f.)."
+    },
+    {
+     "type": "bullet",
+     "text": "Art. 12 BV: «Wer in Not gerät und nicht in der Lage ist, für sich zu sorgen, hat Anspruch auf Hilfe und Betreuung und auf die Mittel, die für ein menschenwürdiges Dasein unerlässlich sind.» (PDF-S. 4). Der Anspruch umfasst die in einer Notlage unerlässlichen Mittel «in Form von Nahrung, Kleidung, Obdach und medizinischer Grundversorgung» als Überbrückungshilfe; er ist subsidiär und gilt unabhängig vom Aufenthaltsstatus (BGE 131 I 166 E. 3.1, S. 172). Die Unterkunft muss «jedenfalls Raum für die notwendigsten Lebensbedürfnisse» bieten; Art und Umfang bestimmt das zuständige Gemeinwesen, mit Prüfung des Einzelfalls (E. 8.2, S. 181 f.). Der Anspruch richtet sich gegen das Gemeinwesen, nicht gegen die Vermieterschaft. Deshalb Route SOZIAL bei H4."
+    },
+    {
+     "type": "bullet",
+     "text": "UNO-Pakt I (Sozialpakt): Seine Bestimmungen sind programmatisch, richten sich an den Gesetzgeber und geben grundsätzlich keine einklagbaren Rechte (BGE 120 Ia 1 E. 5c, S. 11 f.; bestätigt in BGE 136 I 290 E. 2.3.1, S. 293; Einzelausnahmen sind möglich, wenn eine Norm hinreichend bestimmt ist, ebd. und E. 2.3.3, S. 294). Ob das Recht auf angemessene Unterkunft nach Art. 11 UNO-Pakt I im konkreten Zusammenhang überhaupt angerufen werden kann, hat das Bundesgericht ausdrücklich offengelassen (BGE 131 I 166 E. 8.3, S. 183 f.)."
+    },
+    {
+     "type": "bullet",
+     "text": "Allgemeine Bemerkung Nr. 4 des UNO-Ausschusses (CESCR General Comment No. 4 vom 13.12.1991, E/1992/23): Ziff. 8 lit. d (S. 3): «Adequate housing must be habitable, in terms of providing the inhabitants with adequate space and protecting them from cold, damp, heat, rain, wind or other threats to health, structural hazards, and disease vectors.» Ziff. 8 lit. e (S. 3): Kinder, ältere Menschen, Menschen mit Behinderungen und mit anhaltenden gesundheitlichen Problemen sollen beim Wohnen vorrangig berücksichtigt werden. Ziff. 8 lit. a (S. 3): Schutz vor Zwangsräumung für alle Wohnformen, ausdrücklich auch Miete (öffentlich und privat), Genossenschaft und Notunterkunft. Ziff. 17 lit. e (S. 6): Der Ausschuss hält innerstaatliche Rechtsbehelfe gegen Vermieter wegen gesundheitsschädlicher Wohnverhältnisse für angezeigt. Rechtsnatur: Auslegungshilfe des Überwachungsorgans, für Schweizer Gerichte nicht verbindlich; in der Schweiz erfüllt das Mietrecht diese Funktion (Art. 256, 259a ff. OR)."
+    },
+    {
+     "type": "p",
+     "text": "Folge für die Datenbank: Diese Normen begründen, warum das System bei Gesundheitsgefahr und fehlender Unterkunft schnell an die Sozialarbeiterin eskaliert. Sie erscheinen nicht als Aussage über Ansprüche der Klientin."
+    },
+    {
+     "type": "p",
+     "text": "Datenschutz (DSG, SR 235.1, Stand 7.7.2025)"
+    },
+    {
+     "type": "bullet",
+     "text": "Besonders schützenswert sind nicht nur «Daten über die Gesundheit» (Art. 5 lit. c Ziff. 2 DSG), sondern auch «Daten über Massnahmen der sozialen Hilfe» (Ziff. 6; PDF-S. 3). Schon die Angabe, dass die Klientin Sozialhilfe bezieht oder der Sozialdienst die Miete zahlt, fällt also darunter."
+    },
+    {
+     "type": "bullet",
+     "text": "Grundsätze: verhältnismässig, zweckgebunden, vernichten oder anonymisieren, sobald nicht mehr nötig (Art. 6 Abs. 2–4 DSG; PDF-S. 3); Voreinstellungen so, dass die Bearbeitung auf das für den Zweck nötige Mindestmass beschränkt ist (Art. 7 Abs. 3 DSG). Ist eine Einwilligung erforderlich, muss sie bei besonders schützenswerten Daten ausdrücklich erfolgen (Art. 6 Abs. 7 lit. a DSG)."
+    },
+    {
+     "type": "bullet",
+     "text": "Umsetzung: Das System erfasst nur, was für die Weiterleitung nötig ist: Beschwerden ja oder nein, besondere Gefährdung ja oder nein, keine Diagnosen, keine Medikamente. Das Arztzeugnis geht direkt an die Rechtsperson und wird nicht von der KI ausgewertet."
+    },
+    {
+     "type": "bullet",
+     "text": "Welches Datenschutzrecht gilt? Das DSG gilt für private Personen und Bundesorgane (Art. 2 Abs. 1 DSG; PDF-S. 1). Für öffentliche Organe im Kanton Zürich gilt das IDG (LS 170.4; eure Fassung: Stand 1.7.2020, Nachtrag 109; bitte prüfen, ob es eine neuere gibt). Achtung: Öffentliche Organe sind nach § 3 Abs. 1 lit. b und c IDG nicht nur Behörden der Gemeinden, sondern auch «Organisationen und Personen des öffentlichen und privaten Rechts, soweit sie mit der Erfüllung öffentlicher Aufgaben betraut sind» (PDF-S. 2). Setzt der Sozialdienst eure App für seine Sozialarbeit ein, gilt deshalb voraussichtlich das IDG, auch wenn ein privates Start-up sie entwickelt; das Start-up ist dann Auftragsbearbeiter, der Sozialdienst bleibt verantwortlich (§ 6 IDG, PDF-S. 3). Meine frühere Aussage «privates Start-up = DSG» war zu einfach."
+    },
+    {
+     "type": "bullet",
+     "text": "Was das IDG zusätzlich verlangt: Auch nach IDG sind Angaben über Gesundheit und über Massnahmen der sozialen Hilfe «besondere Personendaten» (§ 3 Abs. 4 lit. a Ziff. 2 und 3; ebenso Profiling, lit. c; PDF-S. 2 f.). Sie dürfen nur bearbeitet werden, wenn ein formelles Gesetz es hinreichend bestimmt regelt (§ 8 Abs. 2, PDF-S. 4); Zweckbindung (§ 9); Datenschutz-Folgenabschätzung und bei besonderen Risiken Vorabkontrolle durch die oder den Datenschutzbeauftragten (§ 10); möglichst wenig Personendaten, löschen oder pseudonymisieren, sobald möglich (§ 11). Weitergabe besonderer Personendaten, z. B. das Briefing an eine externe Rechtsperson, nur mit formellgesetzlicher Grundlage, ausdrücklicher Einwilligung der Klientin im Einzelfall oder zur Abwendung einer Gefahr für Leib und Leben (§ 17 Abs. 1, PDF-S. 6). Folge für die App: Vor jedem Briefing an eine Rechtsperson ausserhalb des Sozialdienstes holt die Sozialarbeiterin die ausdrückliche Einwilligung der Klientin ein; das System fragt das als eigenes Faktum ab (consent_briefing)."
+    },
+    {
+     "type": "p",
+     "text": "Zusätzliche Testfälle"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "ID",
+       "Fall",
+       "Erwartete Route"
+      ],
+      [
+       "T5-11",
+       "Schimmel an mehreren Stellen im Kinderzimmer, Kind hustet, Familie hat keinen anderen Schlafraum",
+       "SOZIAL + RECHT, SOFORT (H1, H2, H3)"
+      ],
+      [
+       "T5-12",
+       "Kleine Stelle im Bad, keine Beschwerden, Räume meidbar",
+       "KI_WEITER (Meldung, Belege)"
+      ],
+      [
+       "T5-13",
+       "Grosser Befall im Schlafzimmer, medical_risk_reported = UNBEKANNT nach Rückfrage",
+       "RECHT + SOZIAL, SOFORT (H2) bzw. mindestens BALD (H7)"
+      ],
+      [
+       "T5-14",
+       "Starker Befall, Raum nicht meidbar, keine Zwischenunterkunft",
+       "SOZIAL, SOFORT (H4); RECHT parallel"
+      ],
+      [
+       "T5-15",
+       "Schimmel in einer vom Sozialdienst zugewiesenen Notwohnung",
+       "RECHT, BALD (H5) + G4"
+      ],
+      [
+       "T5-16",
+       "Sozialarbeiterin schreibt «Klientin hat wegen Schimmel Asthma bekommen»",
+       "H1; Ausgabe ohne Ursachenaussage; Diagnose wird nicht gespeichert"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Im Normalfall gibt es bei Mängeln keine gesetzliche Frist, die sofort abläuft. Die harte Frist entsteht erst mit der Hinterlegung (30 Tage) oder wenn eine Zahlungsaufforderung kommt (Issue 2)."
+    },
+    {
+     "type": "p",
+     "text": "Stufenweises Vorgehen (Lehrbuch N 2947–2964, S. 915–924; Obergericht ZH):"
+    },
+    {
+     "type": "bullet",
+     "text": "Mangel schriftlich melden, am besten eingeschrieben, und Beseitigung sowie Herabsetzung verlangen. Eine Meldung ist zwar nicht in jedem Fall Voraussetzung, aber für den Beweis und die Herabsetzung entscheidend (N 2947, S. 915; N 2954, S. 918). Muster: «Mängelmeldung» des Obergerichts Zürich."
+    },
+    {
+     "type": "bullet",
+     "text": "Volle Miete weiter bezahlen. Nicht selbst kürzen."
+    },
+    {
+     "type": "bullet",
+     "text": "Belege sammeln: Fotos mit Datum, Briefe, Zeugen, evtl. Arztzeugnisse."
+    },
+    {
+     "type": "bullet",
+     "text": "Angemessene Frist abwarten. Die Vermieterschaft muss ab Kenntnis von sich aus beheben; je schwerer der Mangel, desto kürzer die Frist (N 2948, S. 915 f.)."
+    },
+    {
+     "type": "bullet",
+     "text": "Wird nicht behoben, wählt die Rechtsperson den Weg:"
+    },
+    {
+     "type": "bullet",
+     "text": "Klage auf Beseitigung, Herabsetzung oder Schadenersatz bei der Schlichtungsbehörde, oder"
+    },
+    {
+     "type": "bullet",
+     "text": "Hinterlegung (schriftliche Frist, Androhung, Ankündigung; Art. 259g OR), oder"
+    },
+    {
+     "type": "bullet",
+     "text": "Ersatzvornahme oder fristlose Kündigung (Art. 259b OR)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Quelle",
+       "Folge bei Versäumnis"
+      ],
+      [
+       "Behebung durch die Vermieterschaft",
+       "angemessen, je nach Schwere",
+       "Kenntnis des Mangels",
+       "Art. 259b OR; N 2948",
+       "Rechte nach Art. 259b OR"
+      ],
+      [
+       "Frist der Mieterin vor Hinterlegung",
+       "angemessen, schriftlich",
+       "Zugang der Fristansetzung",
+       "Art. 259g Abs. 1 OR; N 2961",
+       "Erkennbar zu kurz: Hinterlegung ungültig"
+      ],
+      [
+       "Anrufung der Schlichtungsbehörde nach Hinterlegung",
+       "30 Tage",
+       "Fälligkeit des ersten hinterlegten Mietzinses",
+       "Art. 259h Abs. 1 OR; N 2964",
+       "Geld fällt an die Vermieterschaft; Neustart nötig"
+      ],
+      [
+       "Entscheidvorschlag ablehnen",
+       "20 Tage",
+       "schriftliche Eröffnung",
+       "Art. 211 Abs. 1 ZPO",
+       "Vorschlag wird rechtskräftig"
+      ],
+      [
+       "Klage nach Klagebewilligung",
+       "3 Monate; 30 Tage, wenn Hinterlegung oder Kündigungsschutz betroffen",
+       "Zustellung",
+       "Art. 209 Abs. 3 und 4 ZPO (S. 56 f.)",
+       "Klagebewilligung verfällt. Bei Hinterlegung: nach Ablehnung eines Entscheidvorschlags gilt dieser als anerkannt, wenn nicht rechtzeitig geklagt wird (Art. 211 Abs. 3 ZPO)"
+      ],
+      [
+       "Rückforderung zu viel bezahlter Miete",
+       "5 Jahre",
+       "zurückgerechnet ab der Herabsetzungserklärung",
+       "Art. 128 Ziff. 1 OR; BGE 130 III 504 E. 8.2, S. 514",
+       "Verjährung"
+      ],
+      [
+       "Herabsetzung verlangen",
+       "keine feste Frist; Rüge während der Mangel besteht",
+       "–",
+       "BGE 142 III 557 E. 8.3.4–8.3.5, S. 566 f.",
+       "Ohne Rüge keine Herabsetzung"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Kosten: Das Schlichtungsverfahren ist bei Wohnungsmiete kostenlos (Art. 113 Abs. 2 lit. c ZPO). Vor Mietgericht gilt das vereinfachte Verfahren (Art. 243 ZPO); Kosten sind möglich, deshalb immer Rechtsperson."
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Zuständig ist die paritätische Schlichtungsbehörde in Miet- und Pachtsachen des Bezirks, in dem die Wohnung liegt (Art. 200 Abs. 1 ZPO)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Kosten",
+       "Quelle"
+      ],
+      [
+       "Schlichtungsbehörde des Bezirks",
+       "Klage auf Beseitigung, Herabsetzung, Schadenersatz; Hinterlegungsgesuch; kostenlose Rechtsauskunft",
+       "keine Gerichtskosten (Art. 113 Abs. 2 lit. c ZPO)",
+       "Obergericht ZH, Seiten «Schlichtungsbehörden» und «Rechtsauskunft»"
+      ],
+      [
+       "Kasse des Bezirksgerichts",
+       "Einzahlung der hinterlegten Mietzinse nach Depositionsanweisung der Schlichtungsbehörde",
+       "–",
+       "Obergericht ZH, Seite «Hinterlegung»; § 66 Abs. 2 GOG ZH (Wortlaut oben)"
+      ],
+      [
+       "Mietgericht des Bezirks",
+       "Klage nach Klagebewilligung oder Ablehnung des Entscheidvorschlags",
+       "Kosten möglich",
+       "Obergericht ZH, Seite «Hinterlegung»"
+      ],
+      [
+       "Mieterinnen- und Mieterverband Zürich",
+       "Beratung, Musterbriefe, Begleitung",
+       "Mitgliedschaft",
+       "Kontakt noch zu ergänzen"
+      ],
+      [
+       "Unentgeltliche Rechtsberatung",
+       "Beratung für Klientinnen mit wenig Geld",
+       "gratis",
+       "aus Issues 1–4 übernehmen"
+      ],
+      [
+       "AWEL, Abteilung Luft, Klima und Strahlung, Sektion Emissionskontrolle (Baudirektion Kanton Zürich), 043 257 41 64",
+       "Allgemeine Auskunft zu Schimmel, Gesundheitsrisiken, Vorgehen und Zuständigkeiten; keine Durchsetzung gegenüber der Vermieterschaft. Für die Rechtsberatung verweist der Kanton auf Mieterverband (bzw. HEV für Vermieter)",
+       "–",
+       "Kanton Zürich, Umweltpraxis (ZUP) Nr. 113, März 2026, S. 33 f. Eine kommunale Behörde, die bei Schimmel in Mietwohnungen eingreift, nennt der Artikel nicht; für die Stadt Zürich weiterhin offen"
+      ],
+      [
+       "Notunterkunft für Familien, Stadt Zürich (Soziale Einrichtungen und Betriebe)",
+       "Obdachlose Familien mit Wohnsitz in der Stadt Zürich, höchstens 6 Monate. Keine Selbstanmeldung: Zuweisung über die Sozialen Dienste (Telefon 044 412 65 54) bzw. das Sozialzentrum im Quartier, in dringenden Fällen direkt; ausserhalb der Bürozeiten bis 19 Uhr über sip züri oder Stadtpolizei. Prozessdauer (Anmeldung, Abklärungstermin, Zuweisung) 4–6 Wochen (am Original bestätigt, 7.11.2026)",
+       "Kostengutsprache nötig",
+       "Stadt Zürich, Seite «Notunterkunft für Familien»; Heilsarmee Sozialberatung Zürich, Übersicht «Wohnen bei drohender Obdachlosigkeit und Notunterkünfte», Stand 30.6.2026, S. 4"
+      ],
+      [
+       "Notschlafstelle Rosengartenstrasse 30, 8037 Zürich (Stadt Zürich), 044 415 77 14",
+       "Sofortige Übernachtung ohne Anmeldung, ab 18 Jahren, Wohnsitz Stadt Zürich (sonst Entscheid des Teams), keine Tiere; regulär eine Nacht, ausnahmsweise bis vier Monate; für Familien mit Kindern nicht geeignet",
+       "kostenlos",
+       "Heilsarmee-Übersicht, Stand 30.6.2026, S. 3"
+      ],
+      [
+       "Sekretariat Wohnen und Obdach, Strassburgstrasse 5, 8004 Zürich, 044 412 65 54",
+       "Anmeldung für alle städtischen Wohnangebote (Übergangswohnen, Wohnintegration); Unterlagen gemäss Checkliste der Stadt mitbringen",
+       "Kostengutsprache nötig; Selbstzahlende im Einzelfall",
+       "Heilsarmee-Übersicht, Stand 30.6.2026, S. 1"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Formulare des Obergerichts Zürich (gerichte-zh.ch, Bereich Miete):"
+    },
+    {
+     "type": "bullet",
+     "text": "Muster «Mängelmeldung»: gerichte-zh.ch/de/themen/miete/formulare/maengelmeldung"
+    },
+    {
+     "type": "bullet",
+     "text": "Formular «Mietzinshinterlegung»: gerichte-zh.ch/de/themen/miete/formulare/mietzinses-hinterlegungsgesuch (verlangt Daten von Fristansetzung, Androhung und Hinterlegungsanzeige sowie Belege)"
+    },
+    {
+     "type": "bullet",
+     "text": "Formular «Klage bei der Schlichtungsbehörde»: gerichte-zh.ch/de/themen/miete/formulare/klage"
+    },
+    {
+     "type": "bullet",
+     "text": "Berechnungshilfe Mietzinsminderung mit Beispielen aus Zürcher Urteilen (Schimmel, Lärm, Lift): Seite «Mietzinsminderung»"
+    },
+    {
+     "type": "p",
+     "text": "Das Obergericht bezeichnet Hinterlegungen ausdrücklich als heikel und empfiehlt vorher die Rechtsauskunft der Schlichtungsbehörde oder anwaltlichen Rat. Das deckt sich mit unserer Regel, die Hinterlegung immer an eine Rechtsperson zu geben."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 5 ist das einzige der bisherigen Issues, bei dem das System in einfachen Fällen ohne Rechtsperson weiterhelfen darf: Mangel melden, Belege sammeln, volle Miete weiter bezahlen. Sobald es um Geld (Kürzung, Hinterlegung, Schadenersatz), Auszug oder ein Verfahren geht, eskaliert es."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Grund"
+      ],
+      [
+       "Zahlungsaufforderung mit Kündigungsandrohung vorhanden",
+       "RECHT (Wechsel zu Issue 2)",
+       "SOFORT",
+       "Wohnungsverlust droht"
+      ],
+      [
+       "Klientin hat Miete gekürzt, verrechnet oder zurückbehalten",
+       "RECHT",
+       "BALD",
+       "Zahlungsverzug möglich"
+      ],
+      [
+       "Hinterlegung läuft oder ist erfolgt",
+       "RECHT",
+       "SOFORT",
+       "30-Tage-Frist (Art. 259h OR)"
+      ],
+      [
+       "Klientin will hinterlegen",
+       "RECHT",
+       "BALD",
+       "Formvorschriften; Obergericht ZH rät zu Fachberatung"
+      ],
+      [
+       "Gefahr für Gesundheit oder Sicherheit, Wohnung unbewohnbar",
+       "RECHT + SOZIAL",
+       "SOFORT",
+       "Erkennung und Abstufung nach den Regeln H1–H7 in Abschnitt 3a; Notunterkunft prüfen (G2)"
+      ],
+      [
+       "Klientin will wegen des Mangels ausziehen oder fristlos kündigen",
+       "RECHT",
+       "BALD",
+       "Unwirksame Kündigung = Mietzins weiter geschuldet"
+      ],
+      [
+       "Kündigung oder Drohung nach Mängelmeldung",
+       "RECHT (Wechsel zu Issue 1)",
+       "SOFORT",
+       "Anfechtungsfrist 30 Tage"
+      ],
+      [
+       "Schaden an Sachen oder Zusatzkosten",
+       "RECHT",
+       "NORMAL",
+       "Schadenersatz, Verschulden"
+      ],
+      [
+       "Klientin will selbst reparieren lassen",
+       "RECHT",
+       "NORMAL",
+       "Ersatzvornahme nur unter Voraussetzungen"
+      ],
+      [
+       "Brief oder Entscheid der Schlichtungsbehörde oder des Gerichts",
+       "RECHT",
+       "SOFORT",
+       "Global G1"
+      ],
+      [
+       "Ursache unklar oder Klientin könnte verantwortlich sein",
+       "RECHT",
+       "NORMAL",
+       "Keine Schuldzuweisung durch das System"
+      ],
+      [
+       "Mangel gemeldet, keine Kürzung, keine Gefahr, Vermieterschaft hat noch Zeit",
+       "KI_WEITER",
+       "NORMAL",
+       "Information und Musterbrief genügen; Wiedervorlage vorschlagen"
+      ],
+      [
+       "Vermieterschaft reagiert nach der Produktschwelle nicht",
+       "RECHT",
+       "NORMAL",
+       "Weg wählen (Klage oder Hinterlegung)"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Produktschwelle (keine gesetzliche Grösse): Vorschlag 30 Tage ohne Reaktion nach schriftlicher Meldung, bei schweren Mängeln sofort. Das Gesetz kennt nur die «angemessene Frist» (Art. 259b OR)."
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Vermieterschaft muss die Wohnung in einem gebrauchstauglichen Zustand erhalten.» (Art. 256 Abs. 1 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Melden Sie den Mangel schriftlich, am besten eingeschrieben, und verlangen Sie die Behebung. Eine Herabsetzung der Miete ist erst ab dem Zeitpunkt möglich, in dem die Vermieterschaft vom Mangel weiss.» (Art. 257g, 259d OR; Lehrbuch N 2954)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bezahlen Sie die volle Miete weiter, bis eine Fachperson den Fall geprüft hat. Wer die Miete selbst kürzt, zurückbehält oder verrechnet, riskiert eine Kündigung.» (Art. 257d OR; BGer 4A_140/2014 E. 5.2, 5.4)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sammeln Sie Belege: Fotos mit Datum, Briefe, E-Mails, Namen von Zeugen.» (Produktregel; Beweis)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Kleine Reparaturen und Reinigungen, etwa eine Glühbirne oder ein verstopfter Abfluss, muss die Mieterin selbst bezahlen.» (Art. 259 OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Handwerkern für die Behebung müssen Sie Zutritt gewähren; die Arbeiten müssen rechtzeitig angekündigt werden.» (Art. 257h OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Das Verfahren vor der Schlichtungsbehörde kostet keine Gerichtskosten. Dort gibt es auch eine kostenlose Rechtsauskunft.» (Art. 113 Abs. 2 lit. c ZPO; Obergericht ZH)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wer wegen einer Mängelmeldung gekündigt wird, kann die Kündigung möglicherweise anfechten. Bringen Sie eine solche Kündigung sofort einer Fachperson.» (Art. 271a Abs. 1 lit. a OR)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie dürfen die Miete um X % kürzen» oder jede andere Prozentzahl. (BGE 130 III 504 E. 4.1, S. 507 f.: Bemessung im Einzelfall nach Ermessen)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Zahlen Sie die Miete einfach nicht, bis repariert ist.» (Art. 257d OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie können die Miete hinterlegen» ohne Verweis an eine Rechtsperson und ohne die Formvorschriften. (Art. 259g OR)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Das ist ein schwerer (oder leichter) Mangel.» Die Einordnung macht eine Fachperson."
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie können fristlos kündigen und ausziehen.» (Art. 259b lit. a OR; Lehrbuch N 2949a)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Lassen Sie es reparieren und schicken Sie die Rechnung der Vermieterschaft.» (Art. 259b lit. b OR; Lehrbuch N 2950)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Vermieterschaft muss bis zum [Datum] reparieren.» Kein berechnetes Fristende."
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie sind selbst schuld» oder «das haben Sie verursacht»."
+    },
+    {
+     "type": "p",
+     "text": "Briefing an die Rechtsperson"
+    },
+    {
+     "type": "bullet",
+     "text": "Anliegen, Dringlichkeit und ausgelöste Regel"
+    },
+    {
+     "type": "bullet",
+     "text": "Mangel: Art, seit wann, Auswirkung, Gefahr, bei Einzug vorhanden?"
+    },
+    {
+     "type": "bullet",
+     "text": "Meldung: wann, wie, an wen; Reaktion der Vermieterschaft"
+    },
+    {
+     "type": "bullet",
+     "text": "Zahlungsstatus: volle Miete, Kürzung, Verrechnung, Hinterlegung (mit Fälligkeit des ersten hinterlegten Mietzinses)"
+    },
+    {
+     "type": "bullet",
+     "text": "Schreiben der Vermieterschaft oder Behörden (Upload)"
+    },
+    {
+     "type": "bullet",
+     "text": "Belege (Fotos, Briefe, Arztzeugnisse)"
+    },
+    {
+     "type": "bullet",
+     "text": "Wunsch der Klientin"
+    },
+    {
+     "type": "bullet",
+     "text": "Offene Fakten und Widersprüche"
+    },
+    {
+     "type": "p",
+     "text": "Testfälle"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "ID",
+       "Fall",
+       "Erwartete Route"
+      ],
+      [
+       "T5-01",
+       "Schimmel im Schlafzimmer seit 2 Monaten, per E-Mail gemeldet, volle Miete bezahlt, keine Kinder, Verwaltung hat Termin versprochen",
+       "KI_WEITER (Meldung eingeschrieben wiederholen, Belege, Wiedervorlage)"
+      ],
+      [
+       "T5-02",
+       "Wie T5-01, aber Klientin zahlt seit 2 Monaten 20 % weniger",
+       "RECHT, BALD"
+      ],
+      [
+       "T5-03",
+       "Wie T5-02, und Brief mit 30-Tage-Frist und Kündigungsandrohung",
+       "RECHT, SOFORT; Issue 2 aktiviert"
+      ],
+      [
+       "T5-04",
+       "Starker Schimmel, Kleinkind mit Atemproblemen, ärztliches Zeugnis",
+       "RECHT + SOZIAL, SOFORT"
+      ],
+      [
+       "T5-05",
+       "Klientin hat vor 3 Wochen Miete bei der Schlichtungsbehörde hinterlegt, sonst nichts unternommen",
+       "RECHT, SOFORT"
+      ],
+      [
+       "T5-06",
+       "Heizung im Januar defekt, Vermieterschaft reagiert seit 3 Wochen nicht",
+       "RECHT, SOFORT (schwerer Mangel möglich)"
+      ],
+      [
+       "T5-07",
+       "Glühbirne im Bad kaputt",
+       "KI_WEITER (kleiner Unterhalt, Art. 259 OR)"
+      ],
+      [
+       "T5-08",
+       "Kündigung zwei Wochen nach der Mängelmeldung",
+       "RECHT, SOFORT; Issue 1 aktiviert"
+      ],
+      [
+       "T5-09",
+       "Klientin will ausziehen, weil es in der Wohnung laut ist",
+       "RECHT, BALD"
+      ],
+      [
+       "T5-10",
+       "Zahlungsstatus nicht erhoben",
+       "RUECKFRAGE"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Keine Reaktion der Vermieterschaft: 30 Tage nach der schriftlichen Mängelmeldung ohne Reaktion eskaliert das System an die Rechtsperson. Bei schweren Mängeln oder Gesundheitsgefahr (Regeln H1–H7) sofort."
+    },
+    {
+     "type": "bullet",
+     "text": "KI_WEITER in einfachen Fällen erlaubt: leichter Mangel, keine Gesundheitsangaben, keine laufende Frist, keine Hinterlegung geplant."
+    },
+    {
+     "type": "bullet",
+     "text": "Musterbrief (Mängelmeldung): Das System darf den Brief ausfüllen, aber ohne Prozentzahl für eine Mietzinsherabsetzung und ohne Hinterlegungsandrohung; beides nur nach Prüfung durch die Rechtsperson."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: höchstens 2 Rückfrage-Runden, danach Eskalation (G7). Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz voraussichtlich nach IDG ZH (§ 3 Abs. 1 lit. c, § 6 IDG). Vor jedem Briefing an eine externe Rechtsperson ausdrückliche Einwilligung der Klientin (consent_briefing; § 17 Abs. 1 lit. b IDG; Art. 6 Abs. 7 lit. a DSG)."
+    }
+   ]
+  },
+  {
+   "heading": "Was wir noch von euch brauchen",
+   "items": [
+    {
+     "type": "bullet",
+     "text": "Erledigt: Volltexte der acht Leitentscheide und § 66 GOG ZH (eingearbeitet)."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: BGer 4A_565/2009, 4A_368/2007, 4A_739/2011 (Hinterlegung) und 4A_472/2008 (Verrechnung ausgeschlossen, wo Hinterlegung möglich; zitiert in 4A_140/2014 E. 5.2)."
+    },
+    {
+     "type": "bullet",
+     "text": "Empfohlen für die Demo: zwei bis drei Zürcher Entscheide zu typischen Wohnungsmängeln (Schimmel, Heizung, Baulärm), z. B. aus der «Zürcher Mietrechtspraxis» oder über entscheidsuche.ch. Grund: BGE 130 III 504 und 4A_140/2014 betreffen Geschäftsräume."
+    },
+    {
+     "type": "bullet",
+     "text": "Bibliografische Angabe des Lehrbuchs."
+    },
+    {
+     "type": "p",
+     "text": "Für Abschnitt 3a: falls die Gemeinde die App betreibt: IDG ZH (LS 170.4); optional: Planungs- und Baugesetz ZH (PBG, LS 700.1), falls ihr die im ZUP-Artikel genannte Pflicht der Eigentümerschaft belegen wollt (die genaue Bestimmung nennt der Artikel nicht); Kontakt Notunterkunft erledigt. Erledigt: BV, DSG, BGE 120 Ia 1, 131 I 166, 136 I 290, CESCR General Comment No. 4."
+    },
+    {
+     "type": "p",
+     "text": "Offene Prüfpunkte"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Kernaussagen der Lehrbuch-Zitate am Volltext bestätigt (mit zwei Abweichungen: 4C.264/2006 falsch zitiert; N 2956b gibt 4A_140/2014 E. 5.4 umgekehrt wieder)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Produktschwelle festlegen: Nach wie vielen Tagen ohne Reaktion eskaliert das System (Vorschlag 30 Tage; bei schweren Mängeln sofort)? Hinweis: In 4C.264/2003 E. 3.2.2 galten fünf Monate für eine Parkettreparatur noch als angemessen"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Soll das System den Musterbrief «Mängelmeldung» selbst ausfüllen dürfen? Mein Vorschlag: ja, mit Verlangen der Behebung (wichtig für die Rückwirkung nach BGE 142 III 557 E. 8.3.4), aber ohne Prozentzahl und ohne Hinterlegungsandrohung"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Liste der «Gefahr»-Stichworte für das Keyword-Netz (Schimmel und Kleinkind, Gas, Strom, keine Heizung, kein Wasser, Einsturz)"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Kontakte ergänzen (Schlichtungsbehörden nach Bezirk, Mieterverband, Gesundheitsbehörde)"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: OR_admin.pdf (SR 220, Stand 1.10.2026), Art. 256–260, 257d, 271a OR (S. 67–72, 81); ZPO.pdf (SR 272, Stand 1.7.2026), Art. 113, 200, 209–211, 243 ZPO; GOG ZH (LS 211.1, Stand 1.7.2020), §§ 63, 66 (S. 13 f.)"
+    },
+    {
+     "type": "bullet",
+     "text": "Lehrbuch: euer Auszug «§ 31 Miete», N 2939m–2967 (S. 911–925)"
+    },
+    {
+     "type": "bullet",
+     "text": "Volltexte (eure Dateien): BGE 124 III 201, 125 III 120, 130 III 504, 135 III 345, 142 III 557; BGer 4C.97/2003, 4C.264/2003, 4A_140/2014 und 4A_250/2014. Nicht verwendbar: BGer 4C.264/2006 (Bankauftrag)"
+    },
+    {
+     "type": "bullet",
+     "text": "Obergericht Zürich: Seiten «Mietzinsminderung», «Hinterlegung», «Mangel» (gerichte-zh.ch, abgerufen 7.11.2026); Formular Hinterlegungsgesuch"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

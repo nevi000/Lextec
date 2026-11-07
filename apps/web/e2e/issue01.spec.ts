@@ -6,7 +6,7 @@ async function insertAndSend(page: Page, step: number) {
   const guide = page.getByTestId("demo-guide");
   await expect(guide.getByText(new RegExp(`Schritt ${step} –`))).toBeVisible();
   await guide.getByRole("button", { name: "In Eingabefeld einfügen" }).click();
-  await page.getByRole("button", { name: /Situation analysieren|^Erfassen$/ }).click();
+  await page.getByRole("button", { name: /Fall analysieren|^Erfassen$/ }).click();
   await expect(page.getByText("Erfasst und analysiert").first()).toBeVisible();
 }
 
@@ -96,7 +96,7 @@ test("Issue 1: unsupported mietverhältnis (Untermiete) is not answered with sta
   await page.goto("/");
   await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
   await page.getByLabel("Was ist passiert?").fill("Der Vermieter hat gekündigt. Die Klientin ist Untermieterin von Frau Meier.");
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
   const action = page.getByRole("region", { name: "Nächste empfohlene Aktion" });
   await action.getByText("Rechtliche Details ansehen").click();
   await expect(action.getByText("OUT_OF_SCOPE_NOT_MAIN_TENANT").first()).toBeVisible();
@@ -104,19 +104,19 @@ test("Issue 1: unsupported mietverhältnis (Untermiete) is not answered with sta
   await expect(page.getByTestId("statements-panel")).toHaveCount(0);
 });
 
-test("Issue 1: hardship adds social counselling and an honest note about the not-yet-available issue", async ({
+test("Issue 1: hardship adds social counselling and an honest note that the routed issue is only a dossier draft", async ({
   page,
 }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
   await page.getByLabel("Was ist passiert?").fill("Der Vermieter hat gekündigt. Die Klientin ist alleinerziehend mit zwei Kindern.");
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
   const action = page.getByRole("region", { name: "Nächste empfohlene Aktion" });
   await expect(action.getByText("Mietrechtsberatung", { exact: true })).toBeVisible();
   await expect(action.getByText("Sozialberatung", { exact: true })).toBeVisible();
   await action.getByText("Rechtliche Details ansehen").click();
   await expect(action.getByText("TT_HARDSHIP")).toBeVisible();
-  await expect(action.getByText("noch nicht verfügbar")).toBeVisible();
+  await expect(action.getByText("Dossierstand, nicht freigegeben").first()).toBeVisible();
   await action.getByText("Übergabestatus verwalten").click();
   await expect(action.getByText(/Es wurde noch niemand kontaktiert/)).toBeVisible();
 });
@@ -125,4 +125,32 @@ test("API usage stays visible and the app never needs a key in mock mode", async
   await page.goto("/settings");
   await expect(page.getByText("Mock (lokal)")).toBeVisible();
   await expect(page.getByTestId("ai-usage")).toHaveCount(0); // only shown for the external provider
+});
+
+test("Issue 6: acute eviction escalates at once, shows the urgent recommendation and no question loop", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
+  await page.getByLabel("Was ist passiert?").fill("Das Stadtammannamt kommt morgen zur Räumung.");
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
+  const action = page.getByRole("region", { name: "Nächste empfohlene Aktion" });
+  await expect(action.getByText("Sozialberatung", { exact: true })).toBeVisible();
+  await expect(action.getByText("Mietrechtsberatung", { exact: true })).toBeVisible();
+  await action.getByText("Rechtliche Details ansehen").click();
+  await expect(action.getByText("EV_GRUNDREGEL")).toBeVisible();
+});
+
+test("after ESCALATE the intake continues: counted important question, answer updates, report any time", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
+  await page.getByLabel("Was ist passiert?").fill("Mein Vermieter hat der Klientin die Wohnung gekündigt, ohne amtliches Formular, in der Stadt Zürich.");
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
+  const intake = page.getByRole("region", { name: "Fallaufnahme vervollständigen" });
+  await expect(intake.getByText(/Noch \d+ wichtige Angaben offen\./)).toBeVisible();
+  const before = Number((await intake.getByText(/Noch \d+ wichtige/).first().innerText()).match(/\d+/)![0]);
+  // report stays available while questions are open
+  await expect(page.getByRole("button", { name: /Fallbericht erstellen/ })).toBeEnabled();
+  await intake.getByRole("radio").first().click();
+  await intake.getByRole("button", { name: /Speichern|Weiter|Antwort/ }).first().click();
+  await expect(intake.getByText(new RegExp(`Noch ${before - 1} wichtige`))).toBeVisible();
+  await expect(page.getByRole("region", { name: "Einschätzung" })).toBeVisible();
 });

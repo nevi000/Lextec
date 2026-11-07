@@ -1,0 +1,963 @@
+{
+ "file": "issue_06.docx",
+ "title": "Issue 6 – Ausweisung und Räumung",
+ "sections": [
+  {
+   "heading": "",
+   "items": []
+  },
+  {
+   "heading": "Issue 6 – Ausweisung und Räumung",
+   "items": [
+    {
+     "type": "p",
+     "text": "Nov 7, 2026 · @sofia"
+    }
+   ]
+  },
+  {
+   "heading": "Überblick",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 6 ist das dringendste Issue. Es betrifft Klientinnen, die nach einer Kündigung oder nach Vertragsende nicht ausgezogen sind und gegen die die Vermieterschaft ein Ausweisungsverfahren eingeleitet hat oder vollstrecken lässt. Hier ist der Wohnungsverlust nicht mehr nur möglich, sondern konkret."
+    },
+    {
+     "type": "p",
+     "text": "Grundsatz: Die Vermieterschaft darf nicht selbst räumen (Schloss wechseln, Sachen hinausstellen, Strom abstellen). Sie braucht einen Ausweisungsentscheid eines Gerichts; sonst macht sie sich unter Umständen strafbar (Lehrbuch N 3025d, S. 990). Der Entscheid wird dann von der Behörde vollstreckt (Art. 343 Abs. 1 lit. d ZPO; im Kanton Zürich durch das Gemeinde- oder Stadtammannamt, § 147 GOG ZH)."
+    },
+    {
+     "type": "p",
+     "text": "Zwei Wege für die Vermieterschaft (Lehrbuch N 3025e, S. 990 f.):"
+    },
+    {
+     "type": "bullet",
+     "text": "Rechtsschutz in klaren Fällen (Art. 248 lit. b, 257 ZPO): ohne Schlichtungsverfahren (Art. 198 lit. a ZPO), direkt beim Einzelgericht, schnell. Nur wenn der Sachverhalt unbestritten oder sofort beweisbar und die Rechtslage klar ist. Sonst tritt das Gericht nicht ein (Art. 257 Abs. 3 ZPO). Das ist der Normalfall, v. a. nach Kündigung wegen Zahlungsverzug."
+    },
+    {
+     "type": "bullet",
+     "text": "Ordentlicher Weg: Schlichtungsbehörde, dann Mietgericht im vereinfachten Verfahren (Art. 243 Abs. 2 lit. c ZPO). Langsamer."
+    },
+    {
+     "type": "p",
+     "text": "Warum das System hier fast nichts selbst sagen darf:"
+    },
+    {
+     "type": "bullet",
+     "text": "Die Fristen sind sehr kurz: Stellungnahme oft nur wenige Tage (vom Gericht angesetzt), Rechtsmittel 10 Tage (Art. 314 Abs. 1, 321 Abs. 2 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Im Verfahren für klare Fälle gibt es praktisch keine zweite Chance: Nach der Stellungnahme wird in der Regel nichts mehr zugelassen, neue Behauptungen im Rechtsmittel kaum (Obergericht ZH, LF260018, E. 3.2 und 4.4)."
+    },
+    {
+     "type": "bullet",
+     "text": "Auch eine hängige Anfechtung der Kündigung verhindert die Ausweisung nicht automatisch (BGE 141 III 262 E. 3.3, S. 265)."
+    },
+    {
+     "type": "bullet",
+     "text": "Die Frage, ob die Kündigung gültig ist, wird im Ausweisungsverfahren als Vorfrage geprüft (BGE 141 III 262 E. 3.2, S. 265). Das ist die eigentliche Verteidigungslinie und braucht eine Rechtsperson."
+    },
+    {
+     "type": "p",
+     "text": "Abgrenzung: Issue 6 wird meist aus Issue 3 (Kündigung wegen Zahlungsverzug) oder Issue 1 aktiviert. Das Keyword-Netz aktiviert Issue 6 bei Stichworten wie «Ausweisung», «Räumung», «Gemeindeammann», «Stadtammann», «Polizei», «klare Fälle» (global_escalation.yaml, KW_GERICHT_RAEUMUNG). Parallel läuft immer die soziale Notfallplanung (Unterkunft, Kinder, Hab und Gut), Global-Regel G2."
+    },
+    {
+     "type": "p",
+     "text": "Quellenstand: ZPO.pdf (Stand 1.7.2026), OR_admin.pdf (Stand 1.10.2026), GOG ZH (Stand 1.7.2020), mit PDF-Seite. Lehrbuch «§ 31 Miete», N 3025d–3025f (S. 990–992). Alle Leitentscheide am Volltext geprüft: BGE 138 III 123, 138 III 620, 139 III 38, 140 III 315, 141 III 23, 141 III 262, 142 III 515, 142 III 690; BGer 4A_391/2013. Obergericht Zürich: Beschluss LF260018 vom 16.3.2026 und Checkliste Ausweisungsgesuch (online gelesen)."
+    }
+   ]
+  },
+  {
+   "heading": "1) Gesetzesartikel",
+   "items": [
+    {
+     "type": "p",
+     "text": "Wortlaut aus ZPO.pdf (SR 272, Stand 1.7.2026), OR_admin.pdf (SR 220, Stand 1.10.2026) und GOG ZH (LS 211.1, Stand 1.7.2020)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Artikel",
+       "Wortlaut (Kern)",
+       "PDF-Seite",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "Art. 267 Abs. 1 OR",
+       "«Der Mieter muss die Sache in dem Zustand zurückgeben, der sich aus dem vertragsgemässen Gebrauch ergibt.»",
+       "76",
+       "Grundlage des Rückgabeanspruchs"
+      ],
+      [
+       "Art. 248 lit. b ZPO",
+       "Das summarische Verfahren ist anwendbar für den Rechtsschutz in klaren Fällen.",
+       "67",
+       "Verfahrensart"
+      ],
+      [
+       "Art. 257 ZPO",
+       "Rechtsschutz im summarischen Verfahren, wenn «der Sachverhalt unbestritten oder sofort beweisbar ist; und die Rechtslage klar ist» (Abs. 1); sonst tritt das Gericht nicht ein (Abs. 3).",
+       "73",
+       "Kernnorm; Verteidigung = Sachverhalt oder Rechtslage unklar machen"
+      ],
+      [
+       "Art. 198 lit. a ZPO",
+       "Das Schlichtungsverfahren entfällt im summarischen Verfahren.",
+       "52",
+       "Kein Schlichtungsversuch, direkt Gericht"
+      ],
+      [
+       "Art. 252–254 ZPO",
+       "Gesuch; Gelegenheit zur Stellungnahme, wenn das Gesuch nicht offensichtlich unzulässig oder unbegründet ist; Beweis grundsätzlich durch Urkunden.",
+       "72–73",
+       "Stellungnahme mit Belegen ist die einzige Chance"
+      ],
+      [
+       "Art. 256 Abs. 1 ZPO",
+       "Das Gericht kann ohne Verhandlung aufgrund der Akten entscheiden.",
+       "73",
+       "Keine mündliche Anhörung garantiert"
+      ],
+      [
+       "Art. 236 Abs. 3 ZPO",
+       "Auf Antrag der obsiegenden Partei ordnet das Gericht Vollstreckungsmassnahmen an.",
+       "64",
+       "Direkte Vollstreckung"
+      ],
+      [
+       "Art. 239 Abs. 2 ZPO",
+       "Begründung innert 10 Tagen verlangen; sonst gilt dies als Verzicht auf Berufung oder Beschwerde.",
+       "64",
+       "Erste harte Frist nach dem Entscheid"
+      ],
+      [
+       "Art. 308 Abs. 2 ZPO",
+       "Berufung in vermögensrechtlichen Sachen nur ab Streitwert CHF 10 000.",
+       "89",
+       "Berufung oder Beschwerde"
+      ],
+      [
+       "Art. 314 Abs. 1 ZPO",
+       "Berufungsfrist im summarischen Verfahren zehn Tage.",
+       "91",
+       "Harte Frist"
+      ],
+      [
+       "Art. 315 Abs. 1 ZPO",
+       "Die Berufung hemmt Rechtskraft und Vollstreckbarkeit im Umfang der Anträge.",
+       "91",
+       "Aufschub durch Berufung"
+      ],
+      [
+       "Art. 321 Abs. 2 ZPO",
+       "Beschwerdefrist im summarischen Verfahren zehn Tage.",
+       "93",
+       "Harte Frist"
+      ],
+      [
+       "Art. 325 ZPO",
+       "Die Beschwerde hemmt die Vollstreckbarkeit nicht; Aufschub nur auf Gesuch bei nicht leicht wiedergutzumachendem Nachteil.",
+       "94",
+       "Unter CHF 10 000 kein automatischer Aufschub"
+      ],
+      [
+       "Art. 336 ZPO",
+       "Vollstreckbar ist ein Entscheid, wenn er rechtskräftig ist und die Vollstreckbarkeit nicht aufgeschoben wurde.",
+       "97",
+       "Wann geräumt werden kann"
+      ],
+      [
+       "Art. 337, 338, 341 ZPO",
+       "Direkte Vollstreckung oder Vollstreckungsgesuch; Vollstreckungsgericht prüft von Amtes wegen und setzt eine kurze Frist zur Stellungnahme; Einwand z. B. Stundung, mit Urkunden zu beweisen.",
+       "98",
+       "Letzte Verteidigung"
+      ],
+      [
+       "Art. 343 Abs. 1 lit. d und Abs. 3 ZPO",
+       "Zwangsmassnahme wie Räumung eines Grundstücks; Hilfe der zuständigen Behörde (Polizei).",
+       "99",
+       "Zwangsräumung"
+      ],
+      [
+       "Art. 243 Abs. 2 lit. c ZPO",
+       "Vereinfachtes Verfahren unabhängig vom Streitwert, wenn der Kündigungsschutz betroffen ist.",
+       "65–66",
+       "Ordentlicher Weg"
+      ],
+      [
+       "Art. 257d, 266l–266o, 271–273 OR",
+       "Zahlungsverzug, Form der Kündigung, Nichtigkeit, Anfechtung, Erstreckung.",
+       "68, 76, 81–84",
+       "Vorfragen (→ Issues 1–4)"
+      ],
+      [
+       "§ 24 lit. c und e GOG ZH",
+       "Das Einzelgericht entscheidet erstinstanzlich im summarischen Verfahren und über die Vollstreckung.",
+       "6",
+       "Zuständiges Gericht"
+      ],
+      [
+       "§ 147 GOG ZH",
+       "Der Gemeindeammann kann vom Gericht mit der Vollstreckung nach Art. 343 Abs. 1 lit. d und e ZPO beauftragt werden; er kann einen Kostenvorschuss verlangen und die Hilfe der Polizei beanspruchen.",
+       "32",
+       "Wer räumt"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "1) Leitentscheide",
+   "items": [
+    {
+     "type": "p",
+     "text": "Am Volltext geprüft"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "Entscheid",
+       "Kernaussage mit Fundstelle",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "1",
+       "BGE 141 III 262 (Geschäftsräume, Handelsgericht ZH)",
+       "Ein Ausweisungsbegehren im Verfahren für klare Fälle ist auch zulässig, wenn die Mieterin die Kündigung angefochten hat und dieses Verfahren hängig ist (E. 3.3, S. 265). Der Gesetzgeber wollte rasche Ausweisung; im Ausweisungsverfahren wird die Gültigkeit der Kündigung als Vorfrage beurteilt, und auch dafür müssen Sachverhalt und Rechtslage klar sein, sonst Nichteintreten (E. 3.2, S. 263–265).",
+       "Verbot «Solange die Anfechtung läuft, kann man Sie nicht ausweisen»; Verteidigung über die Vorfrage"
+      ],
+      [
+       "2",
+       "Obergericht ZH, LF260018 vom 16.3.2026 (Wohnung, Stadt Zürich)",
+       "Vorinstanz war das Einzelgericht Audienz am Bezirksgericht Zürich. Eine Zahlung nach Ablauf der Zahlungsfrist ändert an der Gültigkeit der Kündigung nichts; Erstreckung nach Art. 272a Abs. 1 lit. a OR ausgeschlossen; Vollstreckungsaufschub (Schonfrist) abgelehnt, weil er die Aussicht auf eine Wohnung nicht merklich erhöht hätte (E. 4.2, S. 5). Die Berufung muss sich konkret mit dem Entscheid auseinandersetzen, auch bei Laien zumindest rudimentär (E. 3.1, S. 3 f.); neue Behauptungen sind im Rechtsmittel kaum noch zulässig (E. 3.2, S. 4; E. 4.4, S. 6). Nichteintreten.",
+       "Zeigt den typischen Zürcher Ablauf; Rechtsmittel ohne Rechtsperson praktisch aussichtslos"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Neu am Volltext geprüft (die bisherigen Lehrbuch-Zitate sind bestätigt; Achtung: mehrere Entscheide betreffen nicht die Wohnungsmiete, ihre Aussagen zu Art. 257 ZPO gelten aber allgemein)"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "#",
+       "Entscheid",
+       "Kernaussage mit Fundstelle",
+       "Funktion in der Datenbank"
+      ],
+      [
+       "3",
+       "BGE 138 III 620 (Gebrauchsleihe, kein Mietfall)",
+       "Sofort beweisbar = ohne Verzögerung und besonderen Aufwand, in der Regel durch Urkunden; die gesuchstellende Partei muss den vollen Beweis erbringen. Offensichtlich haltlose Bestreitungen genügen nicht. Es genügt aber, dass die Gegenpartei substanziiert und schlüssig Einwendungen vorträgt, die nicht sofort widerlegt werden können und die Überzeugung des Gerichts erschüttern; glaubhaft machen muss sie sie nicht (E. 5.1.1, S. 621–623). Grund: Ein Entscheid im klaren Fall ist endgültig, die Einwände wären sonst für immer abgeschnitten (E. 5.1.1, S. 623 f.; E. 6.2, S. 624 f.).",
+       "Kern der Verteidigung: konkrete, schlüssige Einwände in der Stellungnahme"
+      ],
+      [
+       "4",
+       "BGE 138 III 123 (Geschäftsräume, Restaurant)",
+       "Klare Rechtslage nur, wenn sich die Rechtsfolge ohne Weiteres ergibt; nicht klar, wenn das Gericht Ermessen ausüben oder Treu und Glauben wertend beurteilen muss (E. 2.1.2, S. 126). Im Fall: Rechtsmissbrauch erforderte eine Gesamtwürdigung, daher kein klarer Fall (E. 2.5, S. 129).",
+       "Einwände wie mündliche Abmachung, widersprüchliches Verhalten der Vermieterschaft erfassen"
+      ],
+      [
+       "5",
+       "BGE 142 III 515 (Geschäftsräume, Restaurant)",
+       "Ist die Kündigung angefochten, beziehen sich die Voraussetzungen von Art. 257 ZPO auch auf ihre Gültigkeit; der Rechtsschutz in klaren Fällen ist nur zu gewähren, wenn keine Zweifel an der Vollständigkeit der Sachverhaltsdarstellung bestehen und die Kündigung klar berechtigt erscheint, damit der mietrechtliche Kündigungsschutz nicht unterlaufen wird (E. 2.2.4, S. 517 f.).",
+       "Stützt die Verteidigung bei hängiger Anfechtung"
+      ],
+      [
+       "6",
+       "BGE 140 III 315 (Wohnung, VD; Sozialdienst zahlte)",
+       "Sachverhalt: Der Sozialdienst zahlte während der Zahlungsfrist insgesamt mehr als den Rückstand, teils ausdrücklich für die Partnerin des Mieters; die Vermieter wiesen diesen Teil zurück und kündigten wegen eines angeblichen Restbetrags von CHF 750; die Ausweisung im klaren Fall scheiterte (S. 316 f.). Gründe laut vollständigem Urteil BGer 4A_68/2014: Zahlt ein Dritter (hier der Sozialdienst) eine Geldschuld, tilgt das die Schuld der Mieterin (Art. 68 OR); die Vermieter hatten innert der Zahlungsfrist den ganzen Rückstand erhalten, und eine Zahlung, die sie erst nach Fristablauf zurücküberwiesen, gilt als angenommen (E. 4.2); die Anrechnung richtet sich nach Art. 86–87 OR (E. 4.3); die Schuld war klar getilgt (E. 4.4). Das Verfahren nach Art. 257 ZPO endet bei fehlendem Anspruch nicht mit materieller Abweisung, sondern mit Nichteintreten; die Vermieterschaft kann dann den ordentlichen Weg gehen (E. 5.2.3–5.3, S. 320).",
+       "Zahlungen Dritter (Sozialdienst) genau dokumentieren; Ergebnis Nichteintreten ≠ endgültiger Sieg"
+      ],
+      [
+       "7",
+       "BGE 139 III 38 (Wohnung, SZ)",
+       "Eine Ausweisung im summarischen Verfahren gibt es nur als klaren Fall nach Art. 248 lit. b, 257 ZPO; das Parlament hob aArt. 274g OR auf, weil es diesen Weg für rasche Ausweisungen als ausreichend ansah (E. 2.5.3, S. 42 f.; E. 3, S. 43).",
+       "Hintergrund"
+      ],
+      [
+       "8",
+       "BGE 142 III 690 (Wohnung, befristet)",
+       "«Kündigungsschutz» im Sinne von Art. 210 Abs. 1 lit. b und 243 Abs. 2 lit. c ZPO ist weit zu verstehen: Er liegt vor, sobald über das Ende der Miete zu entscheiden ist, auch bei Ausweisungsbegehren der Vermieterschaft; dann gilt das vereinfachte Verfahren mit sozialer Untersuchungsmaxime (E. 3.1, S. 693 f.).",
+       "Ordentlicher Weg schützt die Mieterin stärker"
+      ],
+      [
+       "9",
+       "BGer 4A_391/2013 (Geschäftsräume, Untermiete, GE)",
+       "Das Gericht kann eine Frist für den freiwilligen Auszug setzen, muss aber nicht; das Bundesgericht greift nur bei Ermessensmissbrauch ein (E. 7). Streitwert im Ausweisungsverfahren: Mietzins für die voraussichtliche Dauer des Ausweisungsverfahrens (E. 5).",
+       "Verbot «Sie bekommen sicher noch Zeit»; Streitwert"
+      ],
+      [
+       "10",
+       "BGE 141 III 23 (Arbeitsrecht)",
+       "Zusammenfassung der Voraussetzungen von Art. 257 ZPO (E. 3.2, S. 25 f.); das Gesuch muss vollumfänglich gutgeheissen werden können, sonst Nichteintreten (E. 3.3, S. 26 f.).",
+       "Nur Hintergrund, kein Mietfall"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Aus früheren Issues verwendbar (Volltexte vorhanden): Die Vorfrage der gültigen Kündigung prüft die Rechtsperson mit den Entscheiden aus Issues 2 und 3, z. B. BGE 119 II 147 und BGer 4A_585/2010 (Zugang der Mahnung, Unwirksamkeit), BGer 4A_366/2008 (Wartezeit bis zur Kündigung) und BGE 135 III 441 (keine Umdeutung einer ungültigen Kündigung)."
+    }
+   ]
+  },
+  {
+   "heading": "2) Benötigte Informationen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Bei Issue 6 sammelt das System nur, was die Rechtsperson sofort braucht. Es fragt nicht in mehreren Runden nach: Fehlt etwas, eskaliert es trotzdem sofort (Ausnahme von G7). Wichtigstes Faktum ist das Stadium des Verfahrens, denn davon hängen die Fristen ab."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Faktum",
+       "Frage an die Sozialarbeiterin",
+       "Zwingend",
+       "Juristische Funktion"
+      ],
+      [
+       "Stadium",
+       "Was liegt vor? (a) nur Kündigung oder Drohung, (b) Gesuch oder Vorladung des Gerichts, (c) Entscheid des Gerichts, (d) Schreiben des Gemeinde- oder Stadtammanns mit Räumungstermin, (e) Räumung findet heute statt oder Schloss wurde gewechselt",
+       "ja, blockierend",
+       "Bestimmt Frist und Dringlichkeit"
+      ],
+      [
+       "Dokument",
+       "Schreiben hochladen (alle Seiten, mit Umschlag)",
+       "ja",
+       "Frist, Gericht, Geschäftsnummer"
+      ],
+      [
+       "Zustelldatum",
+       "Wann wurde das Schreiben empfangen oder auf der Post abgeholt? Abholungseinladung?",
+       "ja",
+       "Fristbeginn (Rechtsperson rechnet)"
+      ],
+      [
+       "Frist im Schreiben",
+       "Steht im Schreiben eine Frist (Stellungnahme, Auszug, Räumungstermin)?",
+       "ja",
+       "Wird wörtlich ans Briefing übergeben, nicht berechnet"
+      ],
+      [
+       "Grund der Kündigung",
+       "Zahlungsverzug, ordentliche Kündigung, Vertragsende, andere?",
+       "ja",
+       "Vorfrage; bei Zahlungsverzug keine Erstreckung"
+      ],
+      [
+       "Anfechtung oder Erstreckung",
+       "Wurde die Kündigung angefochten oder Erstreckung verlangt? Wann, wo?",
+       "ja",
+       "BGE 141 III 262; Vorfrage"
+      ],
+      [
+       "Zahlungen",
+       "Wurde der Rückstand bezahlt? Wann genau (vor oder nach Ablauf der Zahlungsfrist)? Belege?",
+       "ja",
+       "Nachzahlung nach Fristablauf heilt nicht (OG ZH LF260018 E. 4.2)"
+      ],
+      [
+       "Vereinbarung",
+       "Gibt es eine Abmachung mit der Vermieterschaft (Stundung, Ratenzahlung, neuer Vertrag, Auszugstermin)? Schriftlich?",
+       "ja",
+       "Einwand gegen Ausweisung oder Vollstreckung (Art. 341 Abs. 3 ZPO); möglicher neuer Mietvertrag"
+      ],
+      [
+       "Familienwohnung",
+       "Ist die Klientin verheiratet oder in eingetragener Partnerschaft und wohnt die Familie dort? Wurde dem Ehegatten separat zugestellt?",
+       "ja",
+       "Art. 266m–266n OR; häufiger Formfehler"
+      ],
+      [
+       "Haushalt",
+       "Wer wohnt in der Wohnung? Kinder, Kranke, Pflegebedürftige, Tiere?",
+       "ja",
+       "Soziale Notfallplanung"
+      ],
+      [
+       "Anschlusslösung",
+       "Gibt es eine Unterkunft nach dem Auszug?",
+       "ja",
+       "Notunterkunft (Sozialdienst)"
+      ],
+      [
+       "Sozialhilfe",
+       "Bezieht die Klientin Sozialhilfe? Ist der Sozialdienst schon informiert?",
+       "nein",
+       "Mietzinsgarantie, Übernahme Rückstand"
+      ],
+      [
+       "Hab und Gut",
+       "Wo kommen Möbel und Sachen hin?",
+       "nein",
+       "Einlagerung bei der Räumung"
+      ],
+      [
+       "Selbsthilfe der Vermieterschaft",
+       "Hat die Vermieterschaft ohne Gericht das Schloss gewechselt, Sachen entfernt oder Strom und Wasser abgestellt?",
+       "ja",
+       "Unzulässige Selbsthilfe (Lehrbuch N 3025d); Polizei und Rechtsperson sofort"
+      ],
+      [
+       "Zahlungen Dritter",
+       "Hat der Sozialdienst oder jemand anderes während der Zahlungsfrist gezahlt? Wann, wie viel, mit welchem Zahlungszweck (auch für Mitbewohnende)? Belege hochladen.",
+       "ja",
+       "Tilgt die Mietschuld (Art. 68 OR); kann den klaren Fall ausschliessen (BGer 4A_68/2014 E. 4.2–4.4)"
+      ],
+      [
+       "Rücküberweisung",
+       "Hat die Vermieterschaft eine Zahlung zurückgeschickt? An welchem Datum (vor oder nach Fristende)?",
+       "ja, wenn Dritte gezahlt haben",
+       "Erst nach Fristende zurücküberwiesen = angenommen (4A_68/2014 E. 4.2)"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "3) Grenzen und Ausnahmefälle",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Fall",
+       "Was gilt",
+       "Folge im System"
+      ],
+      [
+       "Vermieterschaft räumt selbst (Schloss, Sachen, Strom)",
+       "Unzulässig; es braucht einen Ausweisungsentscheid; Selbsthilfe kann strafbar sein (Lehrbuch N 3025d, S. 990)",
+       "RECHT + SOZIAL SOFORT; Polizei kann beigezogen werden; keine strafrechtliche Bewertung durch das System"
+      ],
+      [
+       "Anfechtung der Kündigung läuft",
+       "Schützt nicht automatisch; Ausweisung im Verfahren für klare Fälle bleibt zulässig (BGE 141 III 262 E. 3.3, S. 265)",
+       "RECHT SOFORT; Gericht und Geschäftsnummer der Anfechtung ins Briefing"
+      ],
+      [
+       "Rechtslage oder Sachverhalt unklar (z. B. Zustellung der Mahnung strittig, Abmachung mündlich)",
+       "Gericht tritt nicht ein (Art. 257 Abs. 3 ZPO); es genügen substanziierte und schlüssige Einwendungen, die nicht sofort widerlegt werden können (BGE 138 III 620 E. 5.1.1); Ermessens- und Treu-und-Glauben-Fragen sind nicht klar (BGE 138 III 123 E. 2.1.2); Vermieterschaft muss ordentlich klagen",
+       "Genau diese Punkte erfassen; Bewertung durch Rechtsperson"
+      ],
+      [
+       "Rückstand nach Ablauf der Zahlungsfrist bezahlt",
+       "Heilt die Kündigung nicht (OG ZH LF260018 E. 4.2, S. 5); evtl. Einigung mit der Vermieterschaft möglich",
+       "Verbot «Jetzt ist alles gut»; Rechtsperson klärt Einigung"
+      ],
+      [
+       "Neue Abmachung oder Zahlungsplan nach der Kündigung",
+       "Kann ein neues Mietverhältnis oder eine Stundung sein; Einwand im Vollstreckungsverfahren nur mit Urkunden (Art. 341 Abs. 3 ZPO)",
+       "Schriftliche Bestätigung sichern; Rechtsperson"
+      ],
+      [
+       "Familienwohnung, nur ein Ehegatte informiert",
+       "Zahlungsaufforderung und Kündigung müssen beiden separat zugestellt werden (Art. 266n OR); sonst nichtig (Art. 266o OR)",
+       "Starker Einwand; Rechtsperson SOFORT"
+      ],
+      [
+       "Untermiete oder Mitbewohnende ohne Vertrag",
+       "Vermieterschaft kann auch direkt gegen Untermieter vorgehen (Lehrbuch N 3025d, S. 990)",
+       "Alle Bewohnenden im Briefing nennen"
+      ],
+      [
+       "Entscheid ist eröffnet, keine Begründung verlangt",
+       "10 Tage, sonst Verzicht auf Rechtsmittel (Art. 239 Abs. 2 ZPO)",
+       "RECHT SOFORT, Frist ins Briefing"
+      ],
+      [
+       "Streitwert unter CHF 10 000",
+       "Nur Beschwerde, ohne automatischen Aufschub der Räumung (Art. 308 Abs. 2, 325 ZPO)",
+       "Rechtsperson muss Aufschub beantragen"
+      ],
+      [
+       "Räumungstermin des Ammannamts steht",
+       "Vollstreckbarer Entscheid liegt vor; nur noch Einwände nach Art. 341 Abs. 3 ZPO oder Einigung",
+       "SOZIAL SOFORT (Unterkunft, Sachen); RECHT prüft Restchancen"
+      ],
+      [
+       "Kinder, Krankheit, hohes Alter",
+       "Kein Hindernis für die Ausweisung bei Zahlungsverzug (keine Erstreckung, Art. 272a OR); Schonfrist nicht zwingend (4A_391/2013 E. 7; OG ZH LF260018 E. 4.2)",
+       "Soziale Notfallplanung im Vordergrund; keine falschen Hoffnungen"
+      ],
+      [
+       "Geschäftsraum, Pacht, Zimmer in Heim oder Notwohnung",
+       "Andere Regeln oder ausserhalb des Moduls",
+       "Vorprüfung; G5"
+      ],
+      [
+       "Sozialdienst oder Dritte haben während der Zahlungsfrist bezahlt",
+       "Zahlungen Dritter tilgen die Mietschuld (Art. 68 OR); behält die Vermieterschaft sie über das Fristende hinaus, gelten sie als angenommen; ist der Rückstand innert Frist voll bezahlt, besteht kein Zahlungsverzug (BGer 4A_68/2014 E. 4.2–4.4, vollständiges Urteil zu BGE 140 III 315). Ergebnis im klaren Fall ist Nichteintreten, nicht endgültige Abweisung (E. 5.3, S. 320)",
+       "Zahlungsbelege des Sozialdienstes sofort beschaffen; Rechtsperson SOFORT"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "4) Verfahren und Fristen",
+   "items": [
+    {
+     "type": "p",
+     "text": "Ablauf im Verfahren für klare Fälle (Kanton Zürich)"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesuch der Vermieterschaft beim Einzelgericht des Bezirksgerichts am Ort der Wohnung (Art. 252 ZPO; § 24 lit. c GOG ZH; Checkliste Obergericht ZH). Kein Schlichtungsverfahren (Art. 198 lit. a ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Stellungnahme der Mieterin: Das Gericht setzt eine Frist (Art. 253 ZPO). Beweis grundsätzlich durch Urkunden (Art. 254 Abs. 1 ZPO). Laut Obergericht ZH gibt das Gericht danach in der Regel keine weitere Gelegenheit mehr. Das ist der entscheidende Moment."
+    },
+    {
+     "type": "bullet",
+     "text": "Entscheid, oft ohne Verhandlung (Art. 256 Abs. 1 ZPO), meist mit Auszugstermin und Anordnung der Vollstreckung durch das Ammannamt (Art. 236 Abs. 3 ZPO)."
+    },
+    {
+     "type": "bullet",
+     "text": "Rechtsmittel ans Obergericht: Berufung ab Streitwert CHF 10 000 (aufschiebend), sonst Beschwerde (nicht aufschiebend)."
+    },
+    {
+     "type": "bullet",
+     "text": "Vollstreckung: Gemeinde- oder Stadtammannamt räumt, nötigenfalls mit Polizei (Art. 343 Abs. 1 lit. d, Abs. 3 ZPO; § 147 GOG ZH)."
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Frist",
+       "Dauer",
+       "Beginn",
+       "Quelle",
+       "Folge bei Versäumnis"
+      ],
+      [
+       "Stellungnahme zum Ausweisungsgesuch",
+       "vom Gericht angesetzt, oft kurz",
+       "Zustellung der Verfügung",
+       "Art. 253 ZPO",
+       "Entscheid nur aufgrund des Gesuchs"
+      ],
+      [
+       "Begründung verlangen",
+       "10 Tage",
+       "Eröffnung des Entscheids",
+       "Art. 239 Abs. 2 ZPO",
+       "Verzicht auf Rechtsmittel"
+      ],
+      [
+       "Berufung (ab CHF 10 000)",
+       "10 Tage",
+       "Zustellung des begründeten Entscheids",
+       "Art. 314 Abs. 1 ZPO",
+       "Entscheid rechtskräftig"
+      ],
+      [
+       "Beschwerde (unter CHF 10 000)",
+       "10 Tage",
+       "Zustellung des begründeten Entscheids",
+       "Art. 321 Abs. 2 ZPO",
+       "Entscheid rechtskräftig; Räumung läuft ohnehin weiter, wenn kein Aufschub"
+      ],
+      [
+       "Auszugstermin",
+       "im Entscheid festgelegt",
+       "–",
+       "Art. 236 Abs. 3 ZPO",
+       "Zwangsräumung"
+      ],
+      [
+       "Stellungnahme im Vollstreckungsverfahren",
+       "kurze Frist des Vollstreckungsgerichts",
+       "Zustellung",
+       "Art. 341 Abs. 2 ZPO",
+       "Vollstreckung"
+      ],
+      [
+       "Anfechtung der Kündigung (falls noch offen)",
+       "30 Tage",
+       "Empfang der Kündigung",
+       "Art. 273 Abs. 1 OR",
+       "→ Issue 1"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Rechtsmittel ans Bundesgericht: Laut OG ZH LF260018 (S. 8) hat die Beschwerde ans Bundesgericht keine aufschiebende Wirkung. Das System sagt dazu nichts Eigenes."
+    },
+    {
+     "type": "p",
+     "text": "Kosten: Im summarischen Verfahren fallen Gerichtskosten an; die Kostenbefreiung des Schlichtungsverfahrens (Art. 113 ZPO) gilt hier nicht. Unentgeltliche Rechtspflege prüft die Rechtsperson."
+    }
+   ]
+  },
+  {
+   "heading": "5) Stellen und Behörden (Kanton Zürich)",
+   "items": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Stelle",
+       "Wofür",
+       "Quelle"
+      ],
+      [
+       "Einzelgericht des Bezirksgerichts (in Zürich: «Einzelgericht Audienz»)",
+       "Entscheidet über das Ausweisungsgesuch im Verfahren für klare Fälle und über die Vollstreckung",
+       "§ 24 lit. c, e GOG ZH; OG ZH LF260018"
+      ],
+      [
+       "Mietgericht des Bezirks",
+       "Ausweisung auf dem ordentlichen Weg; Anfechtung und Erstreckung",
+       "§ 21, 26 GOG ZH"
+      ],
+      [
+       "Obergericht des Kantons Zürich, II. Zivilkammer",
+       "Berufung und Beschwerde",
+       "OG ZH LF260018"
+      ],
+      [
+       "Gemeinde- bzw. Stadtammannamt",
+       "Vollzug der Räumung, Räumungstermin, nötigenfalls mit Polizei",
+       "§ 147 GOG ZH; Checkliste Obergericht ZH"
+      ],
+      [
+       "Sozialdienst der Wohngemeinde",
+       "Notunterkunft, Übernahme von Mietzinsrückständen prüfen, Einlagerung. Stadt Zürich: Notunterkunft für Familien nur über die Sozialen Dienste (044 412 65 54), in dringenden Fällen direkt, ausserhalb der Bürozeiten bis 19 Uhr über sip züri oder Stadtpolizei; Notschlafstelle Rosengartenstrasse 30 sofort ohne Anmeldung (ab 18, für Familien ungeeignet)",
+       "Stadt Zürich, Seite «Notunterkunft für Familien»; Heilsarmee-Übersicht «Wohnen bei drohender Obdachlosigkeit und Notunterkünfte», Stand 30.6.2026, S. 1, 3 f."
+      ],
+      [
+       "Unentgeltliche Rechtsberatung, Mieterverband Zürich",
+       "Sofortige Vertretung, Stellungnahme, Rechtsmittel",
+       "aus Issues 1–4 übernehmen"
+      ],
+      [
+       "Polizei",
+       "Bei Räumung ohne Gerichtsentscheid (Selbsthilfe der Vermieterschaft)",
+       "Notruf / Polizeiposten"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Hinweis: Liegenschaftsverwaltungen dürfen die Vermieterschaft im Ausweisungsverfahren nicht berufsmässig vertreten, nur Anwältinnen und Anwälte (Checkliste Obergericht ZH). Für die Mieterin ist das kein Einwand, kann aber für die Rechtsperson ein Prüfpunkt sein."
+    }
+   ]
+  },
+  {
+   "heading": "6) Ausgabe: Was das System tut und sagt",
+   "items": [
+    {
+     "type": "p",
+     "text": "Issue 6 eskaliert immer und sofort an Rechtsperson und Sozialarbeiterin parallel. Es gibt keinen Fall «KI_WEITER». Das System sammelt das Stadium und das Dokument, gibt die wenigen sicheren Hinweise und erstellt das Briefing."
+    },
+    {
+     "type": "p",
+     "text": "Eskalationsregeln"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Wenn",
+       "Route",
+       "Dringlichkeit",
+       "Grund"
+      ],
+      [
+       "Jedes Schreiben eines Gerichts oder Ammannamts zur Ausweisung",
+       "RECHT + SOZIAL",
+       "SOFORT",
+       "Kurze, nicht abgebildete Fristen (G1)"
+      ],
+      [
+       "Räumungstermin steht oder Räumung findet statt",
+       "SOZIAL + RECHT",
+       "SOFORT",
+       "Unterkunft, Kinder, Hab und Gut (G2)"
+      ],
+      [
+       "Vermieterschaft räumt ohne Gericht",
+       "RECHT + SOZIAL",
+       "SOFORT",
+       "Unzulässige Selbsthilfe"
+      ],
+      [
+       "Nur Kündigung, noch kein Verfahren",
+       "Wechsel zu Issue 1 oder 3",
+       "nach diesen Issues",
+       "Ausweisung noch nicht eingeleitet"
+      ],
+      [
+       "Stadium unklar",
+       "RECHT + SOZIAL",
+       "SOFORT",
+       "Keine Rückfrage-Schleife"
+      ],
+      [
+       "Klientin will «freiwillig» einen Auszugstermin unterschreiben",
+       "RECHT",
+       "SOFORT",
+       "G9 Unterschrift"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Erlaubte Aussagen (mit Quelle)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Die Vermieterschaft darf die Wohnung nicht selbst räumen. Dafür braucht es einen Entscheid eines Gerichts.» (Lehrbuch N 3025d; Art. 343 ZPO)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Schreiben von Gericht oder Ammannamt enthalten oft sehr kurze Fristen. Bitte heute noch einer Rechtsfachperson zeigen.» (C_G_BEHOERDENFRIST; Art. 239, 314, 321 ZPO)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Auch wenn die Kündigung angefochten ist, kann ein Ausweisungsverfahren laufen. Reagieren Sie deshalb auf jedes Schreiben.» (BGE 141 III 262 E. 3.3)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wer nach Ablauf der Zahlungsfrist bezahlt, macht die Kündigung dadurch nicht ungültig. Eine Einigung mit der Vermieterschaft kann aber trotzdem möglich sein; das klärt eine Fachperson.» (OG ZH LF260018 E. 4.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Parallel zur rechtlichen Prüfung sollte jetzt eine Unterkunft gesucht werden.» (C_G_PARALLEL)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Bewahren Sie alle Schreiben mit Umschlag und Abholungseinladung auf.» (Produktregel; Fristbeginn)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Hat der Sozialdienst oder eine andere Person während der Zahlungsfrist für die Klientin bezahlt, kann das entscheidend sein. Bitte alle Zahlungsbelege mit Datum und Zahlungszweck sofort der Rechtsperson geben.» (Art. 68 OR; BGer 4A_68/2014 E. 4.2)"
+    },
+    {
+     "type": "p",
+     "text": "Verbotene Aussagen"
+    },
+    {
+     "type": "bullet",
+     "text": "Jedes berechnete Fristende oder Datum."
+    },
+    {
+     "type": "bullet",
+     "text": "«Solange die Anfechtung läuft, können Sie nicht ausgewiesen werden.» (BGE 141 III 262 E. 3.3)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Mit Kindern darf man Sie nicht auf die Strasse stellen» oder «Sie bekommen sicher noch Zeit.» (4A_391/2013 E. 7; OG ZH LF260018 E. 4.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn Sie jetzt alles nachzahlen, ist die Kündigung erledigt.» (OG ZH LF260018 E. 4.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie haben gute Chancen» oder «das Gericht wird nicht eintreten.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Ignorieren Sie das Schreiben, das ist nur eine Drohung.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Sie müssen nicht öffnen, wenn das Ammannamt kommt.»"
+    },
+    {
+     "type": "bullet",
+     "text": "«Zahlungen des Sozialdienstes zählen nicht, weil der Vertrag auf Sie lautet.» (falsch, BGer 4A_68/2014 E. 4.2)"
+    },
+    {
+     "type": "bullet",
+     "text": "«Wenn das Gericht nicht eintritt, haben Sie gewonnen.» (falsch; die Vermieterschaft kann den ordentlichen Weg gehen, BGE 140 III 315 E. 5.3)"
+    },
+    {
+     "type": "p",
+     "text": "Briefing an die Rechtsperson (oben, in dieser Reihenfolge)"
+    },
+    {
+     "type": "bullet",
+     "text": "Stadium, Dokument, Geschäftsnummer, Gericht oder Ammannamt"
+    },
+    {
+     "type": "bullet",
+     "text": "Zustelldatum und wörtlich zitierte Frist aus dem Schreiben"
+    },
+    {
+     "type": "bullet",
+     "text": "Grund der Kündigung; Zahlungsaufforderung und Kündigung (Uploads); Familienwohnung?"
+    },
+    {
+     "type": "bullet",
+     "text": "Zahlungen mit Datum, auch Zahlungen Dritter mit Zahlungszweck und allfällige Rücküberweisungen; Abmachungen mit der Vermieterschaft"
+    },
+    {
+     "type": "bullet",
+     "text": "Hängige Anfechtung oder Erstreckung (Gericht, Nummer)"
+    },
+    {
+     "type": "bullet",
+     "text": "Haushalt, Kinder, Gesundheit; Anschlusslösung"
+    },
+    {
+     "type": "bullet",
+     "text": "Offene Fakten und Widersprüche"
+    },
+    {
+     "type": "p",
+     "text": "Testfälle"
+    },
+    {
+     "type": "table",
+     "rows": [
+      [
+       "ID",
+       "Fall",
+       "Erwartete Route"
+      ],
+      [
+       "T6-01",
+       "Verfügung des Einzelgerichts mit Frist zur Stellungnahme zum Ausweisungsgesuch",
+       "RECHT + SOZIAL, SOFORT"
+      ],
+      [
+       "T6-02",
+       "Schreiben des Stadtammannamts: Räumung am kommenden Dienstag",
+       "SOZIAL + RECHT, SOFORT"
+      ],
+      [
+       "T6-03",
+       "Vermieter hat das Schloss gewechselt, kein Gericht beteiligt",
+       "RECHT + SOZIAL, SOFORT"
+      ],
+      [
+       "T6-04",
+       "Klientin hat Rückstand nach Fristablauf bezahlt und glaubt, alles sei erledigt; Gesuch liegt vor",
+       "RECHT + SOZIAL, SOFORT; Claim «Nachzahlung heilt nicht»"
+      ],
+      [
+       "T6-05",
+       "Anfechtung hängig, nun Ausweisungsgesuch",
+       "RECHT + SOZIAL, SOFORT; Verbot «Anfechtung schützt» nicht ausgegeben"
+      ],
+      [
+       "T6-06",
+       "Sozialarbeiterin schreibt nur «Klientin muss raus», kein Dokument",
+       "RECHT + SOZIAL, SOFORT (Stadium unklar)"
+      ],
+      [
+       "T6-07",
+       "Nur Kündigung wegen Zahlungsverzug, Wort «Ausweisung» kommt im Text vor",
+       "Issue 3 aktiv; Keyword-Netz hebt auf SOFORT"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "Teamentscheide (7.11.2026)",
+   "items": [
+    {
+     "type": "p",
+     "text": "Diese Werte sind Produktentscheide, keine gesetzlichen Grössen."
+    },
+    {
+     "type": "bullet",
+     "text": "Keine Rückfrage-Runden: Bei jedem Hinweis auf ein Ausweisungsverfahren eskaliert das System sofort; fehlende Angaben werden parallel erhoben. Das ist eine bewusste Ausnahme zur allgemeinen Regel G7."
+    },
+    {
+     "type": "bullet",
+     "text": "Unterlagenliste für die Sozialarbeiterin: ja. Das System gibt eine Liste aus (Mietvertrag, Kündigung mit Couvert, Mahnung, Zahlungsbelege inkl. Zahlungen des Sozialdienstes, Gesuch und Vorladung des Gerichts)."
+    },
+    {
+     "type": "bullet",
+     "text": "Übergreifend: Betrieb: Das Start-up betreibt die App im Auftrag des Sozialdienstes (vom Team bestätigt, 7.11.2026); Datenschutz voraussichtlich nach IDG ZH (§ 3 Abs. 1 lit. c, § 6 IDG). Vor jedem Briefing an eine externe Rechtsperson ausdrückliche Einwilligung der Klientin (consent_briefing; § 17 Abs. 1 lit. b IDG; Art. 6 Abs. 7 lit. a DSG)."
+    }
+   ]
+  },
+  {
+   "heading": "Was wir noch von euch brauchen",
+   "items": [
+    {
+     "type": "bullet",
+     "text": "Erledigt: Volltexte BGE 138 III 620, 141 III 23, 142 III 515, 138 III 123, 139 III 38, 140 III 315, 142 III 690, BGer 4A_391/2013."
+    },
+    {
+     "type": "bullet",
+     "text": "Erledigt: Volltext BGer 4A_68/2014 (vollständiges Urteil zu BGE 140 III 315), eingearbeitet."
+    },
+    {
+     "type": "bullet",
+     "text": "Streitwert: 4A_391/2013 E. 5 und OG ZH LF260018 E. 5.1 geben den Massstab (Mietzins für die voraussichtliche Dauer, bis die Vermieterschaft wieder verfügen kann). Ein publizierter BGE dazu wäre besser, ist aber nicht zwingend."
+    },
+    {
+     "type": "bullet",
+     "text": "Optional: ein bis zwei Zürcher Entscheide, in denen die Mieterin Erfolg hatte (Nichteintreten wegen unklarer Lage)."
+    },
+    {
+     "type": "bullet",
+     "text": "Kontakte: Notunterkunft und Sozialdienst der Stadt Zürich bzw. eurer Demo-Gemeinde; Stadtammannämter."
+    },
+    {
+     "type": "p",
+     "text": "Offene Prüfpunkte"
+    },
+    {
+     "type": "bullet",
+     "text": "☒ Lehrbuch-Zitate am Volltext bestätigt"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Produktentscheid: Bei Issue 6 keine Rückfrage-Runden, sondern sofort eskalieren, auch wenn Fakten fehlen (Ausnahme zu G7). Einverstanden?"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Darf das System der Sozialarbeiterin eine Liste der Unterlagen für die Rechtsperson ausgeben (Mietvertrag, Mahnung, Kündigung, Zahlungsbelege inkl. Zahlungen des Sozialdienstes, Gerichtsschreiben)? Vorschlag: ja"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Faktenliste für «mögliche Einwände» ergänzen (mündliche Abmachungen, Zahlungen Dritter, Zustellprobleme, Familienwohnung), weil nach BGE 138 III 620 E. 5.1.1 substanziierte und schlüssige Einwände den klaren Fall verhindern können"
+    },
+    {
+     "type": "bullet",
+     "text": "☐ Keyword-Netz ergänzen: «Audienz», «Einzelgericht», «Räumungstermin», «Schloss ausgewechselt»"
+    },
+    {
+     "type": "p",
+     "text": "Quellen"
+    },
+    {
+     "type": "bullet",
+     "text": "Gesetz: ZPO.pdf (SR 272, Stand 1.7.2026), Art. 198, 236, 239, 243, 248, 252–257, 308, 314 f., 321, 325, 336–343 (S. 52–99); OR_admin.pdf (SR 220, Stand 1.10.2026), Art. 257d, 266l–o, 267, 271–273 (S. 68–84); GOG ZH (LS 211.1, Stand 1.7.2020), §§ 21, 24, 26, 147 (S. 6 f., 32)"
+    },
+    {
+     "type": "bullet",
+     "text": "Lehrbuch: euer Auszug «§ 31 Miete», N 3025d–3025f (S. 990–992)"
+    },
+    {
+     "type": "bullet",
+     "text": "Volltexte (eure Dateien): BGE 138 III 123, 138 III 620, 139 III 38, 140 III 315, 141 III 23, 141 III 262, 142 III 515, 142 III 690; BGer 4A_391/2013, 4A_68/2014"
+    },
+    {
+     "type": "bullet",
+     "text": "Obergericht Zürich: Beschluss LF260018-O/U vom 16.3.2026; Checkliste Ausweisungsgesuch (gerichte-zh.ch, abgerufen 7.11.2026)"
+    }
+   ]
+  }
+ ],
+ "footnotes": []
+}

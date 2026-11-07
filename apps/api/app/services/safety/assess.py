@@ -16,8 +16,9 @@ from app.services.referrals.network import (
     Org,
     ReferralNetwork,
     build_card,
+    find_municipality,
     infer_canton,
-    resolve_role,
+    resolve_role_options,
 )
 
 HEADLINE_IMMEDIATE = "Akute Gefahr erkannt – jetzt handeln"
@@ -68,7 +69,31 @@ def location_from_facts(kb: KnowledgeBase, issue_ids: list[str], facts: dict) ->
                 break
     if canton is None and net is not None:
         canton = infer_canton(net, municipality)
-    return Location(canton=canton, municipality=municipality)
+    alias_note = None
+    if net is not None and municipality and canton:
+        key, how = find_municipality(net, municipality, canton)
+        if key is not None and how == "alias":
+            canonical = key.split(":", 1)[1]
+            alias_note = (
+                f"«{municipality}» ist ein Ortsteil von {canonical}; zuständig ist {canonical}."
+            )
+            municipality = canonical
+    residence = None
+    rf = facts.get("client_residence_municipality")
+    if rf is not None and getattr(rf.status, "value", rf.status) == "KNOWN" and rf.value:
+        residence = str(rf.value).strip()
+        if net is not None and canton:
+            key, how = find_municipality(net, residence, canton)
+            if key is not None and how == "alias":
+                residence = key.split(":", 1)[1]
+        if residence and municipality and residence.casefold() == municipality.casefold():
+            residence = None  # same municipality: nothing different to say
+    return Location(
+        canton=canton,
+        municipality=municipality,
+        residence_municipality=residence,
+        alias_note=alias_note,
+    )
 
 
 # ------------------------------------------------------------------------------------ safety
@@ -79,26 +104,36 @@ def _route_index(net: ReferralNetwork) -> dict[str, tuple[int, object]]:
 def _resolve_orgs(
     net: ReferralNetwork, roles: list[str], loc: Location, notes: list[str] | None = None
 ) -> list[tuple[Org, str, str]]:
-    """Role/org ids -> [(org, role, how)], skipping unresolved and inactive organisations."""
-    orgs = net.org_map()
+    """Role/org ids -> [(org, role, how)] (best option per role), skipping unresolved and inactive organisations."""
     out: list[tuple[Org, str, str]] = []
     for role in roles:
-        org_id, how = resolve_role(net, role, loc)
-        org = orgs.get(org_id or "")
+        for org, how, _opt in _active_options(net, role, loc, notes)[:1]:
+            out.append((org, role, how))
+    return out
+
+
+def _active_options(
+    net: ReferralNetwork, role: str, loc: Location, notes: list[str] | None = None
+) -> list[tuple[Org, str, object]]:
+    """All usable options of a role, best first: [(org, how, ResolvedOption)]. Inactive organisations fall back to the
+    role default (never silently shown as a regular recommendation)."""
+    orgs = net.org_map()
+    out: list[tuple[Org, str, object]] = []
+    for opt in resolve_role_options(net, role, loc):
+        org = orgs.get(opt.org_id)
+        how = "municipality" if opt.how == "municipality_data" else opt.how
         if org is not None and not org.active:
             if notes is not None:
                 notes.append(
                     f"{org.label} nimmt derzeit nicht auf; nicht als reguläre Empfehlung angeboten."
                 )
             default_id = (net.role_resolution.get(role) or {}).get("default")
-            alt = orgs.get(default_id or "")
-            org, how = (
-                (alt, "default")
-                if alt is not None and alt.active and alt.id != org.id
-                else (None, "none")
-            )
+            alt = orgs.get(default_id) if isinstance(default_id, str) else None
+            if alt is not None and alt.active and alt.id != org.id:
+                out.append((alt, "default", opt))
+            continue
         if org is not None:
-            out.append((org, role, how))
+            out.append((org, how, opt))
     return out
 
 
@@ -236,6 +271,58 @@ def _active_signals(
 
 
 # ------------------------------------------------------------------------------------ referrals
+SIGNAL_REASON_DE = {
+    "legal_deadline_risk": "weil eine Frist knapp sein oder bereits laufen könnte",
+    "imminent_housing_loss": "weil der Verlust der Wohnung droht",
+    "needs_shelter": "weil eine Unterkunft nötig sein könnte",
+    "amount_disputed": "weil der verlangte Betrag unklar oder bestritten ist",
+    "children_in_household": "weil Kinder im Haushalt leben",
+    "health_risk": "wegen möglicher Gesundheitsrisiken",
+    "rent_deposit_started": "weil Miete hinterlegt wurde oder werden soll",
+    "rent_unaffordable": "weil die Miete nicht mehr finanzierbar sein könnte",
+    "debt": "wegen Schulden oder einer Betreibung",
+    "low_income": "weil das Einkommen knapp ist",
+}
+
+
+def _signal_reason(sig: str) -> str:
+    return SIGNAL_REASON_DE.get(sig, "wegen der Fallsituation")
+
+
+SOCIAL_NOTE = {
+    "to_verify": (
+        "Der Sozialdienst dieser Gemeinde ist vom Law-Team noch nicht einzeln geprüft. Gezeigt wird die allgemeine "
+        "kantonale Anlaufstelle; den örtlichen Sozialdienst bitte über die Gemeindeverwaltung klären."
+    ),
+    "traeger_verified_contact_open": (
+        "Die zuständige Trägerschaft ist belegt; die Kontaktdaten des örtlichen Sozialdienstes sind noch nicht geprüft."
+    ),
+}
+
+
+def _annotate(
+    net, card: ReferralCard, role: str, how: str, opt, loc: Location, notes: list[str]
+) -> None:
+    """Jurisdiction text and honest verification notes (no invented local contact)."""
+    mkey = getattr(opt, "municipality_key", None)
+    if mkey:
+        name = mkey.split(":", 1)[1]
+        entry = net.municipalities.get(mkey)
+        bezirk = f", Bezirk {entry.bezirk}" if entry is not None else ""
+        card.scope_de = f"Zuständig für Gemeinde {name}{bezirk}"
+        if getattr(opt, "basis_fallback", False):
+            card.scope_de += " (Gemeinde der Wohnung; Wohnsitzgemeinde nicht erfasst)"
+    elif how == "canton" and loc.canton:
+        card.scope_de = f"Kantonsweit (Kanton {loc.canton})"
+        if role in net.municipality_roles() and not loc.municipality:
+            notes.append(
+                f"{card.label}: Gemeinde nicht bestimmt, kantonale Anlaufstelle gezeigt (nicht die örtlich zuständige Stelle)."
+            )
+    status = getattr(opt, "social_status", None)
+    if status in SOCIAL_NOTE:
+        card.local_note_de = SOCIAL_NOTE[status]
+
+
 def plan_referrals(
     kb: KnowledgeBase,
     issue_ids: list[str],
@@ -273,7 +360,7 @@ def plan_referrals(
                             15 if grp == "primary" else 25,
                             grp,
                             role,
-                            f"wegen: {sig}",
+                            _signal_reason(sig),
                             f"issue_rules:{rule.issue_id}:{sig}",
                         )
                     )
@@ -285,29 +372,45 @@ def plan_referrals(
         if cc.get("signal") in signals:
             for role in cc.get("add", []):
                 entries.append(
-                    (40, "more", role, f"wegen: {cc['signal']}", f"cross_cutting:{cc['signal']}")
+                    (
+                        40,
+                        "more",
+                        role,
+                        _signal_reason(cc["signal"]),
+                        f"cross_cutting:{cc['signal']}",
+                    )
                 )
 
-    orgs = net.org_map()
     primary: list[ReferralCard] = []
     more: list[ReferralCard] = []
     seen: set[str] = set()
+    if loc.alias_note:
+        notes.append(loc.alias_note)
     for _rank, grp, role, reason, ref in sorted(entries, key=lambda e: e[0]):
-        resolved = _resolve_orgs(net, [role], loc, notes)
-        if not resolved:
+        options = _active_options(net, role, loc, notes)
+        if not options:
             unresolved.append(role)
             continue
-        org, _r, how = resolved[0]
-        if org.id in seen:
-            continue
-        seen.add(org.id)
-        if how == "default" and org.id == role and loc.canton:
-            notes.append(
-                f"{org.label}: Zuständigkeit für {loc.describe()} nicht bestätigt, allgemeine Anlaufstelle gezeigt."
-            )
-        card = build_card(org, reason=reason or None, rule_ref=ref)
-        (primary if grp == "primary" and len(primary) < 3 else more).append(card)
-    del orgs
+        for n, (org, how, opt) in enumerate(options):
+            if org.id in seen:
+                continue
+            seen.add(org.id)
+            if how == "default" and org.id == role and loc.canton:
+                notes.append(
+                    f"{org.label}: Zuständigkeit für {loc.describe()} nicht bestätigt, allgemeine Anlaufstelle gezeigt."
+                )
+            card = build_card(org, reason=reason or None, rule_ref=ref)
+            card.option_of_role = role
+            _annotate(net, card, role, how, opt, loc, notes)
+            if n > 0:  # further option of the same role: never prominent, never lost
+                card.reason_de = (
+                    (reason + " – weitere Option in dieser Region").strip(" –")
+                    if reason
+                    else "weitere Option in dieser Region"
+                )
+                more.append(card)
+            else:
+                (primary if grp == "primary" and len(primary) < 3 else more).append(card)
     location_de = (
         loc.describe() or "Kein Wohnort bestätigt: es werden nur allgemeine Anlaufstellen gezeigt."
     )

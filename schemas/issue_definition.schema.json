@@ -408,6 +408,20 @@
           "default": false,
           "title": "Escalation Relevant",
           "type": "boolean"
+        },
+        "handover_priority": {
+          "default": "normal",
+          "enum": [
+            "high",
+            "normal"
+          ],
+          "title": "Handover Priority",
+          "type": "string"
+        },
+        "store_evidence": {
+          "default": true,
+          "title": "Store Evidence",
+          "type": "boolean"
         }
       },
       "required": [

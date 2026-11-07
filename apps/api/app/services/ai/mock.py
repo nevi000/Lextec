@@ -10,6 +10,7 @@ import re
 from datetime import date
 
 from app.services.ai.base import CallContext
+from app.services.ai.issue_keywords import ISSUE_PATTERNS
 from app.services.ai.schemas import (
     DetectedIssue,
     ExtractedFact,
@@ -61,55 +62,39 @@ def to_iso(text: str) -> str | None:
     return None
 
 
-ISSUE_PATTERNS: list[tuple[str, float, re.Pattern]] = [
-    (
-        "CH_TENANCY_TERMINATION",
-        0.9,
-        re.compile(
-            r"vermieter\w*.{0,60}kündig|kündigung\s+(für|der)\s+(ihre|seine|die|unsere)?\s*wohnung"
-            r"|wohnung\w*.{0,40}(gekündigt|kündigung)|kündigungsformular|mietkündigung|eigenbedarf"
-            r"|wohnung\w*\s+(zurück|verlassen)",
-            I,
-        ),
-    ),
-    (
-        "CH_TENANCY_TERMINATION",
-        0.6,
-        re.compile(
-            r"wohnung\w*\s+(zu\s+)?verlier|miete\w*\s+nicht\s+mehr\s+bezahlen|mietzins|räumung", I
-        ),
-    ),
-    (
-        "tenancy_defects",
-        0.85,
-        re.compile(r"schimmel|mängel|mangel|heizung\w*\s+(ist\s+)?(defekt|kaputt)|feucht", I),
-    ),
-    (
-        "employment_termination",
-        0.9,
-        re.compile(
-            r"(arbeitgeber|arbeitsstelle|arbeitsverhältnis|arbeitsvertrag|chef).{0,60}kündig"
-            r"|kündig.{0,60}(arbeitsstelle|arbeitsverhältnis|arbeitsvertrag)",
-            I,
-        ),
-    ),
-    (
-        "unpaid_salary",
-        0.85,
-        re.compile(
-            r"(lohn|gehalt)\w*.{0,50}(nicht\s+(bezahlt|erhalten|überwiesen)|ausstehend|unbezahlt|offen)"
-            r"|(nicht|kein)\w*\s+(lohn|gehalt)",
-            I,
-        ),
-    ),
-]
-
 UNSUPPORTED_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("Familienrecht", re.compile(r"scheidung|sorgerecht|unterhaltsbeitr|alimente", I)),
     ("Erbrecht", re.compile(r"erbschaft|testament|erbteil", I)),
     ("Strafrecht", re.compile(r"strafverfahren|strafanzeige|polizei\w*\s+vorgeladen|vorladung", I)),
     ("Steuerrecht", re.compile(r"steuerverfahren|steuererklärung|steuerrekurs", I)),
-    ("Ausländerrecht", re.compile(r"aufenthaltsbewilligung|asylverfahren|ausweisung", I)),
+    (
+        "Ausländerrecht",
+        # «Ausweisung» alone is tenancy law (Issue 6). Immigration law needs an immigration context.
+        re.compile(
+            r"aufenthaltsbewilligung|asylverfahren|landesverweis|ausländerrecht|aufenthaltsrecht"
+            r"|ausweisung\s+aus\s+der\s+schweiz|ausreise\s+aus\s+der\s+schweiz"
+            r"|(ausländer\w*|migrations\w*|aufenthalts\w*|asyl\w*)[^.?!]{0,60}wegweisung"
+            r"|wegweisung\w*[^.?!]{0,60}(schweiz\s+verlassen|migrations\w*|ausländer\w*|asyl\w*|aufenthalts\w*)",
+            I,
+        ),
+    ),
+    (
+        "Arbeitsrecht",
+        # A real employment-law concern (dismissal by the employer, unpaid wages). A job loss mentioned only as the
+        # background of a rent problem («Job verloren, kann die Miete nicht zahlen») is NOT employment law, and the words
+        # «Kündigung» or «Lohn» alone are never enough.
+        re.compile(
+            r"(arbeitgeber\w*|arbeitsstelle|arbeitsverhältnis|arbeitsvertrag|\bchef\w*|\bfirma)"
+            r"[^.?!]{0,50}\b(gekündigt|kündigt|kündigte|kündigen|entlassen|entlässt|entliess|fristlos)\b"
+            r"|(arbeitsverhältnis|arbeitsvertrag|arbeitsstelle)\w*[^.?!]{0,40}(kündigung|gekündigt)"
+            r"|\b(fristlos|ungerechtfertigt)\w*\s+entlassen"
+            r"|(arbeitgeber\w*|\bchef\w*|\bfirma)[^.?!]{0,60}\b(keinen|kein|nicht)\s+(\w+\s+)?(lohn|gehalt)"
+            r"|(arbeitgeber\w*|\bchef\w*|\bfirma)[^.?!]{0,60}\b(lohn|gehalt)\w*[^.?!]{0,30}\b(nicht|kein\w*)\b"
+            r"|\b(lohn|gehalt)\w*[^.?!]{0,40}(nicht\s+(bezahlt|erhalten|ausbezahlt|überwiesen)|ausstehend|unbezahlt)"
+            r"|\bkeinen\s+(lohn|gehalt)\w*\s+(bezahlt|erhalten|ausbezahlt|überwiesen)",
+            I,
+        ),
+    ),
 ]
 
 # (fact_id, value, pattern). Value "@date" = take the date captured by group 'd' / 'd2'.
@@ -200,7 +185,7 @@ FACT_PATTERNS: list[tuple[str, str, re.Pattern]] = [
         "official_form_used",
         "nein",
         re.compile(
-            r"ohne\s+(das\s+)?amtliche[sn]?\s+Kündigungsformular"
+            r"ohne\s+(das\s+)?amtliche[sn]?\s+(Kündigungs)?[Ff]ormular"
             r"|kein(?:es|en)?\s+amtliche[sn]?\s+(Kündigungs)?[Ff]ormular|nicht\s+auf\s+(dem\s+)?amtlichen",
             I,
         ),
@@ -239,6 +224,124 @@ FACT_PATTERNS: list[tuple[str, str, re.Pattern]] = [
         "ja",
         re.compile(
             r"(möchte|wünscht|will)\s+(eine[nr]?\s+)?(Anwalt|Anwältin|Fachperson|Jurist\w*)", I
+        ),
+    ),
+    # --- Issues 2-7 (nur wörtlich genannte Angaben; keine Annahmen) ---
+    (
+        "warning_written",
+        "ja",
+        re.compile(
+            r"schriftliche[rn]?\s+(Mahnung|Zahlungsaufforderung)|Mahnung\s+(vorhanden|liegt\s+vor)",
+            I,
+        ),
+    ),
+    (
+        "warning_threat_present",
+        "ja",
+        re.compile(
+            r"Kündigungsandrohung|mit\s+(der\s+)?Kündigung\s+(gedroht|angedroht)|Kündigung\s+angedroht",
+            I,
+        ),
+    ),
+    (
+        "termination_already_received",
+        "nein",
+        re.compile(r"noch\s+keine\s+Kündigung|keine\s+Kündigung\s+(erhalten|eingetroffen)", I),
+    ),
+    (
+        "payment_status",
+        "nicht_bezahlt",
+        re.compile(r"(noch\s+)?nichts\s+bezahlt|Rückstände?\s+nicht\s+bezahlt", I),
+    ),
+    (
+        "rent_withheld_for_defects",
+        "ja",
+        re.compile(
+            r"Miete\s+(wegen|aufgrund)\s+(der\s+)?Mängel\w*\s+(nicht\s+bezahlt|zurückbehalten|gekürzt)",
+            I,
+        ),
+    ),
+    ("defect_type", "schimmel", re.compile(r"Schimmel|Feuchtigkeit", I)),
+    (
+        "rent_payment_status",
+        "gekuerzt_oder_zurueckbehalten",
+        re.compile(
+            r"(Miete|Mietzins)\w*\s+(\w+\s+){0,3}(gekürzt|zurückbehalten|hinterlegt)|weniger\s+Miete\s+bezahlt|zahlt\s+\d+\s?%\s+weniger",
+            I,
+        ),
+    ),
+    (
+        "health_symptoms_reported",
+        "ja",
+        re.compile(r"hustet|Atemprobleme|Atembeschwerden|Asthma|gesundheitliche\s+Beschwerden", I),
+    ),
+    (
+        "children_in_household",
+        "ja",
+        re.compile(
+            r"Familie\s+mit\s+(zwei\s+|drei\s+|\d\s+)?Kindern|Kinder\s+im\s+Haushalt|alleinerziehend|mit\s+(zwei\s+|drei\s+)?Kindern",
+            I,
+        ),
+    ),
+    ("children_in_household", "nein", re.compile(r"keine\s+Kinder", I)),
+    (
+        "housing_solution_available",
+        "nein",
+        re.compile(
+            r"findet\s+keine\s+(neue\s+|passende\s+)?Wohnung|keine\s+(Ersatz|Anschluss)(wohnung|lösung)",
+            I,
+        ),
+    ),
+    ("ending_reason", "ordentliche_kuendigung", re.compile(r"ordentliche\s+Kündigung", I)),
+    (
+        "ending_reason",
+        "zahlungsverzug",
+        re.compile(r"Kündigung\s+wegen\s+(Zahlungs|Mietzins|Miet)\w*", I),
+    ),
+    (
+        "eviction_stage",
+        "ammannamt_raeumungstermin",
+        re.compile(
+            r"(Stadt|Gemeinde)?ammann(amt)?\w*.{0,60}(Räumung|räumen|Termin)|Räumungstermin", I
+        ),
+    ),
+    (
+        "eviction_stage",
+        "raeumung_heute_oder_schloss",
+        re.compile(r"Schloss\s+(ausgewechselt|gewechselt)|Räumung\s+findet\s+heute", I),
+    ),
+    (
+        "eviction_stage",
+        "gesuch_oder_vorladung",
+        re.compile(r"Ausweisungsgesuch|Vorladung\s+(des|vom)\s+Gericht", I),
+    ),
+    (
+        "landlord_self_help",
+        "ja",
+        re.compile(
+            r"Schloss\s+(ausgewechselt|gewechselt)|Strom\s+abgestellt|Sachen\s+(hinaus|vor\s+die\s+Tür)gestellt",
+            I,
+        ),
+    ),
+    (
+        "change_type",
+        "mietzinserhoehung",
+        re.compile(r"Mietzinserhöhung|Miete\s+(wird\s+|wurde\s+)?erhöht|Erhöhung\s+der\s+Miete", I),
+    ),
+    ("change_type", "neue_nebenkosten", re.compile(r"neue\s+Nebenkosten", I)),
+    (
+        "form_official_used",
+        "nein",
+        re.compile(
+            r"ohne\s+(das\s+)?amtliche[sn]?\s+Formular|per\s+(E-Mail|Brief)\s+ohne\s+Formular|kein(?:es)?\s+amtliche[sn]?\s+Formular",
+            I,
+        ),
+    ),
+    (
+        "letter_contains_termination",
+        "ja",
+        re.compile(
+            r"(Erhöhung|Mietzins\w*)\s+(und|mit)\s+(gleichzeitig\s+)?(eine[rn]?\s+)?Kündigung", I
         ),
     ),
 ]
@@ -343,6 +446,8 @@ class MockAIProvider:
                     )
         for label, pat in UNSUPPORTED_PATTERNS:
             quote = _find(pat, text)
+            if label == "Arbeitsrecht" and "employment_termination" in issue_ids:
+                continue  # demo mode: employment law is offered as a (demo) issue
             if quote and label not in unsupported:
                 unsupported[label] = UnrecognizedIssue(
                     description=label, evidence_quote=quote, source_message_id=msg.id
@@ -368,3 +473,12 @@ class MockAIProvider:
         self, question_de: str, context: str, ctx: CallContext | None = None
     ) -> str:
         return question_de
+
+    def translate(
+        self, texts: list[str], source: str, target: str, ctx: CallContext | None = None
+    ) -> list[str]:
+        """Deterministic stand-in: marks the text instead of pretending to translate (no network, no cost)."""
+        if source == target:
+            return list(texts)
+        tag = "DE" if target == "de" else target.upper()
+        return [f"[{tag} · Mock] {t}" for t in texts]

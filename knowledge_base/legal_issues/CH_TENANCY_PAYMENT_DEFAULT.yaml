@@ -1,0 +1,1278 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Kündigung wegen Zahlungsverzug (Issue 3)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_03.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_03.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_PAYMENT_DEFAULT
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: payment_default
+title_de: Kündigung wegen Zahlungsverzug (Issue 3)
+description: Kündigung nach unbenütztem Ablauf der Zahlungsfrist (Art. 257d Abs. 2 OR). Immer sofortige,
+  parallele Eskalation an Rechtsperson und Sozialarbeiterin; Erstreckung ausgeschlossen; keine Erfolgsprognose.
+provenance_de: 'Law-Dossier Issue 3 vom 7.11.2026; Teamentscheide: Wartezeit-Prüfhinweis ab 14 Tagen,
+  Anfechtungsempfehlung bleibt bei der Rechtsperson, Übertragbarkeit BGE 141 III 262 / 4A_585/2010 auf
+  Wohnungen.'
+classification:
+  description: 'Passt, wenn die Vermieterschaft wegen Mietzinsrückstand gekündigt hat (Kündigung nach
+    Mahnung, fristlose oder 30-Tage-Kündigung wegen Zahlungsverzug). NICHT passend: Kündigung ohne Zahlungsverzug
+    (Issue 1), Mahnung ohne Kündigung (Issue 2), Gerichtsschreiben (Issue 6).'
+  typical_situations:
+  - Der Vermieter hat wegen Mietrückstand gekündigt.
+  - Meine Klientin hat die Kündigung wegen Zahlungsverzug erhalten.
+  - Nach der Mahnung kam die Kündigung nach Art. 257d.
+  - Die Verwaltung hat gekündigt, weil die Miete nicht rechtzeitig bezahlt wurde.
+  related_issues: []
+derived:
+- id: days_since_earliest_receipt
+  kind: days_since_earliest
+  facts:
+  - pickup_notice_date
+  - receipt_date
+  description: Tage seit dem frühesten bekannten Empfangshinweis der Kündigung (INTERNE Schwelle, kein
+    Fristende).
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: co_tenants_exist
+  group: prescreening
+  label_de: Mitmieter im Vertrag
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - BGE_140_III_491
+  extraction_hint_de: true, wenn eine weitere Person im Mietvertrag steht; false bei 'keine weiteren Mitmieter'
+    / 'alleinige Mieterin'.
+  question_de: Steht noch jemand anderes im Mietvertrag?
+  why_needed_de: Die Kündigung muss allen Mitmietern zugehen (BGE 140 III 491).
+- id: co_tenants_all_notified
+  group: prescreening
+  label_de: Kündigung an alle Mitmieter zugestellt
+  data_type: boolean
+  required_if:
+    ref: fact.co_tenants_exist
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - co_tenants_exist
+  source_ids:
+  - BGE_140_III_491
+  question_de: Wurde die Kündigung allen Mitmietern zugestellt?
+  why_needed_de: Bei Mitmiete muss gegenüber allen Mietern gekündigt werden (BGE 140 III 491).
+- id: delivery_method
+  group: delivery
+  label_de: Art der Zustellung
+  data_type: enum
+  enum_values:
+  - persoenlich
+  - eingeschrieben
+  - normale_post
+  enum_labels_de:
+    persoenlich: Persönlich übergeben
+    eingeschrieben: Eingeschrieben (Einschreiben)
+    normale_post: Normale Post
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_140_III_244
+  extraction_hint_de: '''gewöhnlicher Brief'', ''normale Post'' = normale_post. Einschreiben nur, wenn
+    ausdrücklich genannt.'
+  question_de: 'Wie wurde die Kündigung zugestellt: persönlich, eingeschrieben oder mit normaler Post?'
+  why_needed_de: Die Zustellart bestimmt den Fristbeginn (BGE 140 III 244).
+- id: pickup_notice_date
+  group: delivery
+  label_de: Datum der Abholungseinladung
+  data_type: date
+  required_if:
+    ref: fact.delivery_method
+    op: equals
+    value: eingeschrieben
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - delivery_method
+  source_ids:
+  - BGE_143_III_15
+  extraction_hint_de: Datum, an dem der gelbe Zettel (Abholungseinladung) im Briefkasten lag. NICHT das
+    Briefdatum.
+  question_de: "An welchem Datum lag der gelbe Zettel (Abholungseinladung) im Briefkasten?"
+  why_needed_de: Frühester möglicher Empfang bei eingeschriebener Post (BGE 143 III 15).
+- id: receipt_date
+  group: delivery
+  label_de: Empfangsdatum
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273_1
+  extraction_hint_de: Datum, an dem die Klientin die Kündigung tatsächlich in den Händen hatte. Das Datum
+    auf dem Brief ist NICHT das Empfangsdatum. Nur setzen, wenn ausdrücklich genannt.
+  question_de: "An welchem Datum hatte die Klientin die Kündigung tatsächlich in den Händen?"
+  why_needed_de: Ausgangspunkt der 30-Tage-Frist (Art. 273 Abs. 1 OR). Das Datum auf dem Brief ist nicht
+    der Empfang.
+- id: official_form_used
+  group: form
+  label_de: Amtliches Kündigungsformular verwendet
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_266L
+  - CH_OR_266O
+  extraction_hint_de: false bei 'nur ein gewöhnlicher Brief ohne amtliches Formular' / 'kein Formular';
+    true nur, wenn das kantonale Formular ausdrücklich genannt wird.
+  question_de: Wurde das amtliche kantonale Kündigungsformular verwendet?
+  why_needed_de: Die Vermieterschaft muss mit dem vom Kanton genehmigten Formular kündigen (Art. 266l
+    Abs. 2 OR); ein Mangel kann die Kündigung nichtig machen (Art. 266o OR) – das beurteilt die Fachperson.
+- id: family_home_with_spouse
+  group: form
+  label_de: Familienwohnung (Ehe-/eingetragene Partnerperson)
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_273A_1
+  - BGE_139_III_7
+  extraction_hint_de: true nur bei Ehe oder eingetragener Partnerschaft; Konkubinat = false. 'keine Ehe-
+    oder eingetragene Partnerperson' = false.
+  question_de: Wohnt die Klientin dort mit einer Ehe- oder eingetragenen Partnerperson?
+  why_needed_de: Bei Familienwohnung ist die Kündigung auch der Partnerperson separat zuzustellen (Art.
+    266n OR; BGE 139 III 7). Konkubinat zählt nicht.
+- id: spouse_still_lives_there
+  group: form
+  label_de: Partnerperson wohnt noch dort
+  data_type: boolean
+  required_if:
+    ref: fact.family_home_with_spouse
+    op: equals
+    value: true
+  priority: medium
+  depends_on:
+  - family_home_with_spouse
+  source_ids:
+  - BGE_139_III_7
+  - BGE_140_III_491
+  question_de: Wohnt die Partnerperson noch dort (oder ist sie definitiv ausgezogen)?
+  why_needed_de: Bei definitivem Auszug entfällt der Familiencharakter (BGE 139 III 7; BGE 140 III 491).
+- id: separate_delivery_to_spouse
+  group: form
+  label_de: Separate Zustellung an die Partnerperson
+  data_type: boolean
+  required_if:
+    all:
+    - ref: fact.family_home_with_spouse
+      op: equals
+      value: true
+    - ref: fact.spouse_still_lives_there
+      op: equals
+      value: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - family_home_with_spouse
+  - spouse_still_lives_there
+  source_ids:
+  - CH_OR_266N
+  - CH_OR_266O
+  question_de: Hat die Partnerperson eine eigene Kündigung in einem separaten Umschlag erhalten?
+  why_needed_de: Fehlt die separate Zustellung, kann ein Formmangel vorliegen (Art. 266n, 266o OR); die
+    Fachperson beurteilt das.
+- id: termination_date
+  group: content
+  label_de: Angegebener Kündigungstermin
+  data_type: date
+  priority: medium
+  source_ids:
+  - CH_OR_266A
+  - CH_OR_266C
+  extraction_hint_de: Datum, auf das gekündigt wurde ('per 31. Januar 2027').
+  question_de: Auf welches Datum wurde gekündigt?
+  why_needed_de: Planung des Auszugs; ein falscher Termin macht die Kündigung nicht ungültig, sie gilt
+    dann auf den nächstmöglichen Termin (Art. 266a Abs. 2 OR).
+- id: eviction_or_court_proceeding
+  group: history
+  label_de: Laufendes Gerichtsverfahren oder Ausweisung
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_257_1
+  question_de: Läuft bereits ein Gerichtsverfahren oder eine Ausweisung?
+  why_needed_de: Ein laufendes Verfahren liegt ausserhalb dieses Issues (Art. 257 ZPO); dafür ist ein
+    eigenes Issue vorgesehen.
+- id: rent_payer
+  group: social
+  label_de: Zahlende Stelle
+  data_type: enum
+  enum_values:
+  - klientin
+  - sozialdienst
+  - andere
+  enum_labels_de:
+    klientin: Klientin selbst
+    sozialdienst: Sozialdienst
+    andere: Andere Stelle
+  priority: low
+  question_de: 'Wer zahlt die Miete: die Klientin selbst oder der Sozialdienst?'
+  why_needed_de: Mögliche Interessenkonflikte; Wohnungssuche.
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: warning_written
+  group: warning
+  label_de: Mahnung schriftlich
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_257D_1
+  extraction_hint_de: true, wenn ein schriftliches Schreiben (Brief/Foto) mit Zahlungsfrist vorliegt.
+  question_de: "Liegt die Mahnung schriftlich vor?"
+  why_needed_de: Art. 257d Abs. 1 OR verlangt eine schriftliche Zahlungsfrist.
+- id: warning_threat_present
+  group: warning
+  label_de: Kündigungsandrohung enthalten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  - BGER_4A_332_2025
+  extraction_hint_de: true nur, wenn das Schreiben eine Kündigung für den Fall der Nichtzahlung androht
+    (auch 'kann gekündigt werden'). Nur Verweis auf Art. 257d ohne Androhung = false.
+  question_de: Steht in der Mahnung, dass bei Nichtzahlung gekündigt wird oder werden kann?
+  why_needed_de: Ohne Androhung keine Mahnung nach Art. 257d (ZMP 2018 Nr. 1; 4A_332/2025); «kann gekündigt
+    werden» genügt.
+- id: warning_amount_clear
+  group: warning
+  label_de: Betrag und Monate klar bezeichnet
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_332_2025
+  - CH_OR_257
+  question_de: "Ist in der Mahnung klar bezeichnet, welcher Betrag für welche Monate verlangt wird?"
+  why_needed_de: Der Rückstand muss beziffert oder einwandfrei bestimmbar sein (BGer 4A_332/2025 E. 3.1).
+- id: warning_deadline_days
+  group: warning
+  label_de: Angesetzte Zahlungsfrist (Tage)
+  data_type: integer
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  extraction_hint_de: Anzahl Tage der Zahlungsfrist laut Schreiben; nur wenn die Tage genannt oder eindeutig
+    bestimmbar sind.
+  question_de: "Wie viele Tage Zahlungsfrist setzt das Schreiben (Anzahl Tage)?"
+  why_needed_de: Bei Wohnungen mindestens 30 Tage (Art. 257d Abs. 1 OR). Das System berechnet kein Fristende.
+- id: warning_delivery_method
+  group: delivery
+  label_de: Zustellart der Mahnung
+  data_type: enum
+  enum_values:
+  - persoenlich
+  - eingeschrieben
+  - normale_post
+  enum_labels_de:
+    persoenlich: Persönlich übergeben
+    eingeschrieben: Eingeschrieben (Post)
+    normale_post: Normale Post
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_119_II_147
+  - BGE_140_III_244
+  question_de: 'Wie wurde die Mahnung zugestellt: eingeschrieben, normale Post oder persönlich?'
+  why_needed_de: 'Fristbeginn: tatsächlicher Empfang, spätestens 7. Tag der Abholfrist (BGE 119 II 147
+    E. 2); nicht die absolute Empfangstheorie wie bei der Kündigung.'
+- id: warning_receipt_date
+  group: delivery
+  label_de: Tatsächlicher Empfang der Mahnung
+  data_type: date
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_119_II_147
+  question_de: "An welchem Datum hat die Klientin das Schreiben erhalten oder auf der Post abgeholt?"
+  why_needed_de: Relative Empfangstheorie bei der Zahlungsaufforderung (BGE 119 II 147 E. 2; BGE 140 III
+    244 E. 5).
+- id: warning_pickup_notice_date
+  group: delivery
+  label_de: Abholungseinladung (Mahnung)
+  data_type: date
+  required_if:
+    ref: fact.warning_delivery_method
+    op: equals
+    value: eingeschrieben
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - warning_delivery_method
+  source_ids:
+  - BGE_119_II_147
+  question_de: 'Falls nicht abgeholt: Wann lag der gelbe Zettel im Briefkasten?'
+  why_needed_de: 'Nicht abgeholtes Einschreiben: Empfang spätestens am 7. Tag der Abholfrist (BGE 119
+    II 147 E. 2).'
+- id: payment_path
+  group: payment
+  label_de: Zahlungsweg
+  data_type: enum
+  enum_values:
+  - einzahlungsschein
+  - ueberweisung
+  - bar_oder_andere
+  enum_labels_de:
+    einzahlungsschein: Einzahlungsschein der Vermieterschaft
+    ueberweisung: Überweisung / E-Banking
+    bar_oder_andere: Bar oder anderer Weg
+  priority: medium
+  source_ids:
+  - BGE_124_III_145
+  - BGE_119_II_232
+  - CH_OR_74_2_1
+  question_de: "Über welchen Weg soll bezahlt werden (Einzahlungsschein, Überweisung, bar oder anderes)?"
+  why_needed_de: Mit beigelegtem Einzahlungsschein zählt die Einzahlung (BGE 124 III 145 E. 2), sonst
+    der Eingang bei der Vermieterschaft (BGE 119 II 232 E. 2).
+- id: third_party_payment
+  group: payment
+  label_de: Zahlung durch Dritte
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat jemand anderes für die Klientin gezahlt (Sozialdienst, Angehörige, Stiftung)?"
+  why_needed_de: Zahlung durch Dritte tilgt die Mietschuld (Art. 68 OR; BGer 4A_68/2014 E. 4.2).
+- id: payment_returned_by_landlord
+  group: payment
+  label_de: Zahlung von der Vermieterschaft zurückgeschickt
+  data_type: boolean
+  required_if:
+    ref: fact.third_party_payment
+    op: equals
+    value: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - third_party_payment
+  source_ids:
+  - BGER_4A_68_2014
+  question_de: "Hat die Vermieterschaft eine Zahlung zurückgeschickt oder abgelehnt?"
+  why_needed_de: Erst nach Fristende zurücküberwiesen = angenommen (BGer 4A_68/2014 E. 4.2).
+- id: social_payment_failed
+  group: payment
+  label_de: Zahlung des Sozialdienstes ausgeblieben
+  data_type: boolean
+  required_if:
+    ref: fact.rent_payer
+    op: equals
+    value: sozialdienst
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - rent_payer
+  source_ids:
+  - PRODUKTREGEL
+  question_de: "Ist eine Mietzahlung des Sozialdienstes an die Vermieterschaft ausgeblieben?"
+  why_needed_de: 'Der Sozialdienst ist selbst beteiligt (Interessenkonflikt): interne Klärung und unabhängige
+    Beratung.'
+- id: rent_withheld_for_defects
+  group: counterclaims
+  label_de: Miete wegen Mängeln zurückbehalten
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259G
+  - BGE_147_III_218
+  question_de: Hat die Klientin wegen Mängeln bewusst nicht bezahlt?
+  why_needed_de: 'Schutzregel (Art. 259g OR; BGE 147 III 218): Zurückbehalten und Hinterlegung bereits
+    fälliger Mietzinse schützen nicht.'
+- id: payment_agreement_present
+  group: history
+  label_de: Ratenvereinbarung oder Gespräch vereinbart
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - MGZH_ZMP_2018_1
+  question_de: Gab es eine Ratenvereinbarung, Stundung oder ein vereinbartes Gespräch mit der Vermieterschaft?
+  why_needed_de: Kann eine spätere Kündigung treuwidrig machen (ZMP 2018 Nr. 1).
+- id: amount_disputed
+  group: counterclaims
+  label_de: Betrag wird bestritten
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - BGE_140_III_591
+  - BGE_120_II_31
+  question_de: Bestreitet die Klientin den Betrag?
+  why_needed_de: Fälligkeit genügt; wer bestreitet und nicht zahlt, trägt das Risiko (BGE 140 III 591
+    E. 3.2).
+- id: paid_in_time
+  group: payment
+  label_de: Zahlung innert Frist
+  data_type: enum
+  enum_values:
+  - vollstaendig_rechtzeitig
+  - teilweise
+  - nicht_bezahlt
+  - nur_nach_fristablauf
+  enum_labels_de:
+    vollstaendig_rechtzeitig: Vollständig und rechtzeitig bezahlt
+    teilweise: Nur teilweise bezahlt
+    nicht_bezahlt: Nicht bezahlt
+    nur_nach_fristablauf: Erst nach Fristablauf bezahlt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_124_III_145
+  - BGE_119_II_232
+  question_de: "Wurde der ganze Betrag innert der Zahlungsfrist bezahlt?"
+  why_needed_de: Rechtzeitige vollständige Zahlung macht die Kündigung unwirksam (BGE 124 III 145 E. 2b).
+- id: partial_payment_with_notice
+  group: payment
+  label_de: Teilzahlung mit Hinweis an die Vermieterschaft
+  data_type: boolean
+  required_if:
+    ref: fact.paid_in_time
+    op: equals
+    value: teilweise
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - paid_in_time
+  source_ids:
+  - BGER_4A_332_2025
+  - BGE_140_III_591
+  question_de: "Wurde nur ein Teil bezahlt und die Vermieterschaft dabei schriftlich darauf hingewiesen?"
+  why_needed_de: Wer den nach eigenem Wissen geschuldeten Betrag zahlt und informiert, wird geschützt
+    (4A_332/2025 E. 3.5.2).
+- id: setoff_or_deposit_done
+  group: payment
+  label_de: Verrechnet oder hinterlegt
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_147_III_218
+  - OGZH_LF250009
+  question_de: "Wurde verrechnet oder hinterlegt?"
+  why_needed_de: Verrechnung nur innert Frist und gegenüber der Vermieterschaft; Hinterlegung bereits
+    fälliger Mietzinse tilgt nicht (BGE 147 III 218).
+- id: payment_after_deadline_accepted
+  group: payment
+  label_de: Zahlung nach Fristablauf von der Vermieterschaft angenommen
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_119_II_232
+  question_de: "Hat die Vermieterschaft eine Zahlung angenommen, die nach Fristablauf erfolgte?"
+  why_needed_de: Heilt die Kündigung nicht (BGE 119 II 232 E. 3).
+- id: termination_before_deadline_end
+  group: termination
+  label_de: Kündigung vor Ablauf der Zahlungsfrist
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGER_4A_585_2010
+  - BGE_119_II_147
+  question_de: Wurde die Kündigung vor Ablauf der Zahlungsfrist ausgesprochen oder zugestellt?
+  why_needed_de: 'Neuere Praxis: unwirksam (4A_585/2010 E. 3.1); älter anfechtbar (BGE 119 II 147 E. 4).
+    Ausnahme bei Zugang nach Fristablauf.'
+- id: days_between_deadline_and_termination
+  group: termination
+  label_de: Tage zwischen Fristablauf und Kündigung
+  data_type: integer
+  priority: low
+  source_ids:
+  - BGER_4A_366_2008
+  - LEHRBUCH_MIETE_31
+  question_de: Wie lange wartete die Vermieterschaft nach Fristablauf bis zur Kündigung (ungefähr in Tagen)?
+  why_needed_de: Zu langes Zuwarten kann als Verzicht gedeutet werden; ab 14 Tagen gibt das System einen
+    Prüfhinweis (Teamentscheid). Keine feste gesetzliche Grenze.
+- id: special_circumstances
+  group: termination
+  label_de: Besondere Umstände
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BGE_140_III_591
+  - BGE_120_II_31
+  question_de: Gab es Absprachen, einen Ratenplan, ein vereinbartes Gespräch, einen falschen Betrag oder
+    einen sehr kleinen Rest?
+  why_needed_de: Treu und Glauben, sehr eng (BGE 140 III 591 E. 1; BGE 120 II 31).
+- id: challenge_filed
+  group: history
+  label_de: Kündigung bereits angefochten
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273_1
+  - BGE_141_III_262
+  question_de: "Hat die Klientin die Kündigung schon bei der Schlichtungsbehörde angefochten oder eine Erstreckung verlangt?"
+  why_needed_de: Laufendes Verfahren (Art. 273 OR); schützt aber nicht automatisch vor der Ausweisung
+    (BGE 141 III 262 E. 3.3).
+  required: true
+- id: housing_solution_available
+  group: social
+  label_de: Anschlusslösung vorhanden
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Gibt es eine Unterkunft nach dem Auszug (Anschlusslösung)?
+  why_needed_de: Ohne Anschlusslösung muss der Sozialdienst sofort eine Notunterkunft prüfen.
+  required: true
+- id: children_in_household
+  group: social
+  label_de: Kinder im Haushalt
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  extraction_hint_de: true bei Kindern im Haushalt; false bei ausdrücklich keine Kinder.
+  question_de: Leben Kinder in der Wohnung?
+  why_needed_de: Soziale Notfallplanung bzw. Härtegrund; verändert keine Rechtsfolge, wohl aber den Unterstützungsbedarf.
+- id: landlord_self_help
+  group: history
+  label_de: Selbsthilfe der Vermieterschaft
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_343_1_D
+  - LEHRBUCH_MIETE_31
+  question_de: Hat die Vermieterschaft ohne Gericht das Schloss gewechselt, Sachen entfernt oder Strom
+    und Wasser abgestellt?
+  why_needed_de: 'Unzulässige Selbsthilfe: eine Räumung braucht einen Gerichtsentscheid (Lehrbuch N 3025d;
+    Art. 343 ZPO).'
+escalation_rules:
+- id: PD_OUT_OF_SCOPE_ROLE
+  description: 'Klientin nicht Hauptmieterin: ausserhalb des Moduls.'
+  when:
+    ref: fact.tenant_role
+    op: in
+    value:
+    - untermieterin
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_NOT_MAIN_TENANT
+  reason_de: Die Klientin ist nicht selbst Hauptmieterin (z. B. Untermiete). Dieses Modul gilt dafür nicht;
+    es werden keine Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: PD_OUT_OF_SCOPE_OBJECT
+  description: 'Geschäftsraum/Ferienwohnung/Notunterkunft: ausserhalb des Moduls.'
+  when:
+    ref: fact.object_type
+    op: in
+    value:
+    - notwohnung_heim
+    - ferienwohnung_bis_3_monate
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Objekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls. Es werden keine
+    Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: PD_NOT_ZH
+  description: Wohnung nicht im Kanton Zürich.
+  when:
+    ref: fact.property_in_canton_zh
+    op: equals
+    value: false
+  urgency: MEDIUM
+  reason_code: AUTHORITY_NOT_DETERMINABLE
+  reason_de: Die Wohnung liegt nicht im Kanton Zürich. Die Zürcher Stellenangaben gelten nicht; die zuständigen
+    Stellen müssen separat bestimmt werden.
+  professionals: &id001
+  - tenancy_law_counsel
+- id: PD_GRUNDREGEL
+  description: 'Jede Kündigung wegen Zahlungsverzug: sofort Rechtsperson + Sozialarbeiterin.'
+  when: &id003
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: PAYMENT_DEFAULT_TERMINATION_IMMEDIATE
+  reason_de: 'Kündigung wegen Zahlungsverzug: Die Anfechtungsfrist von 30 Tagen kann laufen, eine Erstreckung
+    ist ausgeschlossen und eine schnelle Ausweisung ist möglich. Rechtsperson und Sozialarbeiterin handeln
+    sofort und parallel (Unterkunft sichern). Das System macht keine Erfolgsprognose.'
+  professionals: &id002
+  - tenancy_law_counsel
+  - social_counselling
+- id: PD_EMPFANG_UNBEKANNT_ODER_GE20
+  description: 'Empfang der Kündigung unbekannt oder 20+ Tage seit Empfang: höchste Priorität.'
+  when:
+    any:
+    - ref: fact.receipt_date
+      op: is_unknown
+    - ref: fact.delivery_method
+      op: is_unknown
+    - ref: fact.pickup_notice_date
+      op: is_unknown
+    - ref: derived.days_since_earliest_receipt
+      op: greater_than
+      value: 19
+  urgency: HIGH
+  reason_code: TERMINATION_RECEIPT_UNKNOWN_OR_20_DAYS
+  reason_de: 'Das Empfangsdatum der Kündigung ist unbekannt oder es sind seit dem frühesten Empfangshinweis
+    20 oder mehr Tage vergangen. Die Anfechtungsfrist (30 Tage) ist knapp oder unbestimmbar: höchste Priorität
+    (Produktschwelle, keine Gesetzesfrist).'
+  professionals: *id001
+- id: PD_PRUEFFRAGE1_MAHNUNG
+  description: Keine Mahnung, fehlerhafte Mahnung oder zu kurze Frist (Prüffrage 1).
+  when:
+    any:
+    - ref: fact.warning_written
+      op: equals
+      value: false
+    - ref: fact.warning_threat_present
+      op: equals
+      value: false
+    - ref: fact.warning_amount_clear
+      op: equals
+      value: false
+    - ref: fact.warning_deadline_days
+      op: less_than
+      value: 30
+  urgency: HIGH
+  reason_code: WARNING_DEFECT_POSSIBLE
+  reason_de: Die vorausgehende Mahnung fehlt oder ist möglicherweise fehlerhaft (Schriftlichkeit, Androhung,
+    Betrag, Frist unter 30 Tagen). Eine Kündigung wegen Zahlungsverzug setzt eine gültige Mahnung voraus;
+    keine Entwarnung, da die Vermieterschaft neu mahnen oder ordentlich kündigen kann. Rechtsperson sofort.
+  professionals: *id001
+- id: PD_PRUEFFRAGE2_ZAHLUNG
+  description: Angabe 'innert Frist bezahlt', Teilzahlung mit Hinweis, Verrechnung/Hinterlegung (Prüffrage
+    2).
+  when:
+    any:
+    - ref: fact.paid_in_time
+      op: equals
+      value: vollstaendig_rechtzeitig
+    - all:
+      - ref: fact.paid_in_time
+        op: equals
+        value: teilweise
+      - ref: fact.partial_payment_with_notice
+        op: equals
+        value: true
+    - ref: fact.setoff_or_deposit_done
+      op: equals
+      value: true
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: PAYMENT_IN_TIME_OR_SETOFF_CLAIMED
+  reason_de: Es wird geltend gemacht, dass innert Frist gezahlt, verrechnet, hinterlegt oder durch Dritte
+    bezahlt wurde. Alle Belege mit Datum (Auftrag und Gutschrift) sichern. Rechtsperson sofort.
+  professionals: *id001
+- id: PD_PRUEFFRAGE3_FORM
+  description: Kündigung vor Fristablauf, kein Formular, Familienwohnung/Mitmieter nicht separat (Prüffrage
+    3).
+  when:
+    any:
+    - ref: fact.termination_before_deadline_end
+      op: equals
+      value: true
+    - ref: fact.official_form_used
+      op: equals
+      value: false
+    - all:
+      - ref: fact.family_home_with_spouse
+        op: equals
+        value: true
+      - ref: fact.spouse_still_lives_there
+        op: equals
+        value: true
+      - ref: fact.separate_delivery_to_spouse
+        op: equals
+        value: false
+    - ref: fact.co_tenants_all_notified
+      op: equals
+      value: false
+  urgency: HIGH
+  reason_code: TERMINATION_FORM_OR_TIMING_DEFECT_POSSIBLE
+  reason_de: 'Mögliche Mängel der Kündigung: vor Ablauf der Zahlungsfrist ausgesprochen, ohne amtliches
+    Formular oder nicht separat/allen zugestellt. Keine Entwarnung; Rechtsperson sofort.'
+  professionals: *id001
+- id: PD_GERICHT
+  description: 'Gesuch ans Gericht, Vorladung oder Räumungstermin: Wechsel zu Issue 6.'
+  when:
+    ref: fact.eviction_or_court_proceeding
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: COURT_OR_EVICTION_PROCEEDING
+  reason_de: Es liegt ein Gesuch, eine Vorladung oder ein Räumungstermin vor. Dafür gilt Issue 6 (Ausweisung
+    und Räumung). Sofortige rechtliche und soziale Prüfung.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_EVICTION
+- id: PD_SELBSTHILFE
+  description: 'Vermieterschaft räumt selbst oder sperrt aus: unzulässige Selbsthilfe.'
+  when:
+    ref: fact.landlord_self_help
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: LANDLORD_SELF_HELP
+  reason_de: Die Vermieterschaft hat ohne Gericht geräumt, das Schloss gewechselt oder Leistungen abgestellt.
+    Das ist unzulässig und kann strafbar sein; das System bewertet das nicht. Rechtsperson und Sozialarbeiterin
+    sofort, nötigenfalls Polizei.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_EVICTION
+- id: PD_SOZIALDIENST_ZAHLT
+  description: 'Sozialdienst zahlt direkt: Interessenkonflikt, unabhängige Beratung.'
+  when:
+    ref: fact.rent_payer
+    op: equals
+    value: sozialdienst
+  urgency: HIGH
+  reason_code: SOCIAL_SERVICE_IS_PAYER
+  reason_de: Der Sozialdienst zahlt die Miete direkt und ist selbst beteiligt. Eine unabhängige Rechtsperson
+    muss prüfen.
+  professionals:
+  - independent_legal_body
+  - social_counselling
+- id: PD_KEINE_ANSCHLUSSLOESUNG
+  description: 'Kinder, Gesundheit oder keine Anschlusslösung: Unterkunft sofort sichern.'
+  when:
+    any:
+    - ref: fact.housing_solution_available
+      op: equals
+      value: false
+    - ref: fact.housing_solution_available
+      op: is_unknown
+  urgency: HIGH
+  reason_code: NO_HOUSING_SOLUTION
+  reason_de: Es gibt keine Anschlusslösung (oder sie ist unbekannt). Weil keine Erstreckung möglich ist,
+    muss die Sozialarbeiterin sofort Unterkunft und Notunterkunft prüfen.
+  professionals:
+  - social_counselling
+- id: PD_BESONDERE_UMSTAENDE
+  description: 'Absprachen, Ratenplan, falscher Betrag: Treu und Glauben.'
+  when:
+    any:
+    - ref: fact.special_circumstances
+      op: equals
+      value: true
+    - ref: fact.payment_agreement_present
+      op: equals
+      value: true
+  urgency: HIGH
+  reason_code: SPECIAL_CIRCUMSTANCES_PRESENT
+  reason_de: Es gibt besondere Umstände (Absprache, Ratenplan, falscher Betrag). Treuwidrigkeit kommt
+    nur sehr ausnahmsweise in Frage; die Rechtsperson prüft sofort.
+  professionals: *id001
+- id: PD_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id002
+- id: PD_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht.
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id001
+legal_rules:
+- id: PD_HINT_ANFECHTUNG
+  description: Anfechtung 30 Tage, kostenlos.
+  kind: HINT
+  when: *id003
+  result_code: HINT_CONTEST_30_DAYS_FREE
+  result_de: Eine Kündigung kann innert 30 Tagen nach Empfang bei der Schlichtungsbehörde angefochten
+    werden; das Verfahren kostet keine Gerichtskosten.
+  legal_source_ids:
+  - CH_OR_273_1
+  - CH_ZPO_113_2_C
+- id: PD_HINT_KEINE_ERSTRECKUNG
+  description: Erstreckung ausgeschlossen.
+  kind: HINT
+  when: *id003
+  result_code: HINT_NO_EXTENSION
+  result_de: Bei einer Kündigung wegen Zahlungsverzug ist eine Erstreckung ausgeschlossen. Die Suche nach
+    einer Unterkunft sollte deshalb sofort beginnen.
+  legal_source_ids:
+  - CH_OR_272A_1_A
+- id: PD_HINT_MAHNUNG
+  description: Gültige Mahnung ist Voraussetzung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_VALID_WARNING_REQUIRED
+  result_de: Eine solche Kündigung setzt eine gültige schriftliche Mahnung mit Frist und ausdrücklicher
+    Kündigungsandrohung voraus. Ob das erfüllt ist, prüft eine Fachperson.
+  legal_source_ids:
+  - CH_OR_257D_1
+  - LEHRBUCH_MIETE_31
+- id: PD_HINT_RECHTZEITIG
+  description: Rechtzeitige Zahlung.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.paid_in_time
+      op: equals
+      value: vollstaendig_rechtzeitig
+    - ref: fact.third_party_payment
+      op: equals
+      value: true
+  result_code: HINT_PAID_IN_TIME
+  result_de: Wurde der ganze Betrag rechtzeitig bezahlt, kann die Kündigung unwirksam sein. Bitte alle
+    Belege mit Datum sichern.
+  legal_source_ids:
+  - BGE_124_III_145
+- id: PD_HINT_NACH_FRIST
+  description: Zahlung nach Fristablauf heilt nicht automatisch.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.paid_in_time
+      op: equals
+      value: nur_nach_fristablauf
+    - ref: fact.payment_after_deadline_accepted
+      op: equals
+      value: true
+  result_code: HINT_LATE_PAYMENT
+  result_de: Eine Zahlung nach Fristablauf macht die Kündigung nicht automatisch unwirksam, auch wenn
+    die Vermieterschaft das Geld annimmt.
+  legal_source_ids:
+  - BGE_119_II_232
+- id: PD_HINT_FORM
+  description: Formular und separate Zustellung.
+  kind: HINT
+  when: *id003
+  result_code: HINT_FORM_REQUIRED
+  result_de: Auch bei einer Kündigung muss die Vermieterschaft das amtliche Formular verwenden und bei
+    einer Familienwohnung beiden Ehegatten separat zustellen.
+  legal_source_ids:
+  - CH_OR_266L
+  - CH_OR_266N
+  - CH_OR_266O
+- id: PD_HINT_SELBSTHILFE
+  description: Keine Selbsthilfe.
+  kind: HINT
+  when:
+    ref: fact.landlord_self_help
+    op: equals
+    value: true
+  result_code: HINT_NO_SELF_HELP
+  result_de: Die Vermieterschaft darf die Wohnung nicht selbst räumen; dafür braucht es einen Entscheid
+    einer Behörde oder eines Gerichts.
+  legal_source_ids:
+  - CH_ZPO_343_1_D
+  - LEHRBUCH_MIETE_31
+- id: PD_HINT_ANFECHTUNG_SCHUETZT_NICHT
+  description: Anfechtung schützt nicht sicher vor schneller Ausweisung.
+  kind: HINT
+  when:
+    any:
+    - ref: fact.challenge_filed
+      op: equals
+      value: true
+    - ref: fact.eviction_or_court_proceeding
+      op: equals
+      value: true
+  result_code: HINT_CHALLENGE_NO_SAFE_PROTECTION
+  result_de: Eine Anfechtung schützt nicht sicher vor einem schnellen Ausweisungsverfahren.
+  legal_source_ids:
+  - BGE_141_III_262
+- id: PD_REVIEW_WARTEZEIT
+  description: Wartezeit nach Fristablauf (Verzicht?).
+  kind: REVIEW_POINT
+  when:
+    ref: fact.days_between_deadline_and_termination
+    op: greater_than
+    value: 13
+  result_code: REVIEW_WAITING_TIME
+  result_de: 'Prüfhinweis: Zwischen Fristablauf und Kündigung liegen 14 oder mehr Tage. Zu langes Zuwarten
+    kann als Verzicht gedeutet werden; knapp drei Wochen gelten als Grenze. Keine Entwarnung.'
+  legal_source_ids:
+  - BGER_4A_366_2008
+  - LEHRBUCH_MIETE_31
+- id: PD_REVIEW_VOR_FRIST
+  description: Kündigung vor Fristablauf.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.termination_before_deadline_end
+    op: equals
+    value: true
+  result_code: REVIEW_TERMINATION_BEFORE_DEADLINE
+  result_de: 'Prüfhinweis: Eine Kündigung vor Ablauf der Zahlungsfrist ist nach neuerer Praxis unwirksam
+    (ältere Praxis: anfechtbar); der Zeitpunkt des Zugangs entscheidet. Anfechtungsfrist vorsorglich wahren.'
+  legal_source_ids:
+  - BGER_4A_585_2010
+  - BGE_119_II_147
+- id: PD_REVIEW_SPERRFRIST
+  description: 'Laufendes Verfahren: keine Sperrfrist.'
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_NO_BLOCKING_PERIOD
+  result_de: 'Prüfhinweis: Bei einer Kündigung wegen Zahlungsverzug gelten die Sperrfristen nach einem
+    Schlichtungs- oder Gerichtsverfahren nicht; ein laufendes Verfahren bietet hier keinen Schutz.'
+  legal_source_ids:
+  - CH_OR_271A_3_B
+  - LEHRBUCH_MIETE_31
+- id: PD_REVIEW_KAUTION
+  description: Kaution verhindert die Kündigung nicht.
+  kind: REVIEW_POINT
+  when: *id003
+  result_code: REVIEW_DEPOSIT_NO_PAYMENT
+  result_de: 'Prüfhinweis: Eine Kaution ist keine Vorauszahlung und verhindert die Kündigung nicht.'
+  legal_source_ids:
+  - LEHRBUCH_MIETE_31
+- id: PD_REVIEW_UMDEUTUNG
+  description: Keine Umdeutung in ordentliche Kündigung.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.warning_written
+    op: equals
+    value: false
+  result_code: REVIEW_NO_CONVERSION
+  result_de: 'Prüfhinweis: Ohne gültige Mahnung ist die Zahlungsverzugskündigung unwirksam; eine Umdeutung
+    in eine ordentliche Kündigung ist ausgeschlossen. Die Vermieterschaft kann aber neu mahnen oder ordentlich
+    kündigen.'
+  legal_source_ids:
+  - BGE_135_III_441
+  - LEHRBUCH_MIETE_31
+- id: PD_REVIEW_FALSCHER_TERMIN
+  description: Falscher Termin/zu kurze Frist.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.termination_date
+    op: is_known
+  result_code: REVIEW_WRONG_TERM
+  result_de: 'Prüfhinweis: Ein falscher Termin oder eine zu kurze Kündigungsfrist macht die Kündigung
+    nicht ungültig; sie gilt auf den nächstmöglichen Termin.'
+  legal_source_ids:
+  - CH_OR_266A_2
+  - LEHRBUCH_MIETE_31
+legal_source_ids:
+- CH_OR_273_1
+- CH_ZPO_113_2_C
+- CH_OR_272A_1_A
+- CH_OR_257D_1
+- LEHRBUCH_MIETE_31
+- BGE_124_III_145
+- BGE_119_II_232
+- CH_OR_266L
+- CH_OR_266N
+- CH_OR_266O
+- CH_ZPO_343_1_D
+- BGE_141_III_262
+- BGER_4A_366_2008
+- BGER_4A_585_2010
+- BGE_119_II_147
+- CH_OR_271A_3_B
+- BGE_135_III_441
+- CH_OR_266A_2
+default_professionals:
+- tenancy_law_counsel
+- social_counselling
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Kündigung wegen Zahlungsverzug (Art. 257d Abs. 2 OR) – drei Prüffragen
+  groups:
+  - id: q1_warning
+    title_de: Prüffrage 1 – Mahnung
+    fact_ids:
+    - warning_written
+    - warning_threat_present
+    - warning_amount_clear
+    - warning_deadline_days
+    - warning_delivery_method
+    - warning_receipt_date
+    - warning_pickup_notice_date
+  - id: q2_payment
+    title_de: Prüffrage 2 – Zahlung
+    fact_ids:
+    - paid_in_time
+    - payment_path
+    - partial_payment_with_notice
+    - setoff_or_deposit_done
+    - payment_after_deadline_accepted
+    - third_party_payment
+    - payment_returned_by_landlord
+    - rent_payer
+    - social_payment_failed
+    - rent_withheld_for_defects
+    - amount_disputed
+  - id: q3_termination
+    title_de: Prüffrage 3 – Kündigung
+    fact_ids:
+    - receipt_date
+    - pickup_notice_date
+    - delivery_method
+    - termination_before_deadline_end
+    - official_form_used
+    - family_home_with_spouse
+    - spouse_still_lives_there
+    - separate_delivery_to_spouse
+    - co_tenants_exist
+    - co_tenants_all_notified
+    - termination_date
+    - days_between_deadline_and_termination
+    - special_circumstances
+    - payment_agreement_present
+  - id: situation
+    title_de: Lage danach und Vorprüfung
+    fact_ids:
+    - challenge_filed
+    - eviction_or_court_proceeding
+    - landlord_self_help
+    - housing_solution_available
+    - children_in_household
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+    - vulnerability_present
+    - client_requests_expert
+    - consent_briefing
+  review_points:
+  - text_de: 'Prüffrage 1: War die Mahnung gültig (Frist ≥ 30 Tage, Androhung, bestimmbarer Betrag, Zustellung)?
+      Details in Issue 2.'
+    source_ids:
+    - CH_OR_257D_1
+    - BGER_4A_332_2025
+  - text_de: 'Prüffrage 2: Innert Frist vollständig bezahlt (Einzahlungsschein, Gutschrift, Dritte) oder
+      verrechnet?'
+    source_ids:
+    - BGE_124_III_145
+    - BGE_119_II_232
+    - BGER_4A_68_2014
+  - text_de: 'Prüffrage 3: Formgültigkeit der Kündigung (Formular, Familienwohnung, Mitmieter), Zeitpunkt
+      zur Zahlungsfrist, Termin, Treu und Glauben.'
+    source_ids:
+    - CH_OR_266L
+    - CH_OR_266N
+    - CH_OR_266O
+    - BGER_4A_585_2010
+    - BGE_140_III_591
+  - text_de: Anfechtung bei der Schlichtungsbehörde innert 30 Tagen ab Empfang (absolute Empfangstheorie);
+      der Entscheid über die Anfechtung liegt immer bei der Rechtsperson.
+    source_ids:
+    - CH_OR_273_1
+    - BGE_143_III_15
+  - text_de: Ausweisung im Verfahren für klare Fälle möglich; Anfechtung schützt nicht sicher.
+    source_ids:
+    - BGE_141_III_262
+    - CH_ZPO_257
+  documents_to_request:
+  - Mahnung und Kündigungsformular (alle Seiten, beide Ehegatten)
+  - Umschläge bzw. Abholungseinladungen oder Sendungsverfolgung
+  - Zahlungsbelege mit Datum (Auftrag und Gutschrift)
+  - Korrespondenz mit der Vermieterschaft
+  - Mietvertrag
+  authority_ids:
+  - SCHLICHTUNGSBEHOERDE_MIETE_ZH
+  - MIETERVERBAND_ZH
+  - RECHTSAUSKUNFT_BEZIRKSGERICHT_ZUERICH
+  - SOZIALDIENST_WOHNGEMEINDE
+  - SCHULDENBERATUNG_ZH

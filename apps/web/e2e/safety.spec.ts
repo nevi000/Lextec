@@ -9,7 +9,7 @@ async function describe(page: Page, text: string) {
   await page.goto("/");
   await page.getByRole("button", { name: "Neuen Fall erfassen" }).first().click();
   await page.getByLabel("Was ist passiert?").fill(text);
-  await page.getByRole("button", { name: "Situation analysieren" }).click();
+  await page.getByRole("button", { name: "Fall analysieren" }).click();
 }
 
 const emergency = (page: Page) => page.getByTestId("safety-emergency");
@@ -66,7 +66,7 @@ test("rent case with a violence threat: emergency first, legal handling kept but
   await legal.getByText("Juristische Fallbearbeitung (nachrangig").click();
   await expect(legal.getByRole("button", { name: "Fallbericht erstellen" })).toBeVisible();
   await emergency(page).getByText("Weiterführende Stellen nach der akuten Situation").click();
-  await expect(emergency(page).getByText(/Opferberatung Zuerich/).first()).toBeVisible();
+  await expect(emergency(page).getByText(/Opferberatung Zürich/).first()).toBeVisible();
 });
 
 test("documenting a response never clears the warning", async ({ page }) => {
@@ -89,13 +89,15 @@ test("normal legal escalation shows concrete organisations with real contact dat
   await describe(page, RENT);
   const refs = page.getByTestId("referrals");
   await expect(refs).toBeVisible();
-  const schlichtung = refs.getByTestId("org-card").filter({ hasText: "Bezirks Zuerich" });
-  await expect(schlichtung.getByRole("link", { name: /058 111 70 30 anrufen/ })).toHaveAttribute("href", "tel:0581117030");
+  const schlichtung = refs.getByTestId("org-card").filter({ hasText: "Bezirks Zürich" });
+  // v1.2 (Law-Team-Korrektur): keine Telefonnummer der Schlichtungsbehörde; Kontakt über die offizielle Website
+  await expect(schlichtung.getByRole("link", { name: /anrufen/ })).toHaveCount(0);
   await expect(schlichtung.getByRole("link", { name: "Website öffnen" })).toHaveAttribute("href", /^https:\/\/www\.gerichte-zh\.ch\//);
-  await expect(schlichtung).toContainText("Fachverzeichnis");
+  await expect(schlichtung).toContainText("Offizielle Quelle");
+  await expect(schlichtung).toContainText("Zuständig für Gemeinde Zürich, Bezirk Zürich");
   const mv = refs.getByTestId("org-card").filter({ hasText: "Mieterinnen- und Mieterverband" });
-  await expect(mv.getByRole("link", { name: "E-Mail schreiben" })).toHaveAttribute("href", "mailto:info@mvzh.ch");
-  await expect(mv).toContainText("Terminpflicht");
+  await expect(mv.getByRole("link", { name: /044 296 90 20 anrufen/ })).toHaveAttribute("href", "tel:0442969020");
+  await expect(mv).toContainText("Mo-Fr 09.00-12.00 und 13.30-17.00"); // phone remark moved out of the number, not lost
   await refs.getByText(/Weitere Anlaufstellen/).click();
   await expect(refs.getByText(/Rechtsauskunft in Miet- und Pachtsachen/)).toBeVisible();
   await page.screenshot({ path: "test-results/screens/referrals-zurich.png", fullPage: true });

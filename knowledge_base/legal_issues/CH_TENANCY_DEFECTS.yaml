@@ -1,0 +1,1315 @@
+# yaml-language-server: $schema=../../schemas/issue_definition.schema.json
+# ============================================================================================
+# Mängel an der Mietsache (Issue 5)
+# GENERIERT durch scripts/kb/build_issue_kb.py aus scripts/kb/specs/issue_05.py und dem Law-Dossier
+# docs/legal_inputs/issues/issue_05.docx. Änderungen bitte in der Spec vornehmen und neu generieren.
+#
+# STATUS: content_status DRAFT. Das Dossier ist KEINE endgültige Freigabe für den Einsatz mit
+# echten Klienten (offene Prüfpunkte: docs/ISSUE_COVERAGE_MATRIX.md und docs/ALL_ISSUES_INTEGRATION.md).
+# PRODUKTENTSCHEIDE (Teamentscheide 7.11.2026) sind keine Gesetzesfristen. Das System berechnet und
+# nennt NIE ein Fristende. Dringlichkeit: HIGH = «sofort», MEDIUM = «bald», LOW = «normal».
+# ============================================================================================
+schema_version: 1
+id: CH_TENANCY_DEFECTS
+version: 1.0-dossier-2026-11-07
+content_status: DRAFT
+jurisdiction: CH
+canton: ZH
+legal_area: tenancy
+issue: defects
+title_de: Mängel an der Mietsache (Issue 5)
+description: Mängel an der Wohnung (Art. 256, 258–259i OR) einschliesslich Gesundheits- und Schutzbedarf
+  (Regeln H1–H7). Einfache Fälle ohne Geld, Frist und Gesundheitsangaben darf das System selbst weiterführen
+  (PROCEED); sonst Eskalation.
+provenance_de: 'Law-Dossier Issue 5 vom 7.11.2026 inkl. Abschnitt 3a; Teamentscheide: 30 Tage ohne Reaktion,
+  KI_WEITER nur in einfachen Fällen, Musterbrief ohne Prozentzahl und Hinterlegungsandrohung.'
+classification:
+  description: 'Passt bei Mängeln an der Mietwohnung: Schimmel, Feuchtigkeit, Heizung/Warmwasser defekt,
+    Wasserschaden, Ungeziefer, Lärm, defekte Geräte, Bauarbeiten, auch wenn Mietzins gekürzt oder hinterlegt
+    werden soll. NICHT passend: Kündigung (Issue 1/3), Mietzinserhöhung (Issue 7).'
+  typical_situations:
+  - In der Wohnung ist Schimmel im Schlafzimmer.
+  - Die Heizung ist seit Wochen defekt und der Vermieter reagiert nicht.
+  - Meine Klientin hat die Miete gekürzt wegen Mängeln.
+  - Wasserschaden in der Wohnung, die Verwaltung tut nichts.
+  related_issues: []
+derived:
+- id: days_since_defect_report
+  kind: days_since_earliest
+  facts:
+  - landlord_informed_date
+  description: 'Tage seit der Mängelmeldung (INTERNE Produktschwelle: 30 Tage, kein Fristende).'
+facts:
+- id: tenant_role
+  group: prescreening
+  label_de: Vertragspartei
+  data_type: enum
+  enum_values:
+  - hauptmieterin
+  - untermieterin
+  - andere
+  enum_labels_de:
+    hauptmieterin: Klientin ist selbst Mieterin laut Vertrag (Hauptmiete)
+    untermieterin: Klientin ist Untermieterin
+    andere: Weder noch (z. B. Unterkunft der Gemeinde, nicht im Vertrag)
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_273B_1
+  extraction_hint_de: Nur setzen, wenn klar ist, in welcher Rolle die Klientin zum Mietvertrag steht.
+    'alleinige Mieterin' = hauptmieterin.
+  question_de: Ist die Klientin selbst Mieterin laut Vertrag (nicht Untermieterin, nicht die Gemeinde)?
+  why_needed_de: Nur die Vertragspartei hat den Kündigungsschutz; bei Untermiete gilt er nur, solange
+    das Hauptmietverhältnis besteht (Art. 273b OR).
+- id: object_type
+  group: prescreening
+  label_de: Objektart
+  data_type: enum
+  enum_values:
+  - wohnung
+  - moebliertes_zimmer
+  - notwohnung_heim
+  - ferienwohnung_bis_3_monate
+  - andere
+  enum_labels_de:
+    wohnung: Gewöhnliche Wohnung
+    moebliertes_zimmer: Möbliertes Zimmer
+    notwohnung_heim: Notwohnung, Heim oder Unterkunft der Gemeinde
+    ferienwohnung_bis_3_monate: Ferienwohnung (höchstens drei Monate gemietet)
+    andere: Anderes Objekt
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253A_2
+  - CH_OR_266C
+  - CH_OR_266E
+  extraction_hint_de: '''normale Wohnung'' = wohnung. Ferienwohnung nur bei höchstens drei Monaten Mietdauer.'
+  question_de: 'Um welche Art von Objekt geht es: Wohnung, möbliertes Zimmer, Notwohnung/Heim, Ferienwohnung?'
+  why_needed_de: Für Ferienwohnungen (bis 3 Monate) und Notunterkünfte gelten die Regeln dieses Moduls
+    nicht; für möblierte Zimmer gilt eine andere Kündigungsfrist.
+- id: property_municipality
+  group: prescreening
+  label_de: Gemeinde der Wohnung
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - CH_ZPO_33
+  extraction_hint_de: Name der Gemeinde, z. B. 'Zürich'.
+  question_de: In welcher Gemeinde liegt die Wohnung?
+  why_needed_de: Der Ort der Wohnung bestimmt die zuständige Schlichtungsbehörde (Art. 33 ZPO).
+- id: client_residence_municipality
+  group: prescreening
+  label_de: Wohnsitzgemeinde der Klientin (nur falls abweichend)
+  description: Nur relevant, wenn die Klientin NICHT in der Wohnung wohnt oder der Sozialdienst einer
+    anderen Gemeinde zuständig ist. Bestimmt die Zuständigkeit sozialer Stellen (Sozialdienst, Notunterkunft,
+    KESB); die Gemeinde der Wohnung bestimmt die mietrechtlichen Stellen.
+  data_type: string
+  priority: low
+  depends_on:
+  - property_municipality
+  extraction_hint_de: Nur setzen, wenn ausdrücklich eine von der Wohnung abweichende Wohnsitzgemeinde
+    genannt wird (z. B. 'Die Klientin wohnt eigentlich in Bülach'). Nicht aus der Gemeinde der Wohnung
+    ableiten.
+  question_de: "In welcher Gemeinde wohnt die Klientin? Nur nötig, wenn der Wohnsitz nicht in der Gemeinde der Wohnung liegt; sonst bitte überspringen."
+  why_needed_de: Soziale Stellen (Sozialdienst, Notunterkunft) richten sich nach der Wohnsitzgemeinde,
+    mietrechtliche Stellen nach der Gemeinde der Wohnung.
+- id: property_in_canton_zh
+  group: prescreening
+  label_de: Wohnung im Kanton Zürich
+  description: 'TECHNISCHE ANNAHME (nicht im Dossier als eigenes Faktum): Das Modul ist auf den Kanton
+    Zürich ausgerichtet; die Stellenangaben gelten nur dort.'
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  depends_on:
+  - property_municipality
+  extraction_hint_de: true bei Angaben wie 'Stadt Zürich', 'Kanton Zürich' oder Gemeinden im Kanton Zürich;
+    sonst nur setzen, wenn ausdrücklich gesagt.
+  question_de: Liegt die Wohnung im Kanton Zürich?
+  why_needed_de: Die Zürcher Stellen und Hinweise gelten nur für Wohnungen im Kanton Zürich.
+- id: vulnerability_present
+  group: social
+  label_de: Besondere Verletzlichkeit
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: Nur setzen, wenn ausdrücklich Gewalt, Trennungsstreit, Sprachbarriere oder eine
+    akute Krise genannt wird. Keine Einschätzung durch die KI.
+  question_de: "Trifft mindestens eines davon zu: Gewalt, Trennungsstreit, Sprachbarriere oder akute Krise?"
+  why_needed_de: Solche Situationen liegen ausserhalb dieses Moduls und gehören in menschliche Hände.
+- id: client_requests_expert
+  group: social
+  label_de: Wunsch nach einer Fachperson
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  extraction_hint_de: true nur, wenn die Klientin oder die Sozialarbeiterin ausdrücklich eine Rechtsperson/Fachperson
+    wünscht.
+  question_de: Wünschen die Klientin oder Sie eine Fachperson?
+  why_needed_de: 'Autonomie: Der Wunsch nach einer Fachperson wird immer respektiert.'
+- id: consent_briefing
+  group: social
+  label_de: Einwilligung zur Weitergabe an eine Rechtsperson
+  description: Ausdrückliche Einwilligung der Klientin, dass ihre Angaben (inkl. Gesundheit und Sozialhilfe)
+    an eine Rechtsperson ausserhalb des Sozialdienstes gehen.
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - IDG_ZH_17
+  - CH_DSG_6_7
+  extraction_hint_de: Nur true/false setzen, wenn die Sozialarbeiterin ausdrücklich sagt, dass die Klientin
+    einverstanden ist bzw. nicht einverstanden ist. Unbekannt ist NIE nein.
+  question_de: Ist die Klientin ausdrücklich damit einverstanden, dass ihre Angaben an eine Rechtsperson
+    ausserhalb des Sozialdienstes weitergegeben werden?
+  why_needed_de: Vor jedem Briefing an eine externe Rechtsperson ist die ausdrückliche Einwilligung der
+    Klientin nötig (§ 17 Abs. 1 lit. b IDG ZH; Art. 6 Abs. 7 lit. a DSG). Der lokale Fallbericht ist keine
+    externe Weitergabe.
+- id: eviction_or_court_proceeding
+  group: history
+  label_de: Laufendes Gerichtsverfahren oder Ausweisung
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_257_1
+  question_de: Läuft bereits ein Gerichtsverfahren oder eine Ausweisung?
+  why_needed_de: Ein laufendes Verfahren liegt ausserhalb dieses Issues (Art. 257 ZPO); dafür ist ein
+    eigenes Issue vorgesehen.
+- id: children_in_household
+  group: social
+  label_de: Kinder im Haushalt
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - PRODUKTREGEL
+  extraction_hint_de: true bei Kindern im Haushalt; false bei ausdrücklich keine Kinder.
+  question_de: Leben Kinder in der Wohnung?
+  why_needed_de: Soziale Notfallplanung bzw. Härtegrund; verändert keine Rechtsfolge, wohl aber den Unterstützungsbedarf.
+- id: defect_type
+  group: defect
+  label_de: Art des Mangels
+  data_type: enum
+  enum_values:
+  - schimmel
+  - heizung_wasser_strom
+  - laerm_bau
+  - kleiner_unterhalt
+  - anderes
+  enum_labels_de:
+    schimmel: Schimmel oder Feuchtigkeit
+    heizung_wasser_strom: Heizung, Warmwasser, Wasser, Strom
+    laerm_bau: Lärm oder Bauarbeiten
+    kleiner_unterhalt: Kleines Gerät / kleine Reparatur (z. B. Glühbirne)
+    anderes: Anderer Mangel
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_256_1_2
+  - CH_OR_259
+  question_de: Was für ein Mangel ist es (Schimmel, Heizung/Wasser, Lärm/Bauarbeiten, kleines Gerät, anderes)?
+  why_needed_de: Grobe Einordnung für Rückfragen und Dringlichkeit; die rechtliche Schwere beurteilt die
+    Rechtsperson.
+- id: defect_description
+  group: defect
+  label_de: Beschreibung des Mangels
+  data_type: string
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_256_1_2
+  - CH_OR_259A
+  question_de: "Was genau ist kaputt oder stört?"
+  why_needed_de: Mangelbegriff (Art. 256, 259a OR).
+- id: defect_since
+  group: defect
+  label_de: Mangel seit
+  data_type: date
+  priority: medium
+  source_ids:
+  - BGER_4C_97_2003
+  question_de: Seit wann besteht der Mangel?
+  why_needed_de: Dauer und Zeitpunkt für Herabsetzung und Beweis (BGer 4C.97/2003 E. 3.3).
+- id: defect_effect
+  group: defect
+  label_de: Auswirkung des Mangels
+  data_type: string
+  required: true
+  priority: medium
+  source_ids:
+  - LEHRBUCH_MIETE_31
+  question_de: Was kann die Klientin deswegen nicht oder nur eingeschränkt nutzen (Raum, Gerät, Heizung,
+    Wasser)?
+  why_needed_de: Grundlage für die Fachperson (Schwere, Lehrbuch N 2942); das System ordnet nicht ein.
+- id: health_safety_danger
+  group: defect
+  label_de: Gefahr für Gesundheit oder Sicherheit
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259B
+  - PRODUKTREGEL
+  extraction_hint_de: true bei ausdrücklicher Gefahr (z. B. Schimmel bei Kleinkind, Gasgeruch, keine Heizung
+    im Winter); sonst nur false, wenn ausdrücklich keine Gefahr.
+  question_de: Gibt es eine Gefahr für Gesundheit oder Sicherheit (Schimmel bei Kleinkindern, Gas, Strom,
+    Einsturz, kein Wasser oder keine Heizung im Winter)?
+  why_needed_de: Eskalation sofort; evtl. Unbewohnbarkeit (Global-Regeln G2, G11).
+- id: defect_at_move_in
+  group: defect
+  label_de: Mangel schon beim Einzug
+  data_type: boolean
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_258
+  - CH_OR_259A
+  question_de: "Bestand der Mangel schon beim Einzug?"
+  why_needed_de: Art. 258 OR (Übergabe) vs. Art. 259a ff. OR (während der Mietdauer).
+- id: possibly_tenant_caused
+  group: defect
+  label_de: Mangel möglicherweise von der Klientin verursacht
+  data_type: boolean
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259A
+  question_de: Könnte die Klientin oder jemand aus ihrem Haushalt den Mangel verursacht haben?
+  why_needed_de: Keine Mängelrechte bei eigener Verantwortung (Art. 259a Abs. 1 OR). Das System macht
+    keine Schuldzuweisung.
+- id: minor_repair_possible
+  group: defect
+  label_de: Kleiner Unterhalt
+  data_type: boolean
+  required: true
+  priority: medium
+  source_ids:
+  - CH_OR_259
+  question_de: Liesse sich der Mangel mit einer kleinen Reparatur beheben (Glühbirne, Duschschlauch, verstopfter
+    Abfluss)?
+  why_needed_de: Kleine Unterhaltsarbeiten trägt die Mieterin (Art. 259 OR).
+- id: evidence_available
+  group: defect
+  label_de: Belege vorhanden
+  data_type: boolean
+  priority: low
+  source_ids:
+  - PRODUKTREGEL
+  question_de: Gibt es Fotos (mit Datum), Briefe, E-Mails, Zeugen, Arztzeugnisse?
+  why_needed_de: Beweis.
+- id: construction_nearby
+  group: defect
+  label_de: Bau- oder Renovationsarbeiten
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_257H
+  - CH_OR_260
+  question_de: Gibt es Bau- oder Renovationsarbeiten im Haus oder in der Nachbarschaft?
+  why_needed_de: Mangel durch Dritte (Art. 257h, 260 OR); Renovation und Mietzinserhöhung = Issue 7.
+- id: landlord_informed
+  group: notice
+  label_de: Vermieterschaft informiert
+  data_type: boolean
+  required: true
+  priority: high
+  source_ids:
+  - CH_OR_257G
+  - CH_OR_259D
+  question_de: "Weiss die Vermieterschaft oder Verwaltung von dem Mangel?"
+  why_needed_de: Beginn der Herabsetzung (Art. 259d OR) und der Beseitigungspflicht; Pflicht zur Meldung
+    (Art. 257g OR).
+- id: landlord_informed_in_writing
+  group: notice
+  label_de: Meldung schriftlich
+  data_type: boolean
+  required_if:
+    ref: fact.landlord_informed
+    op: equals
+    value: true
+  priority: medium
+  depends_on:
+  - landlord_informed
+  source_ids:
+  - BGE_142_III_557
+  question_de: Wurde der Mangel schriftlich (am besten eingeschrieben) gemeldet?
+  why_needed_de: Beweis; Rückwirkung der Herabsetzung (BGE 142 III 557 E. 8.3.4).
+- id: landlord_informed_date
+  group: notice
+  label_de: Datum der Mängelmeldung
+  data_type: date
+  priority: medium
+  depends_on:
+  - landlord_informed
+  source_ids:
+  - PRODUKTREGEL
+  question_de: "An welchem Datum wurde der Mangel der Vermieterschaft gemeldet?"
+  why_needed_de: 'Für die Produktschwelle: 30 Tage ohne Reaktion.'
+- id: landlord_reacted
+  group: notice
+  label_de: Reaktion der Vermieterschaft
+  data_type: boolean
+  required_if:
+    ref: fact.landlord_informed
+    op: equals
+    value: true
+  priority: medium
+  depends_on:
+  - landlord_informed
+  source_ids:
+  - CH_OR_259B
+  question_de: Hat die Vermieterschaft reagiert, etwas versprochen oder Handwerker geschickt?
+  why_needed_de: Angemessene Frist zur Behebung (Art. 259b OR).
+- id: landlord_offered_replacement
+  group: notice
+  label_de: Ersatzwohnung angeboten
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_259C
+  question_de: Hat die Vermieterschaft eine andere Wohnung angeboten?
+  why_needed_de: Kein Anspruch auf Beseitigung bei vollwertigem Ersatz (Art. 259c OR).
+- id: rent_payment_status
+  group: payment
+  label_de: Zahlungsstatus der Miete
+  data_type: enum
+  enum_values:
+  - voll_bezahlt
+  - gekuerzt_oder_zurueckbehalten
+  enum_labels_de:
+    voll_bezahlt: Volle Miete wird bezahlt
+    gekuerzt_oder_zurueckbehalten: Miete gekürzt, verrechnet oder zurückbehalten
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  - BGER_4A_140_2014
+  extraction_hint_de: '''gekuerzt_oder_zurueckbehalten'' bei jeder Kürzung (auch ein Prozentsatz), Verrechnung
+    oder Zurückbehaltung; ''voll_bezahlt'' nur bei ausdrücklich voller Zahlung.'
+  question_de: "Wie wird die Miete derzeit bezahlt?"
+  why_needed_de: Risiko Art. 257d OR; eigenmächtige Kürzung kann zur Kündigung führen (BGer 4A_140/2014
+    E. 5.2, 5.4).
+- id: payment_warning_received
+  group: payment
+  label_de: Zahlungsaufforderung mit Kündigungsandrohung
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_257D_1
+  question_de: Gibt es schon ein Schreiben mit Frist und Kündigungsandrohung?
+  why_needed_de: Wechsel zu Issue 2, sofort.
+- id: rent_deposit_started
+  group: payment
+  label_de: Miete schon hinterlegt
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259H
+  - CH_OR_259G
+  question_de: "Hat die Klientin schon Miete hinterlegt?"
+  why_needed_de: 30-Tage-Frist zur Schlichtungsbehörde, sonst fällt das Geld an die Vermieterschaft (Art.
+    259h OR).
+- id: deposit_planned
+  group: payment
+  label_de: Hinterlegung geplant
+  data_type: boolean
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259G
+  - BGER_4C_264_2003
+  question_de: Möchte die Klientin die Miete hinterlegen?
+  why_needed_de: Formvorschriften (Art. 259g OR); Obergericht ZH rät zu Fachberatung.
+- id: deadline_set_in_writing
+  group: payment
+  label_de: Schriftliche Frist mit Hinterlegungsandrohung gesetzt
+  data_type: boolean
+  priority: low
+  source_ids:
+  - CH_OR_259G
+  question_de: Hat die Klientin schriftlich eine Frist zur Behebung gesetzt und die Hinterlegung angedroht?
+  why_needed_de: Voraussetzung der Hinterlegung (Art. 259g OR).
+- id: damage_or_extra_costs
+  group: payment
+  label_de: Schaden oder Zusatzkosten
+  data_type: boolean
+  priority: low
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259E
+  question_de: Ist etwas beschädigt worden (Möbel, Kleider) oder gab es Zusatzkosten (Hotel, Reinigung)?
+  why_needed_de: Schadenersatz (Art. 259e OR).
+- id: termination_after_report
+  group: payment
+  label_de: Kündigung oder Drohung nach Mängelmeldung
+  data_type: boolean
+  required: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_271A_1_A_D_E
+  question_de: "Hat die Vermieterschaft gekündigt oder damit gedroht, seit die Mängel gemeldet wurden?"
+  why_needed_de: Rachekündigung möglich (Art. 271a Abs. 1 lit. a OR) -> Issue 1.
+- id: authority_letter_received
+  group: payment
+  label_de: Brief von Schlichtungsbehörde oder Gericht
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_ZPO_209_1_A
+  question_de: Gibt es einen Brief oder Entscheid der Schlichtungsbehörde oder eines Gerichts?
+  why_needed_de: 'Global G1: Behördenfristen sofort an die Rechtsperson.'
+- id: client_wish
+  group: payment
+  label_de: Wunsch der Klientin
+  data_type: enum
+  enum_values:
+  - reparatur
+  - herabsetzung
+  - schadenersatz
+  - ausziehen
+  - selbst_reparieren
+  - unklar
+  enum_labels_de:
+    reparatur: Reparatur / Behebung
+    herabsetzung: Weniger Miete
+    schadenersatz: Schadenersatz
+    ausziehen: Ausziehen / fristlos kündigen
+    selbst_reparieren: Selbst reparieren lassen
+    unklar: Noch unklar
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_259B
+  question_de: 'Was will die Klientin: Reparatur, weniger Miete, Schadenersatz oder ausziehen?'
+  why_needed_de: Wählt den Rechtsbehelf; Auszug/fristlose Kündigung nur mit Rechtsperson.
+- id: housing_arrangement
+  group: health
+  label_de: Wohnform
+  data_type: enum
+  enum_values:
+  - privat
+  - genossenschaft
+  - gemeindewohnung
+  - subventioniert
+  - zugewiesene_unterkunft
+  enum_labels_de:
+    privat: Privater Mietvertrag
+    genossenschaft: Genossenschaft
+    gemeindewohnung: Gemeindewohnung
+    subventioniert: Subventionierte Wohnung
+    zugewiesene_unterkunft: Vom Sozialdienst zugewiesene Unterkunft
+  required: true
+  priority: medium
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_OR_253B_2_3
+  question_de: Privater Mietvertrag, Genossenschaft, Gemeindewohnung, subventionierte Wohnung oder zugewiesene
+    Unterkunft?
+  why_needed_de: Vorprüfung; Art. 253b Abs. 3 OR; evtl. kein Mietvertrag. UNBEKANNT bleibt unbekannt.
+- id: affected_rooms
+  group: health
+  label_de: Betroffene Räume
+  data_type: string
+  priority: low
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  question_de: Welche Räume sind betroffen?
+  why_needed_de: 'BAG: besondere Vorsicht bei Schlaf- und Kinderzimmern.'
+- id: sleeping_room_affected
+  group: health
+  label_de: Schlafraum betroffen
+  data_type: boolean
+  required_if: &id001
+    any:
+    - ref: fact.defect_type
+      op: equals
+      value: schimmel
+    - ref: fact.health_safety_danger
+      op: equals
+      value: true
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  question_de: Werden die betroffenen Räume zum Schlafen genutzt?
+  why_needed_de: 'BAG 2021: besondere Vorsicht bei Schlaf- und Kinderzimmern. UNBEKANNT ist nie NEIN.'
+- id: reported_extent
+  group: health
+  label_de: Ausmass des Befalls
+  data_type: enum
+  enum_values:
+  - klein
+  - groesser
+  - nur_geruch
+  enum_labels_de:
+    klein: Klein (eine Stelle bis ca. 10 × 10 cm)
+    groesser: Grösser (mehrere Stellen oder über ca. 70 × 70 cm)
+    nur_geruch: Nur Geruch
+  required_if: &id008
+    ref: fact.defect_type
+    op: equals
+    value: schimmel
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  - BGER_4C_97_2003
+  question_de: "Wie zeigt sich der Schimmel: nur als Geruch, als kleine Stelle oder als grössere Fläche?"
+  why_needed_de: Grobe Zuordnung zu den BAG-Kategorien, nur für die Dringlichkeit; keine rechtliche Einordnung.
+- id: health_symptoms_reported
+  group: health
+  label_de: Gesundheitliche Beschwerden gemeldet
+  data_type: boolean
+  required_if: *id001
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  extraction_hint_de: true, wenn Beschwerden berichtet werden (z. B. Husten). KEINE Diagnose und keine
+    Ursache übernehmen.
+  store_evidence: false
+  question_de: Berichtet jemand über gesundheitliche Beschwerden? (Nur ja/nein, keine Diagnose.)
+  why_needed_de: Ärztliche Abklärung empfehlen (BAG 2021). Das System speichert keine Diagnose und macht
+    keine Ursachenaussage.
+- id: medical_risk_reported
+  group: health
+  label_de: Besondere gesundheitliche Gefährdung bekannt
+  data_type: boolean
+  required_if: *id001
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  - CH_DSG_6_7
+  store_evidence: false
+  question_de: Ist eine besondere gesundheitliche Gefährdung bekannt oder ärztlich mitgeteilt worden?
+    (Nur ja/nein, keine Diagnose erfassen.)
+  why_needed_de: 'BAG: gefährdete Personen sollen rasch ärztlich abklären. Art. 5 lit. c Ziff. 2 DSG:
+    besonders schützenswert.'
+- id: children_exposed
+  group: health
+  label_de: Kinder nutzen betroffene Räume
+  data_type: boolean
+  required_if: *id001
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  question_de: "Nutzen die Kinder, die in der Wohnung leben, die betroffenen Räume?"
+  why_needed_de: Schutzbedarf (BAG 2021).
+- id: can_avoid_affected_rooms
+  group: health
+  label_de: Räume vorübergehend meidbar
+  data_type: boolean
+  required_if: *id001
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - BAG_SCHIMMEL_2021
+  question_de: Können die betroffenen Räume vorübergehend gemieden werden?
+  why_needed_de: 'BAG: stark befallene Räume geschlossen halten und nicht benutzen.'
+- id: safe_alternative_available
+  group: health
+  label_de: Sichere vorübergehende Unterkunft
+  data_type: boolean
+  priority: high
+  escalation_relevant: true
+  handover_priority: high
+  source_ids:
+  - CH_BV_12
+  question_de: Gibt es bei Bedarf eine sichere vorübergehende Unterkunft?
+  why_needed_de: Zwischenlösung über den Sozialdienst.
+- id: support_needed
+  group: health
+  label_de: Unterstützung benötigt
+  data_type: boolean
+  priority: medium
+  source_ids:
+  - CH_BV_12
+  question_de: Wird Unterstützung benötigt, um eine Abklärung oder Zwischenunterkunft zu organisieren?
+  why_needed_de: Route SOZIAL.
+escalation_rules:
+- id: DF_OUT_OF_SCOPE_OBJECT
+  description: 'Geschäftsraum/Ferienwohnung/Notunterkunft: ausserhalb des Moduls.'
+  when:
+    ref: fact.object_type
+    op: in
+    value:
+    - notwohnung_heim
+    - ferienwohnung_bis_3_monate
+    - andere
+  urgency: MEDIUM
+  reason_code: OUT_OF_SCOPE_OBJECT
+  reason_de: Das Objekt fällt nicht unter die gewöhnliche Wohnraummiete dieses Moduls. Es werden keine
+    Standardaussagen gemacht. Eine unabhängige Rechtsperson muss prüfen.
+  professionals:
+  - lawyer_general
+  suppress_standard_statements: true
+- id: DF_NOT_ZH
+  description: Wohnung nicht im Kanton Zürich.
+  when:
+    ref: fact.property_in_canton_zh
+    op: equals
+    value: false
+  urgency: LOW
+  reason_code: AUTHORITY_NOT_DETERMINABLE
+  reason_de: Die Wohnung liegt nicht im Kanton Zürich. Die Zürcher Stellenangaben gelten nicht; die zuständigen
+    Stellen müssen separat bestimmt werden.
+  professionals: &id002
+  - tenancy_law_counsel
+- id: DF_SUBLEASE
+  description: 'Untermiete/WG-Zimmer: Mängelrechte gegenüber der Hauptmieterin.'
+  when:
+    ref: fact.tenant_role
+    op: in
+    value:
+    - untermieterin
+    - andere
+  urgency: LOW
+  reason_code: DEFECTS_SUBLEASE_PRECHECK
+  reason_de: Bei Untermiete bestehen Mängelrechte gegenüber der Hauptmieterin, nicht gegenüber der Eigentümerschaft.
+    Die Rechtsperson prüft die Vorfragen.
+  professionals: *id002
+- id: DF_ZAHLUNGSAUFFORDERUNG
+  description: Zahlungsaufforderung mit Kündigungsandrohung vorhanden -> Issue 2, sofort.
+  when:
+    ref: fact.payment_warning_received
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEFECTS_PAYMENT_WARNING_RECEIVED
+  reason_de: 'Es liegt eine Zahlungsaufforderung mit Kündigungsandrohung vor; der Wohnungsverlust droht.
+    Es gelten die Regeln von Issue 2: sofort zahlen und rechtlich prüfen lassen.'
+  professionals: &id003
+  - tenancy_law_counsel
+  - social_counselling
+  routes_to_issue: CH_TENANCY_PAYMENT_WARNING
+- id: DF_MIETE_GEKUERZT
+  description: 'Miete gekürzt, verrechnet oder zurückbehalten: Zahlungsverzug möglich.'
+  when:
+    ref: fact.rent_payment_status
+    op: equals
+    value: gekuerzt_oder_zurueckbehalten
+  urgency: MEDIUM
+  reason_code: DEFECTS_RENT_REDUCED_OR_WITHHELD
+  reason_de: Die Klientin hat die Miete gekürzt, verrechnet oder zurückbehalten. Es droht Zahlungsverzug
+    und damit eine Kündigung nach Art. 257d OR. Bis zur Prüfung durch eine Rechtsperson die volle Miete
+    bezahlen. Rechtsperson bald.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_PAYMENT_WARNING
+- id: DF_HINTERLEGUNG_LAEUFT
+  description: 'Hinterlegung läuft oder ist erfolgt: 30-Tage-Frist.'
+  when:
+    ref: fact.rent_deposit_started
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEFECTS_DEPOSIT_RUNNING
+  reason_de: Es wurde schon Miete hinterlegt. Der Schlichtungsbehörde muss innert 30 Tagen ab Fälligkeit
+    des ersten hinterlegten Mietzinses ein Gesuch vorliegen, sonst fällt das Geld an die Vermieterschaft.
+    Rechtsperson sofort.
+  professionals: *id002
+- id: DF_HINTERLEGUNG_GEPLANT
+  description: 'Klientin will hinterlegen: Formvorschriften.'
+  when:
+    ref: fact.deposit_planned
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: DEFECTS_DEPOSIT_PLANNED
+  reason_de: Die Klientin möchte die Miete hinterlegen. Dafür gelten strenge Formvorschriften; ohne korrekte
+    Form gilt die Miete als nicht bezahlt. Nicht selbst hinterlegen, vorher die Rechtsperson fragen. Rechtsperson
+    bald.
+  professionals: *id002
+- id: DF_GESUNDHEIT_GEFAHR
+  description: 'Gefahr für Gesundheit oder Sicherheit / Unbewohnbarkeit: Recht + Soziales sofort.'
+  when:
+    ref: fact.health_safety_danger
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEFECTS_HEALTH_OR_SAFETY_DANGER
+  reason_de: Es besteht eine Gefahr für Gesundheit oder Sicherheit oder die Wohnung ist möglicherweise
+    unbewohnbar. Rechtsperson und Sozialarbeiterin handeln sofort und parallel (Notunterkunft prüfen).
+  professionals: *id003
+- id: DF_AUSZIEHEN
+  description: Klientin will wegen des Mangels ausziehen oder fristlos kündigen.
+  when:
+    ref: fact.client_wish
+    op: equals
+    value: ausziehen
+  urgency: MEDIUM
+  reason_code: DEFECTS_WANTS_TO_MOVE_OUT
+  reason_de: Die Klientin möchte wegen des Mangels ausziehen oder fristlos kündigen. Eine unwirksame Kündigung
+    lässt den Mietzins weiter schulden; das System gibt dazu keine Empfehlung. Rechtsperson bald.
+  professionals: *id002
+- id: DF_KUENDIGUNG_NACH_MELDUNG
+  description: Kündigung oder Drohung nach Mängelmeldung -> Issue 1, sofort.
+  when:
+    ref: fact.termination_after_report
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEFECTS_TERMINATION_AFTER_REPORT
+  reason_de: Nach der Mängelmeldung gab es eine Kündigung oder Drohung. Sie kann als Rachekündigung anfechtbar
+    sein; die Anfechtungsfrist von 30 Tagen kann laufen. Es gelten die Regeln von Issue 1. Rechtsperson
+    sofort.
+  professionals: *id002
+  routes_to_issue: CH_TENANCY_TERMINATION
+- id: DF_SCHADEN
+  description: 'Schaden oder Zusatzkosten: Schadenersatz.'
+  when:
+    ref: fact.damage_or_extra_costs
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: DEFECTS_DAMAGES
+  reason_de: Es entstand ein Schaden oder es gab Zusatzkosten. Schadenersatz (Verschulden) prüft die Rechtsperson
+    (normal).
+  professionals: *id002
+- id: DF_SELBST_REPARIEREN
+  description: 'Klientin will selbst reparieren lassen: Ersatzvornahme nur unter Voraussetzungen.'
+  when:
+    any:
+    - ref: fact.client_wish
+      op: equals
+      value: selbst_reparieren
+  urgency: LOW
+  reason_code: DEFECTS_SELF_REPAIR
+  reason_de: Die Klientin will selbst reparieren lassen. Eine Ersatzvornahme ist nur unter Voraussetzungen
+    zulässig; vor einem Auftrag an Handwerker die Rechtsperson fragen (normal).
+  professionals: *id002
+- id: DF_BEHOERDENBRIEF
+  description: Brief oder Entscheid der Schlichtungsbehörde/des Gerichts (Global G1).
+  when:
+    ref: fact.authority_letter_received
+    op: equals
+    value: true
+  urgency: HIGH
+  reason_code: DEFECTS_AUTHORITY_LETTER
+  reason_de: 'Es liegt ein Brief oder Entscheid einer Schlichtungsbehörde oder eines Gerichts vor. Behördenfristen
+    sind kurz: Rechtsperson sofort.'
+  professionals: *id002
+- id: DF_URSACHE_UNKLAR
+  description: 'Ursache unklar oder Klientin könnte verantwortlich sein: keine Schuldzuweisung.'
+  when:
+    any:
+    - ref: fact.possibly_tenant_caused
+      op: equals
+      value: true
+    - ref: fact.possibly_tenant_caused
+      op: is_unknown
+  urgency: LOW
+  reason_code: DEFECTS_CAUSE_UNCLEAR
+  reason_de: Die Ursache ist unklar oder die Klientin könnte verantwortlich sein. Das System weist keine
+    Schuld zu; die Rechtsperson prüft (normal).
+  professionals: *id002
+- id: DF_LAERM_BAU
+  description: 'Lärm oder Bauarbeiten: Mangel möglich, Beurteilung durch die Rechtsperson.'
+  when:
+    ref: fact.defect_type
+    op: equals
+    value: laerm_bau
+  urgency: LOW
+  reason_code: DEFECTS_NOISE_OR_CONSTRUCTION
+  reason_de: Lärm oder Bauarbeiten können ein Mangel sein, auch ohne Verschulden der Vermieterschaft.
+    Die Rechtsperson beurteilt (normal); es werden keine Erwartungen geweckt.
+  professionals: *id002
+- id: DF_ERSATZWOHNUNG
+  description: 'Ersatzwohnung angeboten: nicht vorschnell ablehnen.'
+  when:
+    ref: fact.landlord_offered_replacement
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: DEFECTS_REPLACEMENT_OFFERED
+  reason_de: Die Vermieterschaft hat eine andere Wohnung angeboten. Bei vollwertigem Ersatz entfällt der
+    Anspruch auf Beseitigung; nicht vorschnell ablehnen, Rechtsperson fragen.
+  professionals: *id002
+- id: DF_KEINE_REAKTION_30
+  description: 'PRODUKTSCHWELLE (Teamentscheid 7.11.2026): 30 Tage nach der schriftlichen Meldung ohne
+    Reaktion.'
+  when:
+    all:
+    - ref: fact.landlord_reacted
+      op: equals
+      value: false
+    - ref: derived.days_since_defect_report
+      op: greater_than
+      value: 29
+  urgency: LOW
+  reason_code: DEFECTS_NO_REACTION_30_DAYS
+  reason_de: Seit der schriftlichen Mängelmeldung sind 30 Tage oder mehr ohne Reaktion der Vermieterschaft
+    vergangen (Produktschwelle, keine Gesetzesfrist). Die Rechtsperson wählt den Weg (Klage oder Hinterlegung).
+  professionals: *id002
+- id: DF_H1_BESCHWERDEN
+  description: 'H1: gesundheitliche Beschwerden oder besondere Gefährdung gemeldet.'
+  when: &id004
+    any:
+    - ref: fact.health_symptoms_reported
+      op: equals
+      value: true
+    - ref: fact.medical_risk_reported
+      op: equals
+      value: true
+  urgency: MEDIUM
+  reason_code: DEFECTS_H1_HEALTH_REPORTED
+  reason_de: Es werden gesundheitliche Beschwerden oder eine besondere Gefährdung gemeldet. Die Sozialarbeiterin
+    kann eine ärztliche Abklärung anregen; das System macht keine Aussage zur Ursache. Recht und Soziales
+    (bald).
+  professionals: *id003
+- id: DF_H2_GROSSER_BEFALL
+  description: 'H2: grosser Befall oder Geruch UND (Schlafraum oder Kinder oder Gefährdung).'
+  when: &id005
+    all:
+    - ref: fact.reported_extent
+      op: in
+      value:
+      - groesser
+      - nur_geruch
+    - any:
+      - ref: fact.sleeping_room_affected
+        op: equals
+        value: true
+      - ref: fact.children_exposed
+        op: equals
+        value: true
+      - ref: fact.medical_risk_reported
+        op: equals
+        value: true
+  urgency: HIGH
+  reason_code: DEFECTS_H2_EXTENT_AND_EXPOSURE
+  reason_de: Grösserer Befall oder Schimmelgeruch trifft auf Schlafräume, Kinder oder besonders gefährdete
+    Personen. Räume nach Möglichkeit geschlossen halten und nicht nutzen. Recht und Soziales sofort.
+  professionals: *id003
+- id: DF_H3_NICHT_MEIDBAR
+  description: 'H3: H1/H2 und betroffene Räume nicht meidbar (oder unbekannt).'
+  when:
+    all:
+    - &id006
+      any:
+      - *id004
+      - *id005
+    - &id007
+      any:
+      - ref: fact.can_avoid_affected_rooms
+        op: equals
+        value: false
+      - ref: fact.can_avoid_affected_rooms
+        op: is_unknown
+  urgency: HIGH
+  reason_code: DEFECTS_H3_ROOMS_NOT_AVOIDABLE
+  reason_de: Die betroffenen Räume sind nicht meidbar (oder das ist unbekannt). Die Sozialarbeiterin prüft
+    sofort eine sichere Zwischenlösung (Global-Regel G2), die Rechtsperson parallel.
+  professionals:
+  - social_counselling
+  - tenancy_law_counsel
+- id: DF_H4_KEINE_ZWISCHENUNTERKUNFT
+  description: 'H4: H3 und keine sichere Zwischenunterkunft (oder unbekannt).'
+  when:
+    all:
+    - *id006
+    - *id007
+    - any:
+      - ref: fact.safe_alternative_available
+        op: equals
+        value: false
+      - ref: fact.safe_alternative_available
+        op: is_unknown
+  urgency: HIGH
+  reason_code: DEFECTS_H4_NO_SAFE_ALTERNATIVE
+  reason_de: Es gibt keine sichere Zwischenunterkunft (oder das ist unbekannt). Die Sozialarbeiterin organisiert
+    sofort eine Notunterkunft über den Sozialdienst der Gemeinde; Recht parallel.
+  professionals:
+  - social_counselling
+  - tenancy_law_counsel
+- id: DF_H5_GEMEINDE_ZUWEISUNG
+  description: 'H5: Gemeindewohnung oder zugewiesene Unterkunft: Vertrags-/Zuweisungsgrundlage prüfen.'
+  when:
+    ref: fact.housing_arrangement
+    op: in
+    value:
+    - gemeindewohnung
+    - zugewiesene_unterkunft
+  urgency: MEDIUM
+  reason_code: DEFECTS_H5_PUBLIC_OR_ASSIGNED_HOUSING
+  reason_de: Es handelt sich um eine Gemeindewohnung oder zugewiesene Unterkunft. Die Vertrags- bzw. Zuweisungsgrundlage
+    muss geprüft werden. Ist der Sozialdienst selbst Vermieter oder Zuweisungsstelle, ist eine unabhängige
+    Beratung nötig (Global-Regel G4).
+  professionals:
+  - tenancy_law_counsel
+  - independent_legal_body
+- id: DF_H7_GESUNDHEIT_UNBEKANNT
+  description: 'H7: Gesundheitsfelder nach einer Rückfrage weiterhin unbekannt: im Zweifel höher eskalieren.'
+  when:
+    all:
+    - *id008
+    - any:
+      - ref: fact.health_symptoms_reported
+        op: is_unknown
+      - ref: fact.medical_risk_reported
+        op: is_unknown
+      - ref: fact.children_exposed
+        op: is_unknown
+      - ref: fact.sleeping_room_affected
+        op: is_unknown
+      - ref: fact.can_avoid_affected_rooms
+        op: is_unknown
+  urgency: MEDIUM
+  reason_code: DEFECTS_H7_HEALTH_FIELDS_UNKNOWN
+  reason_de: 'Gesundheits- oder Schutzfelder sind nach der Rückfrage weiterhin unbekannt. Unbekannt ist
+    nie ''nein'': im Zweifel wird höher eskaliert (bald), Recht und Soziales.'
+  professionals: *id003
+- id: DF_VULNERABILITY
+  description: 'Besondere Belastungssituation: ausserhalb des Moduls.'
+  when:
+    ref: fact.vulnerability_present
+    op: equals
+    value: true
+  urgency: MEDIUM
+  reason_code: OUTSIDE_MODULE_VULNERABILITY
+  reason_de: Es liegt eine besondere Belastungssituation vor. Das liegt ausserhalb dieses Moduls und gehört
+    in menschliche Hände.
+  professionals: *id003
+- id: DF_EXPERT_REQUESTED
+  description: Fachperson ausdrücklich gewünscht.
+  when:
+    ref: fact.client_requests_expert
+    op: equals
+    value: true
+  urgency: LOW
+  reason_code: EXPERT_REQUESTED
+  reason_de: Es wurde ausdrücklich eine Fachperson gewünscht. Dieser Wunsch wird immer respektiert.
+  professionals: *id002
+legal_rules:
+- id: DF_HINT_PFLICHT
+  description: Vermieterschaft muss Wohnung gebrauchstauglich erhalten.
+  kind: HINT
+  when: &id009
+    ref: ctx.has_user_input
+    op: equals
+    value: true
+  result_code: HINT_LANDLORD_DUTY
+  result_de: Die Vermieterschaft muss die Wohnung in einem gebrauchstauglichen Zustand erhalten.
+  legal_source_ids:
+  - CH_OR_256_1_2
+- id: DF_HINT_MELDEN
+  description: Mangel schriftlich melden.
+  kind: HINT
+  when: *id009
+  result_code: HINT_REPORT_IN_WRITING
+  result_de: Melden Sie den Mangel schriftlich, am besten eingeschrieben, und verlangen Sie die Behebung.
+    Eine Herabsetzung der Miete ist erst ab dem Zeitpunkt möglich, in dem die Vermieterschaft vom Mangel
+    weiss.
+  legal_source_ids:
+  - CH_OR_257G
+  - CH_OR_259D
+  - LEHRBUCH_MIETE_31
+- id: DF_HINT_VOLLE_MIETE
+  description: Volle Miete weiter bezahlen.
+  kind: HINT
+  when: *id009
+  result_code: HINT_PAY_FULL_RENT
+  result_de: Bezahlen Sie die volle Miete weiter, bis eine Fachperson den Fall geprüft hat. Wer die Miete
+    selbst kürzt, zurückbehält oder verrechnet, riskiert eine Kündigung.
+  legal_source_ids:
+  - CH_OR_257D_1
+  - BGER_4A_140_2014
+- id: DF_HINT_BELEGE
+  description: Belege sammeln.
+  kind: HINT
+  when: *id009
+  result_code: HINT_COLLECT_EVIDENCE
+  result_de: 'Sammeln Sie Belege: Fotos mit Datum, Briefe, E-Mails, Namen von Zeugen.'
+  legal_source_ids:
+  - PRODUKTREGEL
+- id: DF_HINT_KLEINER_UNTERHALT
+  description: Kleiner Unterhalt.
+  kind: HINT
+  when:
+    ref: fact.minor_repair_possible
+    op: equals
+    value: true
+  result_code: HINT_MINOR_MAINTENANCE
+  result_de: Kleine Reparaturen und Reinigungen, etwa eine Glühbirne oder ein verstopfter Abfluss, muss
+    die Mieterin selbst bezahlen.
+  legal_source_ids:
+  - CH_OR_259
+- id: DF_HINT_ZUTRITT
+  description: Zutritt für Handwerker.
+  kind: HINT
+  when: *id009
+  result_code: HINT_ACCESS_FOR_REPAIRS
+  result_de: Handwerkern für die Behebung müssen Sie Zutritt gewähren; die Arbeiten müssen rechtzeitig
+    angekündigt werden.
+  legal_source_ids:
+  - CH_OR_257H
+- id: DF_HINT_KOSTENLOS
+  description: Schlichtungsverfahren kostenlos.
+  kind: HINT
+  when: *id009
+  result_code: HINT_FREE_CONCILIATION
+  result_de: Das Verfahren vor der Schlichtungsbehörde kostet keine Gerichtskosten. Dort gibt es auch
+    eine kostenlose Rechtsauskunft.
+  legal_source_ids:
+  - CH_ZPO_113_2_C
+- id: DF_HINT_RACHEKUENDIGUNG
+  description: Kündigung nach Mängelmeldung.
+  kind: HINT
+  when:
+    ref: fact.termination_after_report
+    op: equals
+    value: true
+  result_code: HINT_RETALIATORY_TERMINATION
+  result_de: Wer wegen einer Mängelmeldung gekündigt wird, kann die Kündigung möglicherweise anfechten.
+    Bringen Sie eine solche Kündigung sofort einer Fachperson.
+  legal_source_ids:
+  - CH_OR_271A_1_A_D_E
+- id: DF_HINT_ARZT
+  description: Ärztliche Abklärung bei Beschwerden.
+  kind: HINT
+  when: *id006
+  result_code: HINT_MEDICAL_CHECK
+  result_de: Wenn jemand gesundheitliche Beschwerden hat, sollte das ärztlich abgeklärt werden. Besonders
+    gefährdete Personen sollten das rasch tun.
+  legal_source_ids:
+  - BAG_SCHIMMEL_2021
+- id: DF_HINT_RAEUME_MEIDEN
+  description: Starken Befall meiden.
+  kind: HINT
+  when: *id005
+  result_code: HINT_AVOID_ROOMS
+  result_de: Räume mit starkem Schimmelbefall nach Möglichkeit geschlossen halten und nicht benutzen,
+    besonders Schlaf- und Kinderzimmer. Häufig lüften. Entfeuchtungsgeräte erst nach der Schimmelbeseitigung.
+  legal_source_ids:
+  - BAG_SCHIMMEL_2021
+- id: DF_HINT_SANIERUNG
+  description: Abklärung und Sanierung sind Sache der Vermieterschaft.
+  kind: HINT
+  when: *id008
+  result_code: HINT_LANDLORD_REMEDIES
+  result_de: Abklärung und Sanierung sind Sache der Vermieterschaft. Eigene Gutachten oder Luftmessungen
+    sind in der Regel nicht nötig.
+  legal_source_ids:
+  - BAG_SCHIMMEL_2021
+- id: DF_REVIEW_SUBVENTIONIERT
+  description: 'H6: Hinweis an Issue 7 bei subventionierter Wohnung.'
+  kind: REVIEW_POINT
+  when:
+    ref: fact.housing_arrangement
+    op: equals
+    value: subventioniert
+  result_code: REVIEW_H6_SUBSIDISED
+  result_de: 'Prüfhinweis (H6): Bei subventionierten Wohnungen mit kontrolliertem Mietzins kann die Anfechtung
+    missbräuchlicher Mietzinse ausgeschlossen sein (Art. 253b Abs. 3 OR); siehe Issue 7.'
+  legal_source_ids:
+  - CH_OR_253B_2_3
+- id: DF_REVIEW_HINTERLEGUNG_FALLE
+  description: Formfehler bei Hinterlegung.
+  kind: REVIEW_POINT
+  when:
+    any:
+    - ref: fact.rent_deposit_started
+      op: equals
+      value: true
+    - ref: fact.deposit_planned
+      op: equals
+      value: true
+  result_code: REVIEW_DEPOSIT_FORM
+  result_de: 'Prüfhinweis: Fehlt eine formelle Voraussetzung der Hinterlegung, gilt die Miete als nicht
+    bezahlt, auch bei gutem Glauben; bereits fällige Mietzinse können nicht mehr hinterlegt werden.'
+  legal_source_ids:
+  - CH_OR_259G
+  - CH_OR_259H
+  - BGER_4C_264_2003
+- id: DF_REVIEW_UMGEBUNG
+  description: Veränderte Umgebung ist ohne Zusicherung kein Mangel.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.construction_nearby
+    op: equals
+    value: true
+  result_code: REVIEW_ENVIRONMENT_CHANGE
+  result_de: 'Prüfhinweis: Eine veränderte Umgebung (Neubau nebenan, mehr Verkehr) ist ohne besondere
+    Zusicherung in der Regel kein Mangel; Baulärm während der Bauphase kann ein Mangel sein.'
+  legal_source_ids:
+  - BGE_135_III_345
+  - CH_OR_257H
+- id: DF_REVIEW_DRITTE
+  description: Mitbewohnende oder Kinder geschädigt.
+  kind: REVIEW_POINT
+  when:
+    ref: fact.damage_or_extra_costs
+    op: equals
+    value: true
+  result_code: REVIEW_THIRD_PARTY_DAMAGE
+  result_de: 'Prüfhinweis: Schadenersatz nach Art. 259e OR steht grundsätzlich nur der Vertragspartei
+    zu; der Schutz Dritter ist offen.'
+  legal_source_ids:
+  - CH_OR_259E
+  - LEHRBUCH_MIETE_31
+legal_source_ids:
+- CH_OR_256_1_2
+- CH_OR_257G
+- CH_OR_259D
+- LEHRBUCH_MIETE_31
+- CH_OR_257D_1
+- BGER_4A_140_2014
+- PRODUKTREGEL
+- CH_OR_259
+- CH_OR_257H
+- CH_ZPO_113_2_C
+- CH_OR_271A_1_A_D_E
+- BAG_SCHIMMEL_2021
+- CH_OR_253B_2_3
+- CH_OR_259G
+- CH_OR_259H
+- BGER_4C_264_2003
+- BGE_135_III_345
+- CH_OR_259E
+default_professionals:
+- tenancy_law_counsel
+briefing_template: expert_briefing_v1
+briefing_profile:
+  intro_de: Mängel an der Mietsache (Art. 256, 259a ff. OR) – Kanton Zürich
+  groups:
+  - id: defect
+    title_de: Mangel
+    fact_ids:
+    - defect_type
+    - defect_description
+    - defect_since
+    - defect_effect
+    - health_safety_danger
+    - defect_at_move_in
+    - possibly_tenant_caused
+    - minor_repair_possible
+    - evidence_available
+    - construction_nearby
+  - id: notice
+    title_de: Meldung und Reaktion der Vermieterschaft
+    fact_ids:
+    - landlord_informed
+    - landlord_informed_in_writing
+    - landlord_informed_date
+    - landlord_reacted
+    - landlord_offered_replacement
+  - id: payment
+    title_de: Zahlungsstatus, Hinterlegung, Wunsch
+    fact_ids:
+    - rent_payment_status
+    - payment_warning_received
+    - rent_deposit_started
+    - deposit_planned
+    - deadline_set_in_writing
+    - damage_or_extra_costs
+    - termination_after_report
+    - authority_letter_received
+    - client_wish
+  - id: health
+    title_de: Gesundheit, Schutzbedarf und Wohnform (keine Diagnosen)
+    fact_ids:
+    - housing_arrangement
+    - affected_rooms
+    - sleeping_room_affected
+    - reported_extent
+    - health_symptoms_reported
+    - medical_risk_reported
+    - children_exposed
+    - can_avoid_affected_rooms
+    - safe_alternative_available
+    - support_needed
+  - id: situation
+    title_de: Vorprüfung
+    fact_ids:
+    - tenant_role
+    - object_type
+    - property_municipality
+    - property_in_canton_zh
+    - children_in_household
+    - vulnerability_present
+    - client_requests_expert
+    - consent_briefing
+  review_points:
+  - text_de: Mangel und Schwere (leicht/mittel/schwer) beurteilt allein die Rechtsperson; die BAG-Kategorien
+      sind eine gesundheitliche Einschätzung, keine rechtliche.
+    source_ids:
+    - CH_OR_256_1_2
+    - BAG_SCHIMMEL_2021
+    - LEHRBUCH_MIETE_31
+  - text_de: 'Zahlungsstatus: eigenmächtige Kürzung/Verrechnung kann zur Kündigung nach Art. 257d OR führen;
+      Hinterlegung nur mit korrekter Form (Art. 259g, 259h OR).'
+    source_ids:
+    - CH_OR_257D_1
+    - CH_OR_259G
+    - CH_OR_259H
+    - BGER_4A_140_2014
+  - text_de: Herabsetzung ab Kenntnis der Vermieterschaft; Rüge während des Bestehens des Mangels nötig.
+      Das System nennt keine Prozentzahl.
+    source_ids:
+    - CH_OR_259D
+    - BGE_142_III_557
+    - BGE_130_III_504
+  - text_de: Wohnform (Gemeindewohnung, Zuweisung, Subvention) und Vertragsgrundlage.
+    source_ids:
+    - CH_OR_253B_2_3
+  - text_de: 'Kündigung nach Mängelmeldung: Anfechtbarkeit als Rachekündigung (Issue 1).'
+    source_ids:
+    - CH_OR_271A_1_A_D_E
+  documents_to_request:
+  - Mängelmeldung und Antwort der Vermieterschaft
+  - Fotos mit Datum
+  - Mietvertrag und Einzugsprotokoll
+  - Schreiben der Vermieterschaft oder von Behörden
+  - Allfällige Arztzeugnisse (direkt an die Rechtsperson, nicht von der KI ausgewertet)
+  authority_ids:
+  - SCHLICHTUNGSBEHOERDE_MIETE_ZH
+  - MIETERVERBAND_ZH
+  - RECHTSAUSKUNFT_SCHLICHTUNGSBEHOERDE_ZH
+  - AWEL_SCHIMMEL
+  - KASSE_BEZIRKSGERICHT_ZH
+  - MIETGERICHT_ZH
+  - SOZIALDIENST_WOHNGEMEINDE
+  - NOTUNTERKUNFT_FAMILIEN_STADT_ZH
+  - NOTSCHLAFSTELLE_ZH
+  - SEKRETARIAT_WOHNEN_OBDACH_ZH
