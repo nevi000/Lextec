@@ -124,12 +124,14 @@ export function BridgePanel({ caseId, disabled, onCaseChanged }: { caseId: strin
 
   if (!s.active) {
     return (
-      <section aria-label="Sprachbrücke" className="rounded-lg border border-line bg-surface p-4 shadow-card">
+      <section aria-label="Sprachbrücke" className="rounded-xl border border-dashed border-line-strong bg-surface/60 p-4 sm:px-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="min-w-0">
-            <h2 className="flex items-center gap-2 text-[14.5px] font-semibold">
-              <Smartphone className="size-4 text-brand-600" aria-hidden /> Sprachbrücke
-            </h2>
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-brand-100 text-brand-700" aria-hidden>
+              <Smartphone className="size-4" />
+            </span>
+            <div className="min-w-0">
+            <h2 className="text-[15px] font-semibold">Sprachbrücke</h2>
             <p className="mt-0.5 text-[13px] text-ink-muted">
               Die ratsuchende Person kann die Fragen auf dem eigenen Smartphone in ihrer Sprache beantworten.
             </p>
@@ -138,12 +140,13 @@ export function BridgePanel({ caseId, disabled, onCaseChanged }: { caseId: strin
                 Sitzung beendet. Das Smartphone kann keine Antworten mehr senden; ein neuer QR-Code startet eine neue Sitzung.
               </p>
             )}
+            </div>
           </div>
           <Button variant="secondary" size="sm" loading={start.isPending} onClick={() => start.mutate()}>
             Sprachbrücke aktivieren
           </Button>
         </div>
-        <p className="mt-2 text-[12px] text-ink-subtle">
+        <p className="mt-3 border-t border-line pt-3 text-[12px] leading-relaxed text-ink-subtle">
           Es wird nur die jeweils aktuelle Frage übertragen, nie die Fallakte. Fragen und Antworten werden maschinell übersetzt; bei
           rechtlich wichtigen Punkten ersetzt das keine qualifizierte Sprachmittlung.
         </p>
@@ -156,11 +159,13 @@ export function BridgePanel({ caseId, disabled, onCaseChanged }: { caseId: strin
   const busy = start.isPending || pause.isPending || resume.isPending || end.isPending;
 
   return (
-    <section aria-label="Sprachbrücke" className="rounded-lg border border-line bg-surface p-4 shadow-card" data-testid="bridge-panel">
+    <section aria-label="Sprachbrücke" className="rounded-xl border border-brand-600/25 bg-surface p-4 shadow-card sm:p-5" data-testid="bridge-panel">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 text-[14.5px] font-semibold">
-            <Smartphone className="size-4 text-brand-600" aria-hidden />
+          <h2 className="flex items-center gap-2 text-[15px] font-semibold">
+            <span className="grid size-7 place-items-center rounded-full bg-brand-100 text-brand-700" aria-hidden>
+              <Smartphone className="size-3.5" />
+            </span>
             {connected ? "Sprachbrücke verbunden" : "Sprachbrücke wartet auf das Smartphone"}
           </h2>
           {connected && (
@@ -267,7 +272,7 @@ function AnswerCard({
   }
 
   return (
-    <div className="mt-3 rounded-md border border-brand-600/40 bg-brand-50/60 p-3" data-testid="bridge-answer" role="group" aria-label="Antwort eingegangen">
+    <div className="mt-4 rounded-xl border border-brand-600/40 bg-brand-50/70 p-4" data-testid="bridge-answer" role="group" aria-label="Antwort eingegangen">
       <p className="flex items-center gap-1.5 text-[13.5px] font-semibold">
         <Check className="size-4 text-brand-700" aria-hidden /> Antwort eingegangen
         <span className="ml-auto text-[11.5px] font-normal text-ink-subtle">Herkunft: Sprachbrücke · wartet auf Bestätigung</span>

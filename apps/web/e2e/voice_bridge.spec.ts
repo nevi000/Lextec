@@ -52,7 +52,7 @@ test("one QR connection: phone follows the questions, the social worker confirms
 
   // the social worker ends the session: the phone shows the end screen and is locked out
   await page.getByRole("button", { name: "Sitzung beenden" }).click();
-  await expect(p.getByText(/session has ended|interview is complete/)).toBeVisible({ timeout: 10_000 });
+  await expect(p.getByText(/interview has ended|interview is complete/)).toBeVisible({ timeout: 10_000 });
   await ctx.close();
 });
 

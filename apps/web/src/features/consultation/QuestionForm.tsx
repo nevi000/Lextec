@@ -1,4 +1,4 @@
-import { ChevronDown, CircleHelp, Clock3 } from "lucide-react";
+import { Check, ChevronDown, CircleHelp, Clock3 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -14,10 +14,21 @@ function Choice({ label, selected, disabled, onClick }: { label: string; selecte
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "rounded-lg border px-5 py-2.5 text-[14px] font-medium transition-colors disabled:opacity-50",
-        selected ? "border-brand-600 bg-brand-600 text-white" : "border-line-strong bg-surface hover:bg-brand-50",
+        "inline-flex min-h-12 items-center gap-2.5 rounded-xl border px-5 py-2.5 text-start text-[15px] font-medium transition-[border-color,background-color,box-shadow] disabled:opacity-50",
+        selected
+          ? "border-brand-600 bg-brand-50 text-brand-800 shadow-[inset_0_0_0_1px_var(--color-brand-600)]"
+          : "border-line-strong bg-surface hover:border-brand-500/60 hover:bg-brand-50/60",
       )}
     >
+      <span
+        className={cn(
+          "grid size-5 shrink-0 place-items-center rounded-full border transition-colors",
+          selected ? "border-brand-600 bg-brand-600 text-white" : "border-line-strong bg-surface",
+        )}
+        aria-hidden
+      >
+        {selected && <Check className="size-3" strokeWidth={3} />}
+      </span>
       {label}
     </button>
   );
@@ -67,7 +78,7 @@ export function QuestionForm({
         submit();
       }}
     >
-      <p className="text-[19px] font-semibold leading-snug">{question.question_de}</p>
+      <p className="hyphens-manual max-w-[40ch] font-display text-[22px] font-semibold leading-snug tracking-tight sm:text-[24px]">{question.question_de}</p>
       {question.deferred && (
         <p className="mt-1 inline-flex items-center gap-1.5 text-[12.5px] text-ask-fg">
           <Clock3 className="size-3.5" aria-hidden /> Früher zurückgestellt, daher erneut gefragt.
@@ -83,9 +94,9 @@ export function QuestionForm({
         </details>
       )}
 
-      <div className="mt-4">
+      <div className="mt-6">
         {isBool ? (
-          <div role="radiogroup" aria-label="Antwort" className="flex flex-wrap gap-2">
+          <div role="radiogroup" aria-label="Antwort" className="flex flex-wrap gap-3">
             <Choice label="Ja" selected={value === "Ja"} disabled={off} onClick={() => setValue("Ja")} />
             <Choice label="Nein" selected={value === "Nein"} disabled={off} onClick={() => setValue("Nein")} />
           </div>
@@ -108,7 +119,7 @@ export function QuestionForm({
         )}
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center gap-2">
+      <div className="mt-7 flex flex-wrap items-center gap-2 border-t border-line pt-5">
         <Button type="submit" variant="primary" size="lg" loading={busy} disabled={disabled || !value.trim()}>
           Antwort speichern und weiter
         </Button>

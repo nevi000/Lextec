@@ -63,17 +63,17 @@ export const Composer = forwardRef<
 
   return (
     <form
-      className="rounded-lg border border-line-strong bg-surface p-4 shadow-card"
+      className="rounded-xl border border-line bg-surface p-5 shadow-raised sm:p-7"
       onSubmit={(e) => {
         e.preventDefault();
         send();
       }}
     >
-      <Label htmlFor="composer" className={first ? "text-[18px] font-semibold" : undefined}>
+      <Label htmlFor="composer" className={first ? "font-display text-[24px] font-semibold leading-tight tracking-tight text-ink" : undefined}>
         {first ? "Was ist passiert?" : "Weitere Informationen aus dem Gespräch"}
       </Label>
       {first && (
-        <p className="mb-2 mt-1 text-[13.5px] text-ink-muted">
+        <p className="mb-4 mt-1.5 max-w-[60ch] text-[15px] text-ink-muted">
           Beschreiben Sie die Situation der ratsuchenden Person in eigenen Worten oder importieren Sie eine bereits
           verfasste Fallbeschreibung als PDF.
         </p>
@@ -81,12 +81,12 @@ export const Composer = forwardRef<
       <Textarea
         id="composer"
         ref={ref}
-        rows={first ? 8 : 4}
+        rows={first ? 10 : 4}
         value={value}
         disabled={disabled}
         readOnly={busy}
         aria-busy={busy}
-        className={busy ? "bg-sunken text-ink-muted" : undefined}
+        className={busy ? "bg-sunken text-ink-muted" : first ? "rounded-xl px-4 py-3.5 text-[15.5px] leading-relaxed" : undefined}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => {
           if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {

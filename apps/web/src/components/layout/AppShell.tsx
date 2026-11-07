@@ -26,8 +26,10 @@ export function NewCaseButton({
 
 function navClass({ isActive }: { isActive: boolean }) {
   return cn(
-    "group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13.5px] font-medium transition-colors",
-    isActive ? "bg-white/10 text-white" : "text-brand-200 hover:bg-white/5 hover:text-white",
+    "group relative flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-[14px] font-medium transition-colors",
+    isActive
+      ? "bg-white/10 text-white before:absolute before:inset-y-2 before:-left-3 before:w-[3px] before:rounded-full before:bg-brand-500"
+      : "text-brand-200 hover:bg-white/5 hover:text-white",
   );
 }
 
@@ -43,7 +45,7 @@ function SystemNotice() {
   }
   if (!data) return null;
   return (
-    <div className="space-y-1.5 text-[11.5px] leading-snug text-brand-200" title={data.notice}>
+    <div className="space-y-2 rounded-lg border border-white/10 bg-white/[0.04] p-3 text-[11.5px] leading-snug text-brand-200" title={data.notice}>
       <div className="flex items-start gap-1.5">
         <span
           className={cn("mt-1 size-1.5 shrink-0 rounded-full", data.ai_is_external ? "bg-escalate-solid" : "bg-brand-500")}
@@ -53,7 +55,7 @@ function SystemNotice() {
           ? "Texte werden zur Auswertung an eine externe KI (Gemini) gesendet."
           : "KI-Auswertung lokal simuliert, keine Daten verlassen den Rechner."}
       </div>
-      <div className="opacity-80">Lokaler Prototyp · nur synthetische Daten verwenden</div>
+      <div className="border-t border-white/10 pt-2 opacity-80">Lokaler Prototyp · nur synthetische Daten verwenden</div>
       {data.app_env === "development" && (
         <NavLink to="/dev" className="inline-flex items-center gap-1 pt-1 text-brand-300 underline-offset-2 hover:underline">
           <Wrench className="size-3" aria-hidden /> Entwicklerbereich
@@ -65,9 +67,9 @@ function SystemNotice() {
 
 export function AppShell() {
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[232px_1fr]">
+    <div className="min-h-screen lg:grid lg:grid-cols-[248px_1fr]">
       <aside className="no-print bg-brand-900 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
-        <div className="flex items-center justify-between gap-3 px-4 py-4 lg:px-5 lg:py-5">
+        <div className="flex items-center justify-between gap-3 px-4 py-4 lg:px-6 lg:pb-6 lg:pt-7">
           <NavLink to="/" aria-label="LexTec Bridge, zu Meine Fälle" className="block leading-none">
             {/* Official LexTec wordmark (white), served locally from /public/brand */}
             <img src="/brand/lextec-logo-white.png" alt="LexTec" width={1888} height={446} className="h-9 w-auto" />
@@ -79,8 +81,8 @@ export function AppShell() {
             </NavLink>
           </nav>
         </div>
-        <nav aria-label="Hauptnavigation" className="hidden gap-1 px-3 lg:flex lg:flex-1 lg:flex-col">
-          <div className="mb-2 px-1">
+        <nav aria-label="Hauptnavigation" className="hidden gap-1.5 px-4 lg:flex lg:flex-1 lg:flex-col">
+          <div className="mb-3">
             <NewCaseButton className="w-full" />
           </div>
           <NavLink to="/" end className={navClass}>
@@ -88,12 +90,12 @@ export function AppShell() {
             <span className="whitespace-nowrap">Meine Fälle</span>
           </NavLink>
         </nav>
-        <div className="hidden border-t border-white/10 p-4 lg:block">
+        <div className="hidden p-4 lg:block">
           <SystemNotice />
         </div>
       </aside>
       <main className="min-w-0">
-        <div className="print-shell mx-auto w-full max-w-[1100px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div className="print-shell mx-auto w-full max-w-[1200px] px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           <Outlet />
         </div>
       </main>

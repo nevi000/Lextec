@@ -14,14 +14,14 @@
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
 
   /* surfaces & text (site: #1A1A1A text, #F9F9F9 / #F1F1F1 neutrals, #6B7280 grey) */
-  --color-canvas: #f9f9f9;
+  --color-canvas: #f6f7f5; /* faint warm-green neutral: the white cards read as raised surfaces */
   --color-surface: #ffffff;
-  --color-sunken: #f1f1f1;
+  --color-sunken: #eef0ed;
   --color-ink: #1a1a1a;
   --color-ink-muted: #4b5563;
   --color-ink-subtle: #6b7280;
-  --color-line: #e6e6e6;
-  --color-line-strong: #d0d0d0;
+  --color-line: #e3e6e2;
+  --color-line-strong: #cfd4cf;
 
   /* brand: LexTec green #4A915C (accent), darker #3A724B (actions, AA with white text), dark #1E1C1C (navigation) */
   --color-brand-950: #141212;
@@ -65,12 +65,14 @@
   /* radii: one calm scale (cards 10, controls 8, chips 6) */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 12px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
   /* shadows: hairlines instead of glows */
-  --shadow-xs: none;
-  --shadow-card: 0 1px 2px rgb(26 26 26 / 0.04);
+  --shadow-xs: 0 1px 1px rgb(26 26 26 / 0.03);
+  /* two soft layers: a hairline contact shadow and a wide ambient one */
+  --shadow-card: 0 1px 2px rgb(26 26 26 / 0.04), 0 6px 20px -12px rgb(26 26 26 / 0.12);
+  --shadow-raised: 0 1px 2px rgb(26 26 26 / 0.05), 0 12px 28px -14px rgb(26 26 26 / 0.22);
   --shadow-pop: 0 12px 32px -12px rgb(26 26 26 / 0.3);
 
   /* motion */
@@ -91,16 +93,33 @@
   body {
     margin: 0;
     min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 14.5px;
+    line-height: 1.6;
     background: var(--color-canvas);
   }
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     color: var(--color-ink);
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  /* German compounds must wrap instead of overflowing narrow screens */
+  main {
+    overflow-wrap: anywhere;
+  }
+  main p {
+    hyphens: auto;
+  }
+  main h1,
+  main h2,
+  main h3,
+  .hyphens-manual {
+    hyphens: manual;
   }
   :focus-visible {
     outline: 2px solid var(--color-brand-600);
@@ -114,6 +133,9 @@
   [role="button"],
   a {
     transition-duration: var(--duration-fast);
+  }
+  button:not(:disabled):active {
+    transform: translateY(0.5px);
   }
 }
 

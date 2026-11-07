@@ -15,11 +15,11 @@ export function PageHeader({
   eyebrow?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
         {eyebrow && <div className="mb-1 text-[12px] font-medium text-ink-subtle">{eyebrow}</div>}
-        <h1 className="text-[22px] font-semibold leading-tight">{title}</h1>
-        {description && <p className="mt-1 max-w-2xl text-[13.5px] text-ink-muted">{description}</p>}
+        <h1 className="text-[26px] font-semibold leading-tight tracking-tight">{title}</h1>
+        {description && <p className="mt-1.5 max-w-2xl text-[14.5px] text-ink-muted">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
@@ -38,11 +38,11 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface/60 px-6 py-12 text-center">
-      <div className="mb-3 grid size-10 place-items-center rounded-full bg-brand-100 text-brand-700">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-line-strong bg-surface/70 px-6 py-16 text-center">
+      <div className="mb-4 grid size-12 place-items-center rounded-full bg-brand-100 text-brand-700 ring-8 ring-brand-50">
         <Icon className="size-5" aria-hidden />
       </div>
-      <p className="text-[14px] font-medium">{title}</p>
+      <p className="font-display text-[16px] font-semibold">{title}</p>
       {description && <p className="mt-1 max-w-sm text-[13px] text-ink-muted">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
     </div>

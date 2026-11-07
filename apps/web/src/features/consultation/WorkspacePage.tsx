@@ -203,7 +203,7 @@ export function WorkspacePage() {
             ) : null;
 
   return (
-    <div>
+    <div className="mx-auto max-w-[880px]">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <Link to="/" className="mb-1.5 inline-flex items-center gap-1 text-[12.5px] text-ink-subtle hover:text-ink">
@@ -229,7 +229,7 @@ export function WorkspacePage() {
         <PhaseStepper phase={phase} questionsOpen={(decision?.missing_facts ?? []).length > 0} />
       </div>
 
-      <div className="mx-auto max-w-3xl space-y-5">
+      <div className="space-y-6">
         {safety && emergency && <SafetyEmergency caseId={caseId} safety={safety} />}
         {safety && !emergency && (safety.state === "HUMAN_CHECK" || safety.state === "UNCLEAR") && (
           <SafetyNotice caseId={caseId} safety={safety} />
@@ -286,10 +286,6 @@ export function WorkspacePage() {
           <>
             <CaseSummary detail={detail} facts={facts} onOpenAll={() => setInfoOpen(true)} />
 
-            {!closed && !emergency && (
-              <BridgePanel caseId={caseId} disabled={closed} onCaseChanged={() => void invalidate()} />
-            )}
-
             {emergency ? (
               <details data-testid="legal-secondary" className="group rounded-lg border border-line bg-surface">
                 <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-[13.5px] font-medium">
@@ -300,6 +296,10 @@ export function WorkspacePage() {
               </details>
             ) : (
               nextAction
+            )}
+
+            {!closed && !emergency && (
+              <BridgePanel caseId={caseId} disabled={closed} onCaseChanged={() => void invalidate()} />
             )}
 
             {!closed && (

@@ -21,10 +21,10 @@ export function CaseSummary({
   const unclear = facts.filter((f) => f.status === "AMBIGUOUS" || f.status === "CONTRADICTORY").length;
 
   return (
-    <section aria-label="Dieser Fall" className="rounded-lg border border-line bg-surface p-4 sm:p-5">
+    <section aria-label="Dieser Fall" className="rounded-xl border border-line bg-surface p-5 shadow-card sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[12px] font-semibold text-ink-subtle">
+          <p className="text-[11.5px] font-semibold uppercase tracking-wider text-ink-subtle">
             {supported.length > 0 && unsupported.length > 0 ? "Erkanntes Mietrechtsproblem" : "Erkanntes Problem"}
           </p>
           {supported.length === 0 && unsupported.length === 0 ? (

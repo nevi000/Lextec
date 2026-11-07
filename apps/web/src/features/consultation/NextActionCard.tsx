@@ -23,7 +23,7 @@ export interface Props {
   briefingBusy: boolean;
 }
 
-const shell = "print-break-avoid rounded-lg border p-5 shadow-card sm:p-6";
+const shell = "print-break-avoid rounded-xl border p-5 shadow-card sm:p-7";
 
 export function NextActionCard(p: Props) {
   if (p.decision.action === "ASK") return <AskCard {...p} />;
@@ -35,13 +35,16 @@ function AskCard({ detail, decision, busy, onAnswer, onUnknown, onDefer, onSkip 
   const q = decision.next_question;
   const closed = detail.status === "CLOSED";
   return (
-    <section aria-label="Nächste empfohlene Aktion" className={cn(shell, "border-line bg-surface")}>
-      <header className="mb-3 flex items-center gap-2">
+    <section aria-label="Nächste empfohlene Aktion" className={cn(shell, "border-brand-600/25 bg-surface shadow-raised")}>
+      <header className="mb-4 flex items-center gap-2.5">
         <Badge tone="brand" icon={MessageCircleQuestionMark}>
           Nächste Frage
         </Badge>
         {decision.missing_facts.length > 1 && (
-          <span className="text-[12px] text-ink-subtle">noch {decision.missing_facts.length} Angaben offen</span>
+          <span className="text-[12.5px] text-ink-subtle" title={`${decision.missing_facts.length} Angaben sind noch offen`}>
+            Eine Frage nach der anderen
+            <span className="sr-only"> ({decision.missing_facts.length} Angaben noch offen)</span>
+          </span>
         )}
       </header>
       <h2 className="sr-only">Nächste empfohlene Aktion</h2>

@@ -166,9 +166,9 @@ export function MobileBridgePage() {
   return (
     <div dir={rtl ? "rtl" : "ltr"} lang={uiLang} className="min-h-dvh bg-canvas text-ink" data-testid="bridge-mobile">
       <header className="bg-brand-900 px-5 py-4 text-white">
-        <p className="text-[17px] font-semibold tracking-tight">LexTec Bridge</p>
+        <img src="/brand/lextec-logo-white.png" alt="LexTec" width={1888} height={446} className="h-7 w-auto" />
       </header>
-      <main className="mx-auto flex max-w-md flex-col gap-5 px-5 py-6">
+      <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pb-10 pt-6">
         {reconnecting && !ended && (
           <p role="status" className="flex items-center gap-2 rounded-lg border border-ask-line bg-ask-bg px-3 py-2 text-[14px] text-ask-fg" data-testid="bridge-offline">
             <WifiOff className="size-4 shrink-0" aria-hidden /> {t.connectionLost}
@@ -237,7 +237,7 @@ function Welcome({ uiLang, onPick }: { uiLang: Lang; onPick: (l: Lang) => void }
             <button
               type="button"
               onClick={() => onPick(l.code)}
-              className="flex min-h-14 w-full items-center gap-3 rounded-xl border border-line-strong bg-surface px-4 text-start text-[18px] font-medium shadow-xs active:bg-brand-50"
+              className="flex min-h-16 w-full items-center gap-3 rounded-2xl border border-line-strong bg-surface px-5 text-start text-[19px] font-medium shadow-card transition-colors active:bg-brand-50"
               lang={l.code}
             >
               <Languages className="size-5 text-brand-600" aria-hidden /> {l.name}
@@ -365,8 +365,8 @@ function QuestionView({
   const secondary = cn(big, "border-line-strong bg-surface active:bg-brand-50");
 
   return (
-    <section aria-labelledby="q-h" className="space-y-5 rounded-xl border border-line bg-surface p-5 shadow-card">
-      <h1 id="q-h" className="text-[22px] font-semibold leading-snug" data-testid="bridge-question">
+    <section aria-labelledby="q-h" className="space-y-6 rounded-2xl border border-line bg-surface p-6 shadow-raised">
+      <h1 id="q-h" className="font-display text-[24px] font-semibold leading-snug tracking-tight" data-testid="bridge-question">
         {q.text}
       </h1>
       {q.why && (

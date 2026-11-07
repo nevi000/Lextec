@@ -5,13 +5,13 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-[13px] font-medium transition-colors select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13.5px] font-medium transition-[color,background-color,border-color,box-shadow] select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        primary: "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800",
+        primary: "bg-brand-600 text-white shadow-xs hover:bg-brand-700 active:bg-brand-800",
         accent: "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800",
-        secondary: "border border-line-strong bg-surface text-ink hover:bg-sunken",
+        secondary: "border border-line-strong bg-surface text-ink shadow-xs hover:border-brand-500/50 hover:bg-brand-50",
         ghost: "text-ink-muted hover:bg-sunken hover:text-ink",
         danger: "border border-escalate-line bg-surface text-escalate-fg hover:bg-escalate-bg",
         link: "h-auto px-0 text-brand-600 underline-offset-4 hover:underline",
