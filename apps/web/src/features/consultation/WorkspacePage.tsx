@@ -229,7 +229,7 @@ export function WorkspacePage() {
         <PhaseStepper phase={phase} questionsOpen={(decision?.missing_facts ?? []).length > 0} />
       </div>
 
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
         {safety && emergency && <SafetyEmergency caseId={caseId} safety={safety} />}
         {safety && !emergency && (safety.state === "HUMAN_CHECK" || safety.state === "UNCLEAR") && (
           <SafetyNotice caseId={caseId} safety={safety} />

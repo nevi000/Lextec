@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Select, Textarea } from "@/components/ui/input";
 import { api } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { errorMessage } from "@/lib/queries";
 import type { WorkerState } from "./types";
 
@@ -75,10 +76,19 @@ export function BridgePanel({ caseId, disabled, onCaseChanged }: { caseId: strin
     queryKey: key,
     queryFn: () => api.bridge.get(caseId),
     refetchInterval: (query) => (query.state.data?.active ? 2000 : false),
+    refetchIntervalInBackground: true,
     enabled: !disabled,
   });
   const s = q.data;
   const wasActive = useRef(false);
+  const seenAnswer = useRef<string | null>(null);
+  const answerAt = s?.answer?.submitted_at ?? null;
+  useEffect(() => {
+    if (answerAt && answerAt !== seenAnswer.current) {
+      toast.message("Neue Antwort vom Smartphone", { description: "Bitte prüfen und übernehmen." });
+    }
+    seenAnswer.current = answerAt;
+  }, [answerAt]);
   const [endedNote, setEndedNote] = useState(false);
   useEffect(() => {
     if (s?.active) {
@@ -159,7 +169,14 @@ export function BridgePanel({ caseId, disabled, onCaseChanged }: { caseId: strin
   const busy = start.isPending || pause.isPending || resume.isPending || end.isPending;
 
   return (
-    <section aria-label="Sprachbrücke" className="rounded-xl border border-brand-600/25 bg-surface p-4 shadow-card sm:p-5" data-testid="bridge-panel">
+    <section
+      aria-label="Sprachbrücke"
+      className={cn(
+        "rounded-xl border border-brand-600/25 bg-surface p-4 shadow-card sm:p-5",
+        (s.answer || s.question?.translation_status === "FAILED") && "order-first border-brand-600 shadow-raised",
+      )}
+      data-testid="bridge-panel"
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="flex items-center gap-2 text-[15px] font-semibold">
