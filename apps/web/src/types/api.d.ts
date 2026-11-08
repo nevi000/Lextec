@@ -2169,7 +2169,7 @@ export interface components {
             rtl: boolean;
             question?: components["schemas"]["MobileQuestion"] | null;
             /** Notice */
-            notice?: "translation_failed" | null;
+            notice?: ("translation_failed" | "translation_pending") | null;
         };
         /** NextQuestion */
         NextQuestion: {
@@ -2740,9 +2740,11 @@ export interface components {
              * Translation Status
              * @enum {string}
              */
-            translation_status: "NONE" | "OK" | "FAILED";
+            translation_status: "NONE" | "PENDING" | "OK" | "FAILED";
             /** Translation Error */
             translation_error?: string | null;
+            /** Translation Error Code */
+            translation_error_code?: string | null;
             /** Data Type */
             data_type: string;
             /**
@@ -2778,6 +2780,8 @@ export interface components {
              * @default false
              */
             phone_connected: boolean;
+            /** Last Seen Seconds */
+            last_seen_seconds?: number | null;
             /** Join Token */
             join_token?: string | null;
             /**
@@ -2787,6 +2791,11 @@ export interface components {
             join_path: string;
             /** Lan Ip */
             lan_ip?: string | null;
+            /**
+             * Lan Candidates
+             * @default []
+             */
+            lan_candidates: string[];
             /** Public Base Url */
             public_base_url?: string | null;
             /** Expires At */
