@@ -246,3 +246,24 @@ Jede Entscheidung speichert die **KB-Version** (`kb-…`, ein Hash über alle YA
 * **Stellen:** `contact_verified: true` nur zusammen mit `verified_at`; sonst zeigt die Software «nicht verifiziert». Keine Nummern erfinden.
 * **Policy `policies/forbidden_statements.yaml`:** reguläre Ausdrücke für verbotene Aussagen. Jeder KB-Text wird beim Laden dagegen geprüft; ein Treffer ist ein Validierungsfehler. Neue verbotene Formulierungen hier ergänzen und in `apps/api/tests/test_issue01.py` (`FORBIDDEN_SAMPLES`) mit einem Beispielsatz absichern.
 * **Szenarien:** zusätzlich `unknown_facts`, `today`, `expected_urgency`, `expected_not_rule_ids`, `expected_route_issue_ids`.
+
+## 11. Neues Issue über die Generatoren (Dossier → YAML)
+
+Die sieben Mietrechts-Issues entstehen aus den Dossiers in `docs/legal_inputs/issues/` (Quelle bleibt unverändert). Änderungen gehören in die Spezifikation, nicht in die generierte YAML-Datei.
+
+1. Dossier nach `docs/legal_inputs/issues/issue_08.docx`, dann `python scripts/kb/extract_issue_docs.py`.
+2. `scripts/kb/specs/issue_08.py` nach dem Muster von `issue_05.py` anlegen und in `SPEC_MODULES` (`build_issue_kb.py`) eintragen.
+3. Gesetzes- und BGE-Tabellen kommen automatisch in `sources.yaml`; zusätzliche Quellen in `EXTRA_SOURCES`, neue Stellen in `AUTHORITIES_NEW`.
+4. Verbotene Aussagen als Muster in `policies/forbidden_statements.yaml`, mit je einem Testsatz.
+5. Referral: `issue_rules` und `signal_bindings` in `referrals/referral_network.yaml`.
+6. Mock-Schlüsselwörter in `app/services/ai/issue_keywords.py` (nur Tests/Prefilter).
+7. `python scripts/kb/build_issue_kb.py && python -m app.services.knowledge.cli`, danach `python scripts/kb/build_coverage_matrix.py` (erzeugt `ISSUE_COVERAGE_MATRIX.md`).
+
+## 12. Offene Entscheide für das Law-Team
+
+* Alle sieben Issues sind `DRAFT`. Offene Prüfpunkte und nicht abgebildete Dossier-Aussagen stehen in [`ISSUE_COVERAGE_MATRIX.md`](ISSUE_COVERAGE_MATRIX.md) (generiert).
+* Globale Schwellen (`routing/global_escalation.yaml`: Zuordnungssicherheit < 0.5, mehr als 3 Rechtsprobleme) sind technische Platzhalter.
+* Welche Situationen müssen immer an eine Fachperson? Wann ist eine Information für PROCEED ausreichend? Sind Formulierungen für Sozialarbeitende verständlich?
+* Fristen: Das System berechnet keine Fristen; «Frist läuft» ist nur ein Fakt, der eskaliert.
+* 150 kommunale Sozialdienste sind einzeln zu verifizieren; Datenschutz-Entscheid zur Gemini-API mit echten Fällen steht aus (bis dahin nur synthetische Daten).
+* Selbsttest: In der App **Knowledge Base → «YAML neu laden»**, dann **Evaluation → «Evaluation ausführen»**.

@@ -14,10 +14,10 @@ Honest status per area. *Tested* = covered by automated tests that were executed
 | Further fact collection after ESCALATE | `test_intake_after_escalation.py` |
 | AI output validation, failure handling, truncated/invalid Gemini answers (one bounded retry, no repair), cost control | `test_ai_layer.py`, `test_analysis_robustness.py`, `test_cost_control.py` |
 | Safety signals and referral routing (Zurich municipalities, verification status) | `test_safety.py`, `test_referral_v12.py` |
-| Fedlex retrieval, cache and wording comparison | `test_fedlex.py`, [FEDLEX_INTEGRATION.md](FEDLEX_INTEGRATION.md) |
+| Fedlex retrieval, cache and wording comparison | `test_fedlex.py` |
 | PDF import of a written case description (text only, nothing stored) | `test_pdf_import.py`, `intake.test.tsx`, `pdf_import.spec.ts` |
 | Multilingual QR Sprachbrücke (one session per case, worker confirmation, reconnect, translation errors, remote restriction) | `test_voice_bridge.py`, `test_bridge_stability.py`, `bridge*.test.tsx`, `voice_bridge.spec.ts` |
-| Question wording audit for all seven issues | `test_question_quality.py`, [QUESTION_QUALITY_AUDIT.md](QUESTION_QUALITY_AUDIT.md) |
+| Question wording audit for all seven issues | `test_question_quality.py` |
 | Frontend flows (case list, phases 1–3, question types, facts, briefing) | Vitest and Playwright (`apps/web/src/test`, `apps/web/e2e`) |
 | Migrations from an empty database | `test_migrations.py` |
 | Windows launcher (`scripts/dev.ps1`, incl. `-Lan`) | run manually; `scripts/check.ps1` runs all automated checks |
@@ -35,7 +35,7 @@ Honest status per area. *Tested* = covered by automated tests that were executed
 
 ## Pending legal-team input
 
-* All seven issues are `DRAFT`; open review points per issue: [ISSUE_COVERAGE_MATRIX.md](ISSUE_COVERAGE_MATRIX.md), [ALL_ISSUES_INTEGRATION.md](ALL_ISSUES_INTEGRATION.md), [QUESTION_QUALITY_AUDIT.md](QUESTION_QUALITY_AUDIT.md).
+* All seven issues are `DRAFT`; open review points per issue: [ISSUE_COVERAGE_MATRIX.md](ISSUE_COVERAGE_MATRIX.md), [KNOWLEDGE_BASE.md §12](KNOWLEDGE_BASE.md#12-offene-entscheide-für-das-law-team).
 * Global thresholds (confidence < 0.5, more than 3 issues) are technical placeholders.
 * No Swiss deadline is computed or asserted anywhere.
 * Referral data: 150 municipal social services are marked `to_verify`; the law team must verify them individually.

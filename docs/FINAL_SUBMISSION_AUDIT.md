@@ -12,7 +12,7 @@ Stand: `main` nach dem Premium-Frontend-Merge; Audit am 2026-11-08. Alle automat
 
 ## B. Architektur
 
-Modularer Monolith: React/TypeScript-Frontend, FastAPI-Backend, SQLite (Alembic-Migrationen 0001–0005), YAML-Wissensbasis, austauschbarer KI-Provider (Gemini oder Mock). Die KI schlägt Issues und Fakten vor (validiert gegen die Wissensbasis, Zitate werden geprüft); die Entscheidung trifft eine deterministische, dreiwertige Rule Engine. Details: [`TECHNICAL_PITCH_PREPARATION.md`](TECHNICAL_PITCH_PREPARATION.md), [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Modularer Monolith: React/TypeScript-Frontend, FastAPI-Backend, SQLite (Alembic-Migrationen 0001–0005), YAML-Wissensbasis, austauschbarer KI-Provider (Gemini oder Mock). Die KI schlägt Issues und Fakten vor (validiert gegen die Wissensbasis, Zitate werden geprüft); die Entscheidung trifft eine deterministische, dreiwertige Rule Engine. Details: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 Verbleibende Architekturrisiken: Eskalationen werden nicht «festgehalten» (die Entscheidung ist eine reine Funktion des aktuellen Zustands; ein unbestätigter, widersprüchlicher Fakt kann ESCALATE vorübergehend zu ASK machen); Sperren der Sprachbrücke sind prozesslokal; Polling statt Push.
 
@@ -61,13 +61,13 @@ Geprüft: keine Debug-Ausgaben ausserhalb der CLI (`print` in `app/cli.py` ist b
 
 ## G. Dokumentation
 
-README vollständig neu (Englisch; Problem, Lösung, Funktionen, Mermaid-Diagramm, Scope-Tabelle, Setup, Tests, Demo-Szenarien, Safety, Einschränkungen, Team-Platzhalter, KI-Offenlegung, Lizenzstatus). Aktualisiert: `IMPLEMENTATION_STATUS.md`, `API.md`, `LEGAL_TEAM_HANDOFF.md`. Neu: `TECHNICAL_PITCH_PREPARATION.md`, dieses Audit. Der Startbefehl `.\scripts\dev.ps1 -Seed -ApiPort 8001 -WebPort 5174` wurde geprüft (Seed erzeugt drei synthetische Fälle: Arbeitsrecht/«nicht abgedeckt», gemischter Fall, Mängel).
+README vollständig neu (Englisch; Problem, Lösung, Funktionen, Mermaid-Diagramm, Scope-Tabelle, Setup, Tests, Demo-Szenarien, Safety, Einschränkungen, Team, KI-Hinweis, Lizenzstatus). Aktualisiert: `IMPLEMENTATION_STATUS.md`, `API.md`, `KNOWLEDGE_BASE.md`. Neu: dieses Audit. Die Entwicklungsprotokolle (Integrations-, UX- und Pitch-Dokumente) wurden für die öffentliche Version entfernt und bleiben in der Git-History erhalten. Der Startbefehl `.\scripts\dev.ps1 -Seed -ApiPort 8001 -WebPort 5174` wurde geprüft (Seed erzeugt drei synthetische Fälle: Arbeitsrecht/«nicht abgedeckt», gemischter Fall, Mängel).
 
 ## H. Offene Punkte
 
 | Schweregrad | Bereich | Auswirkung | Nächster Schritt | Blockiert Demo? |
 |---|---|---|---|---|
-| P1 | Juristische Freigabe | alle Inhalte `DRAFT` | Law-Team-Prüfung (`ISSUE_COVERAGE_MATRIX.md`, `QUESTION_QUALITY_AUDIT.md`) | nein |
+| P1 | Juristische Freigabe | alle Inhalte `DRAFT` | Law-Team-Prüfung (`ISSUE_COVERAGE_MATRIX.md`, `KNOWLEDGE_BASE.md` §12) | nein |
 | P1 | Referral-Daten | 150 Gemeinde-Sozialdienste nicht einzeln verifiziert (so angezeigt) | Prüfliste des Law-Teams | nein |
 | P1 | Sprachbrücke | nur mit Browser-Kontexten getestet, kein echtes Smartphone; Adresse wird beim Start des Skripts festgelegt (nach WLAN-Wechsel Neustart nötig) | manueller iPhone-Test; optional dynamische Adresse | nein |
 | P1 | Gemini-Limits | Standard 30 Anfragen/Tag in `.env.example` | für die Demo `AI_DAILY_*` erhöhen | ja, falls vergessen |

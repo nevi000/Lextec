@@ -79,7 +79,7 @@ apps/api/            FastAPI app, services (ai, knowledge, decisions, cases, bri
 apps/web/            React app (features/*), Vitest unit tests, Playwright e2e tests
 knowledge_base/      Law-team content as YAML (legal_issues, referrals, sources, policies, tests)
 scripts/             dev.ps1 / dev.sh (launcher), check.ps1 (all checks), kb/ (generators)
-docs/                Architecture, knowledge-base guide, integration notes, audit
+docs/                Architecture, API, knowledge-base guide, status, final audit, law-team inputs
 demo_fixtures/       Synthetic demo cases
 ```
 
@@ -151,7 +151,7 @@ Start with `-Seed`; the three seeded cases are an employment-law case (AI steps 
 ## Limitations
 
 * Hackathon prototype, local single-process deployment (SQLite). No authentication, roles, audit log or retention policy.
-* Swiss tenancy law only; all seven issues are `DRAFT` and not legally approved. Open legal review points: [`docs/ISSUE_COVERAGE_MATRIX.md`](docs/ISSUE_COVERAGE_MATRIX.md), [`docs/QUESTION_QUALITY_AUDIT.md`](docs/QUESTION_QUALITY_AUDIT.md).
+* Swiss tenancy law only; all seven issues are `DRAFT` and not legally approved. Open legal review points: [`docs/ISSUE_COVERAGE_MATRIX.md`](docs/ISSUE_COVERAGE_MATRIX.md) and [`docs/KNOWLEDGE_BASE.md`](docs/KNOWLEDGE_BASE.md#12-offene-entscheide-für-das-law-team).
 * Referral data covers the municipality structure of Zurich; 150 municipal social services are not yet individually verified (shown as such). Other cantons fall back to cantonal or national bodies.
 * Machine translation is not a replacement for qualified interpreting on legally important points. The Sprachbrücke runs over plain local HTTP.
 * The mock AI is keyword-based and only demonstrates the pipeline. Gemini output quality has only been exercised with a few live calls.
@@ -164,8 +164,10 @@ Start with `-Seed`; the three seeded cases are an employment-law case (AI steps 
 | Noa Franchetto, Orell P. Jenning, Sofia Zaltron | Law team (legal content, dossiers) |
 | Nevio Gübeli | Product and software development |
 
-The commit history lists a single author account; further contributors and roles have to be added by the team.
+## AI-Assisted Development
+
+Parts of the code were developed with assistance from Claude Code. The team reviewed and tested the implementation.
 
 ## Documentation
 
-[Architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [Knowledge base guide](docs/KNOWLEDGE_BASE.md) · [Implementation status](docs/IMPLEMENTATION_STATUS.md) · [Sprachbrücke](docs/MULTILINGUAL_QR_BRIDGE.md) · [PDF import](docs/CASE_INTAKE_PDF_IMPORT.md) · [Referral rules v1.2](docs/REFERRAL_V1_2_INTEGRATION.md) · [Gemini robustness](docs/AI_ANALYSIS_ROBUSTNESS.md) · [Final audit](docs/FINAL_SUBMISSION_AUDIT.md)
+[Architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [Knowledge base guide](docs/KNOWLEDGE_BASE.md) · [Implementation status](docs/IMPLEMENTATION_STATUS.md) · [Final audit](docs/FINAL_SUBMISSION_AUDIT.md) · [Issue coverage matrix](docs/ISSUE_COVERAGE_MATRIX.md)

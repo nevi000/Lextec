@@ -75,7 +75,7 @@ Base URL `http://localhost:8000` (or the port given to `dev.ps1`) · interactive
 |---|---|
 | `POST /api/intake/pdf-text` (raw PDF bytes) → `{text, pages, truncated}` | extracts the text of a written case description; stores nothing, no AI call. Errors `pdf_*` (422): empty, wrong type, too large, too many pages, encrypted, corrupt, no text |
 
-### Sprachbrücke (see [MULTILINGUAL_QR_BRIDGE.md](MULTILINGUAL_QR_BRIDGE.md))
+### Sprachbrücke (design and security: [ARCHITECTURE.md](ARCHITECTURE.md#subsystems))
 | | |
 |---|---|
 | `GET/POST /api/cases/{id}/voice-bridge`, `/pause`, `/resume`, `/end`, `/answer/accept`, `/answer/reask`, `/skip`, `/retry-translation` | social-worker side (local machine only) |
