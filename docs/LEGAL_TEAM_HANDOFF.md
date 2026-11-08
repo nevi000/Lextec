@@ -4,7 +4,7 @@ Sie müssen den Code nicht verstehen. Alles, was Sie liefern, sind YAML-Dateien 
 
 ## Checkliste
 
-### A. Pro Rechtsproblem (mind. die 4 geplanten: Mietkündigung, Wohnungsmängel, Arbeitskündigung, nicht bezahlter Lohn)
+### A. Pro Rechtsproblem (die sieben Mietrechts-Issues sind als `DRAFT` integriert; zu prüfen und freizugeben, siehe `ISSUE_COVERAGE_MATRIX.md`)
 - [ ] **Identifikation:** `title_de`, `classification.description`, 3–5 `typical_situations` (hilft der KI bei der Zuordnung)
 - [ ] **Fakten (ca. 8–15):** je `id`, `label_de`, `data_type`, `question_de` (verständlich, in der Sprache der Sozialarbeiterin), `why_needed_de`, `priority`
 - [ ] **Welche Fakten sind immer nötig (`required`), welche nur unter Bedingung (`required_if`)?**
@@ -31,7 +31,7 @@ Sie müssen den Code nicht verstehen. Alles, was Sie liefern, sind YAML-Dateien 
 1. Datei speichern.
 2. In der App: **Knowledge Base → «YAML neu laden»**. Grün = gültig; rot = Fehlerliste mit Datei und Feld.
 3. **Evaluation → «Evaluation ausführen»**: zeigt, ob Ihre Testszenarien die erwartete Entscheidung liefern und warum nicht.
-4. Beispielfall durchspielen: **Fälle → «Neuen Fall erfassen»** und die Schilderung eingeben (im Mock-Modus nur mit den vier Demo-Rechtsgebieten).
+4. Beispielfall durchspielen: **Fälle → «Neuen Fall erfassen»** und die Schilderung eingeben (im Mock-Modus werden nur die sieben Mietrechts-Issues und einige nicht abgedeckte Rechtsgebiete erkannt).
 
 ## Was die Software bewusst NICHT tut
 - Keine Rechtsberatung, keine Fristenberechnung, keine verbindliche Aussage.

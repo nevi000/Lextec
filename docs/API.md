@@ -1,6 +1,6 @@
 # API
 
-Base URL `http://localhost:8000` · interactive docs `http://localhost:8000/docs` · OpenAPI `/openapi.json`. JSON only. No authentication (local demo mode).
+Base URL `http://localhost:8000` (or the port given to `dev.ps1`) · interactive docs `/docs` · OpenAPI `/openapi.json`. JSON only. No authentication (local demo mode).
 
 ## Error format (all endpoints)
 
@@ -69,3 +69,14 @@ Base URL `http://localhost:8000` · interactive docs `http://localhost:8000/docs
 
 ## TypeScript types
 `apps/web/src/types/api.d.ts` is generated from the OpenAPI schema: `cd apps/web && npm run gen:api`. CI regenerates it and fails on drift.
+
+### Case-description PDF import
+| | |
+|---|---|
+| `POST /api/intake/pdf-text` (raw PDF bytes) → `{text, pages, truncated}` | extracts the text of a written case description; stores nothing, no AI call. Errors `pdf_*` (422): empty, wrong type, too large, too many pages, encrypted, corrupt, no text |
+
+### Sprachbrücke (see [MULTILINGUAL_QR_BRIDGE.md](MULTILINGUAL_QR_BRIDGE.md))
+| | |
+|---|---|
+| `GET/POST /api/cases/{id}/voice-bridge`, `/pause`, `/resume`, `/end`, `/answer/accept`, `/answer/reask`, `/skip`, `/retry-translation` | social-worker side (local machine only) |
+| `GET /api/bridge/state`, `POST /api/bridge/language`, `POST /api/bridge/answer` (header `X-Bridge-Token`) | phone side; the only endpoints reachable from other devices |

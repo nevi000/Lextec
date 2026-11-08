@@ -80,7 +80,10 @@ def test_invalid_enum_value_is_dropped_by_validation_not_stored(client):
         ]
     )
     v = validate_extraction(res, kb, {"m1": "Es gibt Schimmel im Kinderzimmer."}, None)
-    for fact, typed in v.facts:  # never stored as a concrete value: at most «unklar» without a value
+    for (
+        fact,
+        typed,
+    ) in v.facts:  # never stored as a concrete value: at most «unklar» without a value
         assert fact.fact_id == "defect_type" and typed is None and fact.ambiguous
     assert v.warnings  # and the drop is visible
 

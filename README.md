@@ -1,104 +1,180 @@
 ﻿# LexTec Bridge
 
-AI-assisted legal case **intake, analysis, decision support and expert handover** for Swiss social workers and advisers.
+**An AI-assisted legal intake and handover tool that knows when to ask, when to proceed, and when a human has to take over.**
 
-A social worker records a consultation in natural language. LexTec Bridge identifies the legal issues, extracts the stated facts (each linked to the words it came from), finds what is missing, suggests the **one next question**, and decides – with explicit rules, not a language model – whether to **ASK**, **PROCEED** or **ESCALATE** to a human expert. Every case ends in a structured **Expert Briefing**.
+Hackathon challenge: *LexTec – Teaching AI When to Ask / When Must AI Step Back?*
+Scope: seven Swiss residential tenancy-law issues (Canton of Zurich referral routing).
 
-> **Not a lawyer.** The system supports information gathering and escalation. The social worker stays in control: every AI-extracted fact can be inspected and corrected, and corrections are never silently overwritten.
+> **Prototype for synthetic data only.** LexTec Bridge supports information gathering and escalation. It does not give legal advice, does not compute legal deadlines, and none of its legal content has been legally approved (see [Limitations](#limitations)). In Gemini mode, case text is sent to Google's API.
 
-> **Product scope: seven Swiss tenancy-law issues** (termination by the landlord, payment warning, termination for arrears, extension, defects, eviction/clearance, rent increase). All other legal areas (employment, family, immigration …) are **not assessed**: they are recognised as *«nicht abgedeckt»* and left to a human expert. Mixed cases are split: the tenancy part gets the rule-based analysis, the other area is flagged separately. Synthetic demo issues (`content_status: DEMO_SYNTHETIC`: `employment_termination`, `unpaid_salary`, `tenancy_defects`) stay loaded so old cases remain readable, but are **never offered to the classifier** for new cases. `DRAFT` (law-team dossier, not yet legally released) is classifiable; it only means *«not legally released»*, not *«not supported»*.
+## The problem
 
-> ⚠️ **Prototype with synthetic content.** All legal content in `knowledge_base/` is `DEMO / SYNTHETIC / NOT LEGALLY VALIDATED`. **Do not enter real client data** before data-protection, contractual and access-control reviews (revDSG). In Gemini mode, text is sent to Google's API.
+Social workers meet legal problems (a termination notice, an eviction, mould in a child's room) without being legal specialists. Facts are missing, deadlines are short, and an overconfident AI answer can do real harm. The useful behaviour is not "answer everything" but: collect the right facts, recognise the limits, and hand over to a professional with a clear briefing.
 
-## Features
-* **Consultation workspace** (German UI): free-text intake, one prominent *next action* (question / proceed / escalate), a timeline that separates what the user *reported*, what the AI *extracted* and what the system *recommends*, and a fact panel with evidence, correction, confirmation and history.
-* **Deterministic decision engine** with rule IDs and reason codes; unknown legal areas or broken rule files escalate, never proceed.
-* **YAML knowledge base** maintained by the law team without code changes, with validation tooling and JSON Schemas for editor support.
-* **Expert Briefing**: 11 structured sections, versioned, printable (browser *Save as PDF*), reported vs. inferred facts, source verification status (currently always "not verified").
-* **Evaluation center** running YAML scenarios against the engine; distinguishes synthetic technical tests from legally validated ones; no fabricated accuracy score.
-* **Sprachbrücke**: one QR code per case; the client answers the current questions on their own phone in de/en/ar/uk, the social worker confirms every answer ([docs/MULTILINGUAL_QR_BRIDGE.md](docs/MULTILINGUAL_QR_BRIDGE.md); `.\scripts\dev.ps1 -Lan` for the two-device demo).
-* **Gemini or mock AI**, strict Pydantic-validated structured output, evidence checked against the stored messages.
+## The solution
 
-## Quick start (Windows)
+1. The social worker describes the situation in free text (or imports a written case description from a PDF).
+2. **AI proposes**: it classifies the legal issue(s) and extracts facts. Every extracted fact carries a verbatim quote from the text; output is validated against the knowledge base and untrusted until then.
+3. **Rules decide**: a deterministic rule engine (no LLM) returns `ASK`, `PROCEED` or `ESCALATE` with rule IDs and reason codes. Precedence is `ESCALATE > ASK > PROCEED`; unknown stays unknown and is never treated as "no".
+4. The system asks the single most important missing question, and after an escalation lets the worker keep collecting information for the expert.
+5. It recommends professional contacts (Zurich municipality routing) and creates a versioned **expert briefing** (HTML and PDF).
 
-Prerequisites: Python 3.12+, Node 22+ (Vite 8 needs at least 20.19), optionally [`uv`](https://docs.astral.sh/uv/).
+The social worker stays in control: every extracted fact can be inspected and corrected, and corrections are never overwritten by later AI output.
 
-```powershell
-git clone <repo> ; cd Lextec
-.\scripts\dev.ps1 -Seed        # creates .env, venv, installs deps, migrates DB, seeds 3 synthetic cases, starts both servers
+## Key features
+
+All of the following are implemented in this repository; test evidence is in [`docs/FINAL_SUBMISSION_AUDIT.md`](docs/FINAL_SUBMISSION_AUDIT.md).
+
+* **Seven tenancy issues** from the law team's dossiers: termination by the landlord, payment warning with termination threat, termination for arrears, extension, defects, eviction/clearance, rent increase. Multiple issues can be active in one case.
+* **Scope control**: other legal areas (employment, family, immigration …) are reported as *not covered*; mixed cases are split. Synthetic demo issues stay out of the classifier.
+* **Deterministic rules** defined in YAML (no code changes for legal content), with a validator and 128 scenario checks.
+* **Safety signals** and escalation reasons shown in plain language, with the rule trace one click away.
+* **Referral engine v1.2**: roles resolved per municipality (160 Zurich municipalities), cantonal and national fallbacks, verification status shown honestly (150 municipal social services are *not yet individually verified* and are labelled so).
+* **Multilingual QR "Sprachbrücke"**: one QR code per case; the client answers the current questions on their phone (de, en, ar, uk; RTL supported); the worker reviews and confirms every answer before it enters the case.
+* **PDF import of a written case description** into the editable text field (text only, nothing stored, no document management).
+* **Expert briefing** from structured case data, versioned, with provenance of each fact.
+* **Fedlex integration**: official federal-law wording is retrieved and cached; wording checks are deterministic (no LLM).
+* **Cost and failure control** for Gemini: server-side usage limits, bounded retries, truncated or schema-invalid answers are detected and never "repaired".
+
+## How it works
+
+```mermaid
+flowchart LR
+  A[Case description<br/>text or PDF import] --> B[Gemini: issue classification<br/>and fact extraction]
+  B --> C[Validation against<br/>knowledge base + quotes]
+  C --> D[(Case state<br/>facts, provenance)]
+  D --> E{Deterministic<br/>rule engine}
+  E -->|missing facts| F[Next question<br/>desktop or phone]
+  F --> D
+  E -->|ESCALATE| G[Referral routing]
+  E -->|PROCEED| G
+  G --> H[Expert briefing<br/>HTML / PDF]
 ```
 
-| | URL |
+The LLM never selects the route: it only proposes issues and facts. Rules, questions, referrals and briefings come from the knowledge base and the engine.
+
+## Supported legal scope
+
+| # | Issue | Technical module | Legal content status |
+|---|---|---|---|
+| 1 | Kündigung durch die Vermieterschaft | `CH_TENANCY_TERMINATION` | DRAFT |
+| 2 | Zahlungsaufforderung mit Kündigungsandrohung | `CH_TENANCY_PAYMENT_WARNING` | DRAFT |
+| 3 | Kündigung wegen Zahlungsverzug | `CH_TENANCY_PAYMENT_DEFAULT` | DRAFT |
+| 4 | Erstreckung des Mietverhältnisses | `CH_TENANCY_EXTENSION` | DRAFT |
+| 5 | Mängel an der Mietsache | `CH_TENANCY_DEFECTS` | DRAFT |
+| 6 | Ausweisung und Räumung | `CH_TENANCY_EVICTION` | DRAFT |
+| 7 | Mietzinserhöhung und einseitige Vertragsänderung | `CH_TENANCY_RENT_INCREASE` | DRAFT |
+
+`DRAFT` means *supported by the software, not legally approved for real clients*. Nothing is marked as verified. Three synthetic demo issues (`employment_termination`, `unpaid_salary`, `tenancy_defects`, status `DEMO_SYNTHETIC`) remain loadable for old data but are never offered to the classifier.
+
+## Technical architecture
+
+* **Frontend** (`apps/web`): React 19, TypeScript (strict), Vite, Tailwind CSS 4, TanStack Query, React Router, Motion; tests with Vitest and Playwright.
+* **Backend** (`apps/api`): Python ≥ 3.12, FastAPI, Pydantic v2, SQLAlchemy 2 with Alembic migrations, SQLite, PyYAML (safe loading), Jinja2 and Chromium (via Playwright) for the PDF briefing, `pypdf` for the case-description import.
+* **AI**: Google Gemini through the official `google-genai` SDK (default model `gemini-3.8-flash`, configurable) or a deterministic mock provider for development and all automated tests.
+* **Knowledge base** (`knowledge_base/`): YAML for issues, facts, questions, rules, escalation, sources, safety signals, referrals and briefing profiles.
+
+```
+apps/api/            FastAPI app, services (ai, knowledge, decisions, cases, bridge, referrals, report), tests
+apps/web/            React app (features/*), Vitest unit tests, Playwright e2e tests
+knowledge_base/      Law-team content as YAML (legal_issues, referrals, sources, policies, tests)
+scripts/             dev.ps1 / dev.sh (launcher), check.ps1 (all checks), kb/ (generators)
+docs/                Architecture, knowledge-base guide, integration notes, audit
+demo_fixtures/       Synthetic demo cases
+```
+
+## Getting started (Windows)
+
+Prerequisites: Python 3.12+, Node.js 22+ (Vite needs ≥ 20.19), optionally [`uv`](https://docs.astral.sh/uv/).
+
+```powershell
+git clone https://github.com/nevi000/Lextec.git
+cd Lextec
+.\scripts\dev.ps1 -Seed -ApiPort 8001 -WebPort 5174
+```
+
+The script creates `.env` from `.env.example`, creates the virtual environment, installs dependencies, applies the database migrations, seeds three synthetic demo cases (mock AI) and starts both servers. Without arguments it uses ports 8000 and 5173.
+
+| | URL (example above) |
 |---|---|
-| Web app | http://localhost:5173 |
-| API | http://localhost:8000 |
-| API docs (Swagger) | http://localhost:8000/docs |
+| Web app | http://localhost:5174 |
+| API | http://localhost:8001 |
+| API docs | http://localhost:8001/docs |
 
-Port 8000 or 5173 already used by another program? `.\scripts\dev.ps1 -ApiPort 8001 -WebPort 5174` (the launcher tells you which process holds the port).
+macOS/Linux: `./scripts/dev.sh --seed` (`API_PORT` / `WEB_PORT` environment variables).
 
-macOS/Linux: `./scripts/dev.sh --seed` (`API_PORT` / `WEB_PORT` env vars). Manual start:
+### Using real Gemini
 
-```powershell
-cd apps\api;  .venv\Scripts\python.exe -m app.cli migrate; .venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
-cd apps\web;  npm install; npm run dev
-```
+In `.env` set `AI_PROVIDER=gemini` and `GEMINI_API_KEY=<your key>`, then restart. The sidebar then states that texts are sent to an external AI. The application never falls back silently to the mock. **Never commit `.env`.**
 
-**Geführte Demo (Issue 1, Mietkündigung Zürich):** Seitenleiste → *Demo Mietkündigung* → *Demo starten*; Details in [`docs/ISSUE_01_INTEGRATION.md`](docs/ISSUE_01_INTEGRATION.md).
+For a demo, raise the default usage limits (30 requests per day): set `AI_DAILY_REQUEST_LIMIT`, `AI_DAILY_TOKEN_LIMIT`, `AI_DAILY_BUDGET_USD` in `.env`. These are application limits, not a Google billing cap.
 
-Or try it freely: **Fälle → Neuen Fall erfassen**, then enter e.g. *«Mein Arbeitgeber hat mir gekündigt.»* (→ ASK) or *«Mein Arbeitgeber hat mir gekündigt. Jetzt kann ich meine Miete nicht mehr bezahlen und habe Angst, meine Wohnung zu verlieren.»* (→ ESCALATE, two legal areas).
-
-## Configuration (`.env` in the repo root, created from `.env.example`)
-
-| Variable | Default | Meaning |
-|---|---|---|
-| `AI_PROVIDER` | `mock` | `mock` (no credentials, deterministic) or `gemini` |
-| `GEMINI_API_KEY` | – | required when `AI_PROVIDER=gemini`; never exposed to the browser, never logged |
-| `GEMINI_MODEL` | `gemini-3.8-flash` | model id (verified available via the model list) |
-| `AI_THINKING_LEVEL` | `LOW` | `MINIMAL` is rejected by gemini-3.8-flash |
-| `AI_MAX_CALLS_PER_CASE`, `AI_DAILY_REQUEST_LIMIT`, `AI_DAILY_BUDGET_USD`, `AI_CASE_BUDGET_USD`, `AI_MAX_*_TOKENS_*` | 12 / 30 / 0.50 / 0.10 / see `.env.example` | server-side cost control (application limits, not a Google billing cap) |
-| `APP_TODAY` | today | pin the reference date for "days since receipt" |
-| `AI_REPHRASE_QUESTIONS` | `false` | let Gemini reword template questions (untested) |
-| `DATABASE_URL` | `sqlite:///<repo>/data/lextec.db` | SQLite file (gitignored) |
-| `APP_ENV` | `development` | |
-
-### Gemini setup / switching modes
-1. Create an API key in Google AI Studio.
-2. In `.env`: set `AI_PROVIDER=gemini` and `GEMINI_API_KEY=<your key>` (optionally `GEMINI_MODEL=<model id>`).
-3. Restart the API. The sidebar shows **«KI: Gemini (extern)»**; Settings shows the active mode.
-4. Back to mock: `AI_PROVIDER=mock`.
-
-Misconfiguration is a clear startup error (missing key) or a visible analysis failure (quota, wrong model, network). The app **never silently falls back to mock** and never fakes an analysis; a failed analysis keeps the message and offers *«Erneut analysieren»*.
-
-## Tests and checks
+### Phone on the same network (Sprachbrücke)
 
 ```powershell
-.\scripts\check.ps1          # ruff, KB validation, pytest, typecheck, vitest, production build
-.\scripts\check.ps1 -E2E     # + Playwright browser tests (first time: cd apps\web; npx playwright install chromium)
+.\scripts\dev.ps1 -Lan -ApiPort 8001 -WebPort 5174
 ```
-**Test strategy while developing** (a full `pytest` run takes several minutes): run only what the change touches, e.g. `.venv\Scripts\python.exe -m pytest tests/test_classification_regression.py -q -x --tb=short`; repeat failed tests on their own; run the neighbouring suites after a coherent change (knowledge-base changes touch classification, rule engine and referrals); run `.\scripts\check.ps1` (optionally `-E2E`) once before finishing. Never skip, delete or weaken a test to save time, and never call the real Gemini API from tests. Find slow tests with `pytest -q --durations=20`.
 
-Individually: `cd apps\api; .venv\Scripts\python.exe -m pytest` · `cd apps\web; npm test` · `npm run e2e` (uses ports 8100/5273 and a throw-away DB).
-No test calls the real Gemini API (tests force the mock provider even if `.env` contains a key). The only real call is the manual `python -m app.cli live-test --confirm` (one request, no retry).
+The web server then listens on the network; the API stays on `127.0.0.1`. Requests from other devices may only use the phone endpoints (`/api/bridge/*`), everything else answers `403`. The launcher picks the adapter that owns the default route, prints it, checks reachability and shows a narrow firewall rule if needed (it never changes firewall settings itself). **Restart the launcher after switching networks**, because the address is chosen at start. The connection is plain HTTP: use synthetic data only. Without a phone, open the shown link in a second browser window.
 
-Other commands (in `apps/api`): `python -m app.services.knowledge.cli` (validate KB + run scenarios) · `python -m app.cli seed-demo | migrate | export-schemas`. After API changes: `cd apps/web; npm run gen:api`.
+## Environment variables
 
-## Repository layout
+Defined in `.env.example` (all optional except the key for Gemini mode): `AI_PROVIDER` (`mock` | `gemini`), `GEMINI_API_KEY`, `GEMINI_MODEL`, `AI_THINKING_LEVEL`, usage limits (`AI_MAX_CALLS_PER_CASE`, `AI_MAX_INPUT_TOKENS_PER_CALL`, `AI_MAX_OUTPUT_TOKENS_PER_CALL`, `AI_DAILY_REQUEST_LIMIT`, `AI_DAILY_TOKEN_LIMIT`, `AI_DAILY_BUDGET_USD`, `AI_CASE_BUDGET_USD`), `AI_REPHRASE_QUESTIONS`, `APP_TODAY`, `APP_ENV`, `DATABASE_URL`, Sprachbrücke (`BRIDGE_TTL_MINUTES`, `BRIDGE_PUBLIC_BASE_URL`, `RESTRICT_REMOTE_ACCESS`), Fedlex (`FEDLEX_*`). `.env.example` contains no secrets.
+
+## Running tests
+
+```powershell
+.\scripts\check.ps1          # ruff, knowledge-base validation, pytest, typecheck, vitest, production build
+.\scripts\check.ps1 -E2E     # additionally the Playwright browser tests
 ```
-apps/api/        FastAPI, SQLAlchemy 2, Alembic, services (ai, knowledge, rules, decisions, cases, briefings, sources)
-apps/web/        React + TS (strict) + Tailwind + TanStack Query; features/* per screen; Vitest + Playwright
-knowledge_base/  YAML maintained by the law team (issues, routing, sources, referrals, briefings, tests)
-schemas/         generated JSON Schemas for the YAML files (editor validation)
-demo_fixtures/   synthetic demo cases
-docs/            ARCHITECTURE · KNOWLEDGE_BASE · API · IMPLEMENTATION_STATUS · LEGAL_TEAM_HANDOFF
-scripts/         dev / check launchers
-```
+
+Individually: `cd apps\api; .venv\Scripts\python.exe -m pytest` · `cd apps\web; npm run typecheck; npm test; npm run build; npm run e2e` (the e2e run uses ports 8100/5273 and a throw-away database; do not run two e2e runs at the same time). A full backend run takes several minutes. No automated test calls the real Gemini API. While developing, run only the affected test files (`pytest tests\test_x.py -q -x --tb=short`).
+
+## Demo scenarios (all synthetic)
+
+Start with `-Seed`; the three seeded cases are an employment-law case (AI steps back), a mixed case and a defects case.
+
+* **A – Targeted questions.** *"Mein Vermieter hat der Klientin die Wohnung gekündigt, ohne amtliches Formular, in Zürich."* → issue 1 recognised, one question at a time; the missing official form leads to a professional-review recommendation with Zurich referrals.
+* **B – Human escalation.** *"Im Kinderzimmer wächst grossflächig Schimmel. Das vierjährige Kind hustet seit Wochen nachts. Der Vermieter hat nicht reagiert."* → defects issue, `ESCALATE` (health report); further questions can still be answered, then create the expert briefing. No medical conclusion is drawn.
+* **C – Multilingual intake.** In phase 2 click *Sprachbrücke aktivieren*, scan the QR code, choose a language, answer on the phone, confirm on the desktop; the next question follows automatically. Real translations need Gemini mode (the mock only marks texts, e.g. `[EN · Mock]`).
+* **Where AI steps back.** *"Meine Klientin hat ihren Job verloren und keinen Lohn erhalten. Deshalb … Zahlungsaufforderung mit Kündigungsandrohung erhalten."* → the tenancy part is processed; employment law is reported as *not covered*; the case escalates for the unsupported area.
+
+## Safety and responsible AI
+
+* AI and rules are separated: the model proposes, the knowledge base and deterministic engine decide. Instructions inside a case text or imported PDF are data and cannot change the outcome (covered by tests).
+* Unknown is not No; ambiguous and contradictory facts are kept visible.
+* Verbatim evidence for each extracted fact is checked against the stored message; invalid enum values, unknown IDs and truncated model answers are rejected, not guessed.
+* "Handover" is a recorded state. The system never claims that a professional has accepted a case and sends nothing to anyone automatically.
+* Legal sources are shown as unverified unless the Fedlex comparison says otherwise; no legal deadline is computed or asserted.
+* Gemini is an external provider; text leaves the machine in Gemini mode. The prototype is for synthetic data only.
+
+## Limitations
+
+* Hackathon prototype, local single-process deployment (SQLite). No authentication, roles, audit log or retention policy.
+* Swiss tenancy law only; all seven issues are `DRAFT` and not legally approved. Open legal review points: [`docs/ISSUE_COVERAGE_MATRIX.md`](docs/ISSUE_COVERAGE_MATRIX.md), [`docs/QUESTION_QUALITY_AUDIT.md`](docs/QUESTION_QUALITY_AUDIT.md).
+* Referral data covers the municipality structure of Zurich; 150 municipal social services are not yet individually verified (shown as such). Other cantons fall back to cantonal or national bodies.
+* Machine translation is not a replacement for qualified interpreting on legally important points. The Sprachbrücke runs over plain local HTTP.
+* The mock AI is keyword-based and only demonstrates the pipeline. Gemini output quality has only been exercised with a few live calls.
+* Production use would additionally need: authentication and access control, encryption at rest, a data-protection assessment (revDSG), a lawful basis and contract for the external AI provider, hosting and retention decisions, and legal review of all content.
+
+## Team
+
+| Name | Role |
+|---|---|
+| *to be added by the team* | Law team (legal content, dossiers) |
+| *to be added by the team* | Product and software development |
+
+The commit history lists a single author account; further contributors and roles have to be added by the team.
+
+## AI tools disclosure
+
+* **Development assistance:** large parts of the code, tests and documentation were written with AI coding assistants (Claude Code and ChatGPT) under the team's direction and review.
+* **Runtime AI:** Google Gemini is the application's AI provider for classification, fact extraction and translation. It is not used for rule decisions, referrals or the briefing structure.
+
+## Licence
+
+No licence file is included in this repository. Until the team adds one, the code is not licensed for reuse. Third-party packages keep their own licences.
 
 ## Documentation
-* [Architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [Implementation status](docs/IMPLEMENTATION_STATUS.md)
-* **Law team:** [Knowledge base guide](docs/KNOWLEDGE_BASE.md) · [Handoff checklist](docs/LEGAL_TEAM_HANDOFF.md)
 
-## Project status
-Working local foundation: full consultation workflow, persistence, deterministic decisions, briefings, evaluation, mock AI. **Not yet:** real legal content, authentication, semantic citation checking. Fedlex statute retrieval + cache is available (see [Fedlex integration](docs/FEDLEX_INTEGRATION.md)). See [Implementation status](docs/IMPLEMENTATION_STATUS.md) for exactly what is verified.
-
-## Before real client data (outstanding)
-Authentication and role-based access · audit logging · retention/deletion policy · data-protection impact assessment and a lawful basis for the external AI API (processing agreement, data location) · encryption at rest · legally reviewed knowledge base · professional-responsibility review of the user-facing wording.
+[Architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [Knowledge base guide](docs/KNOWLEDGE_BASE.md) · [Implementation status](docs/IMPLEMENTATION_STATUS.md) · [Sprachbrücke](docs/MULTILINGUAL_QR_BRIDGE.md) · [PDF import](docs/CASE_INTAKE_PDF_IMPORT.md) · [Referral rules v1.2](docs/REFERRAL_V1_2_INTEGRATION.md) · [Gemini robustness](docs/AI_ANALYSIS_ROBUSTNESS.md) · [Final audit](docs/FINAL_SUBMISSION_AUDIT.md)

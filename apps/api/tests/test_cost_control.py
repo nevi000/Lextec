@@ -130,7 +130,12 @@ def test_per_case_call_limit_and_input_token_limit(tmp_path):
 
 def test_budgets_use_worst_case_reservation(tmp_path):
     # worst case of one call: 7_000 in * 0.75 + 1500 out * 3.75 = 0.010875 USD
-    gate, _, _ = make_gate(tmp_path, ai_case_budget_usd=0.015, ai_daily_budget_usd=0.5)
+    gate, _, _ = make_gate(
+        tmp_path,
+        ai_case_budget_usd=0.015,
+        ai_daily_budget_usd=0.5,
+        ai_max_output_tokens_per_call=1500,
+    )
     gate.reserve(case_id="c", function="x", model="gemini-3.8-flash", est_input_tokens=7000)
     with pytest.raises(
         AIBudgetExceededError
@@ -138,7 +143,9 @@ def test_budgets_use_worst_case_reservation(tmp_path):
         gate.reserve(case_id="c", function="x", model="gemini-3.8-flash", est_input_tokens=7000)
     assert e.value.reason == "case_budget"
     gate2, _, _ = make_gate(
-        tmp_path / "b" if (tmp_path / "b").mkdir() is None else tmp_path, ai_daily_budget_usd=0.02
+        tmp_path / "b" if (tmp_path / "b").mkdir() is None else tmp_path,
+        ai_daily_budget_usd=0.02,
+        ai_max_output_tokens_per_call=1500,
     )
     gate2.reserve(case_id=None, function="x", model="gemini-3.8-flash", est_input_tokens=7000)
     with pytest.raises(AIBudgetExceededError) as e2:

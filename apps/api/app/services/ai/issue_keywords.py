@@ -74,7 +74,9 @@ ISSUE_PATTERNS: list[tuple[str, float, re.Pattern]] = [
         re.compile(
             r"schimmel|mängel|mangel|heizung\w*\s+(ist\s+)?(defekt|kaputt|ausgefallen)|feucht|wasserschaden|ungeziefer"
             r"|miete\s+(gekürzt|zurückbehalten|hinterlegt)|mietzins\w*\s+(gekürzt|zurückbehalten|hinterlegt)|hinterleg"
-            r"|weniger\s+miete\s+bezahlt",
+            r"|weniger\s+miete\s+bezahlt"
+            r"|(glühbirne|wasserhahn|abfluss|dusche|kühlschrank|herd|boiler|waschmaschine|steckdose|storen|lift|fenster)\w*"
+            r"[^.]{0,25}(defekt|kaputt|verstopft|undicht|tropft)",
             I,
         ),
     ),
