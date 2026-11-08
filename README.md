@@ -161,19 +161,10 @@ Start with `-Seed`; the three seeded cases are an employment-law case (AI steps 
 
 | Name | Role |
 |---|---|
-| *to be added by the team* | Law team (legal content, dossiers) |
-| *to be added by the team* | Product and software development |
+| Noa Franchetto, Orell P. Jenning, Sofia Zaltron | Law team (legal content, dossiers) |
+| Nevio Gübeli | Product and software development |
 
 The commit history lists a single author account; further contributors and roles have to be added by the team.
-
-## AI tools disclosure
-
-* **Development assistance:** large parts of the code, tests and documentation were written with AI coding assistants (Claude Code and ChatGPT) under the team's direction and review.
-* **Runtime AI:** Google Gemini is the application's AI provider for classification, fact extraction and translation. It is not used for rule decisions, referrals or the briefing structure.
-
-## Licence
-
-No licence file is included in this repository. Until the team adds one, the code is not licensed for reuse. Third-party packages keep their own licences.
 
 ## Documentation
 
